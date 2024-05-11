@@ -11,3 +11,9 @@ _Phần mềm quản lý việc bán kim cương trực tuyến của công ty k
  - Quản lý sản phẩm kim cương bao gồm: vỏ kim cương, viên kim cương chính, các viên kim cương phụ, ...
    **Giá bán = giá vốn sản phẩm * tỉ lệ áp giá, Giá vốn sản phẩm = tiền kim cương + vỏ kim cương + tiền công**
  - Dashboard thống kê.
+
+
+# Project Tracking:
+
+- [Total Project Tracking](https://docs.google.com/spreadsheets/d/1WUrHasaQiWyw8n5Qh4pozf7LTzF8fp0X/edit?usp=sharing&ouid=115666720909204446225&rtpof=true&sd=true)
+- [Usecase List](https://docs.google.com/document/d/1Z4Lla7s9GLRm3A_EV-8VYA4TUz5cA-nKMwhgZAPegLk/edit?usp=sharing)
