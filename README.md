@@ -17,3 +17,6 @@ _Phần mềm quản lý việc bán kim cương trực tuyến của công ty k
 
 - [Total Project Tracking](https://docs.google.com/spreadsheets/d/1WUrHasaQiWyw8n5Qh4pozf7LTzF8fp0X/edit?usp=sharing&ouid=115666720909204446225&rtpof=true&sd=true)
 - [Usecase List](https://docs.google.com/document/d/1Z4Lla7s9GLRm3A_EV-8VYA4TUz5cA-nKMwhgZAPegLk/edit?usp=sharing)
+
+# Short Link:
+- [Github BE](https://github.com/devnguyen0111/SWP391-DSS-BE)
