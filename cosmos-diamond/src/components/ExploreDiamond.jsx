@@ -9,7 +9,7 @@ import 'swiper/css/scrollbar';
 import { Scrollbar } from 'swiper/modules';
 
 
-
+import { Link } from 'react-router-dom';
 // import required modules
 
 import "./ExploreDiamond.css";
@@ -101,8 +101,8 @@ function ExploreDiamond() {
               className="mySwiper"
             >
               {diamonds.map((diamond, index) => (
-                <SwiperSlide>
-                  <a href={diamond.href} className="carousel__item" key={index}>
+                <SwiperSlide key={index}>
+                  <a href={diamond.href} className="carousel__item" >
                     <div className="item__img">
                       <img src={diamond.src}></img>
                     </div>

@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Danfo&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.review-banner__container{
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: auto;
+    height: 500px;
+}
+.review-banner__header{
+    font-weight: 400;
+    text-align: center;
+}
+.review-banner__upper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    height: 270px;
+}
+.upper__img{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.upper__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    
+}
+.upper__content{
+    background: url();
+    width: 60%;
+    text-align: center;
+    margin-top: 30px;
+    position: relative;
+    
+
+}
+.upper__content p{
+    font-size: 18px;
+    font-family: "Montserrat", sans-serif;
+}
+.upper__content::before {
+    position: absolute;
+    content: '';
+    width: 100px;
+    height: 100px;
+    background: url('./src/assets/images/quotation-mark.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: -1;
+    left: -20px;
+    top: -30px;
+    background-size: 50px;
+    opacity: 0.2;
+}
+.review-banner__lower{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+}
+.review-banner__lower > *{
+    font-family: "Montserrat", sans-serif;
+
+}
+.lower__name{
+    font-weight: 400;
+    text-align: center;
+}
+.lower__bio{
+    margin-top: 8px;
+    text-align: center;
+}
+@media screen and (max-width: 768px) {
+    
+    .upper__img{
+        width: 100px;
+        height: 100px;
+    }
+    .upper__content p{
+        font-size: 14px;
+        width: 100%;
+    }
+    .upper__content::before {
+        left: -20px;
+        top: -20px;
+        background-size: 30px;
+        
+    }
+    .review-banner__upper{
+        height: 250px;
+    }
+    .lower__name{
+        font-size: 22px;
+    }
+    .lower__bio{
+        font-size: 14px;
+    }
+    .review-banner__header{
+        font-size: 24px;
+    }
+}
+@media screen and (max-width: 576px) {
+    .review-banner__header{
+        font-size: 22px;
+    }
+    .upper__img{
+        width: 100px;
+        height: 100px;
+    }
+    .upper__content{
+        width: 80%;
+    }
+    .upper__content p{
+        font-size: 12px;
+    }
+    .review-banner__upper{
+        height: 250px;
+    }
+    .lower__bio{
+        font-size: 12px;
+    }
+    .lower__name{
+        font-size: 20px;
+    }
+    
+}
