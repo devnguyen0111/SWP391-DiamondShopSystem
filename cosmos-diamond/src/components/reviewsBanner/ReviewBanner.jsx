@@ -37,12 +37,12 @@ function ReviewBanner() {
         <h1 className="review-banner__header">What our customers say</h1>
         <Swiper
           className="mySwiper"
-        //   autoplay={{
-        //     delay: 4000,
-        //     disableOnInteraction: false,
-        //   }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
 
-        //   modules={[Autoplay]}
+          modules={[Autoplay]}
         >
           {reviews.map((review, index) => (
             <SwiperSlide key={index}>

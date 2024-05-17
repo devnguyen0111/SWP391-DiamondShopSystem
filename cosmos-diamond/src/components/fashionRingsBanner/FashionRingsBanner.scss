@@ -1,0 +1,49 @@
+.fsrContent {
+    width: 100%;
+    height:60vh;
+    background-image: url('../../assets/fashionringbanner.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+   
+
+    &__inform {
+        padding: 7em 0 0 5em;
+        text-align: center;
+        &__intro {
+            font-family: 'Lora';
+            font-style: italic;
+            font-size: 1.2em;
+        }
+
+        &__title {
+            font-family: 'Lora';
+            font-weight: 400;
+            font-size: 2.5em;
+        }
+
+        &__subtitle {
+            font-family: 'Gantari';
+            font-weight: 400;
+            font-size: 1.1em;
+            margin-top:1.5em;
+        }
+
+    }
+
+    &__button {
+        height: 3em;
+        width: 50vh;
+        background-color: #151542;
+        color: white;
+        font-family: 'Gantari';
+        font-weight: 500;
+        font-size: 0.9em;
+        border: none;
+        margin-top: 3em;
+        margin-left: 41%;
+        margin-bottom: 2em;
+        border-radius: 3px;
+       
+    }
+}

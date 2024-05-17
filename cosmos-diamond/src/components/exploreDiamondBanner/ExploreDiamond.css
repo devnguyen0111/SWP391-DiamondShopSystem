@@ -20,7 +20,9 @@
     align-items: center;
   }
   .explore__header h1{
-    font-weight: 500;
+    font-weight: 400;
+    font-size: 2.5em;
+    font-family: 'Lora';
   }
   .explore__carousel{
     height: 50%;

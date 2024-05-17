@@ -8,6 +8,8 @@
 .review-banner__header{
     font-weight: 400;
     text-align: center;
+    font-size: 2.5em;
+    font-family: 'Lora';
 }
 .review-banner__upper{
     display: flex;
@@ -31,13 +33,10 @@
     
 }
 .upper__content{
-    background: url();
     width: 60%;
     text-align: center;
     margin-top: 30px;
     position: relative;
-    
-
 }
 .upper__content p{
     font-size: 18px;
@@ -66,10 +65,10 @@
 }
 .review-banner__lower > *{
     font-family: "Montserrat", sans-serif;
-
 }
 .lower__name{
     font-weight: 400;
+    font-size: 2em;
     text-align: center;
 }
 .lower__bio{
