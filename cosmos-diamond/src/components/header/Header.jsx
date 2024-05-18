@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 // import React from 'react';
 import './Header.css';
+
 import img from '../../assets/logo.png'
 import {
   UserOutlined,
@@ -10,11 +11,16 @@ import {
   DownOutlined
 } from '@ant-design/icons';
 
+import img1 from '../../assets/logo.png'
+
+
 const Header = () => {
   return (
     <header className="header-container">
       <div className="logo">
+
       <img src={img} alt="Cosmos Diamonds" />
+
       </div>
       <nav className="nav">
         <a className="nav-link" href="#">Diamonds  <DownOutlined style={{ fontSize: '10px', marginLeft: '3px' }}/>  </a>
