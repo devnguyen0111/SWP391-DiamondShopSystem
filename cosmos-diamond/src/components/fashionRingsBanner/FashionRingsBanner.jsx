@@ -17,9 +17,9 @@ function FashionRingsBanner() {
                     theme={{
                         components: {
                             Button: {
-                                defaultHoverBg: '#240750',
-                                defaultHoverBorderColor: '#240750',
-                                defaultHoverColor: '#240750'
+                                defaultHoverBg: '#F0EBE3',
+                                defaultHoverBorderColor: 'black',
+                                defaultHoverColor: 'black'
                             },
                         },
                     }}
