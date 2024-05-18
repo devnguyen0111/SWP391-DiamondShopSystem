@@ -4,12 +4,18 @@ import FashionRingsBanner from '../../components/fashionRingsBanner/FashionRings
 import { Col, Image, Row } from 'antd'
 import './Homepage.scss'
 import EngagementRingsBanner from '../../components/engagementRingsBanner/EngagementRingsBanner'
+
 import ExploreDiamond from './../../components/exploreDiamondBanner/ExploreDiamond';
 import ReviewBanner from './../../components/reviewsBanner/ReviewBanner';
 
+import Header from '../../components/header/Header'
+import Footer from '../../components/footer/Footer'
+
+
 function Homepage() {
-    return (
+    return ( 
         <div className='homepage'>
+            <Header />
             <WeddingRingsBanner />
             <ExploreDiamond/>
             <EngagementRingsBanner/>
@@ -37,6 +43,7 @@ function Homepage() {
             </div>
             <ReviewBanner/>
             <FashionRingsBanner />
+            <Footer />
         </div>
     )
 }
