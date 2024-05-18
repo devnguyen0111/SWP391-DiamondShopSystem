@@ -17,6 +17,13 @@
   background-color: #fff;
   border-bottom: 1px solid #ccc;
   z-index: 1000;
+  padding-left: 40px;
+  font-family: "Gantari";
+}
+
+.header-container img {
+  width: 100px;
+  height: 100px;
 }
 
 .logo {
@@ -37,7 +44,7 @@
 }
 
 .nav-link:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .search-bar {
