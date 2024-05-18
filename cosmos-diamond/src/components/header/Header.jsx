@@ -1,11 +1,14 @@
 // src/components/Header.jsx
 // import React from 'react';
 import './Header.css';
+import img1 from '../../assets/logo.png'
 
 const Header = () => {
   return (
     <header className="header-container">
-      <div className="logo">Cosmos Diamonds</div>
+      <div className="logo">
+        <img src={img1} style={{width:'30%'}}/>
+      </div>
       <nav className="nav">
         <a className="nav-link" href="#">Diamonds</a>
         <a className="nav-link" href="#">Engagement Rings</a>
