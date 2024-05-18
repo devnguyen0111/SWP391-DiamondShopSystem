@@ -17,7 +17,6 @@ const Footer = () => {
         </div>
         <div className="footer-column">
           <h3>Why Cosmos Diamonds?</h3>
-          <a href="#">Returns Are Free</a>
           <a href="#">Conflict Free Diamonds</a>
           <a href="#">Diamond Price Matching</a>
           <a href="#">Diamond Upgrade Program</a>
