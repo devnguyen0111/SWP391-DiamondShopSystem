@@ -1,15 +1,13 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/swiper-bundle.css';
-import 'swiper/css/scrollbar';
-
+import "swiper/swiper-bundle.css";
+import "swiper/css/scrollbar";
 
 // import required modules
-import { Scrollbar } from 'swiper/modules';
+import { Scrollbar } from "swiper/modules";
 
-
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // import required modules
 
 import "./ExploreDiamond.css";
@@ -66,43 +64,95 @@ const diamonds = [
     name: "Heart",
   },
 ];
-function ExploreDiamond() {
+
+const diamonds02 = [
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/19761/Round.jpeg",
+    name: "Round",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/1757/Princess.webp",
+    name: "Princess",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/1769/Emerald.webp",
+    name: "Emerald",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/1775/Cushion.webp",
+    name: "Cushion",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/6172/Marquise.webp",
+    name: "Marquise",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/1787/Radiant.webp",
+    name: "Radiant",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/1809/Oval.webp",
+    name: "Oval",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/19843/Pear.jpeg",
+    name: "Pear",
+  },
+  {
+    href: "/",
+    src: "https://dam.bluenile.com/images/public/19837/Heart.jpeg",
+    name: "Heart",
+  },
+];
+function ExploreDiamond({ version }) {
   return (
-    <div className="explore">
+    <div
+      className="explore"
+      style={{ backgroundColor: version == "diamonds" ? "#fff8ef" : "white" }}
+    >
       <div className="explore__header">
         <h1>Explore Diamonds</h1>
       </div>
-      <div className="explore__carousel">
-        <Swiper
+
+      {version == "diamonds02" ? (
+        <>
+          <div className="explore__carousel">
+            <Swiper
               scrollbar={{
                 hide: true,
               }}
-              
               modules={[Scrollbar]}
               breakpoints={{
-                1200:{
-                  spaceBetween:10,
-                  slidesPerView: 10
+                1200: {
+                  spaceBetween: 10,
+                  slidesPerView: 9,
                 },
-                992:{
-                  spaceBetween:10,
-                  slidesPerView: 7
+                992: {
+                  spaceBetween: 10,
+                  slidesPerView: 7,
                 },
-                576:{
-                  spaceBetween:3,
-                  slidesPerView: 5
+                576: {
+                  spaceBetween: 3,
+                  slidesPerView: 5,
                 },
-                0:{
-                  spaceBetween:3,
-                  slidesPerView: 3
-                }
-              }
-              }
+                0: {
+                  spaceBetween: 3,
+                  slidesPerView: 3,
+                },
+              }}
               className="mySwiper"
             >
-              {diamonds.map((diamond, index) => (
+              {diamonds02.map((diamond, index) => (
                 <SwiperSlide key={index}>
-                  <a href={diamond.href} className="carousel__item" >
+                  <a href={diamond.href} className="carousel__item">
                     <div className="item__img">
                       <img src={diamond.src}></img>
                     </div>
@@ -111,7 +161,50 @@ function ExploreDiamond() {
                 </SwiperSlide>
               ))}
             </Swiper>
-      </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="explore__carousel">
+            <Swiper
+              scrollbar={{
+                hide: true,
+              }}
+              modules={[Scrollbar]}
+              breakpoints={{
+                1200: {
+                  spaceBetween: 10,
+                  slidesPerView: 10,
+                },
+                992: {
+                  spaceBetween: 10,
+                  slidesPerView: 7,
+                },
+                576: {
+                  spaceBetween: 3,
+                  slidesPerView: 5,
+                },
+                0: {
+                  spaceBetween: 3,
+                  slidesPerView: 3,
+                },
+              }}
+              className="mySwiper"
+            >
+              {diamonds.map((diamond, index) => (
+                <SwiperSlide key={index}>
+                  <a href={diamond.href} className="carousel__item">
+                    <div className="item__img">
+                      <img src={diamond.src}></img>
+                    </div>
+                    <div className="item__name">{diamond.name}</div>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </>
+      )}
     </div>
   );
 }
