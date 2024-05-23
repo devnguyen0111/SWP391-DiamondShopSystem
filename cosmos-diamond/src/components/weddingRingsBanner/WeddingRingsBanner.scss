@@ -1,12 +1,11 @@
 .wdrbContent {
-
   width: 100%;
   height: 65vh;
   background-image: url("../../assets/wdrbanner.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding-top: 125px;
+  margin-top: 125px;
   // left: 0;
   // position: absolute;
   // top: 0;
@@ -26,74 +25,77 @@
       font-weight: 400;
       font-size: 1.1em;
       margin: 2em 0 3em 0;
-
-    position: relative;
-    width: 100%;
-    height:65vh;
-    background-image: url('../../assets/wdrbanner.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    // left: 0;
-    // position: absolute;
-    // top: 0;
-
-    &__inform {
-        padding: 5em 0 0 5em; 
-
-        &__title {
-            font-family: 'Lora';
-            font-weight: 400;
-            font-size: 2.5em;
-            margin: 0.7em 0;
-        }
-
-        &__subtitle {
-            font-family: 'Gantari';
-            font-weight: 400;
-            font-size: 1.1em;
-            margin: 2em 0 3em 0;
-        }
-
     }
+  }
 
+  &__buttons {
     &__button {
-        height: 3em;
-        width: max-content;
-        background-color: #151542;
-        color: white;
-        font-family: 'Gantari';
-        font-weight: 500;
-        font-size: 0.9em;
-        border: none;
-        margin-right: 1em;
-        margin-bottom: 2em;
-        border-radius: 3px;
-        padding-top: 0.5em;
+      height: 3em;
+      width: max-content;
+      background-color: #151542;
+      color: white;
+      font-family: "Gantari";
+      font-weight: 500;
+      font-size: 0.9em;
+      border: none;
+      margin-right: 3em;
+      margin-bottom: 2em;
+      border-radius: 3px;
+      padding-top: 0.5em;
     }
 
-    &__button:nth-child(2) {
-        margin-left: 5.5em;
-
+    &__button:nth-child(1) {
+      margin-left: 5.5em;
     }
-  }
-
-  &__button {
-    height: 3em;
-    width: max-content;
-    background-color: #151542;
-    color: white;
-    font-family: "Gantari";
-    font-weight: 500;
-    font-size: 0.9em;
-    border: none;
-    margin-right: 1em;
-    margin-bottom: 2em;
-    border-radius: 3px;
-  }
-
-  &__button:nth-child(2) {
-    margin-left: 5.5em;
   }
 }
+
+@media screen and (max-width: 1100px) {
+  .wdrbContent {
+    &__inform {
+        padding: 1em;
+      &__title {
+        font-size: 2em;
+      }
+
+      &__subtitle {
+        font-size: 1em;
+      }
+    }
+
+    &__buttons {
+      display: flex;
+      &__button {
+      }
+
+      &__button:nth-child(1) {
+        margin-left: 4em;
+      }
+    }
+  }
+}
+
+// @media screen and (max-width: 820px) {
+//     .wdrbContent {
+//     //   height: 40vh;
+//       &__inform {
+//         &__title {
+//           font-size: 2em;
+//         }
+
+//         &__subtitle {
+//           font-size: 1em;
+//         }
+//       }
+
+//       &__buttons {
+//         display: flex;
+//         &__button {
+//         }
+
+//         &__button:nth-child(1) {
+//           margin-left: 4em;
+//         }
+//       }
+//     }
+//   }

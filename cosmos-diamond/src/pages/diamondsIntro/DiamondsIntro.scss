@@ -1,0 +1,123 @@
+.diamondsGuide {
+  padding: 2em;
+
+  &__banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    // width: 90%;
+    // width:100%;
+    height: 60vh;
+    background-color: #0c1636;
+    color: white;
+    margin-bottom: 2em;
+
+    h4 {
+      margin-bottom: 2em;
+      font-family: "Lora";
+      font-weight: 400;
+    }
+
+    h2 {
+      margin-bottom: 1em;
+      font-size: 2.4em;
+      font-family: "Lora";
+      font-weight: 400;
+    }
+
+    h5 {
+      margin-bottom: 2em;
+      font-family: "Gantari";
+      font-weight: 300;
+      font-size: 1.2em;
+    }
+  }
+
+  &__pic {
+    h5 {
+      font-family: "Gantari";
+      font-size: 1.3em;
+      margin: 0.7em 0;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.shopEarthBanner {
+  background-color: #151542;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 45vh;
+  margin-bottom: 2em;
+
+  &__title {
+    font-family: "Lora";
+    font-weight: 300;
+    font-size: 2em;
+    margin-bottom: 1em;
+  }
+
+  &__description {
+    font-family: "Gantari";
+    font-weight: 300;
+    margin-bottom: 2.5em;
+  }
+
+  &__button {
+    font-family: "Gantari";
+    font-weight: 500;
+    font-size: 1em;
+    border-radius: 0px;
+    height: 2.5em;
+    width: 13%;
+  }
+}
+
+.shopLabGrownBanner {
+  background-image: url("https://dam.bluenile.com/images/public/5933/lab-grown engagement ring.jpeg");
+  background-size: cover;
+  width: 100%;
+  height: 52vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 2em;
+  
+  h4 {
+    font-family: "Lora";
+    font-size: medium;
+    font-weight: 300;
+  }
+
+  h2 {
+    font-family: "Lora";
+    font-size: 2.5em;
+    font-weight: 300;
+    margin-bottom: 0.6em;
+  }
+
+  h5 {
+    font-family: "Gantari";
+    font-weight: 350;
+    font-size: 1.1em;
+    margin-bottom: 2em;
+  }
+
+  &__button {
+    font-family: "Gantari";
+    font-weight: 500;
+    font-size: 1em;
+    border-radius: 0px;
+    height: 2.5em;
+    width: 13%;
+  }
+}
