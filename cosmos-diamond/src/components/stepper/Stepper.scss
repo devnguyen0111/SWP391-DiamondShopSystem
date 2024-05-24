@@ -1,0 +1,41 @@
+
+.stepper{
+    max-width: 1440px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 100px;
+    
+    &__wrapper{
+        border: 1px solid #151542;
+        border-radius: 40px;
+        width: 100%;
+        height: 100%;
+        
+    }
+    &__item{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        padding: 0 40px;
+        font-family: "Lora", serif;
+        &:not(:last-child){
+            border-right: 1px solid #151542;
+        }
+    }
+    &__step{
+        display: flex;
+        align-items: center;
+    }
+    &__number{
+        font-size: 32px;
+    }
+    &__title{
+        font-size: 16px;
+        margin-left: 12px;
+    }
+}

@@ -7,6 +7,7 @@ import Homepage from "../pages/homepage/Homepage";
 import DiamondsIntro from "../pages/diamondsIntro/DiamondsIntro";
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
+import CatalogPage from "../pages/catalog/CatalogPage";
 
 
 
@@ -29,7 +30,12 @@ export const router = createBrowserRouter([
             {
                 path: "/diamonds",
                 element: <DiamondsIntro />
+            },
+            {
+                path:"/diamond-search",
+                element: <CatalogPage/>
             }
+
         ]
 
 
