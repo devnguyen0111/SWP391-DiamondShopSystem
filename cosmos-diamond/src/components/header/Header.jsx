@@ -11,7 +11,7 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 
-import img1 from "../../assets/logo.png";
+//import img1 from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -21,7 +21,7 @@ const Header = () => {
         <img src={img} alt="Cosmos Diamonds" />
       </div>
       <nav className="nav">
-        <Link to='/diamonds'>
+        <Link to="/diamonds">
           <a className="nav-link" href="#">
             Diamonds{" "}
             <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
@@ -51,6 +51,7 @@ const Header = () => {
       <div className="icon-container">
         <div className="icon">
           <UserOutlined />
+          <Link to="/login">Login</Link>
         </div>
         <div className="icon">
           <HeartOutlined />

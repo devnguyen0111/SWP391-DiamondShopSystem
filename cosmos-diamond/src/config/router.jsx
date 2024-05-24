@@ -1,5 +1,5 @@
 // import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, createBrowserRouter } from "react-router-dom";
+import { Outlet, createBrowserRouter } from "react-router-dom";
 // import { increment } from "../redux/features/counterSlice";
 // import { useEffect } from "react";
 // import api from "./axios";
@@ -7,36 +7,40 @@ import Homepage from "../pages/homepage/Homepage";
 import DiamondsIntro from "../pages/diamondsIntro/DiamondsIntro";
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
-
-
+import Login from "../pages/authentication/login";
+import Register from "../pages/authentication/register";
 
 export const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: (
+      <div>
+        <Header />
+        {/* // nơi các router con sẽ được render.*/}
+        <Outlet />
+        <Footer />
+      </div>
+    ),
+    children: [
+      {
         path: "/",
-        element: (
-            <div>
-                <Header />
-                {/* // nơi các router con sẽ được render.*/}
-                <Outlet />
-                <Footer />
-            </div>
-        ),
-        children: [
-            {
-                path: "/",
-                element: <Homepage />
-            },
-            {
-                path: "/diamonds",
-                element: <DiamondsIntro />
-            }
-        ]
-
-
-    }
+        element: <Homepage />,
+      },
+      {
+        path: "/diamonds",
+        element: <DiamondsIntro />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ],
+  },
 ]);
-
-
 
 //Ví dụ sử dụng path khi có children:
 // path: "/",

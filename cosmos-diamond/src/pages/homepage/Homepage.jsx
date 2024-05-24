@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import WeddingRingsBanner from "../../components/weddingRingsBanner/WeddingRingsBanner";
 import FashionRingsBanner from "../../components/fashionRingsBanner/FashionRingsBanner";
 import { Col, Image, Row } from "antd";
@@ -8,9 +8,9 @@ import EngagementRingsBanner from "../../components/engagementRingsBanner/Engage
 import ExploreDiamond from "./../../components/exploreDiamondBanner/ExploreDiamond";
 import ReviewBanner from "./../../components/reviewsBanner/ReviewBanner";
 
-import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
-import Banner from "../../components/banner/Banner";
+// import Header from "../../components/header/Header";
+// import Footer from "../../components/footer/Footer";
+// import Banner from "../../components/banner/Banner";
 
 function Homepage() {
   return (
