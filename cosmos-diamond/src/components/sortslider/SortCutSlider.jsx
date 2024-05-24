@@ -43,6 +43,7 @@ function SortCutSlider() {
             min={1}
             value={cut}
             marks
+            markClassName="cut-mark"
             onChange={handlerCutChange}
             minDistance={1}
           />
