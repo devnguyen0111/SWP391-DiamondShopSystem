@@ -27,10 +27,10 @@ const Header = () => {
             <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
           </a>
         </Link>
-        <a className="nav-link" href="#">
+        <Link to={'/setting-search'} className="nav-link">
           Engagement Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
+        </Link>
         <a className="nav-link" href="#">
           Wedding Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}

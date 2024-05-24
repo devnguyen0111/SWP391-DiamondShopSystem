@@ -2,7 +2,11 @@ import { RubyOutlined } from '@ant-design/icons';
 import './Stepper.scss'
 import { Col, Row } from "antd";
 import React from "react";
-function Stepper() {
+import { Link } from 'react-router-dom';
+function Stepper({step1, step2, path}) {
+  console.log(path.op);
+  console.log(path.op1);
+  
   return (
     <>
       <div className="stepper">
@@ -10,7 +14,7 @@ function Stepper() {
             <Col span={8} className="stepper__item">
                 <div className="stepper__step">
                     <span className="stepper__number">1</span>
-                    <span className="stepper__title">Choose a diamond</span>
+                    <Link to={path.op} className="stepper__title">{step1}</Link>
                 </div>
                 <div className="stepper__icon">
                 </div>
@@ -18,7 +22,7 @@ function Stepper() {
             <Col span={8} className="stepper__item">
                 <div className="stepper__step">
                     <span className="stepper__number">2</span>
-                    <span className="stepper__title">Choose a setting</span>
+                    <Link to={path.op1} className="stepper__title">{step2}</Link>
                 </div>
                 <div className="stepper__icon"></div>
             </Col>
@@ -29,7 +33,6 @@ function Stepper() {
                 </div>
                 <div className="stepper__icon"></div>
             </Col>
-
         </Row>
       </div>
     </>

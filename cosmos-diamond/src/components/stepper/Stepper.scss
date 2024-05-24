@@ -37,5 +37,12 @@
     &__title{
         font-size: 16px;
         margin-left: 12px;
+        color: unset;
+        transition: unset;
+        &:hover{
+            
+            color: unset;
+        }
+        
     }
 }

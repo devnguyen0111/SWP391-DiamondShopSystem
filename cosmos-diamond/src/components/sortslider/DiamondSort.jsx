@@ -8,10 +8,11 @@ import SortCaratSlider from "./SortCaratSlider";
 import SortColorSlider from "./SortColorSlider";
 import SortClaritySlider from "./SortClaritySlider";
 import SortCutSlider from "./SortCutSlider";
+import DiamondList from "./DiamondList";
 
 
 function DiamondSort() {
-  console.log(document.querySelector("#price-sort"));
+
 
   return (
     <>
@@ -54,6 +55,16 @@ function DiamondSort() {
           </Col>
           <Col span={8} className="sort__area">
             <SortCutSlider/>
+          </Col>
+          <Col span={24} className="sort__reset">
+                <button className="sort__btn--reset" >
+                  <i class="fa-solid fa-arrow-rotate-right"></i>
+                  <span>Reset Filters</span>
+                </button>
+                
+          </Col>
+          <Col span={24} >
+                <DiamondList/>
           </Col>
         </Row>
       </div>
