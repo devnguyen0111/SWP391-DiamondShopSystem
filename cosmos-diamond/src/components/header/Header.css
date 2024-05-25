@@ -19,6 +19,7 @@
   z-index: 1000;
   padding-left: 40px;
   font-family: "Gantari";
+ 
 }
 
 .header-container img {
@@ -41,6 +42,7 @@
   text-decoration: none;
   color: #000;
   font-size: 16px;
+  text-wrap: nowrap;
 }
 
 .nav-link:hover {

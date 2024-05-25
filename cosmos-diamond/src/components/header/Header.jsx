@@ -21,16 +21,14 @@ const Header = () => {
         <img src={img} alt="Cosmos Diamonds" />
       </div>
       <nav className="nav">
-        <Link to='/diamonds'>
-          <a className="nav-link" href="#">
-            Diamonds{" "}
-            <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-          </a>
+        <Link to="/diamonds" className="nav-link">
+          Diamonds{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        <a className="nav-link" href="#">
+        <Link to="./engagement-rings" className="nav-link">
           Engagement Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
+        </Link>
         <a className="nav-link" href="#">
           Wedding Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
