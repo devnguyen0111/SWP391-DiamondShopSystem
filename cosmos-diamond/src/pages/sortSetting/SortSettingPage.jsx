@@ -4,7 +4,7 @@ import { Row, Col, Dropdown, Space } from "antd";
 import {DownOutlined} from "@ant-design/icons";
 import "./SortSettingPage.scss";
 
-import { items } from "./SortSettingOption";
+
 import SettingDropDownGroup from "../../components/sortSettingDropdownButton/sortSettingDropDownButton";
 function SortSettingPage() {
   return (
