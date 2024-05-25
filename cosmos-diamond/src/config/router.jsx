@@ -7,6 +7,7 @@ import Homepage from "../pages/homepage/Homepage";
 import DiamondsIntro from "../pages/diamondsIntro/DiamondsIntro";
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
+import EngagementRingsIntro from "../pages/engagementRingsIntro/EngagementRingsIntro";
 import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
                 element: <DiamondsIntro />
             },
             {
+                path: "/engagement-rings",
+                element: <EngagementRingsIntro />
+            },
+          {
                 path:"/diamond-search",
                 element: <CatalogPage/>
             },
