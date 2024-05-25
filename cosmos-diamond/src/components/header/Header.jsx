@@ -11,7 +11,6 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 
-import img1 from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -49,7 +48,7 @@ const Header = () => {
       </div>
       <div className="icon-container">
         <div className="icon">
-          <UserOutlined />
+          <Link to='/login'><UserOutlined /></Link>
         </div>
         <div className="icon">
           <HeartOutlined />

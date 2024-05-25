@@ -10,6 +10,7 @@ import Footer from "../components/footer/Footer";
 import EngagementRingsIntro from "../pages/engagementRingsIntro/EngagementRingsIntro";
 import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
+import Login from "../components/login/Login";
 
 
 
@@ -46,11 +47,14 @@ export const router = createBrowserRouter([
                 element: <SortSettingPage/>
             }
 
-        ]
-
-
+        ],
+    },
+    {
+        path: "/login",
+        element: <Login/>
     }
 ]);
+
 
 
 
