@@ -1,0 +1,15 @@
+.sort__setting{
+    width: 1440px;
+    margin: auto;
+}
+.sort__btn{
+    background-color: #fff;
+    border:  1px solid ;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover{
+        background-color: #efefef;
+    }
+}
