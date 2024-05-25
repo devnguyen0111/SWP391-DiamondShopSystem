@@ -25,6 +25,7 @@ const Header = () => {
           Diamonds{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
+
         <Link to="./engagement-rings" className="nav-link">
           Engagement Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
