@@ -34,6 +34,10 @@ const Header = () => {
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </a>
         <a className="nav-link" href="#">
+          Jewelry{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
+        </a>
+        <a className="nav-link" href="#">
           Fashion Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </a>

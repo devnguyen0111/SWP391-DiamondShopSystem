@@ -48,7 +48,7 @@ const Footer = () => {
           <a href="#">Marquise</a>
         </div>
         <div className="footer-column">
-          <h3>Join the Cosmos Diamonds - List</h3>
+          <h3>Join the Cosmos Diamonds</h3>
           <input type="email" placeholder="Email Address" />
           <button>Sign Up</button>
         </div>
