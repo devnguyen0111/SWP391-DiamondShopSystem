@@ -41,10 +41,10 @@ const Header = () => {
           Fashion Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </a>
-        <a className="nav-link" href="#">
+        <Link to="/education" className="nav-link">
           Education{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
+        </Link>
       </nav>
       <div className="search-bar">
         <input className="search-input" type="text" placeholder="Search" />
@@ -52,7 +52,9 @@ const Header = () => {
       </div>
       <div className="icon-container">
         <div className="icon">
-          <Link to='/login'><UserOutlined /></Link>
+          <Link to="/login">
+            <UserOutlined />
+          </Link>
         </div>
         <div className="icon">
           <HeartOutlined />

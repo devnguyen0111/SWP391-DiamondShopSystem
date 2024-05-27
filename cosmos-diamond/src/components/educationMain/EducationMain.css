@@ -1,0 +1,150 @@
+.wrapper {
+  font-family: "Gantari";
+}
+#first {
+  margin-top: 135px;
+  padding-left: 1.3em;
+  margin-bottom: 0.6em;
+  font-size: 15px;
+}
+
+#first a {
+  text-decoration: none;
+  color: black;
+}
+
+#first span {
+  color: #909290;
+}
+
+.education-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f6f6f6;
+}
+
+.image-container img {
+  padding-right: 140px;
+}
+
+.text-container {
+  margin-left: -20px;
+  text-align: center;
+  color: #474747;
+}
+
+.text-container h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.text-container h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.text-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.text-container ul li {
+  margin: 30px 0;
+  font-size: 13px;
+}
+
+/* .brief-edu-container */
+.brief-edu-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.edu-item {
+  text-align: center;
+  width: 282px;
+  height: 375px;
+  text-decoration: none;
+}
+
+.edu-item img {
+  width: 100%;
+  height: auto;
+}
+
+.edu-item h3 {
+  color: #100e31;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 30px;
+  margin-top: 15px;
+  min-height: 80px;
+  padding: 10px;
+  text-align: center;
+}
+
+.edu-item p {
+  color: #4a4a4a;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  padding: 10px;
+  text-align: left;
+}
+
+/* explore more */
+.explore-info-container h2 {
+  color: #4a4a4a;
+  font-size: 35px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 3rem;
+  margin: 30px auto 20px auto;
+  max-width: 1440px;
+}
+.explore-edu-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.guide-item {
+  display: flex;
+  background-color: #f6f6f6;
+  align-items: center;
+  width: 696px;
+  height: 184px;
+  margin-bottom: 30px;
+  text-decoration: none;
+  color: #4a4a4a;
+}
+
+.guide-item img {
+  width: auto; /* Adjust based on your image proportions */
+  height: 100%;
+  margin-right: 20px;
+}
+
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.guide-content h3 {
+  font-size: 1.2em;
+  margin: 0 0 20px;
+}
+
+.guide-content p {
+  font-size: 0.9em;
+  color: #555;
+  text-align: left;
+  padding-right: 18px;
+}

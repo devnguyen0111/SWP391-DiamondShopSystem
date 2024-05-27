@@ -19,17 +19,11 @@
   z-index: 1000;
   padding-left: 40px;
   font-family: "Gantari";
- 
 }
 
 .header-container img {
   width: 100px;
   height: 100px;
-}
-
-.logo {
-  
-  
 }
 
 .nav {
@@ -41,12 +35,13 @@
 .nav-link {
   text-decoration: none;
   color: #000;
-  font-size: 16px;
+  font-size: 14px;
   text-wrap: nowrap;
 }
 
 .nav-link:hover {
-  text-decoration: none;
+  text-decoration: underline;
+  color: #3c3c3c;
 }
 
 .search-bar {

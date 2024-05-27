@@ -11,6 +11,7 @@ import EngagementRingsIntro from "../pages/engagementRingsIntro/EngagementRingsI
 import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
+import EducationMain from "../components/educationMain/EducationMain";
 
 
 
@@ -45,8 +46,11 @@ export const router = createBrowserRouter([
             {
                 path:"/setting-search",
                 element: <SortSettingPage/>
+            },
+            {
+                path:"/education",
+                element: <EducationMain/>
             }
-
         ],
     },
     {
