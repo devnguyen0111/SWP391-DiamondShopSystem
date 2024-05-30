@@ -12,6 +12,7 @@ import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
+import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 
 
 
@@ -50,7 +51,11 @@ export const router = createBrowserRouter([
             {
                 path:"/education",
                 element: <EducationMain/>
-            }
+            },
+            {
+                path:"/diamond-detail",
+                element: <DiamondDetail/>
+            },
         ],
     },
     {
