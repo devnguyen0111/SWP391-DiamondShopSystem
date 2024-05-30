@@ -1,0 +1,43 @@
+.commit{
+    max-width: 1440px;
+    width: 1440px;
+    margin: auto;
+    
+    &__left{
+        display: flex;
+        flex-direction: column;
+        font-family: 'Lora', serif;
+        color: #151547;
+        font-weight: 400;
+        gap: 20px;
+    }
+    &__header{
+        font-size: 32px;
+        
+    }
+    &__content{
+        font-family: 'Gantari', sans-serif;
+    }
+    &__right{
+        width: 100%;
+        
+        img{
+            width: 100%;
+        }
+    }
+    
+}
+.ant-collapse{
+    margin-top: 20px;
+    width: 70%;
+    background-color: transparent;
+    font-family: 'Gantari';
+    border: none;
+    border-radius: 0;
+    margin-bottom: 20px;
+}
+.ant-collapse-header-text{
+    font-family: 'Gantari';
+    font-weight: 600;
+    color: #151547;
+}
