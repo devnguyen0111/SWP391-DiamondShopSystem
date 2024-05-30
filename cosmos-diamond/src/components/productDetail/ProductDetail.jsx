@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
 import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
+import Modal from "../modal/Modal";
+import { disableScroll } from "../disableScroll";
 function ProductDetail() {
+  const [show, setShow] = useState(false)
+  const openModal = () => {
+    setShow(true);
+    disableScroll()
+  };
   return (
     <div className="detail">
       <Stepper
@@ -108,7 +115,10 @@ function ProductDetail() {
 
           <Col span={24}>
             <div className="right__sticker">
-              <img src="https://ion.bluenile.com/images/ShipsInTime/bluenile/itemPage/byFastShipping.svg" alt="" />
+              <img
+                src="https://ion.bluenile.com/images/ShipsInTime/bluenile/itemPage/byFastShipping.svg"
+                alt=""
+              />
             </div>
             <div className="right__shipping">
               <div className="">
@@ -143,42 +153,57 @@ function ProductDetail() {
           </Col>
           <Col span={24}>
             <div className="right__notice">
-            <i class="fa-solid fa-circle-info" style={{marginRight: '4px'}}></i>
-            This price pertains solely to the diamond and does not include the cost of the entire piece of jewelry.
+              <i
+                class="fa-solid fa-circle-info"
+                style={{ marginRight: "4px" }}
+              ></i>
+              This price pertains solely to the diamond and does not include the
+              cost of the entire piece of jewelry.
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">
+            <button className="right__button" onClick={() => openModal()}>
               Select This Diamond
             </button>
-            <button className="right__button">
-              Consult a Expert
-            </button>
+            <button className="right__button">Consult a Expert</button>
           </Col>
           <Col span={24} className="include">
             <div className="include__header">Your Order Include:</div>
             <div className="include__item">
-                <div className="include__img">
-                    <img src="https://ecommo--ion.bluenile.com/static-diamonds-bn/trackFastShipping.2b103.png" alt="" />
+              <div className="include__img">
+                <img
+                  src="https://ecommo--ion.bluenile.com/static-diamonds-bn/trackFastShipping.2b103.png"
+                  alt=""
+                />
+              </div>
+              <div className="include__content">
+                <h5 className="include__title">Free Shipping</h5>
+                <div className="include__text">
+                  We're committed to making your entire experience a pleasant
+                  one, from shopping to shipping.
                 </div>
-                <div className="include__content">
-                    <h5 className="include__title">Free Shipping</h5>
-                    <div className="include__text">We're committed to making your entire experience a pleasant one, from shopping to shipping.</div>
-                </div>
+              </div>
             </div>
             <div className="include__item">
-                <div className="include__img">
-                    <img src="https://ecommo--ion.bluenile.com/static-diamonds-bn/freeReturns.c7cd2.png" alt="" />
+              <div className="include__img">
+                <img
+                  src="https://ecommo--ion.bluenile.com/static-diamonds-bn/freeReturns.c7cd2.png"
+                  alt=""
+                />
+              </div>
+              <div className="include__content">
+                <h5 className="include__title">Free Return</h5>
+                <div className="include__text">
+                  Our commitment to you does not end at delivery. We offer free
+                  returns (U.S and Canada) to make your experience as easy as
+                  possible.
                 </div>
-                <div className="include__content">
-                    <h5 className="include__title">Free Return</h5>
-                    <div className="include__text">Our commitment to you does not end at delivery. We offer free returns (U.S and Canada) to make your experience as easy as possible.</div>
-                </div>
+              </div>
             </div>
+          </Col>
         </Col>
-        </Col>
-        
       </Row>
+      <Modal show={show} setShow={setShow}/>
     </div>
   );
 }

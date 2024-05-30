@@ -10,7 +10,7 @@
     margin: auto;
     min-height: 70vh;
     margin-top: 200px;
-    
+  
     
     
 }
@@ -184,7 +184,7 @@
         cursor: pointer;   
         transition: 0.2s; 
         &:hover{
-            opacity: 0.9;
+            opacity: 0.8;
         }
         &:nth-child(2){
             background-color: transparent;
@@ -225,6 +225,5 @@
         min-height: 76px;
     }
 }
-
 
 

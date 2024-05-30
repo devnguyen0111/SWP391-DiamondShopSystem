@@ -22,7 +22,7 @@ const items = [
 ];
 function CommitExperience() {
   return (
-    <Row className="commit">
+    <Row className="commit" >
       <Col span={12} className="commit__left">
         <div className="commit__header">
           We're committed to making your entire experience a pleasant one, from
@@ -38,7 +38,7 @@ function CommitExperience() {
         </div>
         <Collapse className="commit__collapse" items={items} defaultActiveKey={['1']} />
       </Col>
-      <Col span={10} className="commit__right">
+      <Col span={12} className="commit__right">
         <img
           src="https://ecommo--ion.bluenile.com/static-diamonds-bn/Ringbox.d298a.jpg"
           alt=""
