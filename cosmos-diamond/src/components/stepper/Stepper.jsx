@@ -4,8 +4,7 @@ import { Col, Row } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 function Stepper({ step1, step2, path }) {
-  console.log(path.op);
-  console.log(path.op1);
+  
 
   return (
     <>
