@@ -12,10 +12,14 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import Banner from "../../components/banner/Banner";
 import { useMediaQuery } from "react-responsive";
+import { jwtDecode } from "jwt-decode";
 
 function Homepage() {
   const isMobile= useMediaQuery({ maxWidth: "2400px" })
-  return (
+  
+
+
+    return (
     <div className="homepage">
       <WeddingRingsBanner />
       <ExploreDiamond version="diamonds" />
