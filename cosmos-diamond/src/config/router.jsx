@@ -65,12 +65,21 @@ export const router = createBrowserRouter([
         element: <EducationDiamond />,
       },
       {
+<<<<<<< Updated upstream
         path: "/complete-product",
         element: <CompleteProduct />,
       },
       {
         path: "/shopping-cart",
         element: <ShoppingCart/>,
+=======
+        path: `/diamond-detail`,
+        element: <DiamondDetail />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
+>>>>>>> Stashed changes
       },
     ],
   },

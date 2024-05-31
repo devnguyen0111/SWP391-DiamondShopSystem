@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import {
   GoogleOutlined,
@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Divider } from "antd";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -21,6 +24,9 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [account, setAccount] = useState(null)
+  
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -29,10 +35,13 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Logic xử lý đăng nhập
-    fetch("", {
+  const  onSubmit =  (data) => {
+    // let token = await axios.post("https://localhost:7262/api/Authentication/login",{
+    //   headers:{
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   }
+    // })
+    fetch("https://localhost:7262/api/Authentication/login", {
       method: "POST",
       body: JSON.stringify({
         email: data.email,
@@ -43,9 +52,40 @@ const Login = () => {
       },
     })
       .then((response) => response.json())
-      .then((json) => console.log(json));
-  };
+      .then((json) => {
+        
+        
+        localStorage.setItem('token', json.token)
+        setAccount(jwtDecode(json.token))
+        console.log(jwtDecode(json.token));
 
+  })
+}
+    
+    // Logic xử lý đăng nhập
+    if(account){
+      fetch(`https://localhost:7262/api/Authentication/customers/1`, {
+        method: 'POST',
+        body: JSON.stringify({
+          id: account.UserID,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+      })
+      .then(res => res.json())
+      .then(data =>{
+        console.log(data)
+        console.log(localStorage.getItem("token"));
+        navigate("/")
+      })
+    }
+     
+    
+    
+    
+  
   return (
     <div className="login-container">
       <div className="login-form">
