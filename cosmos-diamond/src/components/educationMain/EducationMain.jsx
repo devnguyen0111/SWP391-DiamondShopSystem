@@ -19,6 +19,10 @@ const EducationMain = () => {
         <Link to="/">Home</Link> <span> / Diamond and Jewelry Education</span>
       </p>
 
+      {/* <p id="first">
+        <Link to="/">Home</Link> <span> / Diamond and Jewelry Education</span>
+      </p> */}
+
       <div className="education-container">
         <div className="image-container">
           <img src={img1} alt="Diamond Ring" />

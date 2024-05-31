@@ -64,6 +64,13 @@
   margin-top: 20px;
 }
 
+/* .brief-edu-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin-top: 20px;
+} */
+
 .edu-item {
   text-align: center;
   width: 282px;

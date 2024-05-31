@@ -31,6 +31,11 @@ a {
   font-weight: bold;
 }
 
+/* .nav-item h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+} */
+
 .nav-item span {
   color: rgb(123, 123, 254);
   font-size: 1em;
