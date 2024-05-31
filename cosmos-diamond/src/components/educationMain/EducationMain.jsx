@@ -3,7 +3,6 @@ import "./EducationMain.css";
 import img1 from "../../assets/Education_1.webp";
 import dia from "../../assets/diamond-edu.webp";
 import met from "../../assets/metal-edu.webp";
-import pearl from "../../assets/pearl_edu.webp";
 import exp1 from "../../assets/ring_exp1.webp";
 import exp2 from "../../assets/ear-exp2.webp";
 import exp3 from "../../assets/brace4.webp";
@@ -15,7 +14,7 @@ import { Link } from "react-router-dom";
 
 const EducationMain = () => {
   return (
-    <div className="wrapper">
+    <div className="wrapper-main">
       <p id="first">
         <Link to="/">Home</Link> <span> / Diamond and Jewelry Education</span>
       </p>
@@ -36,7 +35,7 @@ const EducationMain = () => {
       </div>
 
       <div className="brief-edu-container">
-        <Link to="/" className="edu-item">
+        <Link to="/education/diamonds" className="edu-item">
           <img src={dia} alt="Diamond" />
           <h3>Diamond Education And Guidance</h3>
           <p>
@@ -44,14 +43,7 @@ const EducationMain = () => {
             perfect diamond.
           </p>
         </Link>
-        <Link to="/" className="edu-item">
-          <img src={pearl} alt="Pearl" />
-          <h3>Pearl Education And Guidance</h3>
-          <p>
-            As unique as that special someone, pearls are best when you know
-            what to look for.
-          </p>
-        </Link>
+
         <Link to="/" className="edu-item">
           <img src={met} alt="Metal" />
           <h3>Metal Education And Guidance</h3>

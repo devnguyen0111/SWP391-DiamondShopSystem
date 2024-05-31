@@ -1,0 +1,176 @@
+.wrapper-diamond {
+  margin-top: 135px;
+  display: flex;
+  justify-content: space-around;
+}
+a {
+  text-decoration: none;
+}
+.navigator {
+  font-family: "Gantari";
+  width: 15%;
+  margin: 20px;
+  margin-left: 40px;
+}
+
+.nav-item {
+  cursor: pointer;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+
+  font-size: 15px;
+  text-decoration: none;
+  color: black;
+}
+
+.nav-item h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.nav-item span {
+  color: rgb(123, 123, 254);
+  font-size: 1em;
+}
+
+.sub-nav {
+  padding-left: 20px;
+}
+
+.sub-nav div {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.sub-nav div:hover {
+  text-decoration: underline;
+}
+
+.information {
+  max-width: 75%;
+  font-family: "Lora";
+}
+.education-diamond-introduction {
+  padding: 20px;
+}
+
+.title {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.title h1 {
+  font-size: 2em;
+  margin: 0;
+}
+
+.title hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.introduction {
+  text-align: left;
+}
+
+.introduction h2 {
+  margin-top: 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 40px;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+}
+
+.introduction p {
+  font-size: 0.9em;
+  margin: 10px 0;
+  color: #333;
+  font-family: "Gantari";
+}
+
+.find-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 20px 0;
+  background-color: #151542;
+  border-color: #151542;
+  color: #fff;
+  height: 52px;
+  transition: box-shadow 0.2s ease;
+  width: 379px;
+  align-items: center;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  font-family: Gantari;
+  font-size: 16px;
+  font-weight: 400;
+  justify-content: center;
+  line-height: 20px;
+  outline: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.find-button:hover {
+  background-color: #17176f;
+}
+
+a .find-button {
+  text-decoration: none;
+}
+
+.introduction img {
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 30px 0;
+}
+
+/* cut  */
+.cut {
+  display: flex;
+  flex-direction: column;
+}
+
+.cut h2 {
+  margin-top: 0;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 40px;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+}
+
+.cut p {
+  font-size: 0.9em;
+  /* margin: 10px 0; */
+  color: #333;
+  font-family: "Gantari";
+}
+
+.cut a {
+  display: block;
+  color: #0024d6;
+  cursor: pointer;
+  font-family: "Gantari";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 1em;
+  /* margin-bottom: 1em; */
+}
+
+.cut img {
+  /* margin-top: 10px; */
+  margin-bottom: 15px;
+}
