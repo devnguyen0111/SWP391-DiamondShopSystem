@@ -17,6 +17,8 @@ import EducationDiamond from "../components/educationDiamond/EducationDiamond";
 
 import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
+import CompleteProduct from "../components/completeProduct/CompleteProduct";
+import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 
 
 
@@ -61,6 +63,14 @@ export const router = createBrowserRouter([
       {
         path: "/education/diamonds",
         element: <EducationDiamond />,
+      },
+      {
+        path: "/complete-product",
+        element: <CompleteProduct />,
+      },
+      {
+        path: "/shopping-cart",
+        element: <ShoppingCart/>,
       },
     ],
   },
