@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import './DiamondList.scss'
 import { Col, Row } from 'antd';
+import { Link } from 'react-router-dom';
 
 function DiamondList() {
     // const heartRef = useRef(null)
@@ -34,19 +35,18 @@ function DiamondList() {
                 <div className="list__product">
                     <Row gutter={[13, 21]}>
                         <Col span={6} style={{height: '100px'}} className='product__container'>
-                            <div className="product__wrapper">
+                            <Link to={`/diamond-detail`} className="product__wrapper">
                                 <div className="product__img">
                                     <img src="https://ion.bluenile.com/sgmdirect/photoID/33770493/Diamond/21363707/nl/Diamond-round-1-Carat_3_first_.jpg" alt="" />
-                                    <i class="fa-regular fa-heart"></i>
+                                    <i class="fa-regular fa-heart list__wishlist"></i>
                                     
                                 </div>
                                 <div className="product__info">
                                     <div className="product__name">1.00 Carat H-VS2 Princess Cut Diamond</div>
                                     <div className="product__price">$2570</div>
                                 </div>
-                            </div>
+                            </Link>
                         </Col>
-
                     </Row>
                 </div>
             </div>

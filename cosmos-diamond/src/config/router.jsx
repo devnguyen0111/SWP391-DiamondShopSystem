@@ -12,7 +12,14 @@ import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
+
 import EducationDiamond from "../components/educationDiamond/EducationDiamond";
+
+import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
+import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
+
+
+
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +35,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
+
         element: <Homepage />,
       },
       {
