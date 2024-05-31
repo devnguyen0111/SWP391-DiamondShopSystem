@@ -19,6 +19,7 @@ import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 import CompleteProduct from "../components/completeProduct/CompleteProduct";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
+import AccountDetails from "../pages/accountDetails/AccountDetails";
 
 
 
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
       {
         path: "/shopping-cart",
         element: <ShoppingCart/>,
+      },
+      {
+        path: "/user-details",
+        element: <AccountDetails/>,
       },
     ],
   },
