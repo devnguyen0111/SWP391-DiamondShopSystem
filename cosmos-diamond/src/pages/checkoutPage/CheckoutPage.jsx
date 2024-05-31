@@ -71,27 +71,27 @@ function CheckoutPage() {
               <Col span={24} className="checkout__product">
                 <div className="checkout__product-info">
                   <div className="checkout__img">
-                    <img src="https://ion.bluenile.com/sets/Jewelry-bn/150583/NOP/Images/stage.jpg" alt="" />
+                    <img src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" alt="" />
                   </div>
                   <div className="checkout__product-name">
-                    Lab Grown Diamond Low Dome Eternity Ring in 14k White Gold (3 ct. tw.)
+                  ZAC POSEN
                   </div>
                 </div>
-                <div className="checkout__product-price">$2340</div>
+                <div className="checkout__product-price">$450</div>
               </Col>
               <Col className="checkout__summary" span={24}>
                 <ul>
                     <li>
                         <div className="checkout__summary-title">Subtotal</div>
-                        <div className="">$2340</div>
+                        <div className="">$450</div>
                     </li>
                     <li>
                         <div className="checkout__summary-title">Delivery</div>
-                        <div className="">$0</div>
+                        <div className="">$50</div>
                     </li>
                     <li>
-                        <div className="checkout__summary-title">Taxes</div>
-                        <div className="">$0</div>
+                        <div className="checkout__summary-title">Labour</div>
+                        <div className="">$30</div>
                     </li>
                 </ul>
               </Col>
@@ -99,7 +99,7 @@ function CheckoutPage() {
               <Col span={24} >
                 <div className="checkout__summary-total">
                     <div className="">Total</div>
-                    <div className="">$2340</div>
+                    <div className="">$530</div>
                 </div>
               </Col>
             </Row>

@@ -2,6 +2,7 @@ import React from "react";
 import Banner from "../../components/banner/Banner";
 import "./EngagementRingsIntro.scss";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
+import { Link } from "react-router-dom";
 
 function EngagementRingsIntro() {
   return (
@@ -161,7 +162,8 @@ function EngagementRingsIntro() {
             </Row>
           </Col>
           <Col className="gutter-row" span={6}>
-          <Row>
+            <Link to={"/Product/1"}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
             </Row>
             <Row className="ringsAvailable__content">
@@ -169,6 +171,8 @@ function EngagementRingsIntro() {
               <h5 className="ringsAvailable__content__description">Crafted with petite diamond accents to add brilliance to your band or extra sparkle to your halo engagement ring setting.</h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
+            </Link>
+          
           </Col>
         </Row>
       </div>

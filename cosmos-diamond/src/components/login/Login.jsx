@@ -5,13 +5,14 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Divider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import LoadingScreen from "../loadingScreen/LoadingScreen";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -25,7 +26,7 @@ const schema = yup.object().shape({
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [account, setAccount] = useState(null)
-  
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
   const {
     register,
@@ -41,6 +42,7 @@ const Login = () => {
     //     "Content-type": "application/json; charset=UTF-8",
     //   }
     // })
+    setIsLoading(true)
     fetch("https://localhost:7262/api/Authentication/login", {
       method: "POST",
       body: JSON.stringify({
@@ -57,14 +59,14 @@ const Login = () => {
         
         localStorage.setItem('token', json.token)
         setAccount(jwtDecode(json.token))
-        console.log(jwtDecode(json.token));
+        
 
   })
 }
     
     // Logic xử lý đăng nhập
     if(account){
-      fetch(`https://localhost:7262/api/Authentication/customers/1`, {
+      fetch(`https://localhost:7262/api/Authentication/customers/${account.UserID}`, {
         method: 'POST',
         body: JSON.stringify({
           id: account.UserID,
@@ -76,9 +78,8 @@ const Login = () => {
       })
       .then(res => res.json())
       .then(data =>{
-        console.log(data)
-        console.log(localStorage.getItem("token"));
-        navigate("/")
+      setIsLoading(false)
+      navigate("/")
       })
     }
      
@@ -134,6 +135,7 @@ const Login = () => {
           <span>Don't have an account?</span> <a href="#">Sign Up</a>
         </p>
       </div>
+      {isLoading && <LoadingScreen text={"Authorizing..."}/>}
     </div>
   );
 };
