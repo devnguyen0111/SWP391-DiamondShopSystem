@@ -87,3 +87,42 @@
     }
   }
 }
+
+.ringsAvailable {
+  margin-top: 3em;
+  h1 {
+    display: flex;
+    justify-content: center;
+    font-family: "Lora";
+    font-weight: 400;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    margin: 0.8em 0.8em 2em 0.8em;
+    &__title {
+      text-align: center;
+      font-family: "Gantari";
+      font-weight: 700;
+      font-size: 1.6em;
+    }
+
+    &__description {
+      text-align: center;
+      font-family: "Gantari";
+      font-weight: 400;
+      margin:0.5em 0;
+    }
+
+    &__price {
+      text-align: center;
+      font-family: "Lora";
+      font-weight: 700;
+      font-size: 1.2em;
+      font-style: italic;
+    }
+  }
+}

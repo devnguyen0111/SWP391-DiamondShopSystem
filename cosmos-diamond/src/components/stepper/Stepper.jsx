@@ -3,9 +3,7 @@ import "./Stepper.scss";
 import { Col, Row } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-function Stepper({ step1, step2, path }) {
-  
-
+function Stepper({ step1, step2, step3, path }) {
   return (
     <>
       <div className="stepper">
@@ -63,7 +61,9 @@ function Stepper({ step1, step2, path }) {
           <Col span={8} className="stepper__item">
             <div className="stepper__step">
               <span className="stepper__number">3</span>
-              <span className="stepper__title">Complete Ring</span>
+              <Link to="/complete-product">
+                <span className="stepper__title">{step3}</span>
+              </Link>
             </div>
             <div className="stepper__icon">
               <svg
