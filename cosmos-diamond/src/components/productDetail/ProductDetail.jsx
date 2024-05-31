@@ -5,19 +5,15 @@ import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
-function ProductDetail() {
-  const [show, setShow] = useState(false)
-  const openModal = () => {
-    setShow(true);
-    disableScroll()
-  };
+function ProductDetail({product}) {
+  // const [show, setShow] = useState(false)
+  // const openModal = () => {
+  //   setShow(true);
+  //   disableScroll()
+  // };
   return (
     <div className="detail">
-      <Stepper
-        step1={"Choose a Diamond"}
-        step2={"Choose a Setting"}
-        path={{ op: "/diamond-search", op1: "/setting-search" }}
-      />
+      
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
@@ -31,7 +27,7 @@ function ProductDetail() {
           <Col span={24}>
             <div className="summary__img">
               <img
-                src="https://ion.bluenile.com//sgmdirect/photoID/33181565/Diamond/20373906/nl/Diamond-pear-1-Carat_4_first_.jpg"
+                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
                 alt=""
               />
             </div>
@@ -39,7 +35,7 @@ function ProductDetail() {
           <Col span={24}>
             <div className="summary__album">
               <img
-                src="https://ion.bluenile.com//sgmdirect/photoID/33181565/Diamond/20373906/nl/Diamond-pear-1-Carat_4_first_.jpg"
+                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
                 alt=""
               />
             </div>
@@ -110,7 +106,8 @@ function ProductDetail() {
         </Col>
         <Col span={12} className="right">
           <Col span={24} className="right__name">
-            1.00 Carat Pear Diamond
+            {/* {product && product.diamond.diamondName} */}
+            ZAC POSEN
           </Col>
 
           <Col span={24}>
@@ -162,10 +159,13 @@ function ProductDetail() {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button" onClick={() => openModal()}>
-              Select This Diamond
+            <button className="right__button">
+              {/* Select This Diamond */}
+              <Link style={{display:'block', width: '100%', color:'#fff'}} to={"/checkout"}> Buy now</Link>
             </button>
-            <button className="right__button">Consult a Expert</button>
+            <button className="right__button">
+              Add to Cart
+            </button>
           </Col>
           <Col span={24} className="include">
             <div className="include__header">Your Order Include:</div>
@@ -203,7 +203,7 @@ function ProductDetail() {
           </Col>
         </Col>
       </Row>
-      <Modal show={show} setShow={setShow}/>
+      
     </div>
   );
 }
