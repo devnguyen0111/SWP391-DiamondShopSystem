@@ -12,65 +12,63 @@ import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
+
+import EducationDiamond from "../components/educationDiamond/EducationDiamond";
+
 import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 
 
 
+
 export const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: (
+      <div>
+        <Header />
+        {/* // nơi các router con sẽ được render.*/}
+        <Outlet />
+        <Footer />
+      </div>
+    ),
+    children: [
+      {
         path: "/",
-        element: (
-            <div>
-                <Header />
-                {/* // nơi các router con sẽ được render.*/}
-                <Outlet />
-                <Footer />
-            </div>
-        ),
-        children: [
-            {
-                path: "/",
-                element: <Homepage />
-            },
-            {
-                path: "/diamonds",
-                element: <DiamondsIntro />
-            },
-            {
-                path: "/engagement-rings",
-                element: <EngagementRingsIntro />
-            },
-          {
-                path:"/diamond-search",
-                element: <CatalogPage/>
-            },
-            {
-                path:"/setting-search",
-                element: <SortSettingPage/>
-            },
-            {
-                path:"/education",
-                element: <EducationMain/>
-            },
-            {
-                path:"/diamond-detail",
-                element: <DiamondDetail/>
-            },
-            {
-                path:"/checkout",
-                element: <CheckoutPage/>
-            },
-        ],
-    },
-    {
-        path: "/login",
-        element: <Login/>
-    }
+
+        element: <Homepage />,
+      },
+      {
+        path: "/diamonds",
+        element: <DiamondsIntro />,
+      },
+      {
+        path: "/engagement-rings",
+        element: <EngagementRingsIntro />,
+      },
+      {
+        path: "/diamond-search",
+        element: <CatalogPage />,
+      },
+      {
+        path: "/setting-search",
+        element: <SortSettingPage />,
+      },
+      {
+        path: "/education",
+        element: <EducationMain />,
+      },
+      {
+        path: "/education/diamonds",
+        element: <EducationDiamond />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
-
-
-
 
 //Ví dụ sử dụng path khi có children:
 // path: "/",
