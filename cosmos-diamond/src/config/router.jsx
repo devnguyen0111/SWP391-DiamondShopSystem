@@ -13,6 +13,7 @@ import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
 import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
+import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 
 
 
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
             {
                 path:"/diamond-detail",
                 element: <DiamondDetail/>
+            },
+            {
+                path:"/checkout",
+                element: <CheckoutPage/>
             },
         ],
     },
