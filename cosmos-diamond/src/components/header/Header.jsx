@@ -12,18 +12,30 @@ import {
 } from "@ant-design/icons";
 
 import { Link } from "react-router-dom";
-
+import { Popover, Button } from "antd";
+import { useState } from "react";
 const Header = () => {
+  const content = (
+    <div>
+      <p></p>
+    </div>
+  );
+
   return (
     <header className="header-container">
       <div className="logo">
-        <img src={img} alt="Cosmos Diamonds" />
+        <Link to="/">
+          <img src={img} alt="Cosmos Diamonds" />
+        </Link>
       </div>
       <nav className="nav">
-        <Link to="/diamonds" className="nav-link">
-          Diamonds{" "}
+        {/* <Popover placement="topLeft" title="" content={content}> */}
+        <Link>
+          {" "}
+          Diamonds
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
+        {/* </Popover> */}
 
         <Link to="./engagement-rings" className="nav-link">
           Engagement Rings{" "}

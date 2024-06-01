@@ -30,24 +30,12 @@ const EducationDiamond = () => {
         </Link>
 
         <div className="sub-nav">
-          <Link to="/education/diamonds/cut">
-            <div>Cut</div>
-          </Link>
-          <Link to="/education/diamonds/color">
-            <div>Color</div>
-          </Link>
-          <Link to="/education/diamonds/clarity">
-            <div>Clarity</div>
-          </Link>
-          <Link to="/education/diamonds/carat">
-            <div>Carat</div>
-          </Link>
-          <Link to="/education/diamonds/shape">
-            <div>Shape</div>
-          </Link>
-          <Link to="/education/diamonds/certification">
-            <div>Certification</div>
-          </Link>
+          <div>Cut</div>
+          <div>Color</div>
+          <div>Clarity</div>
+          <div>Carat</div>
+          <div>Shape</div>
+          <div>Certification</div>
         </div>
 
         <Link to="/education/rings" className="nav-item">
@@ -88,7 +76,6 @@ const EducationDiamond = () => {
                 including the balance and brilliance of its facets. Diamond cut
                 is considered the most important of the four Cs.
               </p>
-              <a href="#">Learn More About Diamond Cut</a>
               <img src={cut2} alt="Diamond Cuts" />
             </div>
           </div>
@@ -103,7 +90,6 @@ const EducationDiamond = () => {
                 less color, the higher the grade.
                 <br />
               </p>
-              <a href="#">Learn More About Diamond Color</a>
               <br />
               <img src={color} alt="Diamond Color" />
             </div>
@@ -118,7 +104,6 @@ const EducationDiamond = () => {
                 Inclusions can occur naturally during the diamond forming
                 process. Clarity is used to quantify and specify any inclusions.
               </p>
-              <a href="#">Learn More About Diamond Clarity</a>
               <img src={cut2} alt="Diamond Cuts" />
             </div>
           </div>
@@ -131,7 +116,6 @@ const EducationDiamond = () => {
                 showing how large a diamond is. color, the higher the grade.
                 <br />
               </p>
-              <a href="#">Learn More About Diamond Carat</a>
               <br />
               <img src={color} alt="Diamond Color" />
             </div>
@@ -145,7 +129,6 @@ const EducationDiamond = () => {
                 attributes that can affect price and quality grades.
                 <br />
               </p>
-              <a href="#">Learn More About Diamond Shape</a>
               <br />
               <img src={shape} alt="Diamond Shape" />
             </div>
