@@ -14,15 +14,13 @@ import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
 
 import EducationDiamond from "../components/educationDiamond/EducationDiamond";
+import EducationMetal from "../components/educationMetal/EducationMetal";
 
 import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 import CompleteProduct from "../components/completeProduct/CompleteProduct";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import AccountDetails from "../pages/accountDetails/AccountDetails";
-
-
-
 
 export const router = createBrowserRouter([
   {
@@ -71,11 +69,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/shopping-cart",
-        element: <ShoppingCart/>,
+        element: <ShoppingCart />,
       },
       {
         path: `/Product/:id`,
-        element: <DiamondDetail/>,
+        element: <DiamondDetail />,
       },
       {
         path: "/checkout",
@@ -83,7 +81,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/user-details",
-        element: <AccountDetails/>,
+        element: <AccountDetails />,
+      },
+      {
+        path: "/education/metal",
+        element: <EducationMetal />,
       },
     ],
   },
