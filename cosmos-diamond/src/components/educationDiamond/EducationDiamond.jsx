@@ -1,48 +1,109 @@
 import "./EducationDiamond.css";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 import dia_cut from "../../assets/Diamond_Cut.webp";
 import cut2 from "../../assets/cut2.jpeg";
 import color from "../../assets/Diamond_Clarity.jpeg";
 import shape from "../../assets/Diamond_Shape.jpeg";
 import gia from "../../assets/gia.jpeg";
+import smoothscroll from "smoothscroll-polyfill";
 
 const EducationDiamond = () => {
+  useEffect(() => {
+    // Kick off the polyfill for smooth scroll
+    smoothscroll.polyfill();
+  }, []);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      // Tính toán vị trí cần cuộn tới với margin
+      const offsetPosition = element.offsetTop - 120; // 50px margin
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className="wrapper-diamond">
       <div className="navigator">
         <Link to="/education/metal" className="nav-item">
           <h3>Metal Education </h3>
-          <span>
-            <DownOutlined />
-          </span>
         </Link>
 
         <Link to="/education/diamonds" className="nav-item">
           <h3>Diamond Education </h3>
-          <span>
-            {" "}
-            <UpOutlined />
-          </span>
         </Link>
 
         <div className="sub-nav">
-          <div>Cut</div>
-          <div>Color</div>
-          <div>Clarity</div>
-          <div>Carat</div>
-          <div>Shape</div>
-          <div>Certification</div>
+          <Link
+            to="id_cut"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_cut");
+            }}
+          >
+            <div>Cut</div>
+          </Link>
+
+          <Link
+            to="#id_color"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_color");
+            }}
+          >
+            <div>Color</div>
+          </Link>
+
+          <Link
+            to="#id_clarity"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_clarity");
+            }}
+          >
+            <div>Clarity</div>
+          </Link>
+
+          <Link
+            to="#id_carat"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_carat");
+            }}
+          >
+            <div>Carat</div>
+          </Link>
+
+          <Link
+            to="#id_shape"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_shape");
+            }}
+          >
+            <div>Shape</div>
+          </Link>
+
+          <Link
+            to="#id_certification"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("id_certification");
+            }}
+          >
+            <div>Certification</div>
+          </Link>
         </div>
 
         <Link to="/education/rings" className="nav-item">
           <h3>Ring Education </h3>
-          <span>
-            <DownOutlined />
-          </span>
         </Link>
       </div>
       <div className="information">
@@ -66,7 +127,7 @@ const EducationDiamond = () => {
 
             <img src={dia_cut} alt="Diamonds" />
           </div>
-          <div className="cut">
+          <div className="cut" id="id_cut">
             <h2>Cut</h2>
             <div className="cut-info">
               <p>
@@ -79,7 +140,7 @@ const EducationDiamond = () => {
               <img src={cut2} alt="Diamond Cuts" />
             </div>
           </div>
-          <div className="cut">
+          <div className="cut" id="id_color">
             <h2>Color</h2>
             <div className="cut-info">
               <p>
@@ -94,7 +155,7 @@ const EducationDiamond = () => {
               <img src={color} alt="Diamond Color" />
             </div>
           </div>
-          <div className="cut">
+          <div className="cut" id="id_clarity">
             <h2>Clarity</h2>
             <div className="cut-info">
               <p>
@@ -107,7 +168,7 @@ const EducationDiamond = () => {
               <img src={cut2} alt="Diamond Cuts" />
             </div>
           </div>
-          <div className="cut">
+          <div className="cut" id="id_carat">
             <h2>Carat Weight</h2>
             <div className="cut-info">
               <p>
@@ -120,7 +181,7 @@ const EducationDiamond = () => {
               <img src={color} alt="Diamond Color" />
             </div>
           </div>
-          <div className="cut">
+          <div className="cut" id="id_shape">
             <h2>Shape</h2>
             <div className="cut-info">
               <p>
@@ -133,7 +194,7 @@ const EducationDiamond = () => {
               <img src={shape} alt="Diamond Shape" />
             </div>
           </div>
-          <div className="cut">
+          <div className="cut" id="id_certification">
             <h2>Certificate</h2>
             <div className="cut-info">
               <p>
@@ -143,7 +204,6 @@ const EducationDiamond = () => {
                 Diamonds' diamond.
                 <br />
               </p>
-              <a href="#">Learn More About Certification</a>
               <br />
               <img src={gia} alt="Diamond Certification" />
               <br />
