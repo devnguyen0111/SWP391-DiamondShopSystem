@@ -30,7 +30,7 @@ const Header = () => {
       </div>
       <nav className="nav">
         {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link>
+        <Link to ='./diamonds' className="nav-link">
           {" "}
           Diamonds
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}

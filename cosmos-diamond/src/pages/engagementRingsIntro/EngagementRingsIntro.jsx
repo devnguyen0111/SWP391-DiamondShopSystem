@@ -88,91 +88,136 @@ function EngagementRingsIntro() {
 
       <div className="ringsAvailable">
         <h1>Available Engagement Rings</h1>
-        <Row gutter={20} >
-          <Col className="gutter-row" span={6}>
+        <Row
+          gutter={{
+            xs: 8,
+            sm: 16,
+            md: 24,
+            lg: 24,
+          }}
+          style={{ marginLeft: "0.8em" }}
+        >
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
             <Row>
               <Image src="https://dam.bluenile.com/images/public/5434/Solitaire_ring.webp" />
             </Row>
             <Row className="ringsAvailable__content">
               <h5 className="ringsAvailable__content__title">SOLITAIRE</h5>
-              <h5 className="ringsAvailable__content__description">Timeless and traditional, a diamond solitaire engagement ring highlights your center stone in classic style.</h5>
+              <h5 className="ringsAvailable__content__description">
+                Timeless and traditional, a diamond solitaire engagement ring
+                highlights your center stone in classic style.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
-          <Row>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5440/Halo_ring.webp" />
             </Row>
             <Row className="ringsAvailable__content">
               <h5 className="ringsAvailable__content__title">HALO</h5>
-              <h5 className="ringsAvailable__content__description">Frame your center stone with a sparkling single or double diamond halo, including designs with fancy shapes.</h5>
+              <h5 className="ringsAvailable__content__description">
+                Frame your center stone with a sparkling single or double
+                diamond halo, including designs with fancy shapes.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
-          <Row>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5446/Vintage_ring.webp" />
             </Row>
             <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">VINTAGE - INSPIRED</h5>
-              <h5 className="ringsAvailable__content__description">A vintage-inspired engagement ring gives you heirloom-looks with custom details from milgrain to hand-engraving.</h5>
+              <h5 className="ringsAvailable__content__title">
+                VINTAGE - INSPIRED
+              </h5>
+              <h5 className="ringsAvailable__content__description">
+                A vintage-inspired engagement ring gives you heirloom-looks with
+                custom details from milgrain to hand-engraving.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
-          <Row>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5452/Sapphire_Sidestone.webp" />
             </Row>
             <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">SAPPHIRE SIDESTONE</h5>
-              <h5 className="ringsAvailable__content__description">Bold sapphires and sparkling diamonds make great friends. It's no surprise sapphire sidestone rings are so popular.</h5>
+              <h5 className="ringsAvailable__content__title">
+                SAPPHIRE SIDESTONE
+              </h5>
+              <h5 className="ringsAvailable__content__description">
+                Bold sapphires and sparkling diamonds make great friends. It's
+                no surprise sapphire sidestone rings are so popular.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col className="gutter-row" span={6}>
+        <Row
+            gutter={{
+              xs: 8,
+              sm: 16,
+              md: 24,
+              lg: 24,
+            }}
+            style={{ marginLeft: "0.8em" }}
+        >
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
             <Row>
               <Image src="https://dam.bluenile.com/images/public/5482/Diamond_Sidestone_ring.webp" />
             </Row>
             <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">DIAMOND SIDESTONE</h5>
-              <h5 className="ringsAvailable__content__description">Diamond sidestones add extra sparkle, and come in stunning options like delicate pavé and tapered baguettes.</h5>
+              <h5 className="ringsAvailable__content__title">
+                DIAMOND SIDESTONE
+              </h5>
+              <h5 className="ringsAvailable__content__description">
+                Diamond sidestones add extra sparkle, and come in stunning
+                options like delicate pavé and tapered baguettes.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
-          <Row>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5488/Gemstone_Ring.webp" />
             </Row>
             <Row className="ringsAvailable__content">
               <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-              <h5 className="ringsAvailable__content__description">When you're looking for a unique option, a gemstone engagement ring adds a beautiful pop of color to your style.</h5>
+              <h5 className="ringsAvailable__content__description">
+                When you're looking for a unique option, a gemstone engagement
+                ring adds a beautiful pop of color to your style.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
-          <Row>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Row>
               <Image src="https://dam.bluenile.com/images/public/5494/Three-Stone.webp" />
             </Row>
             <Row className="ringsAvailable__content">
               <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-              <h5 className="ringsAvailable__content__description">A three-stone engagement ring features two diamond or gemstone sidestones that frame your center stone.</h5>
+              <h5 className="ringsAvailable__content__description">
+                A three-stone engagement ring features two diamond or gemstone
+                sidestones that frame your center stone.
+              </h5>
               <h5 className="ringsAvailable__content__price">$450</h5>
             </Row>
           </Col>
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
             <Link to={"/Product/1"}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-              <h5 className="ringsAvailable__content__description">Crafted with petite diamond accents to add brilliance to your band or extra sparkle to your halo engagement ring setting.</h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
+              <Row>
+                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
+              </Row>
+              <Row className="ringsAvailable__content" align={"middle"}>
+                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
+                <h5 className="ringsAvailable__content__description">
+                  Crafted with petite diamond accents to add brilliance to your
+                  band or extra sparkle to your halo engagement ring setting.
+                </h5>
+                <h5 className="ringsAvailable__content__price">$450</h5>
+              </Row>
             </Link>
-          
           </Col>
         </Row>
       </div>
