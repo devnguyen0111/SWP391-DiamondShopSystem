@@ -247,7 +247,7 @@ function ShoppingCart() {
           </Col>
 
           <Col span={12} md={4} sm={7}>
-            <h5>
+            <h5 className="informationLeft__title">
               {" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -269,18 +269,18 @@ function ShoppingCart() {
               </svg>
               <span style={{ marginLeft: "1em" }}>SHIPPING</span>
             </h5>
-            <p>
+            <p className="informationLeft__detail">
               - Free Shipping Worldwide
               <br />
               - Overnight Shipping Order Tracking
-              <br />- Everystep of the way More Info...
+              <br />- Everystep of the way
             </p>
           </Col>
           <Col span={12} md={2} sm={0}>
             {/* khong code cho nay */}
           </Col>
           <Col span={12} md={4} sm={8}>
-            <h5>
+            <h5 className="informationLeft__title"> 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 29.97 30.69"
@@ -306,7 +306,7 @@ function ShoppingCart() {
 
               <span style={{ marginLeft: "1em" }}>RETURNS</span>
             </h5>
-            <p>
+            <p className="informationLeft__detail">
               - 100% Money Back Guarantee
               <br />
               - Free returns from the US & Canada

@@ -84,3 +84,17 @@
     gap: 3em;
   }
 }
+
+.informationLeft {
+  &__title {
+    font-family: "Gantari";
+    font-size: 1.5em;
+    color: rgb(174, 169, 169);
+  }
+
+  &__detail {
+    font-family: "Gantari";
+    line-height: 3em;
+    color: rgb(174, 169, 169);
+  }
+}
