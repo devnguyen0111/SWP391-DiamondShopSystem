@@ -102,7 +102,7 @@
   &__content {
     display: flex;
     flex-direction: column;
-    margin: 0.8em 0.8em 2em 0.8em;
+    margin: 0.8em 0.8em 2em 0;
     &__title {
       text-align: center;
       font-family: "Gantari";
@@ -114,7 +114,7 @@
       text-align: center;
       font-family: "Gantari";
       font-weight: 400;
-      margin:0.5em 0;
+      margin: 0.5em 0;
     }
 
     &__price {

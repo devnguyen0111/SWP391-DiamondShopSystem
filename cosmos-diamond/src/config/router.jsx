@@ -21,6 +21,7 @@ import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 import CompleteProduct from "../components/completeProduct/CompleteProduct";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import AccountDetails from "../pages/accountDetails/AccountDetails";
+import Wishlist from "../pages/wishlist/Wishlist";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
       {
         path: "/education/metal",
         element: <EducationMetal />,
+      },
+      {
+        path: "/wishlist",
+        element: <Wishlist />,
       },
     ],
   },
