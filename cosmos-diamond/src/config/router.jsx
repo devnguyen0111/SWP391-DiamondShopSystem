@@ -15,7 +15,7 @@ import EducationMain from "../components/educationMain/EducationMain";
 
 import EducationDiamond from "../components/educationDiamond/EducationDiamond";
 import EducationMetal from "../components/educationMetal/EducationMetal";
-
+import EducationRing from "../components/educationRing/EducationRing";
 import DiamondDetail from "../pages/dimamondDetail/DiamondDetail";
 import CheckoutPage from "../pages/checkoutPage/CheckoutPage";
 import CompleteProduct from "../components/completeProduct/CompleteProduct";
@@ -63,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: "/education/diamonds",
         element: <EducationDiamond />,
+      },
+      {
+        path: "/education/rings",
+        element: <EducationRing />,
       },
       {
         path: "/complete-product",
