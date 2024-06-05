@@ -66,7 +66,7 @@ const Login = () => {
     
     // Logic xử lý đăng nhập
     if(account){
-      fetch(`https://localhost:7262/api/Authentication/customers/${account.UserID}`, {
+      fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
         method: 'POST',
         body: JSON.stringify({
           id: account.UserID,
