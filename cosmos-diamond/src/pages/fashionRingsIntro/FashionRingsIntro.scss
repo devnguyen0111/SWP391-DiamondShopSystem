@@ -1,0 +1,46 @@
+.bandPairings {
+    padding: 2em;
+  
+    &__banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      // width: 90%;
+      // width:100%;
+      height: 60vh;
+      background-color: #0c1636;
+      color: white;
+      margin-bottom: 2em;
+  
+      h4 {
+        margin-bottom: 2em;
+        font-family: "Lora";
+        font-weight: 400;
+      }
+  
+      h2 {
+        margin-bottom: 1em;
+        font-size: 2.4em;
+        font-family: "Lora";
+        font-weight: 400;
+      }
+  
+      h5 {
+        margin-bottom: 2em;
+        font-family: "Gantari";
+        font-weight: 300;
+        font-size: 1.2em;
+      }
+    }
+  
+    &__pic {
+      h5 {
+        font-family: "Gantari";
+        font-size: 1.3em;
+        margin: 0.7em 0;
+        text-transform: uppercase;
+      }
+    }
+  }

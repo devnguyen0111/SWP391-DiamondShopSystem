@@ -12,7 +12,6 @@ import CatalogPage from "../pages/catalog/CatalogPage";
 import SortSettingPage from "../pages/sortSetting/SortSettingPage";
 import Login from "../components/login/Login";
 import EducationMain from "../components/educationMain/EducationMain";
-
 import EducationDiamond from "../components/educationDiamond/EducationDiamond";
 import EducationMetal from "../components/educationMetal/EducationMetal";
 import EducationRing from "../components/educationRing/EducationRing";
@@ -25,6 +24,9 @@ import Wishlist from "../pages/wishlist/Wishlist";
 import EduRingWedding from "../components/eduRingWedding/EduRingWedding";
 import EduRingMen from "../components/eduRingMen/EduRingMen";
 
+import WeddingRingsIntro from "../pages/weddingRingsIntro/WeddingRingsIntro";
+import JewelryIntro from "../pages/jewelryIntro/JewelryIntro";
+import FashionRingsIntro from "../pages/fashionRingsIntro/FashionRingsIntro";
 import Signup from "../pages/signup/Signup";
 
 export const router = createBrowserRouter([
@@ -109,6 +111,18 @@ export const router = createBrowserRouter([
         path: "/education/rings/mens-wedding-rings",
 
         element: <EduRingMen />,
+      },
+      {
+        path: "/wedding-rings",
+        element: <WeddingRingsIntro />,
+      },
+      {
+        path: "/jewelry",
+        element: <JewelryIntro />,
+      },
+      {
+        path: "/fashion-rings",
+        element: <FashionRingsIntro />,
       },
     ],
   },
