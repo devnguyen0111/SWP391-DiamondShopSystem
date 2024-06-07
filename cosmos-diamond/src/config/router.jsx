@@ -22,6 +22,8 @@ import CompleteProduct from "../components/completeProduct/CompleteProduct";
 import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import AccountDetails from "../pages/accountDetails/AccountDetails";
 import Wishlist from "../pages/wishlist/Wishlist";
+import EduRingWedding from "../components/eduRingWedding/EduRingWedding";
+import EduRingMen from "../components/eduRingMen/EduRingMen";
 
 import Signup from "../pages/signup/Signup";
 
@@ -97,6 +99,16 @@ export const router = createBrowserRouter([
       {
         path: "/wishlist",
         element: <Wishlist />,
+      },
+      {
+        path: "/education/rings/wedding-ring-guide",
+
+        element: <EduRingWedding />,
+      },
+      {
+        path: "/education/rings/mens-wedding-rings",
+
+        element: <EduRingMen />,
       },
     ],
   },
