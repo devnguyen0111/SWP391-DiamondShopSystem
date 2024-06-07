@@ -41,18 +41,19 @@ const Header = () => {
           Engagement Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        <a className="nav-link" href="#">
+        <Link to="./wedding-rings" className="nav-link">
           Wedding Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
-        <a className="nav-link" href="#">
-          Jewelry{" "}
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
-        <a className="nav-link" href="#">
+        </Link>
+        <Link to="./fashion-rings" className="nav-link">
           Fashion Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </a>
+        </Link>
+        <Link to="./jewelry" className="nav-link">
+          Jewelry{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
+        </Link>
+        
         <Link to="/education" className="nav-link">
           Education{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
@@ -63,16 +64,20 @@ const Header = () => {
         <SearchOutlined />
       </div>
       <div className="icon-container">
-        <div className="icon">
-          <Link to="/login">
+        <div className="icon" >
+          <Link to="/login" >
             <UserOutlined />
           </Link>
         </div>
-        <div className="icon">
+        <div className="icon" >
+        <Link to="/wishlist" >
           <HeartOutlined />
+          </Link>
         </div>
         <div className="icon">
+        <Link to="/shopping-cart">
           <ShoppingCartOutlined />
+          </Link>
         </div>
       </div>
     </header>
