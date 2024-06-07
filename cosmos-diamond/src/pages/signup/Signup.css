@@ -33,6 +33,7 @@
 .login-form {
   background: white;
   padding: 40px;
+  padding-bottom: 30px;
   border-radius: 25px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 400px;
@@ -56,7 +57,7 @@
 }
 
 .login-form input {
-  width: 328px;
+  width: 320px;
   padding: 10px;
   padding-left: 18px;
   margin-bottom: 20px;
@@ -208,11 +209,20 @@
   transform: translateY(-50%);
   cursor: pointer;
   color: #888;
-  padding-top: 5px !important;
+  padding-top: 8px;
 }
 
 #sign-up {
   color: grey;
+}
+
+.wrapper-input-name {
+  display: flex;
+}
+
+.name input {
+  width: 155px;
+  margin-right: 10px;
 }
 
 .back-to-home {

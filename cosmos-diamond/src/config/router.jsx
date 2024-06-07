@@ -23,6 +23,8 @@ import ShoppingCart from "../pages/shoppingCart/ShoppingCart";
 import AccountDetails from "../pages/accountDetails/AccountDetails";
 import Wishlist from "../pages/wishlist/Wishlist";
 
+import Signup from "../pages/signup/Signup";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -101,6 +103,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/sign-up",
+    element: <Signup />,
   },
 ]);
 
