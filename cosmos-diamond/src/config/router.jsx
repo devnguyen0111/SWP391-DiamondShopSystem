@@ -25,6 +25,8 @@ import WeddingRingsIntro from "../pages/weddingRingsIntro/WeddingRingsIntro";
 import JewelryIntro from "../pages/jewelryIntro/JewelryIntro";
 import FashionRingsIntro from "../pages/fashionRingsIntro/FashionRingsIntro";
 
+import Signup from "../pages/signup/Signup";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -115,6 +117,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/sign-up",
+    element: <Signup />,
   },
 ]);
 

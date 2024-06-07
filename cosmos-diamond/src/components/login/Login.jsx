@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
+import { Link } from "react-router-dom";
 import {
   GoogleOutlined,
   EyeInvisibleOutlined,
@@ -25,9 +26,9 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [account, setAccount] = useState(null)
+  const [account, setAccount] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -36,13 +37,13 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const  onSubmit =  (data) => {
+  const onSubmit = (data) => {
     // let token = await axios.post("https://localhost:7262/api/Authentication/login",{
     //   headers:{
     //     "Content-type": "application/json; charset=UTF-8",
     //   }
     // })
-    setIsLoading(true)
+    setIsLoading(true);
     fetch("https://localhost:7262/api/Authentication/login", {
       method: "POST",
       body: JSON.stringify({
@@ -55,38 +56,30 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-        
-        
-        localStorage.setItem('token', json.token)
-        setAccount(jwtDecode(json.token))
-        
+        localStorage.setItem("token", json.token);
+        setAccount(jwtDecode(json.token));
+      });
+  };
 
-  })
-}
-    
-    // Logic xử lý đăng nhập
-    if(account){
-      fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
-        method: 'POST',
-        body: JSON.stringify({
-          id: account.UserID,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-      })
-      .then(res => res.json())
-      .then(data =>{
-      setIsLoading(false)
-      navigate("/")
-      })
-    }
-     
-    
-    
-    
-  
+  // Logic xử lý đăng nhập
+  if (account) {
+    fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: account.UserID,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoading(false);
+        navigate("/");
+      });
+  }
+
   return (
     <div className="login-container">
       <div className="login-form">
@@ -132,10 +125,13 @@ const Login = () => {
           </button>
         </form>
         <p className="signup">
-          <span>Don't have an account?</span> <a href="#">Sign Up</a>
+          <span>Don't have an account?</span> <a href="/sign-up">Sign Up</a>
+        </p>
+        <p className="back-to-home">
+          <Link to="/">Back to Home Page</Link>
         </p>
       </div>
-      {isLoading && <LoadingScreen text={"Authorizing..."}/>}
+      {isLoading && <LoadingScreen text={"Authorizing..."} />}
     </div>
   );
 };
