@@ -2,10 +2,8 @@ import React from "react";
 import { useState } from "react";
 import ReactSlider from "react-slider";
 
-const MIN_CARAT = 0.05;
-const MAX_CARAT = 30.0;
-function SortCaratSlider() {
-  const [carat, setCarat] = useState([MIN_CARAT, MAX_CARAT]);
+
+function SortCaratSlider({carat, setCarat, MAX_CARAT, MIN_CARAT}) {
   const handleCaratChange = (newCarat) => setCarat(newCarat);
 
   return (

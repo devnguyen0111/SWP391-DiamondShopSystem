@@ -67,10 +67,7 @@ const Login = () => {
     // Logic xử lý đăng nhập
     if(account){
       fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
-        method: 'POST',
-        body: JSON.stringify({
-          id: account.UserID,
-        }),
+        method: 'GET',
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -79,6 +76,8 @@ const Login = () => {
       .then(res => res.json())
       .then(data =>{
       setIsLoading(false)
+      console.log(data);
+      localStorage.setItem('customer', JSON.stringify(data))
       navigate("/")
       })
     }

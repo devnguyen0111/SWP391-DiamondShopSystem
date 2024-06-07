@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import ReactSlider from "react-slider";
 
-const INIT_CUT = ["Good", "Very Good", "Ideal", "Astor Ideal"];
-function SortCutSlider() {
+function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
 
-  const [cut, setCut] = useState([1, 5]);
-  const [cutName, setCutName] = useState(INIT_CUT);
+
 
   const handlerCutChange = (newCut) => {
     setCut(newCut);
@@ -30,7 +28,7 @@ function SortCutSlider() {
       <div className="range">
         <div className="range__title">Cut</div>
         <div className="range__content">
-          <ul className="cut">
+          <ul className="cut" >
             {INIT_CUT.map((name, index) => (
               <li className="cut__name" key={index}>
                 {name}

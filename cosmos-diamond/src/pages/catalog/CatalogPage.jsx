@@ -3,7 +3,7 @@ import Stepper from "./../../components/stepper/Stepper";
 import DiamondFinderIntro from "../../components/diamondSortIntro/DiamondFinderIntro";
 import DiamondSort from "./../../components/sortslider/DiamondSort";
 import "./CatalogPages.scss";
-import DiamondList from "../../components/sortslider/DiamondList";
+
 
 function CatalogPage() {
   return (

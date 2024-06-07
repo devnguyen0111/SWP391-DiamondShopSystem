@@ -70,9 +70,7 @@
             background-color: rgba($color: #dcdcdc, $alpha: 0.2);
         }
 
-        &:first-child{
-            border: 1px solid #151542;
-        }
+        
     }
 
     &__name{
@@ -191,7 +189,8 @@
     height: 1px;
 }
 .cut{
-    display: flex;
+    display: flex ;
+    flex-direction: row !important;
     list-style: none;
     width: 100%;
     &__name{
@@ -208,4 +207,9 @@
 }
 .cut-mark:nth-of-type(1){
     display: none;
+}
+.chosen{
+    
+        border: 1px solid #151542;
+    
 }

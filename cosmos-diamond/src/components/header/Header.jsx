@@ -13,8 +13,21 @@ import {
 
 import { Link } from "react-router-dom";
 import { Popover, Button } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 const Header = () => {
+  const [customer, setCustomer] = useState(null);
+  
+  
+
+  useEffect(()=>{
+    const userInfo = localStorage.getItem('customer')
+    if(userInfo !== null){
+      setCustomer(JSON.parse(userInfo));
+    };
+
+  }, [])
+
   const content = (
     <div>
       <p></p>
@@ -30,7 +43,7 @@ const Header = () => {
       </div>
       <nav className="nav">
         {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link to ='./diamonds' className="nav-link">
+        <Link to="./diamonds" className="nav-link">
           {" "}
           Diamonds
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
@@ -64,9 +77,15 @@ const Header = () => {
       </div>
       <div className="icon-container">
         <div className="icon">
-          <Link to="/login">
-            <UserOutlined />
-          </Link>
+          {customer === null ? (
+            <Link to="/login">
+              <UserOutlined />
+            </Link>
+          ) : (
+            <Link to={`/profile/${customer.cusId}`}>
+              <span>Hello {customer.cusFirstName}</span>
+            </Link>
+          )}
         </div>
         <div className="icon">
           <HeartOutlined />
