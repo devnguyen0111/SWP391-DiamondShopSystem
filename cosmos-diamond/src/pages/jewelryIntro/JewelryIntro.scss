@@ -1,0 +1,73 @@
+.classicTwist {
+  margin: 2em 0;
+
+  &__banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 60vh;
+    background-color: #0c1636;
+    color: white;
+    margin-bottom: 2em;
+
+    h4 {
+      margin-bottom: 2em;
+      font-family: "Lora";
+      font-weight: 400;
+    }
+
+    h2 {
+      margin-bottom: 1em;
+      font-size: 2.4em;
+      font-family: "Lora";
+      font-weight: 400;
+    }
+
+    h5 {
+      margin-bottom: 2em;
+      font-family: "Gantari";
+      font-weight: 350;
+      font-size: 1.2em;
+    }
+  }
+
+  &__pic {
+    h5 {
+      font-family: "Lora";
+      font-size: 1.3em;
+      margin: 0.7em 0;
+      font-weight: 200;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.perfectPieces {
+  background-color: #151542;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 45vh;
+  margin-bottom: 2em;
+
+  &__title {
+    font-family: "Lora";
+    font-weight: 300;
+    font-size: 2em;
+    margin-bottom: 1em;
+  }
+
+  &__description {
+    font-family: "Gantari";
+    font-weight: 300;
+    margin-bottom: 2.5em;
+  }
+}

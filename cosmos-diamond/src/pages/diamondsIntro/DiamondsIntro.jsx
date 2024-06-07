@@ -15,7 +15,7 @@ function DiamondsIntro() {
         artisans will pour their passion to every detail of your beautiful 
         custom engagement ring."
         bg="https://dam.bluenile.com/images/public/20446/5_loose_diamonds_in_varying_cuts_and_1_round_engagement_ring.jpeg"
-        buttons={["Shop Diamonds", "Shop Engagement Rings"]}
+        buttons={["Shop Diamonds"]}
       />
 
       <div className="diamondsGuide">
@@ -35,7 +35,7 @@ function DiamondsIntro() {
               </h5>
             </Row>
             <Row className="diamondsGuide__pic">
-              <Col md={12} sm={12}>
+              <Col md={12} sm={6}>
                 <Image
                   preview={false}
                   width={350}
@@ -44,7 +44,7 @@ function DiamondsIntro() {
                 />
                 <h5>OVAL DIAMONDS</h5>
               </Col>
-              <Col md={11} sm={11} style={{ marginLeft: "1em" }}>
+              <Col md={11} sm={6} style={{ marginLeft: "1em" }}>
                 <Image
                   preview={false}
                   width={350}
@@ -64,7 +64,7 @@ function DiamondsIntro() {
             <Image
               preview={false}
               width={700}
-              height={900}
+              height={920}
               src="https://dam.bluenile.com/images/public/2879/EMERALD_DIAMONDS.webp"
             />
             <h5>EMERALD DIAMONDS</h5>
