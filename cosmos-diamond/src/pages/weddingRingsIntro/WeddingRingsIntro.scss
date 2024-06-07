@@ -1,0 +1,104 @@
+.weddingEssentials {
+   
+  margin-top:2em;
+    &__banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 60vh;
+      background-color: #0c1636;
+      color: white;
+      margin-bottom: 2em;
+  
+      h4 {
+        margin-bottom: 2em;
+        font-family: "Lora";
+        font-weight: 400;
+      }
+  
+      h2 {
+        margin-bottom: 1em;
+        font-size: 2.4em;
+        font-family: "Lora";
+        font-weight: 400;
+      }
+  
+      h5 {
+        margin-bottom: 2em;
+        font-family: "Gantari";
+        font-weight: 350;
+        font-size: 1.2em;
+      }
+    }
+  
+    &__pic {
+     
+      h5 {
+        font-family: "Lora";
+        font-size: 1.3em;
+        margin: 0.7em 0;
+        font-weight: 200;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .findSize {
+    margin-top:2em;
+    background-color: #f5f7f8;
+    &__banner {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 5.5em;
+      height: 100%;
+  
+      h2 {
+        font-weight: 100;
+        font-family: "Lora";
+        font-size: 2em;
+      }
+  
+      h5 {
+        font-weight: 300;
+        font-family: "Gantari";
+        font-size: 1.3em;
+        margin: 1em 0 4em 0;
+      }
+  
+      &__button {
+        font-family: "Gantari";
+        font-weight: 500;
+        font-size: 1em;
+        border-radius: 0px;
+        height: 3em;
+        width: 40%;
+      }
+    }
+  
+    &__pic {
+      width: 850px;
+      height: 550px;
+    }
+  }
+  
+  @media screen and (max-width: 2600px) {
+    .findSize {
+      &__pic {
+        width: 1500px;
+        height: 950px;
+      }
+    }
+  }
+  @media screen and (max-width: 2000px) {
+    .findSize {
+      &__pic {
+        width: 850px;
+        height: 550px;
+      }
+    }
+  }
