@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import './sortSettingDropDown.scss'
-import DiamondList from "../sortslider/DiamondList";
+
 function SettingDropDownGroup() {
   const items = [
     {
@@ -70,7 +70,7 @@ function SettingDropDownGroup() {
             </Space>
           </a>
         </Dropdown>
-        <DiamondList/>
+        
       </div>
     </>
   );

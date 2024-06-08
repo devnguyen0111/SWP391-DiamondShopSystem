@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import ReactSlider from "react-slider";
 
 
-const INIT_CLARIRY = ["SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF", "FL"];
-function SortClaritySlider() {
 
-    const [clarity, setClarity] = useState([1, 9])
-    const [clarityName, setClarityName] = useState(INIT_CLARIRY)
+function SortClaritySlider({clarity, clarityName, setClarity, setClarityName, INIT_CLARIRY}) {
+
 
     const handlerClarityChange = (newClarity)=>{
         setClarity(newClarity)
@@ -24,7 +22,6 @@ function SortClaritySlider() {
 
         }
     })
-    
     
   return (
     <>

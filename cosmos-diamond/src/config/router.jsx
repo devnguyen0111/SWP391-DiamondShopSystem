@@ -43,7 +43,6 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-
         element: <Homepage />,
       },
       {
@@ -91,7 +90,7 @@ export const router = createBrowserRouter([
         element: <CheckoutPage />,
       },
       {
-        path: "/user-details",
+        path: "/profile/:id",
         element: <AccountDetails />,
       },
       {
