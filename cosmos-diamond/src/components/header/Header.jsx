@@ -1,19 +1,25 @@
-import React from 'react';
+// src/components/Header.jsx
+// import React from 'react';
 import "./Header.css";
+
 import img from "../../assets/logo.png";
-import { UserOutlined, HeartOutlined, ShoppingCartOutlined, SearchOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  HeartOutlined,
+  ShoppingCartOutlined,
+  SearchOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
+
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-
+import { Popover, Button } from "antd";
+import { useState } from "react";
 const Header = () => {
-  const [customer, setCustomer] = useState(null);
-
-  useEffect(() => {
-    const userInfo = localStorage.getItem('customer')
-    if (userInfo !== null) {
-      setCustomer(JSON.parse(userInfo));
-    };
-  }, [])
+  const content = (
+    <div>
+      <p></p>
+    </div>
+  );
 
   return (
     <header className="header-container">
@@ -23,48 +29,45 @@ const Header = () => {
         </Link>
       </div>
       <nav className="nav">
+        {/* <Popover placement="topLeft" title="" content={content}> */}
         <Link to="./diamonds" className="nav-link">
+          {" "}
           Diamonds
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
+        {/* </Popover> */}
 
         <Link to="./engagement-rings" className="nav-link">
-          Engagement Rings
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          Engagement Rings{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
         <Link to="./wedding-rings" className="nav-link">
-          Wedding Rings
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          Wedding Rings{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
         <Link to="./fashion-rings" className="nav-link">
-          Fashion Rings
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          Fashion Rings{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
         <Link to="./jewelry" className="nav-link">
-          Jewelry
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          Jewelry{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        
+
         <Link to="/education" className="nav-link">
-          Education
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />
+          Education{" "}
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
       </nav>
-      <div className="search-bar">
+      {/* <div className="search-bar">
         <input className="search-input" type="text" placeholder="Search" />
         <SearchOutlined />
-      </div>
+      </div> */}
       <div className="icon-container">
         <div className="icon">
-          {customer === null ? (
-            <Link to="/login">
-              <UserOutlined />
-            </Link>
-          ) : (
-            <Link to={`/profile/${customer.cusId}`}>
-              <span>Hello {customer.cusFirstName}</span>
-            </Link>
-          )}
+          <Link to="/login">
+            <UserOutlined />
+          </Link>
         </div>
         <div className="icon">
           <Link to="/wishlist">

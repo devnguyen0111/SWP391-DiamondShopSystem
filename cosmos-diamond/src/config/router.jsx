@@ -23,11 +23,13 @@ import AccountDetails from "../pages/accountDetails/AccountDetails";
 import Wishlist from "../pages/wishlist/Wishlist";
 import EduRingWedding from "../components/eduRingWedding/EduRingWedding";
 import EduRingMen from "../components/eduRingMen/EduRingMen";
-
 import WeddingRingsIntro from "../pages/weddingRingsIntro/WeddingRingsIntro";
 import JewelryIntro from "../pages/jewelryIntro/JewelryIntro";
 import FashionRingsIntro from "../pages/fashionRingsIntro/FashionRingsIntro";
 import Signup from "../pages/signup/Signup";
+import EduRingStyleUni from "../components/eduRingStyleUni/EduRingStyleUni";
+import EduRingFind from "../components/eduRingFind/EduRingFind";
+import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +107,21 @@ export const router = createBrowserRouter([
         path: "/education/rings/wedding-ring-guide",
 
         element: <EduRingWedding />,
+      },
+      {
+        path: "/education/rings/wedding-ring-styles",
+
+        element: <EduRingStyleUni />,
+      },
+      {
+        path: "/education/rings/find-your-ring-size",
+
+        element: <EduRingFind />,
+      },
+      {
+        path: "/education/rings/engagement-ring-guide",
+
+        element: <EduRingGuide />,
       },
       {
         path: "/education/rings/mens-wedding-rings",
