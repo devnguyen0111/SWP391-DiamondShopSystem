@@ -77,7 +77,7 @@ const Header = () => {
         <SearchOutlined />
       </div>
       <div className="icon-container">
-<<<<<<< HEAD
+
         <div className="icon">
           {customer === null ? (
             <Link to="/login">
@@ -88,12 +88,12 @@ const Header = () => {
               <span>Hello {customer.cusFirstName}</span>
             </Link>
           )}
-=======
+
         <div className="icon" >
           <Link to="/login" >
             <UserOutlined />
           </Link>
->>>>>>> dd26309f1500671b0b9d2c187c5bfb51554e39f7
+
         </div>
         <div className="icon" >
         <Link to="/wishlist" >
