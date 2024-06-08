@@ -64,6 +64,15 @@
   gap: 10px;
 }
 
+.icon-container a {
+  text-decoration: none;
+  color: #5d5d5d;
+}
+.icon-container a:hover {
+  text-decoration: none;
+  color: black;
+}
+
 .icon {
   font-size: 20px;
   cursor: pointer;

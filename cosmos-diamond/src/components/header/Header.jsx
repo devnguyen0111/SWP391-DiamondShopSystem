@@ -30,7 +30,7 @@ const Header = () => {
       </div>
       <nav className="nav">
         {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link to ='./diamonds' className="nav-link">
+        <Link to="./diamonds" className="nav-link">
           {" "}
           Diamonds
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
@@ -53,30 +53,30 @@ const Header = () => {
           Jewelry{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        
+
         <Link to="/education" className="nav-link">
           Education{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
       </nav>
-      <div className="search-bar">
+      {/* <div className="search-bar">
         <input className="search-input" type="text" placeholder="Search" />
         <SearchOutlined />
-      </div>
+      </div> */}
       <div className="icon-container">
-        <div className="icon" >
-          <Link to="/login" >
+        <div className="icon">
+          <Link to="/login">
             <UserOutlined />
           </Link>
         </div>
-        <div className="icon" >
-        <Link to="/wishlist" >
-          <HeartOutlined />
+        <div className="icon">
+          <Link to="/wishlist">
+            <HeartOutlined />
           </Link>
         </div>
         <div className="icon">
-        <Link to="/shopping-cart">
-          <ShoppingCartOutlined />
+          <Link to="/shopping-cart">
+            <ShoppingCartOutlined />
           </Link>
         </div>
       </div>
