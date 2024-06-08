@@ -1,10 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import ReactSlider from 'react-slider';
-const MIN_PRICE = 200;
-const MAX_PRICE = 3000000;
-function SortPriceSlider() {
-  const [price, setPrice] = useState([MIN_PRICE, MAX_PRICE]);
+
+function SortPriceSlider({price, setPrice, MAX_PRICE, MIN_PRICE}) {
   const handlePriceChange = (newPrice) => setPrice(newPrice);
   return (
     <>

@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import ReactSlider from "react-slider";
 
 
-const INIT_COLOR_NAME = ["K", "J", "I", "H", "G", "F", "E", "D"];
-function SortColorSlider() {
-
-  const [color, setColor] = useState([1, 9]);
-  const [colorName, setColorName] = useState(INIT_COLOR_NAME);
+function SortColorSlider({color, setColor, colorName, setColorName, INIT_COLOR_NAME}) {
 
   const handlerColorChange = (newColor) => {
     setColor(newColor);
