@@ -64,10 +64,7 @@ const Login = () => {
   // Logic xử lý đăng nhập
   if (account) {
     fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
-      method: "POST",
-      body: JSON.stringify({
-        id: account.UserID,
-      }),
+      method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -76,38 +73,12 @@ const Login = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
+        console.log(data);
+        localStorage.setItem("customer", JSON.stringify(data));
         navigate("/");
       });
   }
 
-<<<<<<< HEAD
-  })
-}
-    
-    // Logic xử lý đăng nhập
-    if(account){
-      fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
-        method: 'GET',
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-      })
-      .then(res => res.json())
-      .then(data =>{
-      setIsLoading(false)
-      console.log(data);
-      localStorage.setItem('customer', JSON.stringify(data))
-      navigate("/")
-      })
-    }
-     
-    
-    
-    
-  
-=======
->>>>>>> dd26309f1500671b0b9d2c187c5bfb51554e39f7
   return (
     <div className="login-container">
       <div className="login-form">
