@@ -1,0 +1,22 @@
+
+.pin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+    width: 100vw;
+    gap: 10px;
+    & > * {
+        font-family: 'Gantari';
+    }
+    &__title{
+        font-size: 32px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+    &__email{
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+}

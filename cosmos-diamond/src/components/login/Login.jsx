@@ -56,13 +56,15 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((json) => {
+        
         localStorage.setItem("token", json.token);
         setAccount(jwtDecode(json.token));
+        
       });
   };
 
   // Logic xử lý đăng nhập
-  if (account) {
+  if (account && account.Role === 'customer') {
     fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
       method: "GET",
       headers: {

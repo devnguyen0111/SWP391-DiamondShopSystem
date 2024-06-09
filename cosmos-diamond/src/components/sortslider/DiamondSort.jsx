@@ -31,7 +31,6 @@ function DiamondSort() {
   const [cutName, setCutName] = useState(INIT_CUT);
   const [diamondList, setDiamondList] = useState();
   const [diamondShape, setDiamondShape] = useState("Round");
-
   
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
@@ -57,7 +56,9 @@ function DiamondSort() {
     let maxCaratURL = carat[1];
     let minPriceURL = price[0];
     let maxPriceURL = price[1];
-    url = `https://localhost:7262/api/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}`;
+    
+    
+    url = `https://dss-api.azurewebsites.net/api/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}`;
     fetch(url)
       .then((res) => res.json())
       .then((res) => {

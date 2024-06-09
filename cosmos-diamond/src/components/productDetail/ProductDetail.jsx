@@ -5,15 +5,41 @@ import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
-function ProductDetail({product}) {
+import { jwtDecode } from "jwt-decode";
+function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
   // const openModal = () => {
   //   setShow(true);
   //   disableScroll()
   // };
+  const addToCart = () => {
+    const url = window.location.href;
+    const productId = url.slice(url.lastIndexOf("/")+1, url.length);
+    const token = jwtDecode(localStorage.getItem("token"))
+    console.log(token);
+    const customerId = token.UserID;
+    if (customerId) {
+      fetch(
+        `https://localhost:7262/api/Cart/addToCart/${customerId}?pid=${productId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            
+          },
+          body: JSON.stringify({
+            id: customerId,
+            pid: productId,
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
+  };
+
   return (
     <div className="detail">
-      
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
@@ -161,9 +187,15 @@ function ProductDetail({product}) {
           <Col span={24} className="right__button-wrapper">
             <button className="right__button">
               {/* Select This Diamond */}
-              <Link style={{display:'block', width: '100%', color:'#fff'}} to={"/checkout"}> Buy now</Link>
+              <Link
+                style={{ display: "block", width: "100%", color: "#fff" }}
+                to={"/checkout"}
+              >
+                {" "}
+                Buy now
+              </Link>
             </button>
-            <button className="right__button">
+            <button onClick={() => addToCart()} className="right__button">
               Add to Cart
             </button>
           </Col>
@@ -203,7 +235,6 @@ function ProductDetail({product}) {
           </Col>
         </Col>
       </Row>
-      
     </div>
   );
 }
