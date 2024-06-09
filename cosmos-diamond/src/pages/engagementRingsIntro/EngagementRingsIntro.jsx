@@ -219,6 +219,36 @@ function EngagementRingsIntro() {
               </Row>
             </Link>
           </Col>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Link to={"/Product/4"}>
+              <Row>
+                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
+              </Row>
+              <Row className="ringsAvailable__content" align={"middle"}>
+                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
+                <h5 className="ringsAvailable__content__description">
+                  Crafted with petite diamond accents to add brilliance to your
+                  band or extra sparkle to your halo engagement ring setting.
+                </h5>
+                <h5 className="ringsAvailable__content__price">$450</h5>
+              </Row>
+            </Link>
+          </Col>
+          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+            <Link to={"/Product/5"}>
+              <Row>
+                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
+              </Row>
+              <Row className="ringsAvailable__content" align={"middle"}>
+                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
+                <h5 className="ringsAvailable__content__description">
+                  Crafted with petite diamond accents to add brilliance to your
+                  band or extra sparkle to your halo engagement ring setting.
+                </h5>
+                <h5 className="ringsAvailable__content__price">$450</h5>
+              </Row>
+            </Link>
+          </Col>
         </Row>
       </div>
     </div>

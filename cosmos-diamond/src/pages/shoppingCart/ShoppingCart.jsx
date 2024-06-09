@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ShoppingCart.scss";
 import { Button, Card, Col, Divider, Flex, Row, Typography } from "antd";
@@ -8,31 +8,69 @@ import {
   PhoneOutlined,
 } from "@ant-design/icons";
 import CardDetail from "../../components/cardDetail/CardDetail";
+import { jwtDecode } from "jwt-decode";
+import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
+  const [listCart, setListCart] = useState([]);
+  const [cart, setCart] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  let token = null
+  let cusID = null
+  if(localStorage.getItem("token")){
+    token = jwtDecode(localStorage.getItem("token"));
+    const cusID = token.UserID;
+    
+    useEffect(() => {
+      fetch(`https://localhost:7262/api/Cart/${cusID}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setCart(data)
+          setListCart(data.items.$values)
+        });
+    }, []);
+    useEffect(()=>{
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 900);
+    })
+  }
+  
+ 
   return (
     <div>
       <p id="first">
         <Link to="/">Home</Link> <span> / Shopping Cart</span>
       </p>
-      <div style={{ backgroundColor: "#FBFBFB" }}>
+      <div style={{ backgroundColor: "#FBFBFB", minHeight: '100vh' }}>
         <Row gutter={[32, 16]} style={{ padding: "4em" }}>
           <Col span={12} md={3} sm={0}>
             {/* khong code cho nay */}
           </Col>
           <Col span={12} md={12} sm={24}>
             <h5 className="title">MY CART</h5>
-            <Row gutter={[32, 16]}>
-              <Col span={12} md={24} sm={24}>
-                <CardDetail />
-              </Col>
-              <Col span={12} md={24} sm={24}>
-                <CardDetail />
-              </Col>
-            </Row>
+            {token ? (
+              <Row gutter={[32, 16]}>
+                {isLoading ? (
+                  <Col span={12} md={24} sm={24}>
+                  <CartItemSkeleton />
+                </Col>
+                  
+                ) : (
+                  listCart.map((item) => (
+                    <Col key={item.$id} span={12} md={24} sm={24}>
+                      <CardDetail item={item} cartId={cusID}/>
+                    </Col>
+                  ))
+                )}
+              </Row>
+            ) : (
+              "Please Login to view your cart"
+            )}
           </Col>
-          <Col span={12} md={6} sm={24}>
+          {token ? (<Col span={12} md={6} sm={24}>
             <h5 className="title">SUMMARY</h5>
             <Card hoverable className="orderSummary">
               <Flex vertical>
@@ -107,7 +145,7 @@ function ShoppingCart() {
                       </Typography>
                     </div>
 
-                    <h5 className="orderSummary__total">$5,490</h5>
+                    <h5 className="orderSummary__total">${cart && cart.totalPrice} </h5>
                   </Flex>
                 </Flex>
                 <Divider />
@@ -192,7 +230,8 @@ function ShoppingCart() {
                 </div>
               </Flex>
             </Card>
-          </Col>
+          </Col>) : "hehe" }
+          
           <Col span={12} md={3} sm={0}>
             {/* khong code cho nay */}
           </Col>
@@ -241,7 +280,7 @@ function ShoppingCart() {
           <Col md={1}></Col>
         </Row> */}
 
-        <Row>
+        <Row align={"bottom"}>
           <Col span={12} md={4} sm={5}>
             {/* khong code cho nay */}
           </Col>
@@ -280,7 +319,7 @@ function ShoppingCart() {
             {/* khong code cho nay */}
           </Col>
           <Col span={12} md={4} sm={8}>
-            <h5 className="informationLeft__title"> 
+            <h5 className="informationLeft__title">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 29.97 30.69"
