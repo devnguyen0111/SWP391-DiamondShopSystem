@@ -30,6 +30,7 @@ import Signup from "../pages/signup/Signup";
 import EduRingStyleUni from "../components/eduRingStyleUni/EduRingStyleUni";
 import EduRingFind from "../components/eduRingFind/EduRingFind";
 import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
+import PinCode from "../components/pinCode/PinCode";
 
 export const router = createBrowserRouter([
   {
@@ -149,6 +150,10 @@ export const router = createBrowserRouter([
   {
     path: "/sign-up",
     element: <Signup />,
+  },
+  {
+    path: "/pincode",
+    element: <PinCode />,
   },
 ]);
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Signup.css";
 import {
@@ -27,6 +27,7 @@ const schema = yup.object().shape({
 
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const nav = useNavigate()
   const {
     register,
     handleSubmit,
@@ -34,9 +35,11 @@ const Signup = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  
   const onSubmit = (data) => {
-    alert(JSON.stringify(data, null, 2));
+    console.log(data);
+    sessionStorage.setItem('account', JSON.stringify(data));
+    nav('/pincode')
   };
 
   return (

@@ -30,7 +30,7 @@ function AccountDetails() {
     nav('/login')
   }
   useEffect(()=>{
-    fetch(`https://localhost:7262/api/Customer/customer/${id}/profile`)
+    fetch(`https://dss-api.azurewebsites.net/api/Customer/customer/${id}/profile`)
     .then(res =>  res.json())
     .then(res => {
       setCustomer(res.customerinfo)
