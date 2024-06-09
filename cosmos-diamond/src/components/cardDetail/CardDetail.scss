@@ -50,8 +50,13 @@
     &__total {
         display:flex;
         justify-content: flex-end;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 1.2em;
+        input{
+          width: 65px;
+          padding: 8px 10px;
+          outline: none;
+        }
     }
   }
 }

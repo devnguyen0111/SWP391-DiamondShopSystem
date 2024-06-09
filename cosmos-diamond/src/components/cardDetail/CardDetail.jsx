@@ -1,20 +1,52 @@
-import { Button, Card, Divider, Flex, Typography } from "antd";
-import React from "react";
+import { Button, Card, Divider, Flex, InputNumber, Typography } from "antd";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
+import { set } from "react-hook-form";
 
-function CardDetail() {
+function CardDetail({ item, cartId }) {
+  console.log(item);
+  console.log(cartId);
   const navigate = useNavigate();
   const imgStyle = {
     display: "block",
     width: "30%",
   };
+  const [total, setTotal] = useState(item.total)
+  
+  const [quantity, setQuantity] = useState(item.quantity);
+  const handleQuantity = (e) => {
+    setQuantity(e.target.value);
+    setTotal(e.target.value * item.price)
+    setTimeout(() => {
+      fetch(
+        `https://localhost:7262/api/Cart/updateCart/${cartId}?pid=${item.pid}&quantity=${quantity}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json", 
+          },
+          body: JSON.stringify({
+            id: cartId,
+            pid: item.pid,
+            quantity: quantity,
+          }),
+        }
+      ).then(res=>res.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => console.log(error));
+    }, 500);
+  };
+  
+  
   return (
     <div>
       <Card hoverable className="cardDetail">
         <Flex vertical>
           <Flex justify="space-between" className="cardDetail__upper">
-            <h5>Engagement Ring (Completed)</h5>
+            <h5>{item.name1}</h5>
             <Flex gap={5}>
               <p onClick={() => navigate("/complete-product")}>View |</p>
               <p>Remove</p>
@@ -95,12 +127,22 @@ function CardDetail() {
             </Flex>
           </Flex>
         </Flex>
-        <p
+        <div
           className="cardDetail__lower__total"
-          style={{ display: "flex", justifyContent: "flex-end" }}
+          style={{ display: "flex", justifyContent: "space-between" }}
         >
-          $5,240
-        </p>
+          <div className="">
+          Quantity
+            <input
+              min={1}
+              value={quantity}
+              type="number"
+              onChange={(e) => handleQuantity(e)}
+              
+            />
+          </div>
+          <p>${total}</p>
+        </div>
       </Card>
     </div>
   );
