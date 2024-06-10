@@ -16,7 +16,9 @@ function CheckoutPage() {
   const [email, setEmail] = useState()
   const [name, setName] = useState()
   const [phone, setPhone] = useState()
-  
+  const [city, setCity] = useState()
+  const [state, setState] = useState()
+  const [street, setStreet] = useState()
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -88,7 +90,7 @@ function CheckoutPage() {
               >
                 Items
               </Col>
-              <Col span={24} className="checkout__product">
+              <Col span={24} className="checkout__product"> 
                 <div className="checkout__product-info">
                   <div className="checkout__img">
                     <img

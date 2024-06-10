@@ -1,17 +1,36 @@
-import { Button, Card, Divider, Flex, InputNumber, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Divider,
+  Flex,
+  InputNumber,
+  Typography,
+  notification,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { set } from "react-hook-form";
 
-function CardDetail({ product, userID, setCartTotalPrice }) {
+function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [productTotalPrice, setProductTotalPrice] = useState(product.total);
-  const imgStyle = {
-    display: "block",
-    width: "30%",
+  
+  
+
+  const openNotification = (placement) => {
+    notification.error({
+      message: `Remove Product Successfully`,
+      description: 'Product Removed',
+      placement,
+      pauseOnHover: true,
+      stack: true,
+      duration: 2,
+    });
   };
+
   const removeCartItem = () => {
+    
     fetch("https://localhost:7262/api/Cart/removeFromCart", {
       method: "POST",
       headers: {
@@ -21,9 +40,11 @@ function CardDetail({ product, userID, setCartTotalPrice }) {
         id: userID,
         pid: product.pid,
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => window.location.reload());
+    }).then(setRemove((prev) => !prev))
+    .then(openNotification('topRight'))
+    
+    
+    
   };
 
   const navigate = useNavigate();
@@ -50,6 +71,7 @@ function CardDetail({ product, userID, setCartTotalPrice }) {
 
   return (
     <div>
+      
       <Card hoverable className="cardDetail">
         <Flex vertical>
           <Flex justify="space-between" className="cardDetail__upper">
@@ -61,7 +83,7 @@ function CardDetail({ product, userID, setCartTotalPrice }) {
               >
                 View |
               </p>
-              <p className="cart-action" onClick={() => removeCartItem()}>
+              <p className="cart-action" onClick={removeCartItem}>
                 Remove
               </p>
             </Flex>
@@ -155,8 +177,8 @@ function CardDetail({ product, userID, setCartTotalPrice }) {
               type="number"
               max={5}
               onChange={(e) => handleQuantity(e)}
-              onKeyDown={(e)=> e.preventDefault()}
-              onKeyUp={(e)=> e.preventDefault()}
+              onKeyDown={(e) => e.preventDefault()}
+              onKeyUp={(e) => e.preventDefault()}
             />
           </div>
           <p>{"$" + productTotalPrice}</p>

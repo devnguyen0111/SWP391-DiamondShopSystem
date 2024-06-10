@@ -14,7 +14,6 @@ function ProductDetail({ product }) {
   // };
   
   const addToCart = () => {
-    openNotification('topRight');
     const url = window.location.href;
     const productId = url.slice(url.lastIndexOf("/")+1, url.length);
     const token = jwtDecode(localStorage.getItem("token"))
@@ -34,13 +33,8 @@ function ProductDetail({ product }) {
             pid: productId,
           }),
         }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          
-        });
+      ).then(openNotification('topRight'))
     }
-    
   };
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (placement) => {
