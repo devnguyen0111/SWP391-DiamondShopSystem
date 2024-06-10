@@ -4,6 +4,7 @@ import { Collapse, Row } from "antd";
 import { Col } from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import FailTransaction from "../../components/failTransaction/FailTransaction";
 
 function CheckoutPage() {
   return (
@@ -106,6 +107,7 @@ function CheckoutPage() {
           </div>
         </Col>
       </Row>
+      <FailTransaction/>
     </div>
   );
 }

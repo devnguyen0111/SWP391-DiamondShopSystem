@@ -89,7 +89,7 @@ export const router = createBrowserRouter([
         element: <DiamondDetail />,
       },
       {
-        path: "/checkout",
+        path: "/checkout/:id",
         element: <CheckoutPage />,
       },
       {

@@ -11,24 +11,28 @@ import CardDetail from "../../components/cardDetail/CardDetail";
 import { jwtDecode } from "jwt-decode";
 import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
 
+
+
+
 function ShoppingCart() {
+  //Get token
+  const token = localStorage.getItem("token") && jwtDecode(localStorage.getItem("token"))
   const [show, setShow] = useState(false);
+  //list item trong cart
   const [listCart, setListCart] = useState([]);
+  //cart data
   const [cart, setCart] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  let token = null
-  let cusID = null
-  if(localStorage.getItem("token")){
-    token = jwtDecode(localStorage.getItem("token"));
-    const cusID = token.UserID;
-    
+  const [cartTotal, setCartTotal] = useState();
+  //lay cart data neu co token  
+  if(token){      
     useEffect(() => {
-      fetch(`https://localhost:7262/api/Cart/${cusID}`)
+      fetch(`https://localhost:7262/api/Cart/${token.UserID}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setCart(data)
           setListCart(data.items.$values)
+          setCartTotal(data.totalPrice)
         });
     }, []);
     useEffect(()=>{
@@ -61,7 +65,7 @@ function ShoppingCart() {
                 ) : (
                   listCart.map((item) => (
                     <Col key={item.$id} span={12} md={24} sm={24}>
-                      <CardDetail item={item} cartId={cusID}/>
+                      <CardDetail item={item} cartId={token.UserID} setCartTotal={setCartTotal} cartTotal={cartTotal}/>
                     </Col>
                   ))
                 )}
@@ -145,7 +149,7 @@ function ShoppingCart() {
                       </Typography>
                     </div>
 
-                    <h5 className="orderSummary__total">${cart && cart.totalPrice} </h5>
+                    <h5 className="orderSummary__total">${cartTotal}</h5>
                   </Flex>
                 </Flex>
                 <Divider />
@@ -181,7 +185,7 @@ function ShoppingCart() {
                   className="orderSummary__pic"
                   style={{ width: "60%" }}
                 />
-                <Button className="orderSummary__button">CHECKOUT</Button>
+                <Button className="orderSummary__button"><Link style={{ width:'100%',}} to={`/checkout/${token.UserID}`}>CHECKOUT</Link></Button>
                 <Divider>OR</Divider>
                 <Button style={{ backgroundColor: "#0070BA" }}>
                   <img
