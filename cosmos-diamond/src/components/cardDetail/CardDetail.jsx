@@ -4,23 +4,23 @@ import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { set } from "react-hook-form";
 
-function CardDetail({ item, cartId }) {
-  console.log(item);
-  console.log(cartId);
+function CardDetail({ item, cartId, setCartTotal}) {
+ 
   const navigate = useNavigate();
   const imgStyle = {
     display: "block",
     width: "30%",
   };
   const [total, setTotal] = useState(item.total)
-  
   const [quantity, setQuantity] = useState(item.quantity);
   const handleQuantity = (e) => {
-    setQuantity(e.target.value);
-    setTotal(e.target.value * item.price)
+    let newQuantity = e.target.value
+    setQuantity(newQuantity);
+    setTotal(newQuantity * item.price)
+    
     setTimeout(() => {
       fetch(
-        `https://localhost:7262/api/Cart/updateCart/${cartId}?pid=${item.pid}&quantity=${quantity}`,
+        `https://localhost:7262/api/Cart/updateCart/${cartId}?pid=${item.pid}&quantity=${newQuantity}`,
         {
           method: "PUT",
           headers: {
@@ -34,7 +34,8 @@ function CardDetail({ item, cartId }) {
         }
       ).then(res=>res.json())
       .then(data => {
-        console.log(data);
+        console.log('cart item', data);
+        setCartTotal(data.total)
       })
       .catch(error => console.log(error));
     }, 500);
@@ -80,8 +81,7 @@ function CardDetail({ item, cartId }) {
                 </svg>
                 <div>
                   <p className="cardDetail__lower__detail__ring__name">
-                    1.00 Carat H-VS2 Excellent Cut Round Diamond Excellent Cut •
-                    H Color • VS2 Clarity • Stock #: 20241044
+                    {item.cover}
                   </p>
                   <Link to="/setting-search">
                     <p className="cardDetail__lower__detail__ring__change">
@@ -113,8 +113,7 @@ function CardDetail({ item, cartId }) {
                 </svg>
                 <div>
                   <p className="cardDetail__lower__detail__ring__name">
-                    Petite Solitaire Engagement Ring in 14k White Gold Stock #:
-                    501130w14
+                    {item.diamond}
                   </p>
                   <Link to="/diamond-search">
                     <p className="cardDetail__lower__detail__ring__change">
