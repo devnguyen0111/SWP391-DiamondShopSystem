@@ -22,7 +22,7 @@ const Header = () => {
       <p></p>
     </div>
   );
-
+  
   return (
     <header className="header-container">
       <div className="logo">
@@ -67,16 +67,11 @@ const Header = () => {
       </div> */}
       <div className="icon-container">
         <div className="icon">
-          {token ? (
-            <Link to={`profile/${JSON.parse(localStorage.getItem('customer')).cusId}`} style={{fontSize:'16px'}}>
-            
-            Welcome {JSON.parse(localStorage.getItem('customer')).cusLastName}!
-            </Link>
-          ) : (
+          
             <Link to="/login">
               <UserOutlined />
             </Link>
-          )}
+         
         </div>
         <div className="icon">
           <Link to="/wishlist">
