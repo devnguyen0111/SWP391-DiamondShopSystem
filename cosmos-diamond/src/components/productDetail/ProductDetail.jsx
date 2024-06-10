@@ -21,7 +21,7 @@ function ProductDetail({ product }) {
     const customerId = token.UserID;
     if (customerId) {
       fetch(
-        `https://localhost:7262/api/Cart/addToCart/${customerId}?pid=${productId}`,
+        `https://localhost:7262/api/Cart/addToCart`,
         {
           method: "POST",
           headers: {

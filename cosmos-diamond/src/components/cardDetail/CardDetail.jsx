@@ -16,7 +16,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [productTotalPrice, setProductTotalPrice] = useState(product.total);
   
-  
+  const [loading, setLoading] = useState(false)
 
   const openNotification = (placement) => {
     notification.error({
@@ -29,8 +29,8 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
     });
   };
 
-  const removeCartItem = () => {
-    
+  const removeCartItem = (e) => {
+    setLoading(true)
     fetch("https://localhost:7262/api/Cart/removeFromCart", {
       method: "POST",
       headers: {
@@ -42,9 +42,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
       }),
     }).then(setRemove((prev) => !prev))
     .then(openNotification('topRight'))
-    
-    
-    
+    .finally(setLoading(false))
   };
 
   const navigate = useNavigate();
@@ -83,7 +81,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
               >
                 View |
               </p>
-              <p className="cart-action" onClick={removeCartItem}>
+              <p className="cart-action" onClick={(e)=> !loading && removeCartItem(e)}>
                 Remove
               </p>
             </Flex>
