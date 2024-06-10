@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CheckoutPage.scss";
 import { Collapse, Row } from "antd";
 import { Col } from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
+import { jwtDecode } from "jwt-decode";
 
+let token = localStorage.getItem('token');
+if (token) {
+  token = jwtDecode(token);
+  console.log(token);
+}
 function CheckoutPage() {
+  const [email, setEmail] = useState()
+  const [name, setName] = useState()
+  const [phone, setPhone] = useState()
+  
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -68,46 +78,56 @@ function CheckoutPage() {
         <Col className="checkout__right" span={9} offset={1}>
           <div className="checkout__right-wrapper">
             <Row className="checkout__description">
-                <Col span={24} style={{fontSize: '22px', borderBottom:'1px solid #dfdfdf', paddingBottom: '8px'}}>Items</Col>
+              <Col
+                span={24}
+                style={{
+                  fontSize: "22px",
+                  borderBottom: "1px solid #dfdfdf",
+                  paddingBottom: "8px",
+                }}
+              >
+                Items
+              </Col>
               <Col span={24} className="checkout__product">
                 <div className="checkout__product-info">
                   <div className="checkout__img">
-                    <img src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" alt="" />
+                    <img
+                      src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
+                      alt=""
+                    />
                   </div>
-                  <div className="checkout__product-name">
-                  ZAC POSEN
-                  </div>
+                  <div className="checkout__product-name">ZAC POSEN</div>
                 </div>
                 <div className="checkout__product-price">$450</div>
               </Col>
               <Col className="checkout__summary" span={24}>
                 <ul>
-                    <li>
-                        <div className="checkout__summary-title">Subtotal</div>
-                        <div className="">$450</div>
-                    </li>
-                    <li>
-                        <div className="checkout__summary-title">Delivery</div>
-                        <div className="">$50</div>
-                    </li>
-                    <li>
-                        <div className="checkout__summary-title">Labour</div>
-                        <div className="">$30</div>
-                    </li>
+                  <li>
+                    <div className="checkout__summary-title">Subtotal</div>
+                    <div className="">$450</div>
+                  </li>
+                  <li>
+                    <div className="checkout__summary-title">Delivery</div>
+                    <div className="">$50</div>
+                  </li>
+                  <li>
+                    <div className="checkout__summary-title">Labour</div>
+                    <div className="">$30</div>
+                  </li>
                 </ul>
               </Col>
-              
-              <Col span={24} >
+
+              <Col span={24}>
                 <div className="checkout__summary-total">
-                    <div className="">Total</div>
-                    <div className="">$530</div>
+                  <div className="">Total</div>
+                  <div className="">$530</div>
                 </div>
               </Col>
             </Row>
           </div>
         </Col>
       </Row>
-      <FailTransaction/>
+      <FailTransaction />
     </div>
   );
 }

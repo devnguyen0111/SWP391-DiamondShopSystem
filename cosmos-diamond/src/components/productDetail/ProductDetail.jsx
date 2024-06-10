@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
-import { Col, Row } from "antd";
+import { Col, Row, notification } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
@@ -12,7 +12,9 @@ function ProductDetail({ product }) {
   //   setShow(true);
   //   disableScroll()
   // };
+  
   const addToCart = () => {
+    openNotification('topRight');
     const url = window.location.href;
     const productId = url.slice(url.lastIndexOf("/")+1, url.length);
     const token = jwtDecode(localStorage.getItem("token"))
@@ -34,12 +36,29 @@ function ProductDetail({ product }) {
         }
       )
         .then((res) => res.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          
+        });
     }
+    
+  };
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (placement) => {
+    api.success({
+      message: `Add to cart sucessfully`,
+      description:
+        <Link to={'/shopping-cart'}>View Cart</Link>,
+      placement,
+      pauseOnHover: true,
+
+      stack: true,
+      duration: 2
+    });
   };
 
   return (
     <div className="detail">
+      {contextHolder}
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>

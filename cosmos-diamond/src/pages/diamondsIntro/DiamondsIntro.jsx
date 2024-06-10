@@ -89,7 +89,7 @@ function DiamondsIntro() {
               Button: {
                 defaultHoverBg: "#100e31",
                 defaultHoverBorderColor: "black",
-                defaultHoverColor: "black",
+                // defaultHoverColor: "black",
                 defaultHoverColor: "white",
               },
             },
@@ -117,7 +117,7 @@ function DiamondsIntro() {
                 defaultHoverBg: "white",
                 defaultHoverBorderColor: "white",
                 defaultHoverColor: "#100e31",
-                defaultHoverColor: "#100e31",
+                
               },
             },
           }}
