@@ -1,56 +1,69 @@
 import { Button, Card, Divider, Flex, InputNumber, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { set } from "react-hook-form";
 
-function CardDetail({ item, cartId, setCartTotal}) {
- 
-  const navigate = useNavigate();
+function CardDetail({ product, userID, setCartTotalPrice }) {
+  const [productQuantity, setProductQuantity] = useState(product.quantity);
+  const [productTotalPrice, setProductTotalPrice] = useState(product.total);
   const imgStyle = {
     display: "block",
     width: "30%",
   };
-  const [total, setTotal] = useState(item.total)
-  const [quantity, setQuantity] = useState(item.quantity);
-  const handleQuantity = (e) => {
-    let newQuantity = e.target.value
-    setQuantity(newQuantity);
-    setTotal(newQuantity * item.price)
-    
-    setTimeout(() => {
-      fetch(
-        `https://localhost:7262/api/Cart/updateCart/${cartId}?pid=${item.pid}&quantity=${newQuantity}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json", 
-          },
-          body: JSON.stringify({
-            id: cartId,
-            pid: item.pid,
-            quantity: quantity,
-          }),
-        }
-      ).then(res=>res.json())
-      .then(data => {
-        console.log('cart item', data);
-        setCartTotal(data.total)
-      })
-      .catch(error => console.log(error));
-    }, 500);
+  const removeCartItem = () => {
+    fetch("https://localhost:7262/api/Cart/removeFromCart", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        id: userID,
+        pid: product.pid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => window.location.reload());
   };
-  
-  
+
+  const navigate = useNavigate();
+  const handleQuantity = (e) => {
+    const newQuantity = e.target.value;
+    setProductQuantity(newQuantity);
+    setProductTotalPrice(newQuantity * product.price);
+
+    fetch(
+      `https://localhost:7262/api/Cart/updateCart?id=${userID}&pid=${product.pid}&quantity=${newQuantity}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("update", data);
+        setCartTotalPrice(data.total);
+      });
+  };
+
   return (
     <div>
       <Card hoverable className="cardDetail">
         <Flex vertical>
           <Flex justify="space-between" className="cardDetail__upper">
-            <h5>{item.name1}</h5>
+            <h5>{product.name1}</h5>
             <Flex gap={5}>
-              <p onClick={() => navigate("/complete-product")}>View |</p>
-              <p>Remove</p>
+              <p
+                className="cart-action"
+                onClick={() => navigate("/complete-product")}
+              >
+                View |
+              </p>
+              <p className="cart-action" onClick={() => removeCartItem()}>
+                Remove
+              </p>
             </Flex>
           </Flex>
           <Flex className="cardDetail__lower">
@@ -81,7 +94,7 @@ function CardDetail({ item, cartId, setCartTotal}) {
                 </svg>
                 <div>
                   <p className="cardDetail__lower__detail__ring__name">
-                    {item.cover}
+                    {product.cover}
                   </p>
                   <Link to="/setting-search">
                     <p className="cardDetail__lower__detail__ring__change">
@@ -89,7 +102,9 @@ function CardDetail({ item, cartId, setCartTotal}) {
                     </p>
                   </Link>
                 </div>
-                <p className="cardDetail__lower__detail__ring__price">$2,300</p>
+                <p className="cardDetail__lower__detail__ring__price">
+                  {"$" + product.coverPrice}
+                </p>
               </div>
               <Divider />
               <div
@@ -113,7 +128,7 @@ function CardDetail({ item, cartId, setCartTotal}) {
                 </svg>
                 <div>
                   <p className="cardDetail__lower__detail__ring__name">
-                    {item.diamond}
+                    {product.diamond}
                   </p>
                   <Link to="/diamond-search">
                     <p className="cardDetail__lower__detail__ring__change">
@@ -121,7 +136,9 @@ function CardDetail({ item, cartId, setCartTotal}) {
                     </p>
                   </Link>
                 </div>
-                <p className="cardDetail__lower__detail__ring__price">$2,370</p>
+                <p className="cardDetail__lower__detail__ring__price">
+                  {"$" + product.diamondPrice}
+                </p>
               </div>
             </Flex>
           </Flex>
@@ -131,16 +148,18 @@ function CardDetail({ item, cartId, setCartTotal}) {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <div className="">
-          Quantity
+            Quantity
             <input
               min={1}
-              value={quantity}
+              value={productQuantity}
               type="number"
+              max={5}
               onChange={(e) => handleQuantity(e)}
-              
+              onKeyDown={(e)=> e.preventDefault()}
+              onKeyUp={(e)=> e.preventDefault()}
             />
           </div>
-          <p>${total}</p>
+          <p>{"$" + productTotalPrice}</p>
         </div>
       </Card>
     </div>

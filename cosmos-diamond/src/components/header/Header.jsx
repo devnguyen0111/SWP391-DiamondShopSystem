@@ -14,6 +14,8 @@ import {
 import { Link } from "react-router-dom";
 import { Popover, Button } from "antd";
 import { useState } from "react";
+import { token } from "../getToken";
+import { jwtDecode } from "jwt-decode";
 const Header = () => {
   const content = (
     <div>
@@ -65,9 +67,16 @@ const Header = () => {
       </div> */}
       <div className="icon-container">
         <div className="icon">
-          <Link to="/login">
-            <UserOutlined />
-          </Link>
+          {token ? (
+            <Link to={`profile/${JSON.parse(localStorage.getItem('customer')).cusId}`} style={{fontSize:'16px'}}>
+            
+            Welcome {JSON.parse(localStorage.getItem('customer')).cusLastName}!
+            </Link>
+          ) : (
+            <Link to="/login">
+              <UserOutlined />
+            </Link>
+          )}
         </div>
         <div className="icon">
           <Link to="/wishlist">
