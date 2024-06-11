@@ -39,6 +39,7 @@ function ShoppingCart() {
           setCartTotalPrice(data.totalPrice);
           setIsLoading(false);
           });
+          
     }, [remove]);
   }
 

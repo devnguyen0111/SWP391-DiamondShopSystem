@@ -39,19 +39,19 @@ const Header = () => {
         </Link>
         {/* </Popover> */}
 
-        <Link to="./engagement-rings" className="nav-link">
+        <Link to="/engagement-rings" className="nav-link">
           Engagement Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        <Link to="./wedding-rings" className="nav-link">
+        <Link to="/wedding-rings" className="nav-link">
           Wedding Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        <Link to="./fashion-rings" className="nav-link">
+        <Link to="/fashion-rings" className="nav-link">
           Fashion Rings{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>
-        <Link to="./jewelry" className="nav-link">
+        <Link to="/jewelry" className="nav-link">
           Jewelry{" "}
           <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
         </Link>

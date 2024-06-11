@@ -14,7 +14,7 @@
         color: #151547;
     }
     &__wrapper{
-        height: 86vh;
+        height: 98vh;
     }
     &__left{
         margin-top: 50px;
@@ -37,6 +37,7 @@
         height: 40px;
         align-items: flex-end;
         margin-top: 20px;
+        margin-bottom: 20px;
     }
     &__email{
         margin-top: 20px;
@@ -58,7 +59,8 @@
     input{
         padding: 12px 20px;
         width: 100%;
-        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-top: 10px;
         outline: none;
         border: #48485b 1px solid;
         border-radius: 8px;
@@ -67,9 +69,7 @@
     &__action{
         display: flex;
         justify-content: space-between;
-        margin-top: 60px;
         height: 40px;
-        
         align-items: center;
         
     }
@@ -154,5 +154,11 @@
     
 }
 
+.ant-select-selector{
+    border: 1px solid #48485b !important;
+    &:hover{
+        border: 1px solid #48485b !important;
 
+    }
+}
 
