@@ -206,7 +206,7 @@ function ShoppingCart() {
                       style={{ width: "60%" }}
                     />
                     <Button className="orderSummary__button">
-                      <Link style={{ width: "100%" }} to={`/checkout`}>
+                      <Link style={{ width: "100%" }} to={`/checkout/${userID}`}>
                         CHECKOUT
                       </Link>
                     </Button>

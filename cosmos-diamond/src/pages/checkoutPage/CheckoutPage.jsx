@@ -1,24 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CheckoutPage.scss";
-import { Collapse, Row } from "antd";
-import { Col } from "antd";
+import { Collapse, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Correct the import statement
 
-let token = localStorage.getItem('token');
+let token = localStorage.getItem("token");
 if (token) {
   token = jwtDecode(token);
-  console.log(token);
 }
+
 function CheckoutPage() {
-  const [email, setEmail] = useState()
-  const [name, setName] = useState()
-  const [phone, setPhone] = useState()
-  const [city, setCity] = useState()
-  const [state, setState] = useState()
-  const [street, setStreet] = useState()
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [street, setStreet] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [orderID, setOrderID] = useState();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+  const createPayment = (orderID) => {
+    fetch(
+      `https://localhost:7262/api/Payment/CreatePayment-VNPAY?orderId=${orderID}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId: orderID,
+        })
+      }
+    ).then(res=> res.json())
+    .then(data=> window.open(data.url, '_blank'))
+  };
+  const createOrder = () => {
+    fetch("https://localhost:7262/api/Order/createOrderFromCart", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        cusId: token.UserID,
+        shippingMethodId: 1,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok " + res.statusText);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setOrderID(data.orderId); // Uncomment and use this to handle order ID
+        return data.orderId;
+      })
+      .then(orderID => createPayment(orderID))
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -35,35 +85,89 @@ function CheckoutPage() {
                     Already have an account? <Link to={"/login"}>Login</Link>
                   </div>
                 </div>
-                <input id="email" type="email" placeholder="Email address" />
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <Row gutter={[18, 10]} className="checkout__shipping">
                 <Col span={24} className="checkout__email">
                   Shipping Address
                 </Col>
                 <Col span={12} className="checkout__name">
-                  <input type="text" id="name" placeholder="Name" />
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </Col>
                 <Col span={12} className="checkout__phone">
-                  <input type="tel" placeholder="Phone Number" id="phone" />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
                 </Col>
                 <Col span={24} className="checkout__country">
-                  <input type="text" id="country" placeholder="Country" />
+                  <input
+                    type="text"
+                    id="country"
+                    placeholder="Country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                  />
                 </Col>
                 <Col span={8}>
-                  <input type="text" id="city" placeholder="City" />
+                  <input
+                    type="text"
+                    id="city"
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
                 </Col>
                 <Col span={8}>
-                  <input type="text" id="state" placeholder="State" />
+                  <input
+                    type="text"
+                    id="state"
+                    placeholder="State"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  />
                 </Col>
                 <Col span={8}>
-                  <input type="text" id="street" placeholder="Street" />
+                  <input
+                    type="text"
+                    id="street"
+                    placeholder="Street"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                  />
                 </Col>
                 <Col span={24} className="checkout__address">
-                  <input type="text" id="address" placeholder="Address" />
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </Col>
                 <Col span={8}>
-                  <input type="number" placeholder="Zipcode" id="zipcode" />
+                  <input
+                    type="number"
+                    placeholder="Zipcode"
+                    id="zipcode"
+                    value={zipcode}
+                    onChange={(e) => setZipcode(e.target.value)}
+                  />
                 </Col>
               </Row>
               <div className="checkout__action">
@@ -71,7 +175,13 @@ function CheckoutPage() {
                   <ArrowLeftOutlined /> Return Shopping
                 </Link>
                 <div className="checkout__submit">
-                  <button className="checkout__btn">Continue to Payment</button>
+                  <button
+                    type="button"
+                    onClick={createOrder}
+                    className="checkout__btn"
+                  >
+                    Continue to Payment
+                  </button>
                 </div>
               </div>
             </form>
@@ -90,7 +200,7 @@ function CheckoutPage() {
               >
                 Items
               </Col>
-              <Col span={24} className="checkout__product"> 
+              <Col span={24} className="checkout__product">
                 <div className="checkout__product-info">
                   <div className="checkout__img">
                     <img
