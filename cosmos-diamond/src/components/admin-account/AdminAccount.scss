@@ -1,0 +1,107 @@
+.admin-account {
+  display: flex;
+  height: min-content;
+  align-items: center;
+  padding-right: 1em;
+  border-radius: 100px;
+  background-color: #e4e4e4;
+  margin-left: 1em;
+  &__avatar {
+    height: 55px !important;
+    width: 55px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(225, 185, 235);
+  }
+  &__info {
+    padding: 0 1em;
+    h3 {
+      font-family: "Gantari";
+      font-size:medium;
+      color: black;
+      font-weight:500;
+    }
+    p {
+      font-family: "Gantari";
+      font-size: smaller;
+      color: rgba(28, 28, 28, 0.733);
+      text-wrap: nowrap;
+    }
+  }
+  &__pop-down {
+    color: black;
+  }
+}
+
+@media only screen and (max-width: 1435px) {
+  .admin-account {
+    &__avatar {
+      height: 50px !important;
+      width: 50px !important;
+    }
+    &__info {
+      padding: 0 1em;
+      h3 {
+        font-size: small;
+      }
+      p {
+        font-size: x-small;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1310px) {
+  .admin-account {
+    &__avatar {
+      height: 50px !important;
+      width: 50px !important;
+    }
+    &__info {
+      padding: 0 1em;
+      h3 {
+        font-size: small;
+      }
+      p {
+        font-size: x-small;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .admin-account {
+    &__avatar {
+      height: 45px !important;
+      width: 45px !important;
+    }
+    &__info {
+      padding: 0 0.7em;
+      h3 {
+        font-size: smaller;
+      }
+      p {
+        font-size: 8px;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1160px) {
+  .admin-account {
+    margin-left: 0.5em;
+    &__avatar {
+      height: 41.5px !important;
+      width: 41.5px !important;
+    }
+    &__info {
+      padding: 0 0.5em;
+      h3 {
+        font-size: smaller;
+      }
+      p {
+        font-size: xx-small;
+      }
+    }
+  }
+}

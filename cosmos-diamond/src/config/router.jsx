@@ -31,6 +31,8 @@ import EduRingStyleUni from "../components/eduRingStyleUni/EduRingStyleUni";
 import EduRingFind from "../components/eduRingFind/EduRingFind";
 import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
+import Main from "../pages/dashboard/layout/main-dashboard/Main";
+import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
 
 export const router = createBrowserRouter([
   {
@@ -155,28 +157,20 @@ export const router = createBrowserRouter([
     path: "/pincode",
     element: <PinCode />,
   },
+  {
+    path: "/dashboard",
+    element: (
+      // <ProtectedADMIN>
+      <Main />
+      // </ProtectedADMIN>
+    ),
+    children: [
+      {
+        path: "/dashboard/manager/orders",
+        element: <OrdersManager />,
+      },
+    
+    ],
+  },
 ]);
 
-//Ví dụ sử dụng path khi có children:
-// path: "/",
-// element: (
-//   <div>
-//     <header>header</header>
-//     <h1>test vps ,set up máy ảo</h1>
-//     <Outlet />
-//     <footer>footer</footer>
-//   </div>
-// ),
-// // outlet sẽ show thằng con của nó
-// children: [
-//   {
-//     path: "audience",
-//     element: <PriveRoute />,
-//     children: [
-//       {
-//         path: "profile",
-//         element: <h1>audience- profile</h1>,
-//       },
-//     ],
-//   },
-// ],
