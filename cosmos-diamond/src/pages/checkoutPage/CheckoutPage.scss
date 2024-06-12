@@ -1,11 +1,20 @@
 .checkout{
-    max-width: 1440px;
+    max-width: 1200px;
     margin: auto;
-    height: 120vh;
-    margin-top: 160px;
+    height: auto;
+    margin-top: 0px;
+    
     
     * {
         font-family: 'Gantari';
+    }
+    &__logo{
+        width: 150px;
+        height: 150px;
+        #logo{
+            height: 100%;
+            width: 100%;
+        }
     }
     &__title{
         text-align: center;
@@ -14,35 +23,54 @@
         color: #151547;
     }
     &__wrapper{
-        height: 98vh;
+        height: auto;
+        margin-bottom: 100px;
     }
     &__left{
         margin-top: 50px;
         height: 100%;
         display: flex;
         flex-direction: column;
-        padding: 32px;
-        border-radius: 8px;
-        box-shadow: 0px 5px 33px -1px rgba(209, 209, 209, 0.75);
     }
     &__account{
         display: flex;
         flex-direction: column;
+        border-radius: 10px;
+        box-shadow: rgba(27, 27, 27, 0.17) 0px 2px 5px;
+        padding: 30px 50px 50px 50px;
         
-
+    }
+    &__error{
+        color: rgb(255, 66, 66);
+        margin-bottom: 10px;
     }
     &__header{
         display: flex;
         justify-content: space-between;
         height: 40px;
         align-items: flex-end;
-        margin-top: 20px;
         margin-bottom: 20px;
     }
     &__email{
         margin-top: 20px;
         font-size: 22px;
         color: #151547;
+        font-weight: 600;
+    }
+    &
+    &__note{
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    &__label{
+        font-size: 14px;
+        font-weight: 600;
+    }
+    &__policy{
+        font-size: 12px;
+        color: #929292;
+        font-weight: 500;
+        margin-bottom: 30px;
     }
     &__login{
         color: #838383;
@@ -53,7 +81,11 @@
         }
     }   
     &__shipping{
-        margin-top: 50px;
+        margin-top: 20px;
+        border-radius: 10px;
+        box-shadow: rgba(27, 27, 27, 0.17) 0px 2px 5px;
+        padding: 30px 50px 50px 50px;
+        height: auto;
     }
     
     input{
@@ -62,7 +94,24 @@
         margin-bottom: 20px;
         margin-top: 10px;
         outline: none;
-        border: #48485b 1px solid;
+        border: #b7b7c3 1px solid;
+        border-radius: 8px;
+    }
+    select{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: transparent;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+        background-repeat: no-repeat;
+        background-position-x: 97%;
+        background-position-y: 10px;
+        width: 100%;
+        padding: 12px 10px;
+        
+        margin-bottom: 20px;
+        margin-top: 10px;
+        outline: none;
+        border: #b7b7c3 1px solid;
         border-radius: 8px;
     }
    
@@ -79,6 +128,7 @@
             color: #151547;
         }
     }
+    
     &__btn{
         background-color: #151547;
         color: #fff;
@@ -86,13 +136,16 @@
         padding: 12px 20px;
         border-radius: 8px;
         cursor: pointer;
-
+        width: 180px;
+        &:first-of-type{
+            justify-content: flex-end;
+        }
     }
     &__right{
         margin-top: 50px;
         border:#9d9da3 1px solid;
         padding: 32px;
-        min-height: 50%;
+        
         border-radius: 8px;
     }
     &__right-wrapper{
@@ -155,10 +208,13 @@
 }
 
 .ant-select-selector{
-    border: 1px solid #48485b !important;
+    border: #b7b7c3 1px solid!important;
     &:hover{
-        border: 1px solid #48485b !important;
+        border: #b7b7c3 1px solid!important;
 
     }
 }
 
+#email{
+    margin-bottom: 10px;
+}

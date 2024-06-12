@@ -5,16 +5,14 @@ import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
 import { jwtDecode } from "jwt-decode"; // Correct the import statement
-import { set } from "react-hook-form";
-
-let token = localStorage.getItem("token");
-if (token) {
-  token = jwtDecode(token);
-}
+import img from "../../assets/logo.png";
+import { token } from "./../../components/getToken";
 
 function CheckoutPage() {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
@@ -23,7 +21,24 @@ function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
   const [cart, setCart] = useState();
-
+  const [error, setError] = useState();
+  console.log(token);
+  
+  const toggleConfirmEmail = () => {
+    if (!email) {
+      setError("*Please provide Email");
+    } else if (!email.match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i)) {
+      setError("*Please provide valid Email");
+    } else {
+      setError();
+      setEmailConfirm(!emailConfirm);
+    }
+  };
+  useEffect(()=>{
+    fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
+    .then(res=> res.json())
+    .then(data=>setCity(data.data))
+  }, [])
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     let userId = window.location.href.slice(
@@ -36,7 +51,8 @@ function CheckoutPage() {
         let customerinfo = data.customerinfo;
         let address = data.ad;
         setEmail(customerinfo.mail);
-        setName(customerinfo.cusLastName + " " + customerinfo.cusFirstName);
+        setFirstName(customerinfo.cusFirstName);
+        setLastName(customerinfo.cusLastName);
         setPhone(customerinfo.cusPhoneNum);
         setCity(address.city);
         setCountry(address.country);
@@ -47,7 +63,7 @@ function CheckoutPage() {
     fetch(`https://localhost:7262/api/Cart/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-      console.log(data);
+        console.log(data);
         setCart(data);
       });
   }, []);
@@ -95,52 +111,108 @@ function CheckoutPage() {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-
+  const handleCity = (e)=>{
+    fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
+    .then(res => res.json())
+    .then(data => setState(data.data))
+  }
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
+        <Col span={1} className="checkout__title">
+          <div className="checkout__logo">
+            <Link to="/" style={{ display: "block" }}>
+              <img id="logo" src={img} alt="Cosmos Diamonds" />
+            </Link>
+          </div>
+        </Col>
         <Col span={24} className="checkout__title">
           Secure Checkout
         </Col>
-        <Col span={12} className="checkout__left">
+        <Col span={14} className="checkout__left">
           <div className="checkout__form">
-            <div className="checkout__account">
+            <Row gutter={[18, 10]} className="checkout__account">
               <div className="checkout__header">
-                <div className="checkout__email">Account Details</div>
+                <div className="checkout__email">CONTACT INFORMATION</div>
+                {emailConfirm && (
+                  <div
+                    style={{ cursor: "pointer", color: "#909090" }}
+                    onClick={toggleConfirmEmail}
+                  >
+                    Edit
+                  </div>
+                )}
               </div>
               <div className="checkout__input-wrapper">
+                {!emailConfirm && (
+                  <div className="checkout__note">
+                    Please provide an email address to receive your order
+                    confirmation email.
+                  </div>
+                )}
                 <div className="checkout__label">Email address</div>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                {!emailConfirm && (
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                )}
+                <p className="checkout__error">{error}</p>
+                {emailConfirm && (
+                  <div style={{ fontSize: "16px" }}>{email}</div>
+                )}
+                {!emailConfirm && (
+                  <div className="checkout__policy">
+                    * By signing up you confirm that you have read the Privacy
+                    Policy and agree that your email and the provided
+                    information will be collected and used by Cosmos for the
+                    purposes of sending news, promotions and updates via email.
+                    You can withdraw your consent at any time by unsubscribing
+                    or contacting us via service@cosmos.com.
+                  </div>
+                )}
+                <div
+                  className="checkout__submit"
+                  style={{ width: "100%", textAlign: "right" }}
+                >
+                  {!emailConfirm && (
+                    <button
+                      type="button"
+                      className="checkout__btn"
+                      onClick={toggleConfirmEmail}
+                    >
+                      Continue
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            </Row>
             <Row gutter={[18, 10]} className="checkout__shipping">
               <Col span={24} className="checkout__email">
                 Shipping Address
               </Col>
               <Col span={12} className="checkout__name">
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Name</div>
+                  <div className="checkout__label">First Name</div>
                   <input
                     type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    id="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
               </Col>
-              <Col span={12} className="checkout__phone">
+              <Col span={12} className="checkout__name">
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Phone Number</div>
+                  <div className="checkout__label">Last Name</div>
                   <input
-                    type="tel"
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    type="text"
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </Col>
@@ -155,31 +227,41 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
-              <Col span={8}>
+              
+              <Col span={12}>
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">City</div>
-                  <input
-                    type="text"
-                    id="city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                  />
+                  <div className="checkout__label">City/Province</div>
+                  <select style={{width:'300px'}} onChange={(e)=>handleCity(e)}>
+                    {city && city.map((city)=>(
+                      <option value={city.id}>{city.full_name_en}</option>
+                    ))}
+                  </select>
                 </div>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">State</div>
-                  <input
-                    type="text"
-                    id="state"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                  />
+                  <div className="checkout__label">District</div>
+                  <select style={{width:'300px'}}>
+                    {state && state.map((ward)=>(
+                      <option value={ward.id}>{ward.full_name_en}</option>
+                    ))}
+                  </select>
                 </div>
               </Col>
-              <Col span={8}>
+              
+              {/* <Col span={12}>
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Street</div>
+                  <div className="checkout__label">District</div>
+                  <select style={{width:'300px'}}>
+                    {c.map((city)=>(
+                      <option value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+              </Col> */}
+              {/* <Col span={12}>
+                <div className="checkout__input-wrapper">
+                  <div className="checkout__label">Ward/Commune</div>
                   <input
                     type="text"
                     id="street"
@@ -187,7 +269,7 @@ function CheckoutPage() {
                     onChange={(e) => setStreet(e.target.value)}
                   />
                 </div>
-              </Col>
+              </Col> */}
               <Col span={24} className="checkout__address">
                 <div className="checkout__input-wrapper">
                   <div className="checkout__label">Address</div>
@@ -199,17 +281,18 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
-              <Col span={8}>
+              <Col span={8} className="checkout__phone">
                 <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Zipcode</div>
+                  <div className="checkout__label">Phone Number</div>
                   <input
-                    type="number"
-                    id="zipcode"
-                    value={zipcode}
-                    onChange={(e) => setZipcode(e.target.value)}
+                    type="tel"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
               </Col>
+              
 
               <Col span={8}>
                 <div className="checkout__input-wrapper">
@@ -243,6 +326,17 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
+              <Col span={8}>
+                <div className="checkout__input-wrapper">
+                  <div className="checkout__label">Zipcode</div>
+                  <input
+                    type="number"
+                    id="zipcode"
+                    value={zipcode}
+                    onChange={(e) => setZipcode(e.target.value)}
+                  />
+                </div>
+              </Col>
             </Row>
             <div className="checkout__action">
               <Link to={"/diamond-search"} className="checkout__back">
@@ -260,7 +354,12 @@ function CheckoutPage() {
             </div>
           </div>
         </Col>
-        <Col className="checkout__right" span={9} offset={1}>
+        <Col
+          className="checkout__right"
+          span={8}
+          offset={1}
+          style={{ height: "100%" }}
+        >
           <div className="checkout__right-wrapper">
             <Row className="checkout__description">
               <Col
@@ -273,27 +372,31 @@ function CheckoutPage() {
               >
                 Items
               </Col>
-              {cart && cart.items.$values.map((item)=>(
-
-              <Col span={24} className="checkout__product" key={item.pid}>
-                <div className="checkout__product-info">
-                  <div className="checkout__img">
-                    <img
-                      src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                      alt=""
-                    />
-                  </div>
-                  <div className="checkout__product-name">{item.name1}</div>
-                </div>
-                <div className="checkout__product-price">x {item.quantity}</div>
-                <div className="checkout__product-price">{'$'+item.price}</div>
-              </Col>
-              ))}
+              {cart &&
+                cart.items.$values.map((item) => (
+                  <Col span={24} className="checkout__product" key={item.pid}>
+                    <div className="checkout__product-info">
+                      <div className="checkout__img">
+                        <img
+                          src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
+                          alt=""
+                        />
+                      </div>
+                      <div className="checkout__product-name">{item.name1}</div>
+                    </div>
+                    <div className="checkout__product-price">
+                      x {item.quantity}
+                    </div>
+                    <div className="checkout__product-price">
+                      {"$" + item.price}
+                    </div>
+                  </Col>
+                ))}
               <Col className="checkout__summary" span={24}>
                 <ul>
                   <li>
                     <div className="checkout__summary-title">Subtotal</div>
-                    <div className="">{cart &&'$'+ cart.totalPrice}</div>
+                    <div className="">{cart && "$" + cart.totalPrice}</div>
                   </li>
                   <li>
                     <div className="checkout__summary-title">Delivery</div>
@@ -308,7 +411,7 @@ function CheckoutPage() {
               <Col span={24}>
                 <div className="checkout__summary-total">
                   <div className="">Total</div>
-                  <div className="">{cart &&'$'+ cart.totalPrice}</div>
+                  <div className="">{cart && "$" + cart.totalPrice}</div>
                 </div>
               </Col>
             </Row>
