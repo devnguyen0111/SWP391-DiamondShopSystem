@@ -13,36 +13,39 @@ import {
 } from "antd";
 import {
   DownOutlined,
-  MessageOutlined,
-  PhoneOutlined,
 } from "@ant-design/icons";
 import CardDetail from "../../components/cardDetail/CardDetail";
-import { jwtDecode } from "jwt-decode";
 import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
-import { token } from "../../components/getToken";
+import { getToken, token } from "../../components/getToken";
 import EmptyCart from "../../components/emptyCart/EmptyCart";
 import { apiHeader } from "../../components/urlApiHeader";
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
-  const [userID, setUserID] = useState(token && token.UserID);
   const [cart, setCart] = useState();
   const [cartTotalPrice, setCartTotalPrice] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [remove, setRemove] = useState(false)
-  if (token) {
-    useEffect(() => {
-      fetch(`${apiHeader}/Cart/${userID}`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setCart(data);
-          setCartTotalPrice(data.totalPrice);
-          setIsLoading(false);
-          });
-          
-    }, [remove]);
-  }
+  const [remove, setRemove] = useState();
+
+  const fetchCart = async () => {
+    try {
+      const response = await fetch(`${apiHeader}/Cart/${token.UserID}`);
+      const data = await response.json();
+      setCart(data);
+      setCartTotalPrice(data.totalPrice);
+      setTimeout(()=>{
+        setIsLoading(false);
+      }, 500)
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchCart();
+    }
+  }, [remove]);
 
   return (
     <div>
@@ -59,35 +62,31 @@ function ShoppingCart() {
           }}
         >
           <Col span={12} md={3} sm={0}>
-            {/* khong code cho nay */}
+            {/* Sidebar placeholder */}
           </Col>
           <Col span={12} md={12} sm={24}>
             <h5 className="title">
               MY CART {cart && "(" + cart.quantity + ")"}
             </h5>
-
             <Row gutter={[32, 16]}>
-              {cart &&
-                token &&
-                (isLoading ? (
-                  <Col span={12} md={24} sm={24}>
-                    <CartItemSkeleton />
+              {cart && token && (isLoading ? (
+                <Col span={12} md={24} sm={24}>
+                  <CartItemSkeleton />
+                </Col>
+              ) : (
+                cart.items.$values.map((product) => (
+                  <Col key={product.pid} span={12} md={24} sm={24}>
+                    <CardDetail
+                      product={product}
+                      userID={token.UserID}
+                      setCartTotalPrice={setCartTotalPrice}
+                      setRemove={setRemove}
+                    />
                   </Col>
-                ) : (
-                  cart.items.$values.map((product, i) => (
-                    <Col key={product.pid} span={12} md={24} sm={24}>
-                      <CardDetail
-                        product={product}
-                        userID={userID}
-                        setCartTotalPrice={setCartTotalPrice}
-                        setRemove={setRemove}
-                      />
-                    </Col>
-                  ))
-                ))}
+                ))
+              ))}
             </Row>
           </Col>
-          {/* Sumarry */}
           {cart && token && cart.items.$values.length > 0 ? (
             isLoading ? (
               <Col style={{ marginTop: "48px" }} span={12} md={6} sm={24}>
@@ -208,7 +207,10 @@ function ShoppingCart() {
                       style={{ width: "60%" }}
                     />
                     <Button className="orderSummary__button">
-                      <Link style={{ width: "100%" }} to={`/checkout/${userID}`}>
+                      <Link
+                        style={{ width: "100%" }}
+                        to={`/checkout/${token.UserID}`}
+                      >
                         CHECKOUT
                       </Link>
                     </Button>
@@ -263,150 +265,8 @@ function ShoppingCart() {
               </Col>
             )
           ) : (
-            <Col span={24}>
-              <EmptyCart />
-            </Col>
+            <EmptyCart />
           )}
-
-          <Col span={12} md={3} sm={0}>
-            {/* khong code cho nay */}
-          </Col>
-        </Row>
-
-        {/* <Row>
-          <Col md={5}></Col>
-          <Col md={8} sm={24}>
-            <Row className="information">
-              <Col md={8} sm={24} className="information__left">
-                <h5>SHIPPING</h5>
-                <p>
-                  - Free Shipping Worldwide
-                  <br />
-                  - Overnight Shipping Order Tracking
-                  <br />- Everystep of the way More Info...
-                </p>
-              </Col>
-              <Col md={8}></Col>
-              <Col md={8} sm={24}>
-                <h5>RETURNS</h5>
-                <p>
-                  - 100% Money Back Guarantee
-                  <br />
-                  - Free returns from the US & Canada
-                  <br />- Fully Insured Returns
-                </p>
-              </Col>
-            </Row>
-          </Col>
-          <Col md={10} sm={24}>
-            <div className="information__right">
-              <h5>24/7 Customer Service</h5>
-              <div className="information__right__lower">
-                <p>
-                  <PhoneOutlined style={{ marginRight: "0.5em" }} />
-                  1-800-242-2728
-                </p>
-                <p>
-                  <MessageOutlined style={{ marginRight: "0.5em" }} />
-                  Chat With Us
-                </p>
-              </div>
-            </div>
-          </Col>
-          <Col md={1}></Col>
-        </Row> */}
-
-        <Row align={"bottom"}>
-          <Col span={12} md={4} sm={5}>
-            {/* khong code cho nay */}
-          </Col>
-
-          <Col span={12} md={4} sm={7}>
-            <h5 className="informationLeft__title">
-              {" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 38.22 27.97"
-                width="31"
-                height="22"
-                fill="#b2b2b2"
-              >
-                <rect
-                  x="25.96"
-                  y="12.76"
-                  width="5.68"
-                  height="1.51"
-                  rx="0.75"
-                ></rect>
-                <path d="m30.25 13.91-1.35-2.39a.76.76 0 0 1 .24-1 .76.76 0 0 1 1 .24l1.34 2.39a.76.76 0 0 1-.23 1 .76.76 0 0 1-1-.24Z"></path>
-                <path d="M36.12 12.56s-1.83-.42-2.17-1L31.73 8a4.07 4.07 0 0 0-3.33-2.35h-4V.91a.91.91 0 0 0-.95-.91H.2a.2.2 0 0 0-.2.2v1.24a.2.2 0 0 0 .2.2h21.88a.7.7 0 0 1 .7.7v18.49a.45.45 0 0 1-.45.45H11.89a4.69 4.69 0 0 0-8.5 0h-1A.39.39 0 0 1 2 20.9v-5.45a.21.21 0 0 0-.2-.21H.38a.21.21 0 0 0-.2.21v5.32c0 1.62.1 2.23 1.38 2.23h1.38a7.44 7.44 0 0 0 .25 1.33A4.68 4.68 0 0 0 7.81 28a4.69 4.69 0 0 0 4.51-4.67v-.23h13.05v.07a4.78 4.78 0 0 0 3.91 4.76 4.7 4.7 0 0 0 5.48-4.61v-.23h1.17a2.29 2.29 0 0 0 2.29-2.28v-5.69c0-1.38-.58-2.12-2.1-2.56Zm-25.6 9.58a3.1 3.1 0 0 1-4 4 3.14 3.14 0 0 1-1.73-1.74 3.09 3.09 0 0 1 4-4 3.14 3.14 0 0 1 1.73 1.74Zm19.56 4.26a3.11 3.11 0 1 1 3.11-3.11 3.11 3.11 0 0 1-3.11 3.11Zm6.53-10.83v5.22c0 .27-.42.49-.7.49h-1.58a4.69 4.69 0 0 0-8.5 0h-.95a.51.51 0 0 1-.52-.51V7.26h4a2.19 2.19 0 0 1 2 1.39l2.67 4.5a1.17 1.17 0 0 0 .47.38l2.18.73a1.32 1.32 0 0 1 .93 1.31Z"></path>
-                <path d="M0 10.85V5.69h3.51v.9H1.15v1.18h2.21v.9H1.15v2.18ZM8.8 10.85H7.56l-.9-1.65a.68.68 0 0 0-.26-.27.75.75 0 0 0-.4-.09h-.55v2H4.32V5.69h2.37a2 2 0 0 1 1.37.4 1.43 1.43 0 0 1 .47 1.15 1.47 1.47 0 0 1-.33 1 1.53 1.53 0 0 1-.92.52 1.15 1.15 0 0 1 .72.56Zm-1.57-3a.65.65 0 0 0 .22-.54.62.62 0 0 0-.22-.54 1.11 1.11 0 0 0-.71-.17H5.43V8h1.09a1.17 1.17 0 0 0 .71-.19ZM9.56 10.85V5.69h3.56v.88h-2.45v1.21H13v.89h-2.3V10h2.45v.89ZM14 10.85V5.69h3.56v.88h-2.43v1.21h2.29v.89h-2.29V10h2.44v.89Z"></path>
-              </svg>
-              <span style={{ marginLeft: "1em" }}>SHIPPING</span>
-            </h5>
-            <p className="informationLeft__detail">
-              - Free Shipping Worldwide
-              <br />
-              - Overnight Shipping Order Tracking
-              <br />- Everystep of the way
-            </p>
-          </Col>
-          <Col span={12} md={2} sm={0}>
-            {/* khong code cho nay */}
-          </Col>
-          <Col span={12} md={4} sm={8}>
-            <h5 className="informationLeft__title">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 29.97 30.69"
-                width="31"
-                height="31"
-                fill="#b2b2b2"
-              >
-                <path d="M7.77 20.82v1.23a3.7 3.7 0 0 1 0 7.4v1.24a4.94 4.94 0 0 0 0-9.87ZM4.12 18.72l-3.09 3.15L.18 21l3.09-3.15.85.87z"></path>
-                <ellipse cx="0.6" cy="21.44" rx="0.6" ry="0.62"></ellipse>
-                <ellipse cx="3.69" cy="18.29" rx="0.6" ry="0.62"></ellipse>
-                <path d="M4.12 24.15 1.03 21l-.85.87 3.09 3.15.85-.87z"></path>
-                <ellipse cx="0.6" cy="21.44" rx="0.6" ry="0.62"></ellipse>
-                <ellipse cx="3.69" cy="24.58" rx="0.6" ry="0.62"></ellipse>
-                <path d="M.6 20.82h7.16v1.23H.6z"></path>
-                <ellipse cx="0.6" cy="21.44" rx="0.6" ry="0.62"></ellipse>
-                <ellipse cx="7.77" cy="21.44" rx="0.6" ry="0.62"></ellipse>
-                <path d="M.6 29.45h7.16v1.23H.6z"></path>
-                <ellipse cx="0.6" cy="30.07" rx="0.6" ry="0.62"></ellipse>
-                <ellipse cx="7.77" cy="30.07" rx="0.6" ry="0.62"></ellipse>
-                <path d="M30 6.64a.67.67 0 0 0-.07-.31.74.74 0 0 0-.58-.33L16.11.07a.89.89 0 0 0-.68 0L2.06 6a.71.71 0 0 0-.44.62v9.32h1.56V7.79L15 13v14.9l.44.19H16.12l13.41-5.94a.73.73 0 0 0 .47-.65V6.64ZM15.77 1.5l11.59 5.15-4.27 1.89L11.5 3.4Zm5.53 7.83-5.53 2.46-11.6-5.14 5.54-2.46M28.4 21.05l-11.85 5.26V13l5.11-2.27 2-.88 4.74-2.08Z"></path>
-                <path d="M27.18 19.84v-3.25a.28.28 0 0 0-.42-.24l-.37.29a.26.26 0 0 0-.14.24v2.47a.3.3 0 0 1-.17.26l-2.5 1.05a.26.26 0 0 0-.16.25v.9l3.46-1.53a.49.49 0 0 0 .3-.44Z"></path>
-              </svg>
-
-              <span style={{ marginLeft: "1em" }}>RETURNS</span>
-            </h5>
-            <p className="informationLeft__detail">
-              - 100% Money Back Guarantee
-              <br />
-              - Free returns from the US & Canada
-              <br />- Fully Insured Returns
-            </p>
-          </Col>
-          <Col span={12} md={9} sm={24}>
-            <div className="information__right">
-              <h5>24/7 Customer Service</h5>
-              <div className="information__right__lower">
-                <p>
-                  <PhoneOutlined style={{ marginRight: "0.5em" }} />
-                  1-800-242-2728
-                </p>
-                <p>
-                  <MessageOutlined style={{ marginRight: "0.5em" }} />
-                  Chat With Us
-                </p>
-              </div>
-            </div>
-          </Col>
-
-          <Col span={12} md={1} sm={0}>
-            {/* khong code cho nay */}
-          </Col>
         </Row>
       </div>
     </div>
