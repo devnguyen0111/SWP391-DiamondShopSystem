@@ -21,6 +21,7 @@ import { jwtDecode } from "jwt-decode";
 import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
 import { token } from "../../components/getToken";
 import EmptyCart from "../../components/emptyCart/EmptyCart";
+import { apiHeader } from "../../components/urlApiHeader";
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
@@ -31,7 +32,7 @@ function ShoppingCart() {
   const [remove, setRemove] = useState(false)
   if (token) {
     useEffect(() => {
-      fetch(`https://localhost:7262/api/Cart/${userID}`)
+      fetch(`${apiHeader}/Cart/${userID}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);

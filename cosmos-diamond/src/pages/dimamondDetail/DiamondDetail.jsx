@@ -6,11 +6,12 @@ import CommitExperience from "../../components/commitExperience/CommitExperience
 import axios from "axios";
 import LoadingScreen from "../../components/loadingScreen/LoadingScreen";
 import Stepper from "../../components/stepper/Stepper";
+import { apiHeader } from "../../components/urlApiHeader";
 function DiamondDetail() {
   const [product, setProduct] = useState(null)
   
   useEffect(()=>{
-   fetch("https://localhost:7262/api/Product/productDetail/1")
+   fetch(`${apiHeader}/Product/productDetail/1`)
    .then((res)=> res.json())
    .then(data=> {
     console.log(data);
