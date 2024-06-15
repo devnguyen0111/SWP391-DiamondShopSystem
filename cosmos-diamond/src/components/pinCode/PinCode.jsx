@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import "./PinCode.scss";
 import { json, useNavigate } from "react-router-dom";
+import { apiHeader } from "../urlApiHeader";
+
 function PinCode() {
   let account = JSON.parse(sessionStorage.getItem("account"));
   let email = account.email;
@@ -12,7 +14,7 @@ function PinCode() {
   const nav = useNavigate()
 
   useEffect(() => {
-    fetch(`https://localhost:7262/api/Email/send/PIN?email=${emailAPI}`, {
+    fetch(`${apiHeader}/Email/send/PIN?email=${emailAPI}`, {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -31,7 +33,7 @@ function PinCode() {
     console.log(pin);
     console.log(text);
     if (text.length === 6 && text == pin) {
-      fetch("https://localhost:7262/api/Authentication/register", {
+      fetch(`${apiHeader}/Authentication/register`, {
         method: "POST",
         body: JSON.stringify({
           email: account.email,

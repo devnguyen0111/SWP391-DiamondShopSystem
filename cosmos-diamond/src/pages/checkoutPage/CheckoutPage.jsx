@@ -7,6 +7,7 @@ import FailTransaction from "../../components/failTransaction/FailTransaction";
 import { jwtDecode } from "jwt-decode"; // Correct the import statement
 import img from "../../assets/logo.png";
 import { token } from "./../../components/getToken";
+import { apiHeader } from "../../components/urlApiHeader";
 
 function CheckoutPage() {
   const [email, setEmail] = useState("");
@@ -22,30 +23,35 @@ function CheckoutPage() {
   const [zipcode, setZipcode] = useState("");
   const [cart, setCart] = useState();
   const [error, setError] = useState();
+  const [shipping, setShipping] = useState()
   console.log(token);
-  
+
   const toggleConfirmEmail = () => {
     if (!email) {
       setError("*Please provide Email");
-    } else if (!email.match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i)) {
+    } else if (
+      !email.match(
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+      )
+    ) {
       setError("*Please provide valid Email");
     } else {
       setError();
       setEmailConfirm(!emailConfirm);
     }
   };
-  useEffect(()=>{
-    fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
-    .then(res=> res.json())
-    .then(data=>setCity(data.data))
-  }, [])
+  useEffect(() => {
+    fetch("https://esgoo.net/api-tinhthanh/1/0.htm")
+      .then((res) => res.json())
+      .then((data) => setCity(data.data));
+  }, []);
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     let userId = window.location.href.slice(
       window.location.href.lastIndexOf("/") + 1,
       window.location.href.length
     );
-    fetch(`https://localhost:7262/api/Customer/customer/${userId}/profile`)
+    fetch(`${apiHeader}/Customer/customer/${userId}/profile`)
       .then((res) => res.json())
       .then((data) => {
         let customerinfo = data.customerinfo;
@@ -60,7 +66,7 @@ function CheckoutPage() {
         setStreet(address.street);
         setZipcode(address.zipcode);
       });
-    fetch(`https://localhost:7262/api/Cart/${userId}`)
+    fetch(`${apiHeader}/Cart/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -69,31 +75,30 @@ function CheckoutPage() {
   }, []);
 
   const createPayment = (orderID) => {
-    fetch(
-      `https://localhost:7262/api/Payment/CreatePayment-VNPAY?orderId=${orderID}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          orderId: orderID,
-        }),
-      }
-    )
+    fetch(`${apiHeader}/Payment/CreatePayment-VNPAY?orderId=${orderID}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        orderId: orderID,
+      }),
+    })
       .then((res) => res.json())
       .then((data) => window.open(data.url, "_blank"));
   };
 
   const createOrder = () => {
-    fetch("https://localhost:7262/api/Order/createOrderFromCart", {
+    fetch(`${apiHeader}/Order/createOrderFromCart`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
         cusId: token.UserID,
-        shippingMethodId: 1,
+        shippingMethodId: shipping,
+        deliveryAddress: `${street}, ${state}, ${city}, ${country}`,
+        contactNumber: `${phone}`,
       }),
     })
       .then((res) => {
@@ -111,11 +116,11 @@ function CheckoutPage() {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-  const handleCity = (e)=>{
+  const handleCity = (e) => {
     fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
-    .then(res => res.json())
-    .then(data => setState(data.data))
-  }
+      .then((res) => res.json())
+      .then((data) => setState(data.data));
+  };
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -227,28 +232,33 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
-              
-              <Col span={12}>
+
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <div className="checkout__input-wrapper">
                   <div className="checkout__label">City/Province</div>
-                  <select style={{width:'300px'}} onChange={(e)=>handleCity(e)}>
-                    {city && city.map((city)=>(
-                      <option value={city.id}>{city.full_name_en}</option>
-                    ))}
+                  <select
+                    style={{ maxWidth: "300px" }}
+                    onChange={(e) => handleCity(e)}
+                  >
+                    {city &&
+                      city.map((city) => (
+                        <option value={city.id}>{city.full_name_en}</option>
+                      ))}
                   </select>
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                 <div className="checkout__input-wrapper">
                   <div className="checkout__label">District</div>
-                  <select style={{width:'300px'}}>
-                    {state && state.map((ward)=>(
-                      <option value={ward.id}>{ward.full_name_en}</option>
-                    ))}
+                  <select style={{ maxWidth: "300px" }}>
+                    {state &&
+                      state.map((ward) => (
+                        <option value={ward.id}>{ward.full_name_en}</option>
+                      ))}
                   </select>
                 </div>
               </Col>
-              
+
               {/* <Col span={12}>
                 <div className="checkout__input-wrapper">
                   <div className="checkout__label">District</div>
@@ -276,8 +286,8 @@ function CheckoutPage() {
                   <input
                     type="text"
                     id="address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
                   />
                 </div>
               </Col>
@@ -292,36 +302,32 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
-              
 
               <Col span={8}>
                 <div className="checkout__input-wrapper">
                   <div className="checkout__label">Shipping Method</div>
                   <Select
+                    onChange={(value)=>setShipping(value)}
                     style={{
                       width: "100%",
                       marginTop: "10px",
                       height: "43px",
                     }}
-                    defaultValue={"Jack"}
+                    
                     options={[
                       {
-                        value: "jack",
-                        label: "Jack",
+                        value: "1",
+                        label: "Standard",
                       },
                       {
-                        value: "lucy",
-                        label: "Lucy",
+                        value: "2",
+                        label: "Economy",
                       },
                       {
-                        value: "Yiminghe",
-                        label: "yiminghe",
+                        value: "3",
+                        label: "Express",
                       },
-                      {
-                        value: "disabled",
-                        label: "Disabled",
-                        disabled: true,
-                      },
+                     
                     ]}
                   />
                 </div>
@@ -337,21 +343,21 @@ function CheckoutPage() {
                   />
                 </div>
               </Col>
+              <Col span={24} className="checkout__action">
+                <Link to={"/diamond-search"} className="checkout__back">
+                  <ArrowLeftOutlined /> Return Shopping
+                </Link>
+                <div className="checkout__submit">
+                  <button
+                    type="button"
+                    onClick={createOrder}
+                    className="checkout__btn"
+                  >
+                    Continue to Payment
+                  </button>
+                </div>
+              </Col>
             </Row>
-            <div className="checkout__action">
-              <Link to={"/diamond-search"} className="checkout__back">
-                <ArrowLeftOutlined /> Return Shopping
-              </Link>
-              <div className="checkout__submit">
-                <button
-                  type="button"
-                  onClick={createOrder}
-                  className="checkout__btn"
-                >
-                  Continue to Payment
-                </button>
-              </div>
-            </div>
           </div>
         </Col>
         <Col

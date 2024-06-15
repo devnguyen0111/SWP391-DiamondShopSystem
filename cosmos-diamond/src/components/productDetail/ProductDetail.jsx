@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
 import { jwtDecode } from "jwt-decode";
+import { apiHeader } from "../urlApiHeader";
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
   // const openModal = () => {
@@ -21,7 +22,7 @@ function ProductDetail({ product }) {
     const customerId = token.UserID;
     if (customerId) {
       fetch(
-        `https://localhost:7262/api/Cart/addToCart`,
+        `${apiHeader}/Cart/addToCart`,
         {
           method: "POST",
           headers: {

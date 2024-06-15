@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import LoadingScreen from "../loadingScreen/LoadingScreen";
+import { apiHeader } from "../urlApiHeader";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -44,7 +45,7 @@ const Login = () => {
     //   }
     // })
     setIsLoading(true);
-    fetch("https://localhost:7262/api/Authentication/login", {
+    fetch(`${apiHeader}/Authentication/login`, {
       method: "POST",
       body: JSON.stringify({
         email: data.email,
@@ -60,12 +61,16 @@ const Login = () => {
         localStorage.setItem("token", json.token);
         setAccount(jwtDecode(json.token));
         
-      });
+      })
+      .catch(error =>{
+        setIsLoading(false)
+        console.log(error.message);
+      })
   };
 
   // Logic xử lý đăng nhập
   if (account && account.Role === 'customer') {
-    fetch(`https://localhost:7262/api/Customer/${account.UserID}`, {
+    fetch(`${apiHeader}/Customer/${account.UserID}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -126,7 +131,7 @@ const Login = () => {
           </button>
         </form>
         <p className="signup">
-          <span>Don't have an account?</span> <a href="/sign-up">Sign Up</a>
+          <span>Don't have an account?</span> <Link to="/sign-up">Sign Up</Link>
         </p>
         <p className="back-to-home">
           <Link to="/">Back to Home Page</Link>

@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { set } from "react-hook-form";
+import { apiHeader } from "../urlApiHeader";
 
 function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
@@ -31,7 +32,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
 
   const removeCartItem = (e) => {
     setLoading(true)
-    fetch("https://localhost:7262/api/Cart/removeFromCart", {
+    fetch(`${apiHeader}/Cart/removeFromCart`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -52,7 +53,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
     setProductTotalPrice(newQuantity * product.price);
 
     fetch(
-      `https://localhost:7262/api/Cart/updateCart?id=${userID}&pid=${product.pid}&quantity=${newQuantity}`,
+      `${apiHeader}/Cart/updateCart?id=${userID}&pid=${product.pid}&quantity=${newQuantity}`,
       {
         method: "PUT",
         headers: {
