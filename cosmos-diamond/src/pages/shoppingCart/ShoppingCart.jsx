@@ -265,7 +265,9 @@ function ShoppingCart() {
               </Col>
             )
           ) : (
-            <EmptyCart />
+            <Col span={24}  sm={24}>
+              <EmptyCart />
+            </Col>
           )}
         </Row>
       </div>
