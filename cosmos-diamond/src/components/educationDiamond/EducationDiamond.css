@@ -144,7 +144,7 @@ a .find-button {
 /* cut  */
 .cut {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
 }
 
 .cut h2 {
