@@ -33,6 +33,7 @@ import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import OrderHistory from "../components/orderHistory/OrderHistory";
 
 export const router = createBrowserRouter([
   {
@@ -142,6 +143,10 @@ export const router = createBrowserRouter([
       {
         path: "/fashion-rings",
         element: <FashionRingsIntro />,
+      },
+      {
+        path: "/orders-history",
+        element: <OrderHistory />,
       },
     ],
   },
