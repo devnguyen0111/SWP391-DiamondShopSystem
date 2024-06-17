@@ -13,7 +13,7 @@ function Banner({ bg, intro, title, subtitle, buttons }) {
     } else if (item == "Shop Wedding Rings") {
       navigate("/wedding-rings");
     } else if (item == "Shop Engagement Rings") {
-      navigate("/engagement-rings");
+      navigate("/engagement-rings/catalog");
     }
   };
 

@@ -199,7 +199,7 @@ function DiamondSort() {
                   </div>
                 </div>
                 <div className="list__product">
-                  <Row gutter={[13, 21]}>
+                  <Row gutter={[13, 21]} >
                     {diamondList &&
                       diamondList.map((diamond, index) => (
                         <Col span={6} className="product__container" key={index}>
