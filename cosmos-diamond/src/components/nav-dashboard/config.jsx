@@ -39,23 +39,23 @@ export const navDashboardConfig = [
 ];
 
 
-// export const navDashboardConfigMod = [
-//   {
-//     key: "4",
-//     icon: <SolutionOutlined />,
-//     label: "Posts",
-//   },
-//   {
-//     key: "5",
-//     icon: <FileExclamationOutlined />,
-//     label: "Reported Posts",
-//   },
-//   {
-//     key: "6",
-//     icon: <TbCategory2 />,
-//     label: "Categories",
-//   },
-// ];
+export const navDashboardConfigAdmin = [
+  {
+    key: "5",
+    icon: <SolutionOutlined />,
+    label: "Posts",
+  },
+  {
+    key: "5",
+    icon: <FileExclamationOutlined />,
+    label: "Reported Posts",
+  },
+  {
+    key: "6",
+    icon: <TbCategory2 />,
+    label: "Categories",
+  },
+];
 
 export const navpath = {
   1: {
@@ -65,7 +65,7 @@ export const navpath = {
     path: "/dashboard/manager/orders",
   },
   3: {
-    path: "/dashboard/manager/vouchers",
+    path: "/dashboard/manager/voucher",
   },
   4: {
     path: "/dashboard/manager/products",
