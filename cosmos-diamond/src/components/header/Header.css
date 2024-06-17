@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 0 20px;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
   z-index: 1000;
@@ -22,8 +22,8 @@
 }
 
 .header-container img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 85px;
 }
 
 .nav {
@@ -61,7 +61,7 @@
 .icon-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1px;
 }
 
 .icon-container a {
@@ -75,5 +75,25 @@
 
 .icon {
   font-size: 20px;
+  cursor: pointer;
+}
+
+.pre_icon-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pre_icon-container a {
+  text-decoration: none;
+  color: #5d5d5d;
+}
+.pre_icon-container a:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.pre_icon {
+  font-size: 1.1em;
   cursor: pointer;
 }

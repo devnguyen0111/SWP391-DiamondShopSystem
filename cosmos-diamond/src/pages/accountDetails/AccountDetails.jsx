@@ -14,9 +14,17 @@ import {
   Form,
   Modal,
 } from "antd";
-import { ExclamationCircleOutlined, HeartOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  HeartOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import "./AccountDetails.scss";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { logout, selectUser } from "../../redux/features/counterSlice";
+import useSelection from "antd/es/table/hooks/useSelection";
+import { useDispatch, useSelector } from "react-redux";
+import { apiHeader } from "../../components/urlApiHeader";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -31,7 +39,8 @@ function AccountDetails() {
   const nav = useNavigate();
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const showModal = () => {
     setOpen(true);
   };
@@ -43,11 +52,11 @@ function AccountDetails() {
   const logOut = () => {
     setCustomer(null);
     localStorage.removeItem("customer");
-    nav("/login");
+    nav("/");
   };
   if (id) {
     useEffect(() => {
-      fetch(`https://localhost:7262/api/Customer/customer/${id}/profile`)
+      fetch(`${apiHeader}/Customer/customer/${id}/profile`)
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
@@ -72,36 +81,34 @@ function AccountDetails() {
       .then((res) => res.json())
       .then((data) => setState(data.data));
   };
-  const handleFirstName = (e)=>{
-    setCustomer(prev => ({
+  const handleFirstName = (e) => {
+    setCustomer((prev) => ({
       ...prev,
-      cusFirstName: e.target.value
+      cusFirstName: e.target.value,
     }));
-     
-  }
-  const handleLastName = (e)=>{
-    setCustomer(prev => ({
+  };
+  const handleLastName = (e) => {
+    setCustomer((prev) => ({
       ...prev,
-      cusLastName: e.target.value
+      cusLastName: e.target.value,
     }));
-     
-  }
-  const handleCusPhoneNum = (e)=>{
-    const regex = /^[0-9]*$/
-    if(regex.test(e.target.value)){
-       setCustomer(prev => ({
+  };
+  const handleCusPhoneNum = (e) => {
+    const regex = /^[0-9]*$/;
+    if (regex.test(e.target.value)) {
+      setCustomer((prev) => ({
         ...prev,
-        cusPhoneNum: e.target.value
+        cusPhoneNum: e.target.value,
       }));
     }
-  }
-  const handleUpdateCustomer = ()=>{
-    hideModal()
-  }
-  
+  };
+  const handleUpdateCustomer = () => {
+    hideModal();
+  };
+
   return (
     <Content>
-      <div className="site-layout-content">
+      <div className="site-layout-content" style={{marginTop:"70px"}}>
         <Card style={{ border: "none" }}>
           <div className="account-section">
             <div className="account-section__upper">
@@ -109,13 +116,20 @@ function AccountDetails() {
                 <HeartOutlined style={{ marginRight: "0.5em" }} />
                 Wishlist
               </p>
-              <p>
-                Sign Out
-                <LogoutOutlined
-                  style={{ marginLeft: "0.5em" }}
-                  onClick={() => logOut()}
-                />
-              </p>
+              <Link
+                to=""
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  dispatch(logout());
+                  nav("/login");
+                }}
+                style={{textDecoration:'none', color:'black'}}
+              >
+                <p>
+                  Sign Out
+                  <LogoutOutlined style={{ marginLeft: "0.5em" }} />
+                </p>
+              </Link>
             </div>
             <div className="account-section__banner">
               <div className="account-section__banner__inform">
@@ -210,14 +224,23 @@ function AccountDetails() {
                 {edit && (
                   <Col span={20} style={{ width: "100%" }}>
                     <Form layout="vertical">
-                      <Form.Item label="First Name" >
-                        <Input onChange={(e)=>handleFirstName(e)} value={customer.cusFirstName}/>
+                      <Form.Item label="First Name">
+                        <Input
+                          onChange={(e) => handleFirstName(e)}
+                          value={customer.cusFirstName}
+                        />
                       </Form.Item>
                       <Form.Item label="Last Name">
-                        <Input onChange={(e)=>handleLastName(e)} value={customer.cusLastName}/>
+                        <Input
+                          onChange={(e) => handleLastName(e)}
+                          value={customer.cusLastName}
+                        />
                       </Form.Item>
                       <Form.Item label="Phone Number">
-                        <Input onChange={(e)=>handleCusPhoneNum(e)} value={customer.cusPhoneNum}/>
+                        <Input
+                          onChange={(e) => handleCusPhoneNum(e)}
+                          value={customer.cusPhoneNum}
+                        />
                       </Form.Item>
                       <Form.Item label="Address">
                         <Row gutter={[12, 0]}>
@@ -226,9 +249,7 @@ function AccountDetails() {
                               <div className="checkout__label">
                                 City/Province
                               </div>
-                              <select
-                                onChange={(e) => handleCity(e)}
-                              >
+                              <select onChange={(e) => handleCity(e)}>
                                 {city &&
                                   city.map((city) => (
                                     <option value={city.id}>
@@ -270,7 +291,10 @@ function AccountDetails() {
                           },
                         }}
                       >
-                        <Button style={{ width: "100%", padding: "17px 0" }} onClick={()=> showModal()}>
+                        <Button
+                          style={{ width: "100%", padding: "17px 0" }}
+                          onClick={() => showModal()}
+                        >
                           Save Login Details
                         </Button>
                       </ConfigProvider>
@@ -289,10 +313,8 @@ function AccountDetails() {
         onCancel={hideModal}
         okText="Update"
         cancelText="Cancel"
-        icon= {<ExclamationCircleOutlined />}
-      >
-        
-      </Modal>
+        icon={<ExclamationCircleOutlined />}
+      ></Modal>
     </Content>
   );
 }

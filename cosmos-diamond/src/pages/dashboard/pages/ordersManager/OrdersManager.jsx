@@ -25,7 +25,6 @@ import { GoDotFill } from "react-icons/go";
 function OrdersManager() {
   const [selectedValue, setSelectedValue] = useState(null);
   const onChange1 = (selectedValue) => {
-    // console.log(`selected ${value}`);
     console.log(selectedValue);
     if (selectedValue == null) {
       setShowAlert(true);
@@ -40,6 +39,7 @@ function OrdersManager() {
   const onSearch = (value) => {
     console.log("search:", value);
   };
+
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const navigate = useNavigate();
@@ -97,47 +97,48 @@ function OrdersManager() {
     },
   ];
 
-  const deliveryStaff = [
+  const saleStaff = [
     {
-      value: "jack",
+    
+      value: "1",
       label: "Jack",
     },
     {
-      value: "lucy",
+      value: "2",
       label: "Lucy",
     },
     {
-      value: "tom",
+      value: "3",
       label: "Tom",
     },
     {
-      value: "henry",
+      value: "4",
       label: "Henry",
     },
     {
-      value: "tommy",
+      value: "5",
       label: "Tommy",
     },
   ];
 
-  const onFinishDeactive = async () => {
-    console.log(categoryEnum);
-    if (name.trim().length == 0) {
-      // alertFail("Please input a category name!");
-    } else {
-      try {
-        const response = await api.put("/changeCategory", {
-          id: id,
-          status: "DISABLE",
-        });
-        setModal2Open(false);
-        alertSuccess(response.data.message);
-        getAllByRole();
-      } catch (error) {
-        alertFail(error.response.data);
-      }
-    }
-  };
+  // const onFinishDeactive = async () => {
+  //   console.log(categoryEnum);
+  //   if (name.trim().length == 0) {
+  //     // alertFail("Please input a category name!");
+  //   } else {
+  //     try {
+  //       const response = await api.put("/changeCategory", {
+  //         id: id,
+  //         status: "DISABLE",
+  //       });
+  //       setModal2Open(false);
+  //       alertSuccess(response.data.message);
+  //       getAllByRole();
+  //     } catch (error) {
+  //       alertFail(error.response.data);
+  //     }
+  //   }
+  // };
   // const onFinishActive = async () => {
   //   try {
   //     const response = await api.put(`/changeCategory`, {
@@ -229,81 +230,7 @@ function OrdersManager() {
       ),
     },
 
-    // {
-    //   title: "Update",
-    //   key: "action",
-    //   render: (_, record) => {
-    //     return (
-    //       <div style={{ display: "flex ", gap: "10px" }}>
-    //         <Button
-    //           style={{
-    //             backgroundColor: "rgba(177, 84, 84, 0.1)",
-    //             color: "rgba(177, 84, 84, 1)",
-    //             fontFamily: "MediumCereal",
-    //             border: "2px solid rgba(177, 84, 84, 1)",
-    //             height: "3em",
-    //             padding: "0 1.5em",
-    //           }}
-    //           onClick={() => {
-    //             setId(record.id);
-    //             setName(record.name);
-    //             setModal2Open(true);
-    //           }}
-    //         >
-    //           Update
-    //         </Button>
-    //       </div>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Delete",
-    //   key: "categoryEnum",
-    //   render: (_, record) => {
-    //     return (
-    //       <>
-    //         {record.categoryEnum == "REMOVE" ? (
-    //           <Button
-    //             style={{
-    //               backgroundColor: "rgba(92, 177, 84, 0.1)",
-    //               color: "rgba(92, 177, 84, 1)",
-    //               fontFamily: "MediumCereal",
-    //               border: "2px solid rgba(92, 177, 84, 1)",
-    //               height: "3em",
-    //               padding: "0 1.5em",
-    //             }}
-    //             onClick={() => {
-    //               setId(record.id);
-    //               setCategoryEnum(record.categoryEnum);
-    //               setName(record.username);
-    //               setModal1Open(true);
-    //             }}
-    //           >
-    //             Enable
-    //           </Button>
-    //         ) : (
-    //           <Button
-    //             style={{
-    //               backgroundColor: "rgba(177, 84, 84, 0.1)",
-    //               color: "rgba(177, 84, 84, 1)",
-    //               fontFamily: "MediumCereal",
-    //               border: "2px solid rgba(177, 84, 84, 1)",
-    //               height: "3em",
-    //               padding: "0 1.5em",
-    //             }}
-    //             onClick={() => {
-    //               setId(record.id);
-    //               setName(record.name);
-    //               setModal2Open(true);
-    //             }}
-    //           >
-    //             Disable
-    //           </Button>
-    //         )}
-    //       </>
-    //     );
-    //   },
-    // },
+
   ].filter((item) => !item.hidden);
 
   const getAllByRole = async () => {
@@ -334,22 +261,6 @@ function OrdersManager() {
 
   return (
     <div className="mode">
-      {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          style={{ backgroundColor: "white" }}
-          onClick={() => setStatus(true)}
-          className="mode__createMod"
-        >
-          Create New Category <IoMdAdd />
-        </Button>
-      </div> */}
-
-      {/* <FormNewCategory
-        getAllByRole={getAllByRole}
-        status={status}
-        setStatus={setStatus}
-      /> */}
-
       <Table
         columns={columns}
         dataSource={data}
@@ -378,37 +289,15 @@ function OrdersManager() {
             onChange={onChange1}
             onSearch={onSearch}
             filterOption={filterOption}
-            options={deliveryStaff}
+            options={saleStaff}
             style={{ width: "100%", margin: "8px 0" }}
           />
-          {showAlert && <Alert message="Lỗi rồi" type="error" />}
+          {showAlert && <Alert message="Please selected a staff." type="error" />}
           <Button style={{ marginTop: "1em" }} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form>
       </Modal>
-
-      {/* <Modal
-        title="Delete Category"
-        centered
-        open={modal2Open}
-        footer={null}
-        onCancel={() => setModal2Open(false)}
-      >
-        <Form name="form_item_path" layout="vertical">
-          <label>ID</label>
-          <Input value={id} disabled />
-
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={onFinishDeactive}
-            style={{ marginTop: "1em" }}
-          >
-            Submit
-          </Button>
-        </Form>
-      </Modal> */}
     </div>
   );
 }

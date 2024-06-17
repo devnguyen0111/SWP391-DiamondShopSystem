@@ -15,6 +15,10 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import LoadingScreen from "../loadingScreen/LoadingScreen";
 import { apiHeader } from "../urlApiHeader";
+import { alertFail } from "../../hooks/useNotification";
+import api from "../../config/axios";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/features/counterSlice";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -37,54 +41,29 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  
+  const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
-    // let token = await axios.post("https://localhost:7262/api/Authentication/login",{
-    //   headers:{
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   }
-    // })
-    setIsLoading(true);
-    fetch(`${apiHeader}/Authentication/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        
-        localStorage.setItem("token", json.token);
-        setAccount(jwtDecode(json.token));
-        
-      })
-      .catch(error =>{
-        setIsLoading(false)
-        console.log(error.message);
-      })
-  };
-
-  // Logic xử lý đăng nhập
-  if (account && account.Role === 'customer') {
-    fetch(`${apiHeader}/Customer/${account.UserID}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLoading(false);
-        console.log(data);
-        localStorage.setItem("customer", JSON.stringify(data));
+  const onSubmit = async (value) => {
+    try {
+      const response = await api.post("/api/Authentication/login", value);
+      localStorage.setItem("token", response.data.token);
+      const user = jwtDecode(response.data.token);
+      const responseUser = await api.get(`/api/Customer/${user.UserID}`);
+      console.log("Login: ", responseUser);
+      //redux
+      dispatch(login(user));
+      if (user.Role === "customer") {
         navigate("/");
-      });
-  }
+      }
+      if (user.Role === "admin") {
+        navigate("/dashboard");
+      }
+    } catch (e) {
+      console.log(e);
+      alertFail(e.response.data, "Please Try Again");
+    }
+  };
 
   return (
     <div className="login-container">
@@ -143,3 +122,51 @@ const Login = () => {
 };
 
 export default Login;
+
+  // const onSubmit = (data) => {
+  //   // let token = await axios.post("https://localhost:7262/api/Authentication/login",{
+  //   //   headers:{
+  //   //     "Content-type": "application/json; charset=UTF-8",
+  //   //   }
+  //   // })
+  //   setIsLoading(true);
+  //   fetch(`${apiHeader}/Authentication/login`, {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       email: data.email,
+  //       password: data.password,
+  //     }),
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((json) => {
+
+  //       localStorage.setItem("token", json.token);
+  //       setAccount(jwtDecode(json.token));
+
+  //     })
+  //     .catch(error =>{
+  //       setIsLoading(false)
+  //       console.log(error.message);
+  //     })
+  // };
+
+  // // // Logic xử lý đăng nhập
+  // if (account && account.Role === 'customer') {
+  //   fetch(`${apiHeader}/Customer/${account.UserID}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setIsLoading(false);
+  //       console.log(data);
+  //       localStorage.setItem("customer", JSON.stringify(data));
+  //       navigate("/");
+  //     });
+  // }
