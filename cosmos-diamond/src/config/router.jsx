@@ -34,6 +34,7 @@ import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
 import OrderHistory from "../components/orderHistory/OrderHistory";
+import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRingCatalog";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/features/counterSlice";
 import { alertFail } from "../hooks/useNotification";
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
             <EngagementRingsIntro />
           </ProtectedRouteCustomer>
         ),
+      },
+      {
+        path: "/engagement-rings/catalog",
+        element: <EngagementRingCatalog/>,
       },
       {
         path: "/diamond-search",
