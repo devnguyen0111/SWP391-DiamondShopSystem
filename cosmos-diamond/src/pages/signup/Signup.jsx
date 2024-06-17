@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Divider } from "antd";
+import { alertSuccessSignUp } from "../../hooks/useNotification";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -40,6 +41,7 @@ const Signup = () => {
     console.log(data);
     sessionStorage.setItem('account', JSON.stringify(data));
     nav('/pincode')
+    alertSuccessSignUp;
   };
 
   return (
