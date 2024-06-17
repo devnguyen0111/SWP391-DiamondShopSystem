@@ -1,5 +1,5 @@
 // import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, createBrowserRouter } from "react-router-dom";
+import { Link, Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 // import { increment } from "../redux/features/counterSlice";
 // import { useEffect } from "react";
 // import api from "./axios";
@@ -34,14 +34,45 @@ import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
 import OrderHistory from "../components/orderHistory/OrderHistory";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/features/counterSlice";
+import { alertFail } from "../hooks/useNotification";
 
+const ProtectedRouteAuth = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (!user) {
+    alertFail("You need to login first!!");
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteCustomer = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role === "admin" || user?.Role === "manager") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedADMIN = ({ children }) => {
+  const user = useSelector(selectUser);
+  console.log(user);
+  if (user?.Role !== "admin") {
+    if (user?.Role !== "manager") {
+      alertFail("You do not have permissions to access this page :(");
+      return <Navigate to="/login" replace />;
+    }
+  }
+  return children;
+};
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <div>
         <Header />
-        {/* // nơi các router con sẽ được render.*/}
         <Outlet />
         <Footer />
       </div>
@@ -49,104 +80,201 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Homepage />,
+        element: (
+          <ProtectedRouteCustomer>
+            <Homepage />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/diamonds",
-        element: <DiamondsIntro />,
+        element: (
+          <ProtectedRouteCustomer>
+            <DiamondsIntro />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/engagement-rings",
-        element: <EngagementRingsIntro />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EngagementRingsIntro />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/diamond-search",
-        element: <CatalogPage />,
+        element: (
+          <ProtectedRouteCustomer>
+            <CatalogPage />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/setting-search",
-        element: <SortSettingPage />,
+        element: (
+          <ProtectedRouteCustomer>
+            <SortSettingPage />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education",
-        element: <EducationMain />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EducationMain />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/diamonds",
-        element: <EducationDiamond />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EducationDiamond />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings",
-        element: <EducationRing />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EducationRing />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/complete-product",
-        element: <CompleteProduct />,
+        element: (
+          <ProtectedRouteCustomer>
+            <CompleteProduct />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/shopping-cart",
-        element: <ShoppingCart />,
+        element: (
+          <ProtectedRouteAuth>
+            <ProtectedRouteCustomer>
+              <ShoppingCart />
+            </ProtectedRouteCustomer>
+          </ProtectedRouteAuth>
+        ),
       },
       {
         path: `/Product/:id`,
-        element: <DiamondDetail />,
+        element: (
+          <ProtectedRouteCustomer>
+            <DiamondDetail />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/checkout/:id",
-        element: <CheckoutPage />,
+        element: (
+          <ProtectedRouteAuth>
+            <ProtectedRouteCustomer>
+              <CheckoutPage />
+            </ProtectedRouteCustomer>
+          </ProtectedRouteAuth>
+        ),
       },
       {
         path: "/profile/:id",
-        element: <AccountDetails />,
+        element: (
+          <ProtectedRouteAuth>
+            <ProtectedRouteCustomer>
+              <AccountDetails />
+            </ProtectedRouteCustomer>
+          </ProtectedRouteAuth>
+        ),
       },
       {
         path: "/education/metal",
-        element: <EducationMetal />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EducationMetal />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/wishlist",
-        element: <Wishlist />,
+        element: (
+          <ProtectedRouteCustomer>
+            <Wishlist />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings/wedding-ring-guide",
-
-        element: <EduRingWedding />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EduRingWedding />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings/wedding-ring-styles",
-
-        element: <EduRingStyleUni />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EduRingStyleUni />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings/find-your-ring-size",
-
-        element: <EduRingFind />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EduRingFind />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings/engagement-ring-guide",
-
-        element: <EduRingGuide />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EduRingGuide />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/education/rings/mens-wedding-rings",
-
-        element: <EduRingMen />,
+        element: (
+          <ProtectedRouteCustomer>
+            <EduRingMen />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/wedding-rings",
-        element: <WeddingRingsIntro />,
+        element: (
+          <ProtectedRouteCustomer>
+            <WeddingRingsIntro />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/jewelry",
-        element: <JewelryIntro />,
+        element: (
+          <ProtectedRouteCustomer>
+            <JewelryIntro />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/fashion-rings",
-        element: <FashionRingsIntro />,
+        element: (
+          <ProtectedRouteCustomer>
+            <FashionRingsIntro />
+          </ProtectedRouteCustomer>
+        ),
       },
       {
         path: "/orders-history",
-        element: <OrderHistory />,
+        element: (
+          <ProtectedRouteCustomer>
+            <OrderHistory />
+          </ProtectedRouteCustomer>
+        ),
       },
     ],
   },
@@ -165,17 +293,15 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      // <ProtectedADMIN>
-      <Main />
-      // </ProtectedADMIN>
+      <ProtectedADMIN>
+        <Main />
+      </ProtectedADMIN>
     ),
     children: [
       {
         path: "/dashboard/manager/orders",
         element: <OrdersManager />,
       },
-    
     ],
   },
 ]);
-

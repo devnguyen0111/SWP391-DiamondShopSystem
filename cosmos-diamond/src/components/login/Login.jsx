@@ -59,6 +59,12 @@ const Login = () => {
       if (user.Role === "admin") {
         navigate("/dashboard");
       }
+      // if (user.Role === "salestaff") {
+      //   navigate("/dashboard");
+      // }
+      if (user.Role === "manager") {
+        navigate("/dashboard/manager");
+      }
     } catch (e) {
       console.log(e);
       alertFail(e.response.data, "Please Try Again");
