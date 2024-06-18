@@ -12,4 +12,14 @@
     &:hover{
         background-color: #efefef;
     }
+   
+}
+.price-dropdown{
+    position: absolute;
+    top: 48px;
+    width: 100%;
+    box-shadow: 0 8px 16px rgb(215, 215, 215);
+    padding: 20px;
+    z-index: 2;
+    border-radius: 10px;
 }
