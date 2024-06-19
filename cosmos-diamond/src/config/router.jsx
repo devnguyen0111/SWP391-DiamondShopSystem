@@ -38,13 +38,13 @@ import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRing
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/features/counterSlice";
 import { alertFail } from "../hooks/useNotification";
-<<<<<<< Updated upstream
+
 import VoucherManager from "../pages/dashboard/pages/voucherManager/VoucherManager";
 import ProductsManager from "../pages/dashboard/pages/productsManager/ProductsManager";
 import Page404 from "../pages/page404";
-=======
+
 import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
->>>>>>> Stashed changes
+
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
