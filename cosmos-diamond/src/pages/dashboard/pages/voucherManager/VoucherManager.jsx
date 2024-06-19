@@ -53,49 +53,49 @@ import FormNewCategory from "../../../../components/formNewCategory/FormNewCateg
     const [showAlert, setShowAlert] = useState(false);
   
   
-    const onChange = (e) => {
-      setName(e.target.value);
-    };
+    // const onChange = (e) => {
+    //   setName(e.target.value);
+    // };
   
-    const data = [
-      {
-        id: "1",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-        categoryEnum:"ACTIVE"
-      },
-      {
-        id: "2",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-      },
-      {
-        id: "3",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-      },
-      {
-        id: "4",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-      },
-      {
-        id: "5",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-      },
-      {
-        id: "6",
-        price: "$200",
-        quantity: "123",
-        assign: "Yen Nhu",
-      },
-    ];
+    // const data = [
+    //   {
+    //     id: "1",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //     categoryEnum:"ACTIVE"
+    //   },
+    //   {
+    //     id: "2",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //   },
+    //   {
+    //     id: "3",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //   },
+    //   {
+    //     id: "4",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //   },
+    //   {
+    //     id: "5",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //   },
+    //   {
+    //     id: "6",
+    //     price: "$200",
+    //     quantity: "123",
+    //     assign: "Yen Nhu",
+    //   },
+    // ];
   
     const saleStaff = [
       {
@@ -120,56 +120,27 @@ import FormNewCategory from "../../../../components/formNewCategory/FormNewCateg
         label: "Tommy",
       },
     ];
-  
-    // const onFinishDeactive = async () => {
-    //   console.log(categoryEnum);
-    //   if (name.trim().length == 0) {
-    //     // alertFail("Please input a category name!");
-    //   } else {
-    //     try {
-    //       const response = await api.put("/changeCategory", {
-    //         id: id,
-    //         status: "DISABLE",
-    //       });
-    //       setModal2Open(false);
-    //       alertSuccess(response.data.message);
-    //       getAllByRole();
-    //     } catch (error) {
-    //       alertFail(error.response.data);
-    //     }
-    //   }
-    // };
-    // const onFinishActive = async () => {
-    //   try {
-    //     const response = await api.put(`/changeCategory`, {
-    //       id: id,
-    //       status: "ACTIVE",
-    //     });
-    //     setModal1Open(false);
-    //     alertSuccess("Active " + name + " successfully!");
-    //     getAllByRole();
-    //   } catch (error) {
-    //     alertFail(error.response.data);
-    //   }
-    // };
-  
-    const onFinishActive = () => {
-      
-    };
+ 
   
     const [update, setUpdate] = useState(false);
   
     const columns = [
       {
-        title: "Order ID",
-        dataIndex: "id",
-        key: "OrderId",
+        title: "Voucher ID",
+        dataIndex: "voucherId",
+        key: "voucherId",
         render: (text) => <a>{text}</a>,
       },
       {
-        title: "Price",
-        dataIndex: "price",
-        key: "OrderPrice",
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        render: (text) => <a>{text}</a>,
+      },
+      {
+        title: "Expiration date",
+        dataIndex: "expDate",
+        key: "expDate",
         render: (text) => <a>{text}</a>,
       },
       {
@@ -178,84 +149,37 @@ import FormNewCategory from "../../../../components/formNewCategory/FormNewCateg
         key: "OrderQuantity",
       },
       {
-        title: "Assign Delivery",
-        dataIndex: "assign",
-        key: "OrderQuantity",
-        render: (_, data) => (
-          <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  border: "none",
-                  borderRadius: "0px",
-                  defaultBg: " rgb(27, 27, 27)",
-                  defaultColor: "white",
-                  defaultHoverBg: "white",
-                  // defaultHoverBorderColor: "black",
-                  defaultHoverColor: "black",
-                },
-              },
-            }}
-          >
-            <Button
-              type="link"
-              onClick={() => {
-                setId(data.id);
-                setModal1Open(!modal1Open);
-              }}
-            >
-              {selectedValue ?? "Assign"}
-            </Button>
-          </ConfigProvider>
-        ),
+        title: "Rate",
+        dataIndex: "rate",
+        key: "rate",
       },
-  
       {
         title: "Status",
-        dataIndex: "categoryEnum",
-        key: "deActive",
-        filters: [
-          { text: "ACTIVE", value: "ACTIVE" },
-          { text: "REMOVE", value: "REMOVE" },
-        ],
-        onFilter: (value, record) => record.categoryEnum === value,
-        render: (deActive) => (
-          <div>
-            {deActive ? (
-              <GoDotFill style={{ color: "green", fontSize: "1.7em" }} />
-            ) : (
-              <MdOutlineBlock style={{ color: "red", marginLeft: "0.2em" }} />
-            )}
-          </div>
-        ),
+        dataIndex: "status",
+        key: "status",
       },
-  
-  
+    
     ].filter((item) => !item.hidden);
   
-    const getAllByRole = async () => {
+    const getVoucher = async () => {
       try {
-        const response = await api.get("/adminCategorys");
-        console.log(response.data.data);
-        setAllUsers(response.data.data);
+        const response = await api.get("/get");
+        const data = response.data.data;
+        console.log("Voucher: ", response.data.data)
+        if (!Array.isArray(data)) {
+          throw new Error("Dữ liệu nhận được không phải là mảng");
+        }
+        console.log(data);
+      
       } catch (e) {
-        alertFail(e.response.data);
+        console.error(e);
+        alertFail(e.response?.data || e.message);
       }
     };
   
-    const assignDelivery = async () => {
-      try {
-        const response = await api.post("/");
-        console.log(response.data.data);
-        setAllUsers(response.data.data);
-      } catch (e) {
-        alertFail(e.response.data);
-      }
-    };
-  
-    useEffect(() => {
-      getAllByRole();
-    }, []);
+    // useEffect(() => {
+    //   getAllByRole();
+    // }, []);
   
     console.log();
   
@@ -270,22 +194,22 @@ import FormNewCategory from "../../../../components/formNewCategory/FormNewCateg
           Create New Product <IoMdAdd />
         </Button>
       </div>
-
+{/* 
       <FormNewCategory
         // getAllByRole={getAllByRole}
         status={status}
         setStatus={setStatus}
-      />
+      /> */}
         <Table
           columns={columns}
-          dataSource={data}
+          // dataSource={data}
           pagination={{
             defaultPageSize: 5,
             showSizeChanger: true,
             pageSizeOptions: ["5"],
           }}
         />
-        <Modal
+        {/* <Modal
           title="Confirm delivery person"
           centered
           dataSource={data}
@@ -312,7 +236,7 @@ import FormNewCategory from "../../../../components/formNewCategory/FormNewCateg
               Submit
             </Button>
           </Form>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

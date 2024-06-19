@@ -15,24 +15,20 @@ import { LuBox } from "react-icons/lu";
 
 
 export const navDashboardConfig = [
+
   {
     key: "1",
-    icon: <TeamOutlined />,
-    label: "Users",
-  },
-  {
-    key: "2",
     icon: <ShoppingCartOutlined />,
     label: "Orders",
    
   },
   {
-    key: "3",
+    key: "2",
     icon: <PiTicketLight  style={{fontSize:'1.4em'}} />,
     label: "Voucher",
   },
   {
-    key: "4",
+    key: "3",
     icon: <LuBox style={{fontSize:'1.4em'}} />,
     label: "Products",
   },
@@ -41,34 +37,42 @@ export const navDashboardConfig = [
 
 export const navDashboardConfigAdmin = [
   {
-    key: "5",
-    icon: <SolutionOutlined />,
-    label: "Posts",
+    key: "4",
+    icon: <TeamOutlined />,
+    label: "Users",
   },
   {
     key: "5",
-    icon: <FileExclamationOutlined />,
-    label: "Reported Posts",
+    icon: <SolutionOutlined />,
+    label: "Summary",
   },
   {
     key: "6",
-    icon: <TbCategory2 />,
-    label: "Categories",
+    icon: <FileExclamationOutlined />,
+    label: "Transaction",
   },
+ 
 ];
 
 export const navpath = {
+  
   1: {
-    path: "/dashboard/manager/users",
-  },
-  2: {
     path: "/dashboard/manager/orders",
   },
-  3: {
+  2: {
     path: "/dashboard/manager/voucher",
   },
-  4: {
+  3: {
     path: "/dashboard/manager/products",
+  },
+  4: {
+    path: "/dashboard/admin/users",
+  },
+  5: {
+    path: "/dashboard/admin/summary",
+  },
+  6: {
+    path: "/dashboard/admin/transaction",
   },
 };
 

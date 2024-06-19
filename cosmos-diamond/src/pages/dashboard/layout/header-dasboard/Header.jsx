@@ -1,53 +1,49 @@
 import { useState, useEffect } from "react";
-
 import {
   Row,
   Col,
   Button,
   List,
   Avatar,
-  Input,
   Drawer,
   Typography,
   Switch,
+  Dropdown,
+  Space,
+  Menu,
 } from "antd";
-
-import { ClockCircleOutlined, AlignLeftOutlined } from "@ant-design/icons";
-
-import { NavLink, Link } from "react-router-dom";
+import { ClockCircleOutlined, AlignLeftOutlined, SmileOutlined } from "@ant-design/icons";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import "./Header.scss";
-
 import { useMediaQuery } from "react-responsive";
-// import SearchDashboard from "../../../../component/search-dashboard/SearchDashboard";
-// import Notification from "../../../../component/notification/Notification";
-// import AdminAccount from "../../../../component/admin-account/AdminAccount";
 import SideNav from "../side-nav/SideNav";
 import AdminAccount from "../../../../components/admin-account/AdminAccount";
+import { logout, selectUser } from "../../../../redux/features/counterSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineLogout } from "react-icons/ai";
 
 const data = [
   {
     title: "New message from Sophie",
     description: "2 days ago",
-
     avatar: null,
   },
   {
     title: "New album by Travis Scott",
     description: "2 days ago",
-
-    avatar: <Avatar shape="square"></Avatar>,
+    avatar: <Avatar shape="square" />,
   },
   {
     title: "Payment completed",
     description: "2 days ago",
-    avatar: <Avatar shape="square"></Avatar>,
+    avatar: <Avatar shape="square" />,
   },
 ];
 
 const menu = (
   <List
     min-width="100%"
-    className="header-notifications-dropdown "
+    className="header-notifications-dropdown"
     itemLayout="horizontal"
     dataSource={data}
     renderItem={(item) => (
@@ -70,6 +66,26 @@ function Header({ name, subName, onPress }) {
   const { Title, Text } = Typography;
   const isDesktop = useMediaQuery({ minWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 630 });
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
+    navigate("/");
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <Button type="link" onClick={handleLogout}>
+          <AiOutlineLogout /> Log out
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <Row className="header-dashboard">
@@ -81,15 +97,15 @@ function Header({ name, subName, onPress }) {
         xs={1}
         className="header-dashboard__header-control"
       >
-        {!isDesktop ? (
+        {!isDesktop && (
           <Button
             type="link"
             className="header-dashboard__header-control__sidebar-toggler"
-            onClick={() => onPress()}
+            onClick={onPress}
           >
             <AlignLeftOutlined />
           </Button>
-        ) : null}
+        )}
       </Col>
       <Col
         xl={23}
@@ -99,9 +115,13 @@ function Header({ name, subName, onPress }) {
         xs={23}
         className="header-dashboard__header-control dash-info"
       >
-        {/* <SearchDashboard />
-        <Notification /> */}
-        <AdminAccount />
+        <Dropdown overlay={<Menu items={items} />} trigger={['click']}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <AdminAccount />
+            </Space>
+          </a>
+        </Dropdown>
       </Col>
     </Row>
   );

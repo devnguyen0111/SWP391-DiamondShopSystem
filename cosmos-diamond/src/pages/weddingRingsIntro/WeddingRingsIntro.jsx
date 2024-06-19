@@ -86,7 +86,7 @@ function WeddingRingsIntro() {
                       defaultColor: "white",
                       defaultHoverBg: "white",
                       defaultHoverBorderColor: "white",
-                      defaultHoverColor: "#100e31",
+                    
                       defaultHoverColor: "#100e31",
                     },
                   },

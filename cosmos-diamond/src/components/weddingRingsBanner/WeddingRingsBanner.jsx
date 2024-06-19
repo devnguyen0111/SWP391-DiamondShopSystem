@@ -2,9 +2,11 @@ import React from "react";
 import "./WeddingRingsBanner.scss";
 import { Button, ConfigProvider } from "antd";
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 
 export default function WeddingRingsBanner() {
   const isMobile = useMediaQuery({ maxWidth: "1200px" });
+  const navigate = useNavigate();
   return (
     <div className="wdrbContent">
       <div className="wdrbContent__inform">
@@ -32,7 +34,7 @@ export default function WeddingRingsBanner() {
             },
           }}
         >
-          <Button className="wdrbContent__buttons__button">Shop Diamonds</Button>
+          <Button onClick={() => navigate("/diamonds")} className="wdrbContent__buttons__button">Shop Diamonds</Button>
           <Button className="wdrbContent__buttons__button">Shop Wedding Rings</Button>
         </ConfigProvider>
       </div>

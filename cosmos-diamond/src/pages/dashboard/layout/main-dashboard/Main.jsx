@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Layout, Drawer, Affix } from "antd";
+import { Layout, Drawer, Affix, Card } from "antd";
 import SideNav from "../side-nav/SideNav";
 import Header from "../header-dasboard/Header";
 import "./Main.scss";
@@ -33,7 +33,6 @@ function Main({ children }) {
       >
         <Layout>
           <SideNav />
-       
         </Layout>
       </Drawer>
 
@@ -57,6 +56,37 @@ function Main({ children }) {
 
       <Layout>
         <Header onPress={openDrawer} name={pathname} subName={pathname} />
+        {/* <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop:"3em"
+          }}
+        >
+          <Card
+            style={{
+              width: 770,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h1
+              style={{
+                color: "black",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                fontSize:"1.6em"
+              }}
+            >
+              Hello *Your Name* !
+            </h1>
+            <p style={{ fontSize:"1.5em"}}>Welcome back to Dashboard.</p>
+          </Card>
+        </div> */}
         <div className="div-ant" style={{ height: "86vh" }}>
           <Outlet />
         </div>

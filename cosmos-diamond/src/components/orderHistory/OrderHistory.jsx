@@ -48,7 +48,6 @@ function OrderHistory() {
                         Segmented: {
                             itemSelectedColor: '#fff',
                             itemSelectedBg:'#151542',
-                            itemActiveBg: '#fff',
                             itemHoverColor: '#fff',
                             itemHoverBg: 'rgba(21,21,66,0.2)',
                             itemActiveBg: 'rgba(21,21,66,0.2)',
