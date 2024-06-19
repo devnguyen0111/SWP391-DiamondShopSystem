@@ -1,0 +1,226 @@
+@mixin normalize-link{
+    color: #333;
+    text-decoration: none;
+    &:hover{
+        color: #333;
+    }
+}
+.detail{
+    max-width: 1440px;
+    margin: auto;
+    min-height: 70vh;
+    margin-top: 200px;
+}
+.summary{
+    max-width: 1120px !important ;
+    margin: 45px auto !important;
+
+    &__navigator{
+        color: black;
+        @include normalize-link;
+    }
+    &__img{
+        margin-top: 16px;
+
+        img{
+            width: 100%;
+            height: 100%;
+            // border: #333 1px solid;
+            border-radius: 8px;
+        }
+
+    }
+    &__album{
+        height: 60px;
+        width: 60px;
+        margin-top: 6px;
+        border: 1px solid navy;
+        border-radius: 4px;
+        overflow: hidden;
+        cursor: pointer;
+        img{
+            width: 100%;
+            height: 100%;
+            
+        }
+    }
+    &__action-icon{
+        height: 60px;
+        width: 60px;
+        
+    }
+    &__action{
+        
+    }
+
+    &__item{
+        margin: 30px 0;
+        padding: 20px 0;
+        text-align: center;
+        border-top: 1px solid #bdbdbd;
+        border-bottom: 1px solid #bdbdbd;
+
+       
+    }
+    &__action-name{
+        &:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+    
+    
+}
+.details-table {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+.details-table th {
+    padding: 10px 20px;
+    text-align: left;
+    font-family: 'Gantari', sans-serif;
+    font-weight: 600;
+}
+
+.details-table td{
+    text-align: right;
+    padding-right: 20px;
+
+}
+.details-table tr:nth-child(2n) {
+    background-color: #f9f9f9;
+    
+}
+
+.right{
+    
+    &__name{
+
+        font-size: 32px;
+        font-family: 'Lora';
+        font-weight:  400;
+        color: #151542;
+        margin-top: 20px;
+    }
+    &__shipping{
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span{
+            margin-left: 10px;
+            text-decoration: underline;
+        }
+    }
+    &__wishlist{
+        justify-self: flex-end;
+        font-size: 20px;
+    }
+    &__tag-wrapper{
+        display: flex;
+        gap: 8px;
+        margin-top: 35px;
+        border-bottom: 1px solid #bdbdbd;
+        padding-bottom: 35px;
+    }
+    &__tag{
+        background-color: #f7f7f7;
+        font-family: 'Gantari';
+        font-weight: 500;
+        font-size: 12px;
+        text-align: center;
+        padding: 8px 10px;
+    }
+    &__price-wrapper{
+        margin-top: 26px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    &__price{
+        font-family: 'Gantari';
+        color: #151542;
+        font-size: 26px;
+        font-weight: 500;
+        
+    }
+    &__price-text{
+        font-size: 14px;
+    }
+    &__sticker{
+        margin-top: 20px;
+        height: 30px;
+        width: 160px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    &__button-wrapper{
+        margin-top: 23px;
+        display: flex;
+        gap: 8px;
+    }
+    &__notice{
+        margin-top: 20px;
+        font-family: 'Gantari';
+        color: #919191;
+    }
+    &__button{
+        padding: 16px 24px;
+        background-color: #151542;
+        color: #f9f9f9;
+        font-size: 18px;
+        flex-grow: 1;
+        font-weight: 400px;
+        font-family: 'Gantari';
+        border-radius: 6px;
+        cursor: pointer;   
+        transition: 0.2s; 
+        &:hover{
+            opacity: 0.8;
+        }
+        &:nth-child(2){
+            background-color: transparent;
+            border: #151542 1px solid;
+            color: #151542;
+            font-weight: 500;
+        }
+    }
+}
+
+.include{
+    margin-top: 80px;
+    font-family: 'Gantari';
+    &__header{
+        font-size: 18px;
+        font-weight: 600;
+        color: #151542;
+    }
+    &__item{
+        margin-top: 20px;
+        width: 100%;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        padding: 20px 10px;
+        gap: 18px;
+        
+    }
+    &__img{
+        
+    }
+    &__content{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 4px;
+        min-height: 76px;
+    }
+}
+
+

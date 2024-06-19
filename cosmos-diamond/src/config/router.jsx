@@ -38,9 +38,13 @@ import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRing
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/features/counterSlice";
 import { alertFail } from "../hooks/useNotification";
+
 import VoucherManager from "../pages/dashboard/pages/voucherManager/VoucherManager";
 import ProductsManager from "../pages/dashboard/pages/productsManager/ProductsManager";
 import Page404 from "../pages/page404";
+
+import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
+
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -170,10 +174,18 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: `/Product/:id`,
+        path: `/Diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
             <DiamondDetail />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/Product/:id`,
+        element: (
+          <ProtectedRouteCustomer>
+            <ProductDetailPage />
           </ProtectedRouteCustomer>
         ),
       },
