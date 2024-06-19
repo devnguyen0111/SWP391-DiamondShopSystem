@@ -16,7 +16,7 @@ function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
   }, [cut]);
 
   //Blur value dont include in cutName array
-  document.querySelectorAll(".cut__name").forEach((name) => {
+  document.querySelectorAll(".cutt__name").forEach((name) => {
     if (!cutName.includes(name.innerHTML)) {
       name.style.opacity = "0.5";
     } else {
@@ -28,9 +28,9 @@ function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
       <div className="range">
         <div className="range__title">Cut</div>
         <div className="range__content">
-          <ul className="cut" >
+          <ul className="cutt" >
             {INIT_CUT.map((name, index) => (
-              <li className="cut__name" key={index}>
+              <li className="cutt__name" key={index}>
                 {name}
               </li>
             ))}
