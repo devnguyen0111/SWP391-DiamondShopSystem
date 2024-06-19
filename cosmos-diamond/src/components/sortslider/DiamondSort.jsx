@@ -203,7 +203,7 @@ function DiamondSort() {
                     {diamondList &&
                       diamondList.map((diamond, index) => (
                         <Col span={6} className="product__container" key={index}>
-                          <Link to={"/Product/1"} className="product__wrapper">
+                          <Link to={`/Diamond/${diamond.diamondId}`} className="product__wrapper">
                             <div className="product__img">
                               <Image src={diamond.shape} />
                               <i class="fa-regular fa-heart list__wishlist"></i>

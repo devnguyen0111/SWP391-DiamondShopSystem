@@ -1,63 +1,35 @@
 import React, { useEffect, useState } from "react";
-import "./ProductDetail.scss";
-import Stepper from "../stepper/Stepper";
+import "./DiamondDetailComponent.scss";
+
 import { Col, Row, notification } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
 import { jwtDecode } from "jwt-decode";
 import { apiHeader } from "../urlApiHeader";
-function ProductDetail({ product }) {
-  // const [show, setShow] = useState(false)
-  // const openModal = () => {
-  //   setShow(true);
-  //   disableScroll()
-  // };
-  
-  const addToCart = () => {
-    const url = window.location.href;
-    const productId = url.slice(url.lastIndexOf("/")+1, url.length);
-    const token = jwtDecode(localStorage.getItem("token"))
-    console.log(token);
-    const customerId = token.UserID;
-    if (customerId) {
-      fetch(
-        `${apiHeader}/Cart/addToCart`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            
-          },
-          body: JSON.stringify({
-            id: customerId,
-            pid: productId,
-          }),
-        }
-      ).then(openNotification('topRight'))
-    }
+import Image from "./../Image";
+function DiamondDetailComponent({ product }) {
+  const [show, setShow] = useState(false);
+  const openModal = () => {
+    setShow(true);
+    disableScroll();
   };
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (placement) => {
-    api.success({
-      message: `Add to cart sucessfully`,
-      description:
-        <Link to={'/shopping-cart'}>View Cart</Link>,
-      placement,
-      pauseOnHover: true,
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, []);
 
-      stack: true,
-      duration: 2
-    });
-  };
+  const url = window.location.href;
+  const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
+  const token = jwtDecode(localStorage.getItem("token"));
+  console.log(token);
+  const customerId = token.UserID;
 
   return (
-    <div className="detail">
-      {contextHolder}
+    <div className="detail" style={{marginTop:'70px'}}>
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <Link to={"/engagement-rings/catalog"} className="summary__navigator">
+            <Link to={"/diamond-search"} className="summary__navigator">
               <i class="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
@@ -66,18 +38,12 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24}>
             <div className="summary__img">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <Image src={"/" + product.shape} />
             </div>
           </Col>
           <Col span={24}>
             <div className="summary__album">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <Image src={"/" + product.shape} />
             </div>
           </Col>
           <Col span={24} className="summary__action">
@@ -146,8 +112,7 @@ function ProductDetail({ product }) {
         </Col>
         <Col span={12} className="right">
           <Col span={24} className="right__name">
-            {product && product.productName}
-            
+            {product && product.diamondName}
           </Col>
 
           <Col span={24}>
@@ -177,15 +142,15 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24} className="right__tag-container">
             <div className="right__tag-wrapper">
-              <div className="right__tag">VS1</div>
-              <div className="right__tag">Very Good</div>
-              <div className="right__tag">0.3</div>
-              <div className="right__tag"></div>
+              <div className="right__tag">{product.color}</div>
+              <div className="right__tag">{product.clarity}</div>
+              <div className="right__tag">{product.caratWeight}</div>
+              <div className="right__tag">{product.cut}</div>
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">
             <div className="right__price">
-              $<span>{product.unitPrice}</span>{" "}
+              $<span>{product.price}</span>{" "}
             </div>
             <span className="right__price-text">(Diamond price)</span>
           </Col>
@@ -200,19 +165,10 @@ function ProductDetail({ product }) {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">
-              {/* Select This Diamond */}
-              <Link
-                style={{ display: "block", width: "100%", color: "#fff" }}
-                to={"/checkout"}
-              >
-                {" "}
-                Buy now
-              </Link>
+            <button onClick={() => openModal()} className="right__button">
+              Select This Diamond
             </button>
-            <button onClick={() => addToCart()} className="right__button">
-              Add to Cart
-            </button>
+            <button className="right__button">Consult Expert</button>
           </Col>
           <Col span={24} className="include">
             <div className="include__header">Your Order Include:</div>
@@ -250,8 +206,9 @@ function ProductDetail({ product }) {
           </Col>
         </Col>
       </Row>
+      <Modal show={show} setShow={setShow}></Modal>
     </div>
   );
 }
 
-export default ProductDetail;
+export default DiamondDetailComponent;

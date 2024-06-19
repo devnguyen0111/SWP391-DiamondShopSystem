@@ -124,13 +124,7 @@ function CheckoutPage() {
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
-        <Col span={1} className="checkout__title">
-          <div className="checkout__logo">
-            <Link to="/" style={{ display: "block" }}>
-              <img id="logo" src={img} alt="Cosmos Diamonds" />
-            </Link>
-          </div>
-        </Col>
+        
         <Col span={24} className="checkout__title">
           Secure Checkout
         </Col>

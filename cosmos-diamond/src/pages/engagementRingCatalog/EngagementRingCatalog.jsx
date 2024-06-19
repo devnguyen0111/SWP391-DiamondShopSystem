@@ -34,6 +34,7 @@ function EngagementRingCatalog() {
         setHasMore(false);
         setRingList((prev) => [...prev, ...data.$values]);
       }
+      console.log(data);
       setRingList((prev) => [...prev, ...data.$values]);
     } catch (error) {
       console.error("Failed to fetch data", error);
