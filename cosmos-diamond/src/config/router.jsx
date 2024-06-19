@@ -38,6 +38,9 @@ import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRing
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/features/counterSlice";
 import { alertFail } from "../hooks/useNotification";
+import VoucherManager from "../pages/dashboard/pages/voucherManager/VoucherManager";
+import ProductsManager from "../pages/dashboard/pages/productsManager/ProductsManager";
+import Page404 from "../pages/page404";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -62,13 +65,14 @@ const ProtectedADMIN = ({ children }) => {
   console.log(user);
   if (user?.Role !== "admin") {
     if (user?.Role !== "manager") {
-      alertFail("You do not have permissions to access this page :(");
-      return <Navigate to="/login" replace />;
+      
+      return <Navigate to="*" replace />;
     }
   }
   return children;
 };
 export const router = createBrowserRouter([
+  
   {
     path: "/",
     element: (
@@ -296,6 +300,10 @@ export const router = createBrowserRouter([
     element: <PinCode />,
   },
   {
+    path: "*",
+    element: <Page404/>,
+  },
+  {
     path: "/dashboard",
     element: (
       <ProtectedADMIN>
@@ -304,7 +312,36 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        path: "/dashboard/manager",
+        element: <OrdersManager />,
+      },
+      {
         path: "/dashboard/manager/orders",
+        element: <OrdersManager />,
+      },
+      {
+        path: "/dashboard/manager/voucher",
+        element: <VoucherManager />,
+      },
+      {
+        path: "/dashboard/manager/products",
+        element: <ProductsManager />,
+      },
+
+      {
+        path: "/dashboard/admin",
+        element: <OrdersManager/>,
+      },
+      {
+        path: "/dashboard/admin/summary",
+        element: <OrdersManager/>,
+      },
+      {
+        path: "/dashboard/admin/users",
+        element: <OrdersManager />,
+      },
+      {
+        path: "/dashboard/admin/transaction",
         element: <OrdersManager />,
       },
     ],

@@ -10,18 +10,21 @@ import "./SideNav.scss";
 // import { logout, selectUser } from "../../../../redux/features/counterSlice";
 import { AiOutlineLogout } from "react-icons/ai";
 import navDashboardConfig, {
+  navDashboardConfigAdmin,
   navpath,
 } from "../../../../components/nav-dashboard/config";
 import img from "../../../../assets/logo.png";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/features/counterSlice";
 function SideNav({}) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const page = pathname.replace("/", "");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const onClick = (e) => {
     navigate(navpath[e.key].path);
   };
-  // const user = useSelector(selectUser);
+  const user = useSelector(selectUser);
 
   return (
     <>
@@ -30,7 +33,9 @@ function SideNav({}) {
         defaultOpenKeys={["sub1"]}
         mode="vertical"
         theme="dark"
-        items={navDashboardConfig}
+         items={
+          user.Role == "manager" ? navDashboardConfig : user.Role == "admin" ? navDashboardConfigAdmin
+        : null }
         className="menu-sidebar"
       />
       {/* <div
