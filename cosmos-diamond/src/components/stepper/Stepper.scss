@@ -27,9 +27,21 @@
             border-right: 1px solid #151542;
         }
     }
+    &__icon{
+        width: 60px;
+    }
     &__step{
         display: flex;
         align-items: center;
+        flex-grow: 1;
+    }
+    &__diamondname  {
+        font-weight: 600;
+    }
+    &__remove{
+        font-size: 12px;
+        text-decoration: underline;
+        cursor: pointer;    
     }
     &__number{
         font-size: 32px;

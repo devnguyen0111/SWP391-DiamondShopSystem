@@ -8,8 +8,8 @@ import Image from "./../Image";
 import ReactSlider from "react-slider";
 
 const MIN_PRICE = 0;
-const MAX_PRICE = 50000;
-function SettingDropDownGroup({
+const MAX_PRICE = 10000;
+function SortOptionCover({
   category,
   size,
   metalType,
@@ -18,15 +18,15 @@ function SettingDropDownGroup({
 }) {
   const [sortMetal, setSortMetal] = useState([]);
   const [sortSize, setSortSize] = useState([]);
-  const [sortShape, setSortShape] = useState([]);
+  
 
   const [items, setItems] = useState([]);
   const [sizeItems, setSizeItems] = useState([]);
-  const [shapeItems, setShapeItems] = useState([]);
+  
 
   const [metalMenuVisible, setMetalMenuVisible] = useState(false);
   const [sizeMenuVisible, setSizeMenuVisible] = useState(false);
-  const [shapeMenuVisible, setShapeMenuVisible] = useState(false);
+  
   const [priceMenuVisible, setPriceMenuVisible] = useState(false);
 
   const priceDropDown = useRef();
@@ -37,7 +37,7 @@ function SettingDropDownGroup({
       .then((data) => {
         setSortMetal(data.metal.$values);
         setSortSize(data.sizes.$values);
-        setSortShape(data.shape.$values);
+        
         console.log(data);
       });
   };
@@ -68,17 +68,9 @@ function SettingDropDownGroup({
       setSizeItems(menuItems);
     }
   }, [sortSize]);
-  //render menu item of shape
+ 
 
-  useEffect(() => {
-    if (sortShape.length !== 0) {
-      const menuItems = sortShape.map((shape, index) => ({
-        label: <div>{shape}</div>,
-        key: shape,
-      }));
-      setShapeItems(menuItems);
-    }
-  }, [sortShape]);
+  
 
   const handleMenuSelect = (info) => {
     console.log("Selected value:", info);
@@ -100,15 +92,7 @@ function SettingDropDownGroup({
     size.setSize((prev) => prev.filter((key) => key !== info.key));
   };
 
-  const handleShapeSelect = (info) => {
-    console.log("Selected shape:", info);
-    shape.setShape((prev) => [...prev, info.key]);
-  };
-
-  const handleShapeDeselect = (info) => {
-    console.log("Deselected shape:", info);
-    shape.setShape((prev) => prev.filter((key) => key !== info.key));
-  };
+  
 
   const toggleMetalMenu = () => {
     setMetalMenuVisible(!metalMenuVisible);
@@ -118,9 +102,7 @@ function SettingDropDownGroup({
     setSizeMenuVisible(!sizeMenuVisible);
   };
 
-  const toggleShapeMenu = () => {
-    setShapeMenuVisible(!shapeMenuVisible);
-  };
+ 
   const togglePriceMenu = () => {
     window.addEventListener("click", (e) => {
       if (!priceDropDown.current.contains(e.target)) {
@@ -152,39 +134,18 @@ function SettingDropDownGroup({
       items={sizeItems}
     />
   );
-  const menuShape = (
-    <Menu
-      multiple={true}
-      selectable={true}
-      onSelect={handleShapeSelect}
-      onDeselect={handleShapeDeselect}
-      style={{ height: "200px", overflow: "auto", marginTop: "8px" }}
-      items={shapeItems}
-    />
-  );
+ 
+  
   const handlePriceChange = (newPrice) => setPrice(newPrice);
 
   return (
     <>
       <div
         className="sort__setting"
-        style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}
+        style={{ display: "flex", flexWrap: "wrap", gap: "20px", marginTop:'100px'}}
+        
       >
-        <Dropdown
-          trigger={["click"]}
-          overlay={menuShape}
-          open={shapeMenuVisible}
-          onOpenChange={toggleShapeMenu}
-        >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              <button className="sort__btn">
-                Diamond Shape
-                <DownOutlined style={{ fontSize: "12px" }} />
-              </button>
-            </Space>
-          </a>
-        </Dropdown>
+        
         <Dropdown
           trigger={["click"]}
           overlay={menuMetal}
@@ -273,4 +234,4 @@ function SettingDropDownGroup({
   );
 }
 
-export default SettingDropDownGroup;
+export default SortOptionCover;

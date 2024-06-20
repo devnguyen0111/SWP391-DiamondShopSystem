@@ -44,6 +44,8 @@ import ProductsManager from "../pages/dashboard/pages/productsManager/ProductsMa
 import Page404 from "../pages/page404";
 
 import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
+import CustomRing from "../pages/customRing/CustomRing";
+import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
 
 
 const ProtectedRouteAuth = ({ children }) => {
@@ -178,6 +180,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRouteCustomer>
             <DiamondDetail />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-ring-by-diamond`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CustomRing />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-ring-by-diamond/:id`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CoverDetailPage />
           </ProtectedRouteCustomer>
         ),
       },
