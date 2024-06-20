@@ -1,36 +1,71 @@
 import { RubyOutlined } from "@ant-design/icons";
 import "./Stepper.scss";
-import { Col, Row } from "antd";
-import React from "react";
+import { Col, Flex, Row } from "antd";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 function Stepper({ step1, step2, step3, path }) {
+  const [diamond, setDiamond] = useState();
+  
+  const src = `/${diamond?.shape}.jpg`;
+  useEffect(()=>{
+    setDiamond(JSON.parse(sessionStorage.getItem("diamond")));
+  },[])
+  const removeDiamond  = ()=>{
+    sessionStorage.removeItem('diamond')
+    setDiamond()
+   
+  }
   return (
     <>
       <div className="stepper">
         <Row className="stepper__wrapper">
           <Col span={8} className="stepper__item">
-            <div className="stepper__step">
-              <span className="stepper__number">1</span>
-              <Link to={path.op} className="stepper__title">
-                {step1}
-              </Link>
-            </div>
-            <div className="stepper__icon">
-              <svg
-                viewBox="0 0 26 16"
-                fill="none"
-                width={28}
-                height={35}
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  d="M20.95 1H5.055L1 6.763 13 21 25 6.764 20.95 1Z"
-                  stroke="#151542"
-                  strokeWidth="1.2"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
+            <div className="" style={{display: 'flex', width: '100%'}}>
+              <div className="stepper__step">
+                {!diamond ? (
+                  <>
+                    <span className="stepper__number">1</span>
+                    <Link to={path.op} className="stepper__title">
+                      {step1}
+                    </Link>
+                  </>
+                ) : (
+                  <Flex vertical>
+                    <div className="stepper__diamondname">{diamond.diamondName}</div>
+                    <Flex align="end" gap={10}>
+                      <span className="stepper__diamondname">${diamond.price}</span>
+                      <span className="stepper__remove" onClick={removeDiamond}>Remove</span>
+                    </Flex>
+                  </Flex>
+                )}
+              </div>
+              <div className="stepper__icon">
+                {!diamond ? (
+                  <svg
+                    viewBox="0 0 26 16"
+                    fill="none"
+                    width={28}
+                    height={35}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      d="M20.95 1H5.055L1 6.763 13 21 25 6.764 20.95 1Z"
+                      stroke="#151542"
+                      strokeWidth="1.2"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <img
+                      src={src}
+                      style={{  width: "100%", height:'100%' }}
+                      alt=""
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </Col>
           <Col span={8} className="stepper__item">
