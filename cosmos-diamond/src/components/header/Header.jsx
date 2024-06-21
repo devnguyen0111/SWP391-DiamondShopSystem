@@ -7,17 +7,22 @@ import {
   UserOutlined,
   HeartOutlined,
   ShoppingCartOutlined,
+  SearchOutlined,
+  DownOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Button, ConfigProvider } from "antd";
+import { Popover, Button, ConfigProvider } from "antd";
+import { useState } from "react";
+import { token } from "../getToken";
+import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/features/counterSlice";
 const Header = () => {
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
-  const nav = useNavigate();
+const dispatch = useDispatch();
+const nav = useNavigate();
   return (
     <header className="header-container">
       <div className="logo">
@@ -63,7 +68,8 @@ const Header = () => {
 
       {user ? (
         <div className="pre_icon-container">
-          <div className="pre_icon">
+         
+         <div className="pre_icon">
             <Link to="/shopping-cart">
               <ShoppingCartOutlined />
             </Link>
@@ -73,14 +79,16 @@ const Header = () => {
               <HeartOutlined />
             </Link>
           </div>
-
+        
+         
           <div className="pre_icon">
             <Link to={`/profile/${user.UserID}`}>
               <UserOutlined />
             </Link>
           </div>
-          <div className="pre_icon" style={{ fontSize: "1em" }}>
+          <div className="pre_icon" style={{fontSize:'1em'}}>
             <Link
+              
               onClick={() => {
                 localStorage.removeItem("token");
                 dispatch(logout());
