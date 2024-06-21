@@ -45,7 +45,6 @@ function ProductDetail({ product }) {
         <Link to={'/shopping-cart'}>View Cart</Link>,
       placement,
       pauseOnHover: true,
-
       stack: true,
       duration: 2
     });

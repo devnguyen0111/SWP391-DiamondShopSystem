@@ -2,25 +2,34 @@ import { RubyOutlined } from "@ant-design/icons";
 import "./Stepper.scss";
 import { Col, Flex, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-function Stepper({ step1, step2, step3, path }) {
+import { Link, useNavigate } from "react-router-dom";
+function Stepper({ step1, step2, path }) {
   const [diamond, setDiamond] = useState();
-  
+  const [cover, setCover] = useState();
   const src = `/${diamond?.shape}.jpg`;
-  useEffect(()=>{
+  const nav = useNavigate()
+  useEffect(() => {
     setDiamond(JSON.parse(sessionStorage.getItem("diamond")));
-  },[])
-  const removeDiamond  = ()=>{
-    sessionStorage.removeItem('diamond')
-    setDiamond()
-   
-  }
+    setCover(JSON.parse(sessionStorage.getItem("cover")));
+  }, []);
+  const removeDiamond = () => {
+    sessionStorage.removeItem("diamond");
+    sessionStorage.removeItem("cover");
+    setDiamond();
+    setCover();
+    nav("/diamond-search")
+  };
+  const removeCover = () => {
+    sessionStorage.removeItem("cover");
+    setCover();
+    nav('/custom-ring-by-diamond')
+  };
   return (
     <>
       <div className="stepper">
         <Row className="stepper__wrapper">
           <Col span={8} className="stepper__item">
-            <div className="" style={{display: 'flex', width: '100%'}}>
+            <div className="" style={{ display: "flex", width: "100%" }}>
               <div className="stepper__step">
                 {!diamond ? (
                   <>
@@ -31,10 +40,16 @@ function Stepper({ step1, step2, step3, path }) {
                   </>
                 ) : (
                   <Flex vertical>
-                    <div className="stepper__diamondname">{diamond.diamondName}</div>
+                    <div className="stepper__diamondname">
+                      {diamond.diamondName}
+                    </div>
                     <Flex align="end" gap={10}>
-                      <span className="stepper__diamondname">${diamond.price}</span>
-                      <span className="stepper__remove" onClick={removeDiamond}>Remove</span>
+                      <span className="stepper__diamondname">
+                        ${diamond.price}
+                      </span>
+                      <span className="stepper__remove" onClick={removeDiamond}>
+                        Remove
+                      </span>
                     </Flex>
                   </Flex>
                 )}
@@ -60,7 +75,7 @@ function Stepper({ step1, step2, step3, path }) {
                   <div style={{ display: "flex", justifyContent: "flex-end" }}>
                     <img
                       src={src}
-                      style={{  width: "100%", height:'100%' }}
+                      style={{ width: "100%", height: "100%" }}
                       alt=""
                     />
                   </div>
@@ -68,37 +83,66 @@ function Stepper({ step1, step2, step3, path }) {
               </div>
             </div>
           </Col>
-          <Col span={8} className="stepper__item">
-            <div className="stepper__step">
-              <span className="stepper__number">2</span>
-              <Link to={path.op1} className="stepper__title">
-                {step2}
-              </Link>
-            </div>
-            <div className="stepper__icon">
-              <svg
-                viewBox="0 2 26 15"
-                fill="none"
-                width={28}
-                height={35}
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10 5.878c-4.694 0-8.5 3.833-8.5 8.56C1.5 19.169 5.306 23 10 23s8.5-3.833 8.5-8.561-3.806-8.561-8.5-8.561Zm0 0L4.673 1M10 5.878 15.327 1"
-                  stroke="#151542"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            </div>
+          <Col span={8} className="stepper__item" style={{ width: "100%" }}>
+            <Flex
+              className="stepper__step"
+              style={{ width: "100%" }}
+              justify="space-between"
+            >
+              {!cover ? (
+                <>
+                  <Flex align="center">
+                    <span className="stepper__number">2</span>
+                    <Link to={path.op1} className="stepper__title">
+                      {step2}
+                    </Link>
+                  </Flex>
+                  <div className="stepper__icon">
+                    <svg
+                      viewBox="0 2 26 15"
+                      fill="none"
+                      width={28}
+                      height={35}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10 5.878c-4.694 0-8.5 3.833-8.5 8.56C1.5 19.169 5.306 23 10 23s8.5-3.833 8.5-8.561-3.806-8.561-8.5-8.561Zm0 0L4.673 1M10 5.878 15.327 1"
+                        stroke="#151542"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Flex vertical>
+                    <div className="stepper__diamondname" style={{width:'300px'}}>{cover.name}</div>
+                    <Flex align="end" gap={10}>
+                      <span className="stepper__diamondname">
+                        ${cover.price}
+                      </span>
+                      <span className="stepper__remove" onClick={removeCover}>
+                        Remove
+                      </span>
+                    </Flex>
+                  </Flex>
+                  <div style={{ display: "flex", width:"70px", height:'100%', justifyContent: "flex-end", alignItems:'flex-start'}}>
+                    <img
+                      src={cover.url}
+                      style={{ width: "100%", objectFit:"contain" }}
+                      alt=""
+                    />
+                  </div>
+                </>
+              )}
+            </Flex>
           </Col>
           <Col span={8} className="stepper__item">
             <div className="stepper__step">
               <span className="stepper__number">3</span>
-              <Link to="/complete-product">
-                <span className="stepper__title">{step3}</span>
-              </Link>
+                <span className="stepper__title">Complete Jewelry</span>
             </div>
             <div className="stepper__icon">
               <svg

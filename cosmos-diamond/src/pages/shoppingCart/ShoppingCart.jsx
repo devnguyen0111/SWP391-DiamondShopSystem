@@ -33,9 +33,11 @@ function ShoppingCart() {
       const data = await response.json();
       setCart(data);
       setCartTotalPrice(data.totalPrice);
-      setTimeout(()=>{
-        setIsLoading(false);
-      }, 500)
+      // setTimeout(()=>{
+      //   setIsLoading(false);
+      // }, 500)
+      setIsLoading(false);
+      console.log(data);
     } catch (error) {
       console.error("Failed to fetch cart", error);
     }
@@ -74,7 +76,7 @@ function ShoppingCart() {
                   <CartItemSkeleton />
                 </Col>
               ) : (
-                cart.items.$values.map((product) => (
+                cart.items.$values.map((product,index) => (
                   <Col key={product.pid} span={12} md={24} sm={24}>
                     <CardDetail
                       product={product}

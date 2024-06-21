@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Col, Row, Select } from "antd";
-import { Link } from "react-router-dom";
+import { Col, Row, Select, notification } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import { apiHeader } from "../urlApiHeader";
 
 const CoverDetail = () => {
@@ -17,7 +17,7 @@ const CoverDetail = () => {
 
   const url = window.location.href;
   const coverId = url.slice(url.lastIndexOf("/") + 1, url.length);
-
+  const nav = useNavigate()
   useEffect(() => {
     fetch(`${apiHeader}/Cover/getCoverDetail?id=${coverId}`)
       .then((res) => res.json())
@@ -74,10 +74,39 @@ const CoverDetail = () => {
       })),
     [coverSize]
   );
-  console.log(cover);
 
+  const handleCoverSelect = () => {
+    if (selectedMetal && selectedSize) {
+      
+      let selectedCover = {
+        coverId: cover.coverId,
+        price: calculatePrice(),
+        url : cover.url,
+        name: cover.name +" "+ selectedMetal.name,
+        sizeId: selectedSize.sizeId,
+        metalId: selectedMetal.metalId
+      };
+      sessionStorage.setItem('cover', JSON.stringify(selectedCover))
+      nav('/custom-ring-by-diamond/complete-product')
+    } else {
+      openNotification();
+    }
+  };
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (placement) => {
+    api.warning({
+      message: `Please Choose Cover options !`,
+      description: "Please choose your cover metal type and size.",
+      placement,
+      pauseOnHover: true,
+
+      stack: true,
+      duration: 2,
+    });
+  };
   return (
     <div className="detail" style={{ marginTop: "70px" }}>
+      {contextHolder}
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
@@ -119,7 +148,7 @@ const CoverDetail = () => {
         </Col>
         <Col span={12} className="right">
           <Col span={24} className="right__name">
-            {cover && cover.name}
+            {cover && cover.name +" "+ (selectedMetal ? selectedMetal.name : '')}
           </Col>
           <Col span={24}>
             <div className="right__sticker">
@@ -182,7 +211,9 @@ const CoverDetail = () => {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">Select This Cover</button>
+            <button className="right__button" onClick={handleCoverSelect}>
+              Select This Cover
+            </button>
             <button className="right__button">Consult Expert</button>
           </Col>
           <Col span={24} className="include">

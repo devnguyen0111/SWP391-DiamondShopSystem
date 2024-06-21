@@ -46,7 +46,7 @@ import Page404 from "../pages/page404";
 import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
 import CustomRing from "../pages/customRing/CustomRing";
 import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
-
+import CompleteProductPage from "../pages/completeProductPage/CompleteProductPage";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -71,14 +71,12 @@ const ProtectedADMIN = ({ children }) => {
   console.log(user);
   if (user?.Role !== "admin") {
     if (user?.Role !== "manager") {
-      
       return <Navigate to="*" replace />;
     }
   }
   return children;
 };
 export const router = createBrowserRouter([
-  
   {
     path: "/",
     element: (
@@ -115,7 +113,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/engagement-rings/catalog",
-        element: <EngagementRingCatalog/>,
+        element: <EngagementRingCatalog />,
       },
       {
         path: "/diamond-search",
@@ -158,10 +156,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/complete-product",
+        path: "/custom-ring-by-diamond/complete-product",
         element: (
           <ProtectedRouteCustomer>
-            <CompleteProduct />
+            <CompleteProductPage />
           </ProtectedRouteCustomer>
         ),
       },
@@ -179,7 +177,7 @@ export const router = createBrowserRouter([
         path: `/Diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
-            <DiamondDetail />
+            <DiamondDetail /> 
           </ProtectedRouteCustomer>
         ),
       },
@@ -331,7 +329,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Page404/>,
+    element: <Page404 />,
   },
   {
     path: "/dashboard",
@@ -360,11 +358,11 @@ export const router = createBrowserRouter([
 
       {
         path: "/dashboard/admin",
-        element: <OrdersManager/>,
+        element: <OrdersManager />,
       },
       {
         path: "/dashboard/admin/summary",
-        element: <OrdersManager/>,
+        element: <OrdersManager />,
       },
       {
         path: "/dashboard/admin/users",

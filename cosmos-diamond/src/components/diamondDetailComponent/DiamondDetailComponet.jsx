@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./DiamondDetailComponent.scss";
 
-import { Col, Row, notification } from "antd";
+import { Col, Row, notification, Flex } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
@@ -48,12 +48,12 @@ function DiamondDetailComponent({ product }) {
           </Col>
           <Col span={24} className="summary__action">
             <div className="summary__item">
-              <div className="sumarry__action-icon">
+              <Flex justify="center" className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
                   alt=""
                 />
-              </div>
+              </Flex>
               <div className="summary__action-name">GIA Report</div>
             </div>
           </Col>
