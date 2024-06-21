@@ -24,7 +24,6 @@ function CheckoutPage() {
   const [cart, setCart] = useState();
   const [error, setError] = useState();
   const [shipping, setShipping] = useState()
-  console.log(token);
 
   const toggleConfirmEmail = () => {
     if (!email) {
@@ -97,7 +96,7 @@ function CheckoutPage() {
       body: JSON.stringify({
         cusId: token.UserID,
         shippingMethodId: shipping,
-        deliveryAddress: `${street}, ${state}, ${city}, ${country}`,
+        deliveryAddress: `hehe`,
         contactNumber: `${phone}`,
       }),
     })
@@ -235,8 +234,8 @@ function CheckoutPage() {
                     onChange={(e) => handleCity(e)}
                   >
                     {city &&
-                      city.map((city) => (
-                        <option value={city.id}>{city.full_name_en}</option>
+                      city.map((city,index) => (
+                        <option key={index} value={city.id}>{city.full_name_en}</option>
                       ))}
                   </select>
                 </div>
@@ -246,8 +245,8 @@ function CheckoutPage() {
                   <div className="checkout__label">District</div>
                   <select style={{ maxWidth: "300px" }}>
                     {state &&
-                      state.map((ward) => (
-                        <option value={ward.id}>{ward.full_name_en}</option>
+                      state.map((ward, i) => (
+                        <option key={i} value={ward.id}>{ward.full_name_en}</option>
                       ))}
                   </select>
                 </div>

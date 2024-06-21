@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./OrderHistory.scss";
 import { HeartOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import { Card, Col, ConfigProvider, Divider, Flex, Row, Segmented } from "antd";
+import { token } from './../getToken';
+import { apiHeader } from "../urlApiHeader";
 function OrderHistory() {
+  console.log(token);
+  const [customer, setCustomer] = useState()
+  useEffect(() => {
+    fetch(`${apiHeader}/Customer/customer/${token.UserID}/profile`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setCustomer(res.customerinfo);
+      });
+  }, []);
   return (
     <>
       <Content>
@@ -31,7 +43,7 @@ function OrderHistory() {
                   <h1
                     className="account-section__banner__inform__title"
                     style={{ textTransform: "capitalize" }}
-                  ></h1>
+                  >{customer && customer.cusFirstName +" "+ customer.cusLastName}</h1>
                 </div>
               </div>
             </div>

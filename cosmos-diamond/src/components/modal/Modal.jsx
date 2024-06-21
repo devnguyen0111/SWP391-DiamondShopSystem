@@ -21,6 +21,12 @@ function Modal({ show, setShow, diamond }) {
           if(index + 1 === 1){
             nav("/custom-ring-by-diamond")
           }
+          else if(index + 1 === 2){
+            nav("/custom-pendant-by-diamond")
+          }
+          else if(index + 1 === 2){
+            nav("/custom-earrings-by-diamond")
+          }
           sessionStorage.setItem('diamond', JSON.stringify(diamond))
         }
       });

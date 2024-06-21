@@ -14,6 +14,8 @@ function Banner({ bg, intro, title, subtitle, buttons }) {
       navigate("/wedding-rings");
     } else if (item == "Shop Engagement Rings") {
       navigate("/engagement-rings/catalog");
+    } else if (item == "Craft Your Rings") {
+      navigate("/diamond-search");
     }
   };
 

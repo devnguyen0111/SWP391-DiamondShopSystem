@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 150px;
     
     &__wrapper{
         border: 1px solid #151542;
@@ -34,9 +34,13 @@
         display: flex;
         align-items: center;
         flex-grow: 1;
+        height: 100%;
     }
     &__diamondname  {
         font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
     &__remove{
         font-size: 12px;
