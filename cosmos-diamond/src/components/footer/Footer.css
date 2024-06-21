@@ -47,14 +47,6 @@
 .footer-column button:hover {
   border: rgba(47, 46, 46, 0.245) 2px solid;
 }
-.footer-column input {
-  border: solid 2px grey;
-  background: white;
-  height: 30px;
-  border-radius: 10px;
-  padding-left: 10px;
-  margin-right: 5px;
-}
 
 .footer-bottom {
   display: flex;
