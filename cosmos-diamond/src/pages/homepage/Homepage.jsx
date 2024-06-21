@@ -8,18 +8,12 @@ import EngagementRingsBanner from "../../components/engagementRingsBanner/Engage
 import ExploreDiamond from "./../../components/exploreDiamondBanner/ExploreDiamond";
 import ReviewBanner from "./../../components/reviewsBanner/ReviewBanner";
 
-import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
-import Banner from "../../components/banner/Banner";
 import { useMediaQuery } from "react-responsive";
-import { jwtDecode } from "jwt-decode";
 
 function Homepage() {
-  const isMobile= useMediaQuery({ maxWidth: "2400px" })
-  
+  const isMobile = useMediaQuery({ maxWidth: "2400px" });
 
-
-    return (
+  return (
     <div className="homepage">
       <WeddingRingsBanner />
       <ExploreDiamond version="diamonds" />
@@ -33,7 +27,7 @@ function Homepage() {
           <h5>Cosmos Diamonds Education And Guidance</h5>
         </div>
         <Row className="homepage__education__pics">
-          <Col span={ isMobile ? 7 : 4}>
+          <Col span={isMobile ? 7 : 4}>
             <Row>
               <Col md={24}>
                 <Image

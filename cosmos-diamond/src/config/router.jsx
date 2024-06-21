@@ -33,6 +33,7 @@ import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import AdminPage from "../pages/admin/AdminPage";
 import OrderHistory from "../components/orderHistory/OrderHistory";
 import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRingCatalog";
 import { useSelector } from "react-redux";
@@ -358,7 +359,7 @@ export const router = createBrowserRouter([
 
       {
         path: "/dashboard/admin",
-        element: <OrdersManager />,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/summary",
