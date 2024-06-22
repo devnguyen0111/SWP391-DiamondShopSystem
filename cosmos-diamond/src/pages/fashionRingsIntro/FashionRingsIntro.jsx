@@ -58,7 +58,7 @@ function FashionRingsIntro() {
             <Image
               preview={false}
               width={720}
-              height={620}
+              height={633}
               src="https://dam.bluenile.com/images/public/21515/Diamond Pendant.jpeg"
             />
             <h5>fancy shape pendants</h5>

@@ -57,9 +57,8 @@ function WeddingRingsIntro() {
             <Image
               preview={false}
               width={800}
-              height={736}
+              height={753}
               src="https://dam.bluenile.com/images/public/21503/Build_Your_Own_Earrings.jpeg"
-
             />
             <h5>PRINCESS DIAMOND EARRING</h5>
           </Col>
@@ -72,8 +71,9 @@ function WeddingRingsIntro() {
             <div className="findSize__banner">
               <h2>How to Find Your Perfect Fit</h2>
               <h5>
-                Don’t know your ring size? You can order our free ring sizer, <br /> or
-                use our  printable guide which determines your size by <br />
+                Don’t know your ring size? You can order our free ring sizer,{" "}
+                <br /> or use our printable guide which determines your size by{" "}
+                <br />
                 using another ring that you already own.
               </h5>
               <ConfigProvider
@@ -84,7 +84,7 @@ function WeddingRingsIntro() {
                       defaultColor: "white",
                       defaultHoverBg: "white",
                       defaultHoverBorderColor: "white",
-                    
+
                       defaultHoverColor: "#100e31",
                     },
                   },
