@@ -1,5 +1,5 @@
 import React from "react";
-import "./AdminTransaction.css";
+import "./AdminTransaction.scss";
 import TransactionTable from "../../components/tableTransaction/TableTransaction";
 
 function AdminTransaction() {
