@@ -33,6 +33,7 @@ import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import AdminPage from "../pages/admin/AdminPage";
 import OrderHistory from "../components/orderHistory/OrderHistory";
 import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRingCatalog";
 import { useSelector } from "react-redux";
@@ -47,6 +48,8 @@ import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
 import CustomRing from "../pages/customRing/CustomRing";
 import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
 import CompleteProductPage from "../pages/completeProductPage/CompleteProductPage";
+
+import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -177,7 +180,7 @@ export const router = createBrowserRouter([
         path: `/Diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
-            <DiamondDetail /> 
+            <DiamondDetail />
           </ProtectedRouteCustomer>
         ),
       },
@@ -358,7 +361,7 @@ export const router = createBrowserRouter([
 
       {
         path: "/dashboard/admin",
-        element: <OrdersManager />,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/summary",
@@ -370,7 +373,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/admin/transaction",
-        element: <OrdersManager />,
+        element: <AdminTransaction />,
       },
     ],
   },
