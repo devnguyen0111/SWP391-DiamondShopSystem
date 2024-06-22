@@ -13,9 +13,9 @@ function SettingDropDownGroup({
   category,
   size,
   metalType,
-  shape,
   price,
   setPrice,
+  shape,
 }) {
   const [sortMetal, setSortMetal] = useState([]);
   const [sortSize, setSortSize] = useState([]);

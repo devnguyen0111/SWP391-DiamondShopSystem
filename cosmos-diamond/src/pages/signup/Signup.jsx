@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const nav = useNavigate()
+  const nav = useNavigate();
   const {
     register,
     handleSubmit,
@@ -36,11 +36,11 @@ const Signup = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  
+
   const onSubmit = (data) => {
     console.log(data);
-    sessionStorage.setItem('account', JSON.stringify(data));
-    nav('/pincode')
+    sessionStorage.setItem("account", JSON.stringify(data));
+    nav("/pincode");
     alertSuccessSignUp;
   };
 

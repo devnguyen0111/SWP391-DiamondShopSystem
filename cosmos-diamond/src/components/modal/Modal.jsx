@@ -2,30 +2,40 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Modal.scss";
 import { Col, Row } from "antd";
 import { enableScroll } from "../disableScroll";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function Modal({ show, setShow }) {
+function Modal({ show, setShow, diamond }) {
   const closeModal = () => {
     setShow(false);
     enableScroll();
   };
-  const submitBtn = useRef(); 
+  const nav = useNavigate()
+  const submitBtn = useRef();
   useEffect(() => {
     const settings = document.querySelectorAll(".setting-option__item");
-    
 
     function handleSubmit() {
       console.log(submitBtn.current);
-      settings.forEach((setting, index)=>{
-        if(setting.children[1].classList.contains('active')){
-            console.log(index);
+      settings.forEach((setting, index) => {
+        if (setting.children[1].classList.contains("active")) {
+          if(index + 1 === 1){
+            nav("/custom-ring-by-diamond")
+          }
+          else if(index + 1 === 2){
+            nav("/custom-pendant-by-diamond")
+          }
+          else if(index + 1 === 2){
+            nav("/custom-earrings-by-diamond")
+          }
+          sessionStorage.setItem('diamond', JSON.stringify(diamond))
         }
-      })
-        enableScroll();
-
+      });
+      enableScroll();
     }
-    
-    submitBtn.current && submitBtn.current.addEventListener('click', handleSubmit )
+
+    submitBtn.current &&
+      submitBtn.current.addEventListener("click", handleSubmit);
+      
     const handleClick = (event) => {
       // Remove 'active' class from all items
       settings.forEach((setting) => {
@@ -98,32 +108,7 @@ function Modal({ show, setShow }) {
                   </div>
                   <i class="fa-solid fa-circle-check setting-option__check active"></i>
                 </li>
-                <li className="setting-option__item">
-                  <div className="setting-option__right">
-                    <div className="setting-option__name">
-                      <svg
-                        viewBox="0 0 26 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={28}
-                        height={35}
-                      >
-                        <path
-                          d="M6.053 16.5v-6.412m0 0V6.065m0 4.023C2.684 10.088 1 9.403 1 11.458c0 1.781 1.684 2.738 2.807 2.053m2.246-3.423c3.368 0 5.052-.685 5.052 1.37 0 2.053-1.684 2.738-2.807 2.053M6.053 6.065l4.42-4.565m-4.42 4.565L1.632 1.5m18.315 15v-6.412m0 0V6.065m0 4.023c-3.368 0-5.052-.685-5.052 1.37 0 1.781 1.684 2.738 2.807 2.053m2.245-3.423c3.369 0 5.053-.685 5.053 1.37 0 2.053-1.684 2.738-2.807 2.053m-2.246-7.446L24.368 1.5m-4.42 4.565L15.525 1.5"
-                          stroke="#151542"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
-                      </svg>
-                      <span>Earrings Setting</span>
-                    </div>
-                    <div className="setting-option__description">
-                      Choose a earrings to match this diamond.
-                    </div>
-                  </div>
-                  <i class="fa-solid fa-circle-check setting-option__check "></i>
-                </li>
+
                 <li className="setting-option__item">
                   <div className="setting-option__right">
                     <div className="setting-option__name">
@@ -150,17 +135,38 @@ function Modal({ show, setShow }) {
                   </div>
                   <i class="fa-solid fa-circle-check setting-option__check"></i>
                 </li>
+                <li className="setting-option__item">
+                  <div className="setting-option__right">
+                    <div className="setting-option__name">
+                      <svg
+                        viewBox="0 0 26 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={28}
+                        height={35}
+                      >
+                        <path
+                          d="M6.053 16.5v-6.412m0 0V6.065m0 4.023C2.684 10.088 1 9.403 1 11.458c0 1.781 1.684 2.738 2.807 2.053m2.246-3.423c3.368 0 5.052-.685 5.052 1.37 0 2.053-1.684 2.738-2.807 2.053M6.053 6.065l4.42-4.565m-4.42 4.565L1.632 1.5m18.315 15v-6.412m0 0V6.065m0 4.023c-3.368 0-5.052-.685-5.052 1.37 0 1.781 1.684 2.738 2.807 2.053m2.245-3.423c3.369 0 5.053-.685 5.053 1.37 0 2.053-1.684 2.738-2.807 2.053m-2.246-7.446L24.368 1.5m-4.42 4.565L15.525 1.5"
+                          stroke="#151542"
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></path>
+                      </svg>
+                      <span>Earrings Setting</span>
+                    </div>
+                    <div className="setting-option__description">
+                      Choose a earrings to match this diamond.
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-circle-check setting-option__check "></i>
+                </li>
               </ul>
             </Col>
           </Row>
-          <Link 
-            ref={submitBtn}
-            to={"/setting-search"}
-            className="setting-option__submit"
-          >
-            
+          <div ref={submitBtn} className="setting-option__submit">
             Continue
-          </Link>
+          </div>
         </div>
       )}
       {show && <div onClick={() => closeModal()} className="modal"></div>}

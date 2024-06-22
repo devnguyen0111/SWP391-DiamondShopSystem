@@ -97,3 +97,43 @@
   font-size: 1.1em;
   cursor: pointer;
 }
+
+/* ///////////////// */
+.dropdown-menu {
+  width: 300px;
+  padding: 20px;
+}
+
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.dropdown-menu ul li {
+  margin: 5px 0;
+}
+
+.ant-dropdown-link:hover .dropdown-menu {
+  display: block;
+}
+
+.ant-dropdown {
+  position: relative;
+}
+
+.ant-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ant-dropdown:hover .ant-dropdown-menu {
+  display: block;
+}
+
+.blur-background {
+  filter: blur(5px);
+}

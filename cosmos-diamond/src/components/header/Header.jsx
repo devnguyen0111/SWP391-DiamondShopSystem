@@ -1,28 +1,25 @@
 // src/components/Header.jsx
 // import React from 'react';
 import "./Header.css";
-
+import React, { useState } from "react";
+import DropdownDiamond from "../dropdownDiamond/DropdownDiamond";
 import img from "../../assets/logo.png";
 import {
   UserOutlined,
   HeartOutlined,
   ShoppingCartOutlined,
-  SearchOutlined,
-  DownOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Popover, Button, ConfigProvider } from "antd";
-import { useState } from "react";
-import { token } from "../getToken";
-import { jwtDecode } from "jwt-decode";
+import { Button, ConfigProvider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/features/counterSlice";
+
 const Header = () => {
   const user = useSelector(selectUser);
-const dispatch = useDispatch();
-const nav = useNavigate();
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   return (
     <header className="header-container">
       <div className="logo">
@@ -32,23 +29,33 @@ const nav = useNavigate();
       </div>
       <nav className="nav">
         {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link to="./diamonds" className="nav-link">
+        <Link to="/diamonds" className="nav-link">
           {" "}
           Diamonds
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
+
         {/* </Popover> */}
+
+        {/* <Dropdown overlay={menu} trigger={["hover"]}>
+          <Button
+            className="ant-dropdown-link"
+            onClick={(e) => e.preventDefault()}
+          >
+            Diamonds <DownOutlined />
+          </Button>
+        </Dropdown> */}
 
         <Link to="/engagement-rings" className="nav-link">
           Engagement Rings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/wedding-rings" className="nav-link">
-          Wedding Rings{" "}
+          Earrings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/fashion-rings" className="nav-link">
-          Fashion Rings{" "}
+          Pendant{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/jewelry" className="nav-link">
@@ -68,8 +75,7 @@ const nav = useNavigate();
 
       {user ? (
         <div className="pre_icon-container">
-         
-         <div className="pre_icon">
+          <div className="pre_icon">
             <Link to="/shopping-cart">
               <ShoppingCartOutlined />
             </Link>
@@ -79,16 +85,14 @@ const nav = useNavigate();
               <HeartOutlined />
             </Link>
           </div>
-        
-         
+
           <div className="pre_icon">
             <Link to={`/profile/${user.UserID}`}>
               <UserOutlined />
             </Link>
           </div>
-          <div className="pre_icon" style={{fontSize:'1em'}}>
+          <div className="pre_icon" style={{ fontSize: "1em" }}>
             <Link
-              
               onClick={() => {
                 localStorage.removeItem("token");
                 dispatch(logout());

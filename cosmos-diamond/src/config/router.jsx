@@ -33,14 +33,23 @@ import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import AdminPage from "../pages/admin/AdminPage";
 import OrderHistory from "../components/orderHistory/OrderHistory";
 import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRingCatalog";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/features/counterSlice";
 import { alertFail } from "../hooks/useNotification";
+
 import VoucherManager from "../pages/dashboard/pages/voucherManager/VoucherManager";
 import ProductsManager from "../pages/dashboard/pages/productsManager/ProductsManager";
 import Page404 from "../pages/page404";
+
+import ProductDetailPage from "../pages/productDetailPage/ProductDetailPage";
+import CustomRing from "../pages/customRing/CustomRing";
+import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
+import CompleteProductPage from "../pages/completeProductPage/CompleteProductPage";
+
+import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -65,14 +74,12 @@ const ProtectedADMIN = ({ children }) => {
   console.log(user);
   if (user?.Role !== "admin") {
     if (user?.Role !== "manager") {
-      
       return <Navigate to="*" replace />;
     }
   }
   return children;
 };
 export const router = createBrowserRouter([
-  
   {
     path: "/",
     element: (
@@ -109,7 +116,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/engagement-rings/catalog",
-        element: <EngagementRingCatalog/>,
+        element: <EngagementRingCatalog />,
       },
       {
         path: "/diamond-search",
@@ -152,10 +159,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/complete-product",
+        path: "/custom-ring-by-diamond/complete-product",
         element: (
           <ProtectedRouteCustomer>
-            <CompleteProduct />
+            <CompleteProductPage />
           </ProtectedRouteCustomer>
         ),
       },
@@ -170,10 +177,34 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: `/Product/:id`,
+        path: `/Diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
             <DiamondDetail />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-ring-by-diamond`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CustomRing />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-ring-by-diamond/:id`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CoverDetailPage />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/Product/:id`,
+        element: (
+          <ProtectedRouteCustomer>
+            <ProductDetailPage />
           </ProtectedRouteCustomer>
         ),
       },
@@ -301,7 +332,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Page404/>,
+    element: <Page404 />,
   },
   {
     path: "/dashboard",
@@ -330,11 +361,11 @@ export const router = createBrowserRouter([
 
       {
         path: "/dashboard/admin",
-        element: <OrdersManager/>,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/summary",
-        element: <OrdersManager/>,
+        element: <OrdersManager />,
       },
       {
         path: "/dashboard/admin/users",
@@ -342,7 +373,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/admin/transaction",
-        element: <OrdersManager />,
+        element: <AdminTransaction />,
       },
     ],
   },

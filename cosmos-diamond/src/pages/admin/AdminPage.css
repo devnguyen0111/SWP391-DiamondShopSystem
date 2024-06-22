@@ -1,0 +1,68 @@
+.wrapper-card {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  width: 100% !important;
+  justify-content: center;
+  gap: 1.3em;
+  padding-left: 1.7em;
+}
+
+.card {
+  font-family: "Gantari";
+  display: flex;
+  flex-direction: column;
+  background-color: #fcf5de;
+  border-radius: 10px;
+  width: calc(100% / 4);
+  height: 200px;
+  padding: 20px;
+}
+
+.card h2 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #666;
+  text-align: start !important;
+}
+
+.number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.percentage {
+  font-size: 1.1rem;
+  color: green;
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  margin-right: 5px;
+}
+
+.description {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 5px;
+}
+
+.detail-back {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding-bottom: 15px;
+}
+
+@media only screen and (max-width: 1280px) {
+  .card {
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    margin-right: 50px;
+  }
+}

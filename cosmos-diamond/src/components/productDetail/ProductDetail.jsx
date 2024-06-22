@@ -45,7 +45,6 @@ function ProductDetail({ product }) {
         <Link to={'/shopping-cart'}>View Cart</Link>,
       placement,
       pauseOnHover: true,
-
       stack: true,
       duration: 2
     });
@@ -57,7 +56,7 @@ function ProductDetail({ product }) {
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <Link to={"/diamond-search"} className="summary__navigator">
+            <Link to={"/engagement-rings/catalog"} className="summary__navigator">
               <i class="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
@@ -146,8 +145,8 @@ function ProductDetail({ product }) {
         </Col>
         <Col span={12} className="right">
           <Col span={24} className="right__name">
-            {/* {product && product.diamond.diamondName} */}
-            ZAC POSEN
+            {product && product.productName}
+            
           </Col>
 
           <Col span={24}>
@@ -177,14 +176,15 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24} className="right__tag-container">
             <div className="right__tag-wrapper">
-              <div className="right__tag">1.00ct</div>
-              <div className="right__tag">G Color</div>
-              <div className="right__tag">VS1 Clarity</div>
+              <div className="right__tag">VS1</div>
+              <div className="right__tag">Very Good</div>
+              <div className="right__tag">0.3</div>
+              <div className="right__tag"></div>
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">
             <div className="right__price">
-              $<span>4,200</span>{" "}
+              $<span>{product.unitPrice}</span>{" "}
             </div>
             <span className="right__price-text">(Diamond price)</span>
           </Col>

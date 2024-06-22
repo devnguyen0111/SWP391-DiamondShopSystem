@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./DiamondSort.scss";
 import "./DiamondList.scss";
 import { Link } from "react-router-dom";
-import { Row, Col } from "antd";
+import { Row, Col, Select } from "antd";
 import ReactSlider from "react-slider";
 import SortPriceSlider from "./SortPriceSlider";
 import SortCaratSlider from "./SortCaratSlider";
@@ -11,7 +11,7 @@ import SortClaritySlider from "./SortClaritySlider";
 import SortCutSlider from "./SortCutSlider";
 import { diamonds } from "./Diamonds";
 import Image from "../Image";
-import { length } from './../../../node_modules/stylis/src/Tokenizer';
+import { length } from "./../../../node_modules/stylis/src/Tokenizer";
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 50000;
@@ -36,7 +36,8 @@ function DiamondSort() {
   const [pageSize, setPageSize] = useState(16);
   const [pageNumber, setPageNumber] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [order, setOrder] = useState("desc");
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
     shapes[0].classList.add("chosen");
@@ -52,7 +53,9 @@ function DiamondSort() {
   }, []);
 
   const fetchDiamonds = async () => {
-    let clarityURL = clarityName.map((cName) => `clarityRange=${cName}`).join("&");
+    let clarityURL = clarityName
+      .map((cName) => `clarityRange=${cName}`)
+      .join("&");
     let colorURL = colorName.map((dname) => `colorRange=${dname}`).join("&");
     let cutURL = cutName.map((dname) => `cutRange=${dname}`).join("&");
     let minCaratURL = carat[0];
@@ -60,46 +63,50 @@ function DiamondSort() {
     let minPriceURL = price[0];
     let maxPriceURL = price[1];
 
-    const url = `https://localhost:7262/api/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
-    
+    const url = `https://localhost:7262/api/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+
     const res = await fetch(url);
     const data = await res.json();
     console.log(data);
-    if(data.$values.length < pageSize){
-      setHasMore(false)
+    if (data.$values.length < pageSize) {
+      setHasMore(false);
     }
-    setIsLoading(true)
-    setDiamondList(pre => [...pre,...data.$values]);
+    setIsLoading(true);
+    setDiamondList((pre) => [...pre, ...data.$values]);
   };
   //neu pageNumber tang, fetch them 16 san pham
-  useEffect(()=>{
+  useEffect(() => {
     console.log(pageNumber);
-    if(hasMore){
-      fetchDiamonds()
+    if (hasMore) {
+      fetchDiamonds();
     }
-  },[pageNumber])
+  }, [pageNumber]);
   //neu user sort, reset diamondList va pageNumber
-  useEffect(()=>{
-    setDiamondList([])
-    setPageNumber(0)
-    fetchDiamonds()
-  }, [diamondShape, price, carat, clarity, color, cut])
-
+  useEffect(() => {
+    setDiamondList([]);
+    setPageNumber(0);
+    fetchDiamonds();
+  }, [diamondShape, price, carat, clarity, color, cut, order]);
 
   //tang pagenumber neu user keo gan toi hang san pham cuoi
-  const handleScroll = ()=>{
-    if(window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 800){
-      setPageNumber(prev => prev + 1)
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 800
+    ) {
+      setPageNumber((prev) => prev + 1);
     }
-  }
+  };
 
-  useEffect(()=>{
-    window.scrollTo(0, 0)
-    window.addEventListener('scroll', handleScroll)
-    return ()=> window.removeEventListener('scroll', handleScroll)
-  }, [])
-  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
+  const handleOrder = (value) => {
+    setOrder(value);
+  };
   return (
     <>
       <div className="sort">
@@ -181,7 +188,26 @@ function DiamondSort() {
               <div className="list">
                 <div className="list__sort">
                   <div className="list__left">
-                    <span>Sort By: </span>
+                    <span style={{ color: "#333" }}>Sort by:</span>
+                    <Select
+                      defaultValue="High to Low"
+                      style={{
+                        width: 120,
+                        marginLeft: "12px",
+                      }}
+                      onChange={handleOrder}
+                      options={[
+                        
+                        {
+                          value: "desc",
+                          label: "High to Low",
+                        },
+                        {
+                          value: "asc",
+                          label: "Low to High",
+                        },
+                      ]}
+                    />
                     <div className="list__dropdown"></div>
                   </div>
                   <div className="list__right">
@@ -199,11 +225,18 @@ function DiamondSort() {
                   </div>
                 </div>
                 <div className="list__product">
-                  <Row gutter={[13, 21]} >
+                  <Row gutter={[13, 21]}>
                     {diamondList &&
                       diamondList.map((diamond, index) => (
-                        <Col span={6} className="product__container" key={index}>
-                          <Link to={"/Product/1"} className="product__wrapper">
+                        <Col
+                          span={6}
+                          className="product__container"
+                          key={index}
+                        >
+                          <Link
+                            to={`/Diamond/${diamond.diamondId}`}
+                            className="product__wrapper"
+                          >
                             <div className="product__img">
                               <Image src={diamond.shape} />
                               <i class="fa-regular fa-heart list__wishlist"></i>

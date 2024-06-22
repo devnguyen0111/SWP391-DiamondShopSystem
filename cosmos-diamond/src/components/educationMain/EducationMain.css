@@ -2,7 +2,7 @@
   font-family: "Gantari";
 }
 #first {
-  margin-top: 135px;
+  margin-top: 95px !important;
   padding-left: 1.3em;
   margin-bottom: 0.6em;
   font-size: 15px;
@@ -33,6 +33,10 @@
   margin-left: -20px;
   text-align: center;
   color: #474747;
+}
+
+.explore-edu-container h3 {
+  font-weight: bold;
 }
 
 .text-container h1 {
