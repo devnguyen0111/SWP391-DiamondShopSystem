@@ -21,7 +21,8 @@ const EducationDiamond = () => {
     const element = document.getElementById(id);
     if (element) {
       // Tính toán vị trí cần cuộn tới với margin
-      const offsetPosition = element.offsetTop - 120; // 50px margin
+      const offsetPosition = element.offsetTop - 95; // 50px margin
+
       window.scrollTo({
         top: offsetPosition,
         behavior: "smooth",

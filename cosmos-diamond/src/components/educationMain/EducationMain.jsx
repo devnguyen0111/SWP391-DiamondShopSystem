@@ -48,7 +48,7 @@ const EducationMain = () => {
           </p>
         </Link>
 
-        <Link to="/" className="edu-item">
+        <Link to="/education/metal" className="edu-item">
           <img src={met} alt="Metal" />
           <h3>Metal Education And Guidance</h3>
           <p>
@@ -56,33 +56,39 @@ const EducationMain = () => {
             jewelry.
           </p>
         </Link>
+
+        <Link to="/education/rings" className="edu-item">
+          <img src={dia} alt="Diamond" />
+          <h3>Ring Education And Guidance</h3>
+          <p>Learn all you need to know to find the right rings for you.</p>
+        </Link>
       </div>
 
       <div className="explore-info-container">
         <h2>Explore More</h2>
         <div className="explore-edu-container">
-          <Link to="/" className="guide-item">
+          <Link to="/education/rings" className="guide-item">
             <img src={exp1} alt="Engagement Ring Guide" />
             <div className="guide-content">
               <h3>Engagement Ring Guide</h3>
               <p>Get expert guidance on finding the perfect engagement ring.</p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/metal" className="guide-item">
             <img src={exp2} alt="Earring Jewelry Guide" />
             <div className="guide-content">
               <h3>Earring Jewelry Guide</h3>
               <p>Learn why earrings make the perfect gift.</p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/metal" className="guide-item">
             <img src={exp3} alt="Bracelet Guide" />
             <div className="guide-content">
               <h3>Bracelet Guide</h3>
               <p>Learn all about bracelets.</p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/rings" className="guide-item">
             <img src={exp4} alt="Wedding Ring Guide" />
             <div className="guide-content">
               <h3>Wedding Ring Guide</h3>
@@ -92,14 +98,14 @@ const EducationMain = () => {
               </p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/diamonds" className="guide-item">
             <img src={exp5} alt="Necklace Jewelry Guide" />
             <div className="guide-content">
               <h3>Necklace Jewelry Guide</h3>
               <p>Learn how to choose necklace jewelry to fit her style.</p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/rings" className="guide-item">
             <img src={exp6} alt="Find Your Ring Size" />
             <div className="guide-content">
               <h3>Find Your Ring Size</h3>
@@ -109,7 +115,7 @@ const EducationMain = () => {
               </p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/diamonds" className="guide-item">
             <img src={exp1} alt="Moissanite vs Diamond: Which One Suits You?" />
             <div className="guide-content">
               <h3>Moissanite vs Diamond: Which One Suits You?</h3>
@@ -121,7 +127,7 @@ const EducationMain = () => {
               </p>
             </div>
           </Link>
-          <Link to="/" className="guide-item">
+          <Link to="/education/diamonds" className="guide-item">
             <img src={exp1} alt="Astor by Cosmos Diamonds" />
             <div className="guide-content">
               <h3>Engagement Ring Guide</h3>
