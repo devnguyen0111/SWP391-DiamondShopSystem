@@ -50,6 +50,7 @@ import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
 import CompleteProductPage from "../pages/completeProductPage/CompleteProductPage";
 
 import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
+import ScrollToTop from "../components/ScrollToTop";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -84,6 +85,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <div>
+        <ScrollToTop />
         <Header />
         <Outlet />
         <Footer />
