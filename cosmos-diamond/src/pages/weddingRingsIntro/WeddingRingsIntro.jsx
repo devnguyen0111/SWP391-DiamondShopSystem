@@ -7,22 +7,19 @@ function WeddingRingsIntro() {
     <div>
       <Banner
         intro="BECAUSE YOUR OCCASION IS BRILLIANT"
-        title="WEDDING RINGS"
-        subtitle="Showcase your love with a cherished wedding ring. 
-        Choose from diamond wedding bands, gold wedding ring 
-        sets, milgrain bands, unique wedding rings, gemstone bands, 
-        men’s rings, women’s wedding rings and more. Mark your 
-        moment with a hand-finished wedding band and create a 
+        title="EARRINGS"
+        subtitle="Showcase your love with a cherished earring. 
+        Mark your moment with a hand-finished earring and create a 
         brilliant memory. "
-        bg="https://dam.bluenile.com/images/public/20224/Wedding Rings.jpeg"
-        buttons={["Shop Diamonds", "Shop Wedding Rings"]}
+        bg="https://dam.bluenile.com/images/public/11302/Lab_Diamond_Earring.jpeg"
+        buttons={["Shop Earrings"]}
       />
 
       <div className="weddingEssentials">
         <Row container>
           <Col md={12} sm={12}>
             <Row className="weddingEssentials__banner">
-              <h4>WEDDING ESSENTIALS</h4>
+              <h4>EARRINGS ESSENTIALS</h4>
               <h2>Band Together</h2>
               <h5>
                 We’re here for every type of love–eternal matrimony is one of
@@ -34,36 +31,37 @@ function WeddingRingsIntro() {
               <Col md={12} sm={6}>
                 <Image
                   preview={false}
-                  width={350}
-                  height={454}
-                  src="https://dam.bluenile.com/images/public/20470/Men's_Wedding_Rings.jpeg"
+                  width={390}
+                  height={360}
+                  src="https://dam.bluenile.com/images/public/11314/ROUND_DIAMOND_EARRING.jpeg"
                 />
-                <h5>Men's Rings</h5>
+                <h5>Round diamond earring</h5>
               </Col>
               <Col md={11} sm={6} style={{ marginLeft: "2.2em" }}>
                 <Image
                   preview={false}
                   width={350}
-                  height={454}
-                  src="https://dam.bluenile.com/images/public/4671/COUPLE'S_RINGS.webp"
+                  height={360}
+                  src="https://dam.bluenile.com/images/public/11320/NATURAL_GEMSTONE_EARRING.jpeg"
                 />
-                <h5>couple's rings</h5>
+                <h5>natural gemstone earrings</h5>
               </Col>
             </Row>
           </Col>
           <Col
             md={10}
             sm={12}
-            style={{ marginLeft: "5em" }}
+            style={{ marginLeft: "1em" }}
             className="weddingEssentials__pic"
           >
             <Image
               preview={false}
-              width={700}
-              height={920}
-              src="https://dam.bluenile.com/images/public/20476/Women's_Wedding_Rings.jpeg"
+              width={800}
+              height={736}
+              src="https://dam.bluenile.com/images/public/21503/Build_Your_Own_Earrings.jpeg"
+
             />
-            <h5>women's rings</h5>
+            <h5>PRINCESS DIAMOND EARRING</h5>
           </Col>
         </Row>
       </div>
@@ -93,7 +91,7 @@ function WeddingRingsIntro() {
                 }}
               >
                 <Button className="findSize__banner__button">
-                  FIND YOUR RING SIZE
+                  FIND YOUR SIZE
                 </Button>
               </ConfigProvider>
             </div>
@@ -101,7 +99,7 @@ function WeddingRingsIntro() {
           <Col lg={12}>
             <img
               className="findSize__pic"
-              src="https://dam.bluenile.com/images/public/5855/How to Find Your Perfect Fit.jpeg"
+              src="https://dam.bluenile.com/images/public/8447/Lab_grown_diamond_pendant_and_studs.jpeg"
             />
           </Col>
         </Row>

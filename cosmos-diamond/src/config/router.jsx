@@ -285,7 +285,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/wedding-rings",
+        path: "/ear-rings",
         element: (
           <ProtectedRouteCustomer>
             <WeddingRingsIntro />

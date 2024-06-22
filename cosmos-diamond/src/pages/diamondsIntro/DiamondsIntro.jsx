@@ -64,7 +64,7 @@ function DiamondsIntro() {
             <Image
               preview={false}
               width={700}
-              height={920}
+              height={900}
               src="https://dam.bluenile.com/images/public/2879/EMERALD_DIAMONDS.webp"
             />
             <h5>EMERALD DIAMONDS</h5>
