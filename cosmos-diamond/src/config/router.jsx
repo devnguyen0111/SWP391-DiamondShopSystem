@@ -49,6 +49,8 @@ import CustomRing from "../pages/customRing/CustomRing";
 import CoverDetailPage from "../pages/coverDetailPage/CoverDetailPage";
 import CompleteProductPage from "../pages/completeProductPage/CompleteProductPage";
 
+import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
+
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
   if (!user) {
@@ -178,7 +180,7 @@ export const router = createBrowserRouter([
         path: `/Diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
-            <DiamondDetail /> 
+            <DiamondDetail />
           </ProtectedRouteCustomer>
         ),
       },
@@ -371,7 +373,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/admin/transaction",
-        element: <OrdersManager />,
+        element: <AdminTransaction />,
       },
     ],
   },
