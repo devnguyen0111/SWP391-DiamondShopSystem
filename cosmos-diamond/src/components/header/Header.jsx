@@ -1,7 +1,8 @@
 // src/components/Header.jsx
 // import React from 'react';
 import "./Header.css";
-
+import React, { useState } from "react";
+import DropdownDiamond from "../dropdownDiamond/DropdownDiamond";
 import img from "../../assets/logo.png";
 import {
   UserOutlined,
@@ -14,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, ConfigProvider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/features/counterSlice";
+
 const Header = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -32,18 +34,28 @@ const Header = () => {
           Diamonds
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
+
         {/* </Popover> */}
+
+        {/* <Dropdown overlay={menu} trigger={["hover"]}>
+          <Button
+            className="ant-dropdown-link"
+            onClick={(e) => e.preventDefault()}
+          >
+            Diamonds <DownOutlined />
+          </Button>
+        </Dropdown> */}
 
         <Link to="/engagement-rings" className="nav-link">
           Engagement Rings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/wedding-rings" className="nav-link">
-          Wedding Rings{" "}
+          Earrings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/fashion-rings" className="nav-link">
-          Fashion Rings{" "}
+          Pendant{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/jewelry" className="nav-link">
