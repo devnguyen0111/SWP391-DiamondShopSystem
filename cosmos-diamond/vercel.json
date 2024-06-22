@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/login", "dest": "/login" },
+    { "src": "/sign-up", "dest": "/sign-up" },
+    { "src": "/pincode", "dest": "/pincode" },
+    { "src": "/dashboard", "dest": "/dashboard" },
+    { "src": "/dashboard/manager", "dest": "/dashboard/manager" },
+    { "src": "/dashboard/manager/orders", "dest": "/dashboard/manager/orders" },
+    {
+      "src": "/dashboard/manager/voucher",
+      "dest": "/dashboard/manager/voucher"
+    },
+    {
+      "src": "/dashboard/manager/products",
+      "dest": "/dashboard/manager/products"
+    },
+    { "src": "/dashboard/admin", "dest": "/dashboard/admin" },
+    { "src": "/dashboard/admin/summary", "dest": "/dashboard/admin/summary" },
+    { "src": "/dashboard/admin/users", "dest": "/dashboard/admin/users" },
+    {
+      "src": "/dashboard/admin/transaction",
+      "dest": "/dashboard/admin/transaction"
+    },
+    { "src": "/(.*?)", "dest": "/" }
+  ]
+}
