@@ -51,7 +51,7 @@ const Header = () => {
           Engagement Rings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
-        <Link to="/wedding-rings" className="nav-link">
+        <Link to="/ear-rings" className="nav-link">
           Earrings{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>

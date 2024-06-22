@@ -8,44 +8,44 @@ function FashionRingsIntro() {
     <div>
       <Banner
         intro="FOR LIFE'S MOST JOYFUL OCCASIONS"
-        title="FASHION RINGS"
-        subtitle="Show off your style with fashion rings in silver and gold. 
-        Explore our collection of fashionable rings in on-trend 
+        title="PENDANTS"
+        subtitle="Show off your style with pendants in silver and gold. 
+        Explore our collection of fashionable necklace in on-trend 
         designs for any look."
-        bg="https://dam.bluenile.com/images/public/5228/lab-grown eternity ring.jpeg"
-        buttons={["Shop Diamonds", "Shop Fashion Rings"]}
+        bg="https://dam.bluenile.com/images/public/7239/14k white gold pendant.jpeg"
+        buttons={["Shop Pendant"]}
       />
 
       <div className="bandPairings">
         <Row container>
           <Col md={12} sm={12}>
-            <Row className="classicTwist__banner">
+            <Row className="bandPairings__banner">
               <h4>Band Pairing</h4>
               <h2>Meet Your Match</h2>
               <h5>
                 Explore our experts’ wedding band recommendations paired with{" "}
                 <br />
-                some of our most popular engagement ring styles.
+                some of our most popular pendant styles.
               </h5>
             </Row>
-            <Row className="classicTwist__pic">
+            <Row className="bandPairings__pic">
               <Col md={12} sm={6}>
                 <Image
                   preview={false}
                   width={350}
-                  height={454}
-                  src="https://dam.bluenile.com/images/public/4701/PETITE_TWIST_RINGS.webp"
+                  height={350}
+                  src="https://dam.bluenile.com/images/public/7280/Gold_Necklaces.webp"
                 />
-                <h5>petite twist rings</h5>
+                <h5>petite twist pendants</h5>
               </Col>
               <Col md={11} sm={6} style={{ marginLeft: "0.8em" }}>
                 <Image
                   preview={false}
                   width={350}
-                  height={454}
-                  src="https://dam.bluenile.com/images/public/4695/STACKABLE_RINGS.webp"
+                  height={350}
+                  src="https://dam.bluenile.com/images/public/7274/Diamond_Necklaces.webp"
                 />
-                <h5>stackable rings</h5>
+                <h5>stackable pendants</h5>
               </Col>
             </Row>
           </Col>
@@ -53,15 +53,15 @@ function FashionRingsIntro() {
             md={10}
             sm={12}
             style={{ marginLeft: "1.5em" }}
-            className="classicTwist__pic"
+            className="bandPairings__pic"
           >
             <Image
               preview={false}
               width={720}
-              height={920}
-              src="https://dam.bluenile.com/images/public/12066/Fancy_Shape_Rings.jpeg"
+              height={620}
+              src="https://dam.bluenile.com/images/public/21515/Diamond Pendant.jpeg"
             />
-            <h5>fancy shape rings</h5>
+            <h5>fancy shape pendants</h5>
           </Col>
         </Row>
       </div>
