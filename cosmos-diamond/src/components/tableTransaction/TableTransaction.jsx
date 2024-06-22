@@ -170,7 +170,7 @@ const columns = [
 
 const TransactionTable = () => {
   return (
-    <div className="table-container">
+    <div className="table-container mode">
       <Table
         dataSource={dataSource}
         columns={columns}
