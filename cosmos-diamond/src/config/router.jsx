@@ -53,6 +53,8 @@ import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
 import ScrollToTop from "../components/ScrollToTop";
 import CustomPendant from "../pages/customPendant/CustomerPendant";
 import CustomEarrings from "../pages/customEarrings/CustomEarrings";
+import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
+import OrderFail from "../pages/orderFail/OrderFail";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -333,6 +335,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRouteCustomer>
             <OrderHistory />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: "/order-successful",
+        element: (
+          <ProtectedRouteCustomer>
+            <OrderSuccess />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: "/order-fail",
+        element: (
+          <ProtectedRouteCustomer>
+            <OrderFail />
           </ProtectedRouteCustomer>
         ),
       },
