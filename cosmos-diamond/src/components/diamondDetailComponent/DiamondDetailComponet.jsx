@@ -20,9 +20,7 @@ function DiamondDetailComponent({ product }) {
 
   const url = window.location.href;
   const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
-  const token = jwtDecode(localStorage.getItem("token"));
-  console.log(token);
-  const customerId = token.UserID;
+ 
 
   return (
     <div className="detail" style={{marginTop:'70px'}}>

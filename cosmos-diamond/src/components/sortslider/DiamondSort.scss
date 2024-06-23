@@ -25,13 +25,15 @@
         width: 150px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         font-size: 15px;
         font-weight: 500;
         border-radius: 30px;
         cursor: pointer;
         transition: 0.2s;
+        background-color: #e1e1e1;
         &:hover{
-            background-color: #e1e1e1;
+            background-color: #c9c9c9;
         }
     }
 }
@@ -124,7 +126,7 @@
     &__dollar{
         position: absolute;
         left: 10px;
-        top: 10px;
+        top: 25%;
     }
 }
 

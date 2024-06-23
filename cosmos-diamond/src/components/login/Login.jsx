@@ -46,11 +46,13 @@ const Login = () => {
 
   const onSubmit = async (value) => {
     try {
+      setIsLoading(true)
       const response = await api.post("/api/Authentication/login", value);
       localStorage.setItem("token", response.data.token);
       const user = jwtDecode(response.data.token);
       const responseUser = await api.get(`/api/Customer/${user.UserID}`);
       console.log("Login: ", responseUser);
+      setIsLoading(false)
       //redux
       dispatch(login(user));
       if (user.Role === "customer") {

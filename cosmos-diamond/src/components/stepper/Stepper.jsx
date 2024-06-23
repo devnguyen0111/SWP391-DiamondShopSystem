@@ -7,7 +7,7 @@ function Stepper({ step1, step2, path }) {
   const [diamond, setDiamond] = useState();
   const [cover, setCover] = useState();
   const src = `/${diamond?.shape}.jpg`;
-  const nav = useNavigate()
+  const nav = useNavigate();
   useEffect(() => {
     setDiamond(JSON.parse(sessionStorage.getItem("diamond")));
     setCover(JSON.parse(sessionStorage.getItem("cover")));
@@ -17,26 +17,49 @@ function Stepper({ step1, step2, path }) {
     sessionStorage.removeItem("cover");
     setDiamond();
     setCover();
-    nav("/diamond-search")
+    nav("/diamond-search");
   };
   const removeCover = () => {
     sessionStorage.removeItem("cover");
     setCover();
-    nav('/custom-ring-by-diamond')
+    if (cover) {
+      if (cover.categoryId === 1) {
+        nav("/custom-ring-by-diamond");
+      } else if (cover.categoryId === 2) {
+        nav("/custom-pendant-by-diamond");
+      } else if (cover.categoryId === 3) {
+        nav("/custom-earrings-by-diamond");
+      }
+    }
   };
+  const viewCompleteJewelry = ()=>{
+    if(cover && diamond){
+      nav("/custom-ring-by-diamond/complete-product")
+    }
+  }
+  const stepperNavCover = ()=>{
+    if (cover) {
+      if (cover.categoryId === 1) {
+        nav("/custom-ring-by-diamond");
+      } else if (cover.categoryId === 2) {
+        nav("/custom-pendant-by-diamond");
+      } else if (cover.categoryId === 3) {
+        nav("/custom-earrings-by-diamond");
+      }
+    }
+  };
+ 
   return (
     <>
       <div className="stepper">
         <Row className="stepper__wrapper">
-          <Col span={8} className="stepper__item">
+          <Col span={8} className="stepper__item" >
             <div className="" style={{ display: "flex", width: "100%" }}>
               <div className="stepper__step">
                 {!diamond ? (
                   <>
                     <span className="stepper__number">1</span>
-                    <Link to={path.op} className="stepper__title">
-                      {step1}
-                    </Link>
+                    <div className="stepper__title">{step1}</div>
                   </>
                 ) : (
                   <Flex vertical>
@@ -93,9 +116,9 @@ function Stepper({ step1, step2, path }) {
                 <>
                   <Flex align="center">
                     <span className="stepper__number">2</span>
-                    <Link to={path.op1} className="stepper__title">
+                    <div className="stepper__title">
                       {step2}
-                    </Link>
+                    </div>
                   </Flex>
                   <div className="stepper__icon">
                     <svg
@@ -117,8 +140,13 @@ function Stepper({ step1, step2, path }) {
                 </>
               ) : (
                 <>
-                  <Flex vertical>
-                    <div className="stepper__diamondname" style={{width:'300px'}}>{cover.name}</div>
+                  <Flex vertical onClick={stepperNavCover} style={{cursor: 'pointer'}}>
+                    <div
+                      className="stepper__diamondname"
+                      style={{ width: "300px" }}
+                    >
+                      {cover.name}
+                    </div>
                     <Flex align="end" gap={10}>
                       <span className="stepper__diamondname">
                         ${cover.price}
@@ -128,10 +156,19 @@ function Stepper({ step1, step2, path }) {
                       </span>
                     </Flex>
                   </Flex>
-                  <div style={{ display: "flex", width:"70px", height:'100%', justifyContent: "flex-end", alignItems:'flex-start'}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "70px",
+                      height: "100%",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                    }}
+                    onClick={stepperNavCover}
+                  >
                     <img
                       src={cover.url}
-                      style={{ width: "100%", objectFit:"contain" }}
+                      style={{ width: "100%", objectFit: "contain" }}
                       alt=""
                     />
                   </div>
@@ -139,10 +176,10 @@ function Stepper({ step1, step2, path }) {
               )}
             </Flex>
           </Col>
-          <Col span={8} className="stepper__item">
+          <Col span={8} className="stepper__item" onClick={viewCompleteJewelry}>
             <div className="stepper__step">
               <span className="stepper__number">3</span>
-                <span className="stepper__title">Complete Jewelry</span>
+              <span className="stepper__title">Complete Jewelry</span>
             </div>
             <div className="stepper__icon">
               <svg

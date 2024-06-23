@@ -82,32 +82,32 @@ function SettingDropDownGroup({
   }, [sortShape]);
 
   const handleMenuSelect = (info) => {
-    console.log("Selected value:", info);
+   
     metalType.setMetalType((prev) => [...prev, info.key]);
   };
 
   const handleMenuDeselect = (info) => {
-    console.log("Deselected value:", info);
+    
     metalType.setMetalType((prev) => prev.filter((key) => key !== info.key));
   };
 
   const handleSizeSelect = (info) => {
-    console.log("Selected size:", info);
+    
     size.setSize((prev) => [...prev, info.key]);
   };
 
   const handleSizeDeselect = (info) => {
-    console.log("Deselected size:", info);
+    
     size.setSize((prev) => prev.filter((key) => key !== info.key));
   };
 
   const handleShapeSelect = (info) => {
-    console.log("Selected shape:", info);
+   
     shape.setShape((prev) => [...prev, info.key]);
   };
 
   const handleShapeDeselect = (info) => {
-    console.log("Deselected shape:", info);
+   
     shape.setShape((prev) => prev.filter((key) => key !== info.key));
   };
 
@@ -125,7 +125,6 @@ function SettingDropDownGroup({
   const togglePriceMenu = () => {
     window.addEventListener("click", (e) => {
       if (!priceDropDown.current.contains(e.target)) {
-        console.log("noss");
         setPriceMenuVisible(false);
       } else {
         setPriceMenuVisible(!priceMenuVisible);

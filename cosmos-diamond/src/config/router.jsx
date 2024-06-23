@@ -51,6 +51,8 @@ import CompleteProductPage from "../pages/completeProductPage/CompleteProductPag
 
 import AdminTransaction from "../pages/adminTransaction/AdminTransaction";
 import ScrollToTop from "../components/ScrollToTop";
+import CustomPendant from "../pages/customPendant/CustomerPendant";
+import CustomEarrings from "../pages/customEarrings/CustomEarrings";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -195,7 +197,23 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: `/custom-ring-by-diamond/:id`,
+        path: `/custom-pendant-by-diamond`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CustomPendant />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-earrings-by-diamond`,
+        element: (
+          <ProtectedRouteCustomer>
+            <CustomEarrings />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: `/custom-jewelry-by-diamond/:id`,
         element: (
           <ProtectedRouteCustomer>
             <CoverDetailPage />
