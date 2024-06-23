@@ -105,19 +105,19 @@ function CoverCatlog({ category }) {
         </div>
         <Divider></Divider>
         <Row gutter={[13, 21]}>
-          {coverList && coverList.map((ring, index) => (
+          {coverList && coverList.map((jewelry, index) => (
             <Col span={6} className="product__container" key={index}>
               <Link
-                to={`/custom-ring-by-diamond/${ring.coverId}`}
+                to={`/custom-jewelry-by-diamond/${jewelry.coverId}`}
                 className="product__wrapper"
               >
                 <div className="product__img">
-                  <img src={ring.url} alt={ring.name} />
+                  <img src={jewelry.url} alt={jewelry.name} />
                   <i className="fa-regular fa-heart list__wishlist"></i>
                 </div>
                 <div className="product__info">
-                  <div className="product__name">{ring.name}</div>
-                  <div className="product__price">${ring.prices} (Setting Price)</div>
+                  <div className="product__name">{jewelry.name}</div>
+                  <div className="product__price">${jewelry.prices} (Setting Price)</div>
                 </div>
               </Link>
             </Col>

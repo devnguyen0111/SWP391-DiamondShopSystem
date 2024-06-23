@@ -17,11 +17,12 @@ const CoverDetail = () => {
 
   const url = window.location.href;
   const coverId = url.slice(url.lastIndexOf("/") + 1, url.length);
-  const nav = useNavigate()
+  const nav = useNavigate();
   useEffect(() => {
     fetch(`${apiHeader}/Cover/getCoverDetail?id=${coverId}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setCover(data);
         setCoverMetal(data.metals.$values);
         setCoverSize(data.sizes.$values);
@@ -77,17 +78,17 @@ const CoverDetail = () => {
 
   const handleCoverSelect = () => {
     if (selectedMetal && selectedSize) {
-      
       let selectedCover = {
         coverId: cover.coverId,
         price: calculatePrice(),
-        url : cover.url,
-        name: cover.name +" "+ selectedMetal.name,
+        url: cover.url,
+        name: cover.name + " " + selectedMetal.name,
         sizeId: selectedSize.sizeId,
-        metalId: selectedMetal.metalId
+        metalId: selectedMetal.metalId,
+        categoryId: cover.categoryId
       };
-      sessionStorage.setItem('cover', JSON.stringify(selectedCover))
-      nav('/custom-ring-by-diamond/complete-product')
+      sessionStorage.setItem("cover", JSON.stringify(selectedCover));
+      nav("/custom-ring-by-diamond/complete-product");
     } else {
       openNotification();
     }
@@ -104,18 +105,29 @@ const CoverDetail = () => {
       duration: 2,
     });
   };
+  const backToCatalog = () => {
+    if (cover) {
+      if (cover.categoryId === 1) {
+        nav("/custom-ring-by-diamond");
+      } else if (cover.categoryId === 2) {
+        nav("/custom-pendant-by-diamond");
+      } else if (cover.categoryId === 3) {
+        nav("/custom-earrings-by-diamond");
+      }
+    }
+  };
   return (
     <div className="detail" style={{ marginTop: "70px" }}>
       {contextHolder}
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <Link to={`/custom-ring-by-diamond`} className="summary__navigator">
+            <div onClick={backToCatalog} className="summary__navigator">
               <i className="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
               </span>
-            </Link>
+            </div>
           </Col>
           <Col span={24}>
             <div className="summary__img">
@@ -148,7 +160,8 @@ const CoverDetail = () => {
         </Col>
         <Col span={12} className="right">
           <Col span={24} className="right__name">
-            {cover && cover.name +" "+ (selectedMetal ? selectedMetal.name : '')}
+            {cover &&
+              cover.name + " " + (selectedMetal ? selectedMetal.name : "")}
           </Col>
           <Col span={24}>
             <div className="right__sticker">

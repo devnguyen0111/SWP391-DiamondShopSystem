@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Stepper from "../stepper/Stepper";
 import { apiHeader } from "../urlApiHeader";
 import { jwtDecode } from "jwt-decode";
+import { token } from "../getToken";
 
 function CompleteProduct() {
   const [cover, setCover] = useState();
@@ -30,8 +31,17 @@ function CompleteProduct() {
       });
     } else if (type === "error") {
       api.error({
-        message: `Add to cart fail!`,
+        message: `Add to cart fail !`,
         description: "Some thing went wrong.",
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    } else if (type === "warning") {
+      api.warning({
+        message: `Add to cart fail !`,
+        description: <Link to={'/login'}>Please Login to Add To Cart.</Link>,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -56,35 +66,38 @@ function CompleteProduct() {
     console.log(data.productId);
     return data.productId;
   };
-  
-  const handleAddToCart = async() => {
-    const productId = await createProduct();
-    const token = localStorage.getItem("token");
-    const cus = jwtDecode(token)
-    console.log(cus);
-    fetch(`${apiHeader}/Cart/addToCart`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify({
-        id: cus.UserID,
-        pid: productId,
-      }),
-    }).then(res => res.json())
-    .then(data => {
-      console.log(data)
-    }).finally(()=>{
-      openNotification('topRight', "success")
-    })
-    .catch(()=> {
-      openNotification('topRight', "error")
-    })
-      
-      
-      
-  };
 
+  const handleAddToCart = async () => {
+    if (token) {
+      const productId = await createProduct();
+      const token = localStorage.getItem("token");
+      const cus = jwtDecode(token);
+      console.log(cus);
+      fetch(`${apiHeader}/Cart/addToCart`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          id: cus.UserID,
+          pid: productId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .finally(() => {
+          openNotification("topRight", "success");
+        })
+        .catch(() => {
+          openNotification("topRight", "error");
+        });
+    } else {
+      openNotification("topRight", 'warning');
+    }
+  };
+  
   return (
     <div className="detail" style={{ marginTop: "60px" }}>
       {contextHolder}

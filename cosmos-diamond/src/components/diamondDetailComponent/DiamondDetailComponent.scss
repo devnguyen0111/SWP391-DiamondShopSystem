@@ -17,6 +17,7 @@
 
     &__navigator{
         color: black;
+        cursor: pointer;
         @include normalize-link;
     }
     &__img{

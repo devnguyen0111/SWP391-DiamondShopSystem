@@ -106,7 +106,6 @@ function SortOptionCover({
   const togglePriceMenu = () => {
     window.addEventListener("click", (e) => {
       if (!priceDropDown.current.contains(e.target)) {
-        console.log("noss");
         setPriceMenuVisible(false);
       } else {
         setPriceMenuVisible(!priceMenuVisible);

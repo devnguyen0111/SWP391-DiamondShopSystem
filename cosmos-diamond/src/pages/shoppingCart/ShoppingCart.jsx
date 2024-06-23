@@ -33,10 +33,10 @@ function ShoppingCart() {
       const data = await response.json();
       setCart(data);
       setCartTotalPrice(data.totalPrice);
-      // setTimeout(()=>{
-      //   setIsLoading(false);
-      // }, 500)
-      setIsLoading(false);
+      setTimeout(()=>{
+        setIsLoading(false);
+      }, 500)
+      
       console.log(data);
     } catch (error) {
       console.error("Failed to fetch cart", error);

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Stepper from "./../../components/stepper/Stepper";
 import DiamondFinderIntro from "../../components/diamondSortIntro/DiamondFinderIntro";
 import DiamondSort from "./../../components/sortslider/DiamondSort";
 import "./CatalogPages.scss";
-
+import { useNavigate } from "react-router-dom";
 
 function CatalogPage() {
+  const nav = useNavigate();
+  useEffect(() => {
+    if (
+      JSON.parse(sessionStorage.getItem("diamond")) &&
+      JSON.parse(sessionStorage.getItem("cover"))
+    ) {
+      nav("/custom-ring-by-diamond/complete-product");
+    }
+  }, []);
   return (
     <div className="catalog-page">
       <Stepper

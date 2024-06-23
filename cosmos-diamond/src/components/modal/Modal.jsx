@@ -24,7 +24,7 @@ function Modal({ show, setShow, diamond }) {
           else if(index + 1 === 2){
             nav("/custom-pendant-by-diamond")
           }
-          else if(index + 1 === 2){
+          else if(index + 1 === 3){
             nav("/custom-earrings-by-diamond")
           }
           sessionStorage.setItem('diamond', JSON.stringify(diamond))

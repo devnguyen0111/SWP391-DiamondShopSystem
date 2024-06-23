@@ -12,6 +12,7 @@ import SortCutSlider from "./SortCutSlider";
 import { diamonds } from "./Diamonds";
 import Image from "../Image";
 import { length } from "./../../../node_modules/stylis/src/Tokenizer";
+import { apiHeader } from "../urlApiHeader";
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 50000;
@@ -63,7 +64,7 @@ function DiamondSort() {
     let minPriceURL = price[0];
     let maxPriceURL = price[1];
 
-    const url = `https://localhost:7262/api/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
 
     const res = await fetch(url);
     const data = await res.json();
@@ -106,6 +107,24 @@ function DiamondSort() {
 
   const handleOrder = (value) => {
     setOrder(value);
+  };
+  const resetFilter = () => {
+     setPrice([MIN_PRICE, MAX_PRICE]);
+     setCarat([MIN_CARAT, MAX_CARAT]);
+     setClarity([1, 9]);
+     setClarityName(INIT_CLARITY);
+     setColor([1, 9]);
+     setColorName(INIT_COLOR_NAME);
+     setCut([1, 5]);
+     setOrder("desc")
+     setDiamondList([])
+     setPageNumber(1)
+     setDiamondShape("Round")
+     const shapes = document.querySelectorAll(".shape__block");
+     shapes.forEach((s,i)=>{
+      s.classList.remove('chosen')
+     })
+     shapes[0].classList.add("chosen");
   };
   return (
     <>
@@ -180,7 +199,7 @@ function DiamondSort() {
           <Col span={24} className="sort__reset">
             <button className="sort__btn--reset">
               <i class="fa-solid fa-arrow-rotate-right"></i>
-              <span>Reset Filters</span>
+              <span onClick={resetFilter}>Reset Filters</span>
             </button>
           </Col>
           <Col span={24}>
@@ -197,7 +216,6 @@ function DiamondSort() {
                       }}
                       onChange={handleOrder}
                       options={[
-                        
                         {
                           value: "desc",
                           label: "High to Low",
