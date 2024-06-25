@@ -16,6 +16,14 @@ function Banner({ bg, intro, title, subtitle, buttons }) {
       navigate("/engagement-rings/catalog");
     } else if (item == "Craft Your Rings") {
       navigate("/diamond-search");
+    } else if(item == "Shop Pendant"){
+      navigate('/pendant/catalog')
+    }else if (item == "Craft Your Pendant") {
+      navigate("/diamond-search");
+    }else if (item == "Craft Your Earrings") {
+      navigate("/diamond-search");
+    }else if (item == "Shop Earrings") {
+      navigate("/earrings/catalog");
     }
   };
 
