@@ -22,8 +22,8 @@ function CatalogPage() {
         step1={"Choose a diamond"}
         path={{ op: "/diamond-search", op1: "/setting-search" }}
       />
-      <DiamondFinderIntro />
-      <DiamondSort />
+      <div className="" style={{marginTop:'100px'}}></div>
+      <DiamondSort/>
     </div>
   );
 }
