@@ -9,11 +9,11 @@
     margin: 0 auto;
     
     &__area:nth-child(-n+3){
-        height: 209px;
+        height: auto;
         
     }
     &__area:not(:nth-child(-n+3)){
-        height: 73px;
+        height: auto;
         
     }
     &__reset{

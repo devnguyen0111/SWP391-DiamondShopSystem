@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./CheckoutPage.scss";
-import { Collapse, Row, Col, Select } from "antd";
+import { Collapse, Row, Col, Select, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
@@ -16,14 +16,14 @@ function CheckoutPage() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
-  const [city, setCity] = useState('');
-  const [state, setState] = useState("");
+  const [city, setCity] = useState();
+  const [state, setState] = useState();
   const [street, setStreet] = useState("");
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
   const [cart, setCart] = useState();
   const [error, setError] = useState();
-  const [shipping, setShipping] = useState()
+  const [shipping, setShipping] = useState();
 
   const toggleConfirmEmail = () => {
     if (!email) {
@@ -55,13 +55,13 @@ function CheckoutPage() {
       .then((data) => {
         let customerinfo = data.customerinfo;
         let address = data.ad;
+        console.log(address);
         setEmail(customerinfo.mail);
+
         setFirstName(customerinfo.cusFirstName);
         setLastName(customerinfo.cusLastName);
         setPhone(customerinfo.cusPhoneNum);
-        
         setCountry(address.country);
-
         setStreet(address.street);
         setZipcode(address.zipcode);
       });
@@ -96,7 +96,7 @@ function CheckoutPage() {
       body: JSON.stringify({
         cusId: token.UserID,
         shippingMethodId: shipping,
-        deliveryAddress: `hehe`,
+        deliveryAddress: `${street && street + ', '}${state && state + ', '}${city && city + ','}`,
         contactNumber: `${phone}`,
       }),
     })
@@ -123,7 +123,6 @@ function CheckoutPage() {
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
-        
         <Col span={24} className="checkout__title">
           Secure Checkout
         </Col>
@@ -177,179 +176,173 @@ function CheckoutPage() {
                   style={{ width: "100%", textAlign: "right" }}
                 >
                   {!emailConfirm && (
+                    <Popconfirm
+                    title="Confirm email"
+                    description="Can you verify it's accurate?"
+                    okText= "Yes"
+                    cancelText="No"
+                    onConfirm = {toggleConfirmEmail}
+                  >
                     <button
                       type="button"
                       className="checkout__btn"
-                      onClick={toggleConfirmEmail}
                     >
                       Continue
                     </button>
+                  </Popconfirm>
+                    
                   )}
                 </div>
               </div>
             </Row>
             <Row gutter={[18, 10]} className="checkout__shipping">
-              <Col span={24} className="checkout__email">
-                Shipping Address
-              </Col>
-              <Col span={12} className="checkout__name">
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">First Name</div>
-                  <input
-                    type="text"
-                    id="firstName"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                </div>
-              </Col>
-              <Col span={12} className="checkout__name">
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Last Name</div>
-                  <input
-                    type="text"
-                    id="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-              </Col>
-              <Col span={24} className="checkout__country">
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Country</div>
-                  <input
-                    type="text"
-                    id="country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                  />
-                </div>
-              </Col>
+              {emailConfirm ? (
+                <>
+                  <Col span={24} className="checkout__email">
+                    Shipping Address
+                  </Col>
+                  <Col span={12} className="checkout__name">
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">First Name</div>
+                      <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={12} className="checkout__name">
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Last Name</div>
+                      <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={24} className="checkout__country">
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Country</div>
+                      <input
+                        type="text"
+                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                      />
+                    </div>
+                  </Col>
 
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">City/Province</div>
-                  <select
-                    style={{ maxWidth: "300px" }}
-                    onChange={(e) => handleCity(e)}
-                  >
-                    {city &&
-                      city.map((city,index) => (
-                        <option key={index} value={city.id}>{city.full_name_en}</option>
-                      ))}
-                  </select>
-                </div>
-              </Col>
-              <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">District</div>
-                  <select style={{ maxWidth: "300px" }}>
-                    {state &&
-                      state.map((ward, i) => (
-                        <option key={i} value={ward.id}>{ward.full_name_en}</option>
-                      ))}
-                  </select>
-                </div>
-              </Col>
+                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">City/Province</div>
+                      <select
+                        style={{ maxWidth: "300px" }}
+                        onChange={(e) => handleCity(e)}
+                      >
+                        {city &&
+                          city.map((city, index) => (
+                            <option key={index} value={city.id}>
+                              {city.full_name_en}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </Col>
+                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">District</div>
+                      <select style={{ maxWidth: "300px" }}>
+                        {state &&
+                          state.map((ward, i) => (
+                            <option key={i} value={ward.id}>
+                              {ward.full_name_en}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </Col>
+                  <Col span={24} className="checkout__address">
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Address</div>
+                      <input
+                        type="text"
+                        id="address"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={8} className="checkout__phone">
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Phone Number</div>
+                      <input
+                        type="tel"
+                        id="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </div>
+                  </Col>
 
-              {/* <Col span={12}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">District</div>
-                  <select style={{width:'300px'}}>
-                    {c.map((city)=>(
-                      <option value={city}>{city}</option>
-                    ))}
-                  </select>
-                </div>
-              </Col> */}
-              {/* <Col span={12}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Ward/Commune</div>
-                  <input
-                    type="text"
-                    id="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                </div>
-              </Col> */}
-              <Col span={24} className="checkout__address">
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Address</div>
-                  <input
-                    type="text"
-                    id="address"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                </div>
-              </Col>
-              <Col span={8} className="checkout__phone">
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Phone Number</div>
-                  <input
-                    type="tel"
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-              </Col>
-
-              <Col span={8}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Shipping Method</div>
-                  <Select
-                    onChange={(value)=>setShipping(value)}
-                    style={{
-                      width: "100%",
-                      marginTop: "10px",
-                      height: "43px",
-                    }}
-                    
-                    options={[
-                      {
-                        value: "1",
-                        label: "Standard",
-                      },
-                      {
-                        value: "2",
-                        label: "Economy",
-                      },
-                      {
-                        value: "3",
-                        label: "Express",
-                      },
-                     
-                    ]}
-                  />
-                </div>
-              </Col>
-              <Col span={8}>
-                <div className="checkout__input-wrapper">
-                  <div className="checkout__label">Zipcode</div>
-                  <input
-                    type="number"
-                    id="zipcode"
-                    value={zipcode}
-                    onChange={(e) => setZipcode(e.target.value)}
-                  />
-                </div>
-              </Col>
-              <Col span={24} className="checkout__action">
-                <Link to={"/diamond-search"} className="checkout__back">
-                  <ArrowLeftOutlined /> Return Shopping
-                </Link>
-                <div className="checkout__submit">
-                  <button
-                    type="button"
-                    onClick={createOrder}
-                    className="checkout__btn"
-                  >
-                    Continue to Payment
-                  </button>
-                </div>
-              </Col>
+                  <Col span={8}>
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Shipping Method</div>
+                      <Select
+                        onChange={(value) => setShipping(value)}
+                        style={{
+                          width: "100%",
+                          marginTop: "10px",
+                          height: "43px",
+                        }}
+                        options={[
+                          {
+                            value: "1",
+                            label: "Standard",
+                          },
+                          {
+                            value: "2",
+                            label: "Economy",
+                          },
+                          {
+                            value: "3",
+                            label: "Express",
+                          },
+                        ]}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={8}>
+                    <div className="checkout__input-wrapper">
+                      <div className="checkout__label">Zipcode</div>
+                      <input
+                        type="number"
+                        id="zipcode"
+                        value={zipcode}
+                        onChange={(e) => setZipcode(e.target.value)}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={24} className="checkout__action">
+                    <Link to={"/diamond-search"} className="checkout__back">
+                      <ArrowLeftOutlined /> Return Shopping
+                    </Link>
+                    <div className="checkout__submit">
+                      <button
+                        type="button"
+                        onClick={createOrder}
+                        className="checkout__btn"
+                      >
+                        Continue to Payment
+                      </button>
+                    </div>
+                  </Col>
+                </>
+              ) : (
+                <h1 className="checkout__email">Shipping Address</h1>
+              )}
             </Row>
           </div>
         </Col>

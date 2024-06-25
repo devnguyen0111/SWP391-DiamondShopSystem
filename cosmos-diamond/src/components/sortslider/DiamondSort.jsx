@@ -130,7 +130,7 @@ function DiamondSort() {
     <>
       <div className="sort">
         <Row className="sort__wrapper" gutter={[24, 16]}>
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <div className="shape">
               <div className="shape__title">Shape</div>
               <div className="shape__content">
@@ -152,7 +152,7 @@ function DiamondSort() {
               </div>
             </div>
           </Col>
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <SortPriceSlider
               price={price}
               setPrice={setPrice}
@@ -161,7 +161,7 @@ function DiamondSort() {
             />
           </Col>
 
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <SortCaratSlider
               carat={carat}
               setCarat={setCarat}
@@ -169,7 +169,7 @@ function DiamondSort() {
               MIN_CARAT={MIN_CARAT}
             />
           </Col>
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <SortColorSlider
               color={color}
               setColor={setColor}
@@ -178,7 +178,7 @@ function DiamondSort() {
               INIT_COLOR_NAME={INIT_COLOR_NAME}
             />
           </Col>
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <SortClaritySlider
               clarity={clarity}
               setClarity={setClarity}
@@ -187,7 +187,7 @@ function DiamondSort() {
               INIT_CLARIRY={INIT_CLARITY}
             />
           </Col>
-          <Col span={8} className="sort__area">
+          <Col span={8} xs={24} lg={8} className="sort__area">
             <SortCutSlider
               cut={cut}
               setCut={setCut}
@@ -196,7 +196,7 @@ function DiamondSort() {
               INIT_CUT={INIT_CUT}
             />
           </Col>
-          <Col span={24} className="sort__reset">
+          <Col span={24}className="sort__reset">
             <button className="sort__btn--reset">
               <i class="fa-solid fa-arrow-rotate-right"></i>
               <span onClick={resetFilter}>Reset Filters</span>
@@ -226,21 +226,9 @@ function DiamondSort() {
                         },
                       ]}
                     />
-                    <div className="list__dropdown"></div>
+                    
                   </div>
-                  <div className="list__right">
-                    <div className="list__result">
-                      <span>1</span> of <span>100</span> Result
-                    </div>
-                    <div className="list__layout">
-                      <div className="list__layout--default">
-                        <i class="fa-solid fa-table-cells-large"></i>
-                      </div>
-                      <div className="list__layout--table">
-                        <i class="fa-solid fa-table-list"></i>
-                      </div>
-                    </div>
-                  </div>
+                  
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>
@@ -248,6 +236,7 @@ function DiamondSort() {
                       diamondList.map((diamond, index) => (
                         <Col
                           span={6}
+                          xs={12} md={8} lg={6}
                           className="product__container"
                           key={index}
                         >
@@ -257,7 +246,7 @@ function DiamondSort() {
                           >
                             <div className="product__img">
                               <Image src={diamond.shape} />
-                              <i class="fa-regular fa-heart list__wishlist"></i>
+
                             </div>
                             <div className="product__info">
                               <div className="product__name">
