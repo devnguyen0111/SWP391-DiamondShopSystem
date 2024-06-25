@@ -16,7 +16,7 @@ function CheckoutPage() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState('');
   const [state, setState] = useState("");
   const [street, setStreet] = useState("");
   const [address, setAddress] = useState("");
@@ -59,9 +59,9 @@ function CheckoutPage() {
         setFirstName(customerinfo.cusFirstName);
         setLastName(customerinfo.cusLastName);
         setPhone(customerinfo.cusPhoneNum);
-        setCity(address.city);
+        
         setCountry(address.country);
-        setState(address.state);
+
         setStreet(address.street);
         setZipcode(address.zipcode);
       });

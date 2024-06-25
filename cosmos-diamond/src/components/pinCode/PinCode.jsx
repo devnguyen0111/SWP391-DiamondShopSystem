@@ -29,9 +29,6 @@ function PinCode() {
       });
   }, []);
   const onChange = (text) => {
-    console.log("onChange:", text);
-    console.log(pin);
-    console.log(text);
     if (text.length === 6 && text == pin) {
       fetch(`${apiHeader}/Authentication/register`, {
         method: "POST",
@@ -59,9 +56,11 @@ function PinCode() {
   return (
     <div className="pin">
       <h1 className="pin__title">Enter Pin Code</h1>
+      
       <div className="">We send it to:</div>
       <div className="pin__email">{email}</div>
-      <Input.OTP formatter={(str) => str.toUpperCase()} {...sharedProps} />
+      <Input.OTP autoFocus={true} formatter={(str) => str.toUpperCase()} {...sharedProps}/>
+
     </div>
   );
 }

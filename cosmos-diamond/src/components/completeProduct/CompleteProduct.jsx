@@ -185,11 +185,7 @@ function CompleteProduct() {
                     <p className="right__detail-product__ring__name">
                       {cover && cover.name}
                     </p>
-                    <Link to="/custom-ring-by-diamond">
-                      <p className="right__detail-product__ring__change">
-                        Change Setting
-                      </p>
-                    </Link>
+                    
                   </div>
                 </Flex>
                 <p className="right__detail-product__ring__price">
@@ -201,6 +197,7 @@ function CompleteProduct() {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
+                  marginTop:'5px'
                 }}
                 className="right__detail-product__diamond"
               >
@@ -224,11 +221,6 @@ function CompleteProduct() {
                     <p className="right__detail-product__ring__name">
                       {diamond && diamond.diamondName}
                     </p>
-                    <Link to="/diamond-search">
-                      <p className="right__detail-product__ring__change">
-                        Change Diamond
-                      </p>
-                    </Link>
                   </div>
                 </Flex>
                 <p

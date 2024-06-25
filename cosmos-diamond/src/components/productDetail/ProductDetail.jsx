@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
 import { Col, Row, notification } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
 import { jwtDecode } from "jwt-decode";
@@ -13,7 +13,7 @@ function ProductDetail({ product }) {
   //   setShow(true);
   //   disableScroll()
   // };
-  
+  const nav = useNavigate()
   const addToCart = () => {
     const url = window.location.href;
     const productId = url.slice(url.lastIndexOf("/")+1, url.length);
@@ -56,12 +56,12 @@ function ProductDetail({ product }) {
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <Link to={"/engagement-rings/catalog"} className="summary__navigator">
+            <div onClick={()=> nav(-1)} className="summary__navigator">
               <i class="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
               </span>
-            </Link>
+            </div>
           </Col>
           <Col span={24}>
             <div className="summary__img">

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import CompleteProduct from "../../components/completeProduct/CompleteProduct";
 import Stepper from "../../components/stepper/Stepper";
+import CommitExperience from "../../components/commitExperience/CommitExperience";
 
 function CompleteProductPage() {
     useEffect(()=>{
@@ -14,6 +15,7 @@ function CompleteProductPage() {
         path={{ op: "/diamond-search", op1: "/custom-ring-by-diamond" }}
       />
       <CompleteProduct />
+      <CommitExperience/>
     </>
   );
 }

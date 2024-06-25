@@ -55,6 +55,8 @@ import CustomPendant from "../pages/customPendant/CustomerPendant";
 import CustomEarrings from "../pages/customEarrings/CustomEarrings";
 import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
+import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
+import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -123,6 +125,14 @@ export const router = createBrowserRouter([
       {
         path: "/engagement-rings/catalog",
         element: <EngagementRingCatalog />,
+      },
+      {
+        path: "/pendant/catalog",
+        element: <PendantCatalog />,
+      },
+      {
+        path: "/earrings/catalog",
+        element: <EarringCatalog />,
       },
       {
         path: "/diamond-search",
@@ -323,7 +333,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/fashion-rings",
+        path: "/pendant",
         element: (
           <ProtectedRouteCustomer>
             <FashionRingsIntro />

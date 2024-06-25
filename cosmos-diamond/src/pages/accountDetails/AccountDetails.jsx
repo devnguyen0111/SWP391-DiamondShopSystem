@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Layout,
   Menu,
@@ -32,6 +32,7 @@ const { Title, Text } = Typography;
 function AccountDetails() {
   const [customer, setCustomer] = useState();
   const [address, setAddress] = useState();
+  const [street, setStreet] = useState();
   const [zipcode, setZipCode] = useState();
   const [edit, setEdit] = useState(false);
   const [city, setCity] = useState();
@@ -40,6 +41,10 @@ function AccountDetails() {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const cityRef = useRef();
+  const stateRef = useRef();
+  const [updatedCity, setUpdatedCity] = useState()
+  const [updatedState, setUpdatedState] = useState()
   const dispatch = useDispatch();
   const showModal = () => {
     setOpen(true);
@@ -62,7 +67,9 @@ function AccountDetails() {
           console.log(res);
           setCustomer(res.customerinfo);
           setAddress(
-            `${res.ad.street} ${res.ad.state} ${res.ad.city}  ${res.ad.country} `
+            `${res.ad.street && res.ad.street + ", "}${
+              res.ad.state && res.ad.state + ", "
+            }${res.ad.city && res.ad.city + ", "}${res.ad.country}`
           );
           setZipCode(res.ad.zipCode);
         });
@@ -77,6 +84,10 @@ function AccountDetails() {
       .then((data) => setCity(data.data));
   }, []);
   const handleCity = (e) => {
+    let arrCity = Array.from(cityRef.current.options);
+    let cityName = arrCity.filter(city => city.value === e.target.value)[0].label
+    setUpdatedCity(cityName)
+    
     fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
       .then((res) => res.json())
       .then((data) => setState(data.data));
@@ -102,13 +113,41 @@ function AccountDetails() {
       }));
     }
   };
-  const handleUpdateCustomer = () => {
-    hideModal();
+  const handleStreet = (e) => {
+    setStreet(e.target.value);
   };
+  const handleUpdateCustomer = () => {
+    let token = localStorage.getItem('token')
+    fetch(`${apiHeader}/Customer/updateProfile`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({
+        customerId: id,
+        street: street,
+        city: updatedCity,
+        state: updatedState,
+        zipcode: zipcode,
+        firstName: customer.cusFirstName,
+        lastName: customer.cusLastName,
+        phonenumber: customer.cusPhoneNum
+      }),
+    }).then(err => err.message)
+    
+  };
+  const handleStateUpdate = (e)=>{
+    setUpdatedState(e.target.value)
+  }
+  const handleZipcode = (e)=>{
+    console.log(user);
+    setZipCode(e.target.value)
+  }
 
   return (
     <Content>
-      <div className="site-layout-content" style={{marginTop:"70px"}}>
+      <div className="site-layout-content" style={{ marginTop: "70px" }}>
         <Card style={{ border: "none" }}>
           <div className="account-section">
             <div className="account-section__upper">
@@ -123,7 +162,7 @@ function AccountDetails() {
                   dispatch(logout());
                   nav("/login");
                 }}
-                style={{textDecoration:'none', color:'black'}}
+                style={{ textDecoration: "none", color: "black" }}
               >
                 <p>
                   Sign Out
@@ -176,13 +215,13 @@ function AccountDetails() {
                   </Button>
                 </ConfigProvider>
               </div>
-              <Row className="myAccount__lower">
-                <Col span={8}>
+              <Row style={{width:'100%'}} className="myAccount__lower">
+                <Col span={4}>
                   <h1>Login Details:</h1>
                 </Col>
                 {!edit && (
                   <>
-                    <Col span={8} className="myAccount__lower__inform">
+                    <Col span={6} className="myAccount__lower__inform">
                       <p className="myAccount__lower__inform__text1">
                         First Name
                       </p>
@@ -201,15 +240,8 @@ function AccountDetails() {
                       >
                         {customer && customer.cusLastName}
                       </p>
-                      <p className="myAccount__lower__inform__text1">Address</p>
-                      <p
-                        className="myAccount__lower__inform__text2"
-                        style={{ textTransform: "capitalize" }}
-                      >
-                        {address && address}
-                      </p>
                     </Col>
-                    <Col span={8} className="myAccount__lower__contact">
+                    <Col span={14} className="myAccount__lower__contact">
                       <p className="myAccount__lower__inform__text1">Email</p>
                       <p className="myAccount__lower__inform__text2">
                         {customer && customer.mail}
@@ -217,6 +249,15 @@ function AccountDetails() {
                       <p className="myAccount__lower__inform__text1">Phone</p>
                       <p className="myAccount__lower__inform__text2">
                         {customer && customer.cusPhoneNum}
+                      </p>
+                    </Col>
+                    <Col span={16} offset={4}>
+                    <p className="myAccount__lower__inform__text1">Address</p>
+                      <p
+                        className="myAccount__lower__inform__text2"
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {address && address}
                       </p>
                     </Col>
                   </>
@@ -249,10 +290,14 @@ function AccountDetails() {
                               <div className="checkout__label">
                                 City/Province
                               </div>
-                              <select onChange={(e) => handleCity(e)}>
+                              <select
+                                ref={cityRef}
+                                className="select1"
+                                onChange={(e) => handleCity(e)}
+                              >
                                 {city &&
                                   city.map((city) => (
-                                    <option value={city.id}>
+                                    <option key={city.id} value={city.id}>
                                       {city.full_name_en}
                                     </option>
                                   ))}
@@ -262,10 +307,10 @@ function AccountDetails() {
                           <Col span={12}>
                             <div>
                               <div className="checkout__label">District</div>
-                              <select>
+                              <select ref={stateRef} className="select1" onChange={(e) => handleStateUpdate(e)}>
                                 {state &&
                                   state.map((ward) => (
-                                    <option value={ward.id}>
+                                    <option key={ward.id} value={ward.full_name_en}>
                                       {ward.full_name_en}
                                     </option>
                                   ))}
@@ -273,6 +318,18 @@ function AccountDetails() {
                             </div>
                           </Col>
                         </Row>
+                      </Form.Item>
+                      <Form.Item label="Street">
+                        <Input
+                          onChange={(e) => handleStreet(e)}
+                          value={street}
+                        />
+                      </Form.Item>
+                      <Form.Item  label="Zip Code">
+                        <Input
+                          onChange={(e) => handleZipcode(e)}
+                          value={zipcode}
+                        />
                       </Form.Item>
                       <Form.Item label="Email">
                         <Input disabled value={customer.mail} />
