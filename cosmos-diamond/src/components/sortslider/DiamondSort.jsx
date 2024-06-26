@@ -246,7 +246,6 @@ function DiamondSort() {
                           >
                             <div className="product__img">
                               <Image src={diamond.shape} />
-
                             </div>
                             <div className="product__info">
                               <div className="product__name">

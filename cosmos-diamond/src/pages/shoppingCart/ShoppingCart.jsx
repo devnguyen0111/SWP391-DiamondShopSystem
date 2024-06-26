@@ -16,7 +16,7 @@ import {
 } from "@ant-design/icons";
 import CardDetail from "../../components/cardDetail/CardDetail";
 import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
-import { getToken, token } from "../../components/getToken";
+import { getToken } from "../../components/getToken";
 import EmptyCart from "../../components/emptyCart/EmptyCart";
 import { apiHeader } from "../../components/urlApiHeader";
 
@@ -26,9 +26,10 @@ function ShoppingCart() {
   const [cartTotalPrice, setCartTotalPrice] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [remove, setRemove] = useState();
-
+  const token = getToken();
   const fetchCart = async () => {
     try {
+      
       const response = await fetch(`${apiHeader}/Cart/${token.UserID}`);
       const data = await response.json();
       setCart(data);
@@ -44,9 +45,9 @@ function ShoppingCart() {
   };
 
   useEffect(() => {
-    if (token) {
+    
       fetchCart();
-    }
+    
   }, [remove]);
 
   return (
