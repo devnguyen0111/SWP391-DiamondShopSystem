@@ -30,7 +30,10 @@ const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
 function AccountDetails() {
-  const [customer, setCustomer] = useState();
+  const [customer, setCustomer] = useState({
+    cusFirstName: "",
+    cusLastName: "",
+  });
   const [address, setAddress] = useState();
   const [street, setStreet] = useState();
   const [zipcode, setZipCode] = useState();
@@ -43,8 +46,8 @@ function AccountDetails() {
   const user = useSelector(selectUser);
   const cityRef = useRef();
   const stateRef = useRef();
-  const [updatedCity, setUpdatedCity] = useState()
-  const [updatedState, setUpdatedState] = useState()
+  const [updatedCity, setUpdatedCity] = useState();
+  const [updatedState, setUpdatedState] = useState();
   const dispatch = useDispatch();
   const showModal = () => {
     setOpen(true);
@@ -85,9 +88,10 @@ function AccountDetails() {
   }, []);
   const handleCity = (e) => {
     let arrCity = Array.from(cityRef.current.options);
-    let cityName = arrCity.filter(city => city.value === e.target.value)[0].label
-    setUpdatedCity(cityName)
-    
+    let cityName = arrCity.filter((city) => city.value === e.target.value)[0]
+      .label;
+    setUpdatedCity(cityName);
+
     fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
       .then((res) => res.json())
       .then((data) => setState(data.data));
@@ -116,13 +120,43 @@ function AccountDetails() {
   const handleStreet = (e) => {
     setStreet(e.target.value);
   };
+  // const handleUpdateCustomer = () => {
+  //   let token = localStorage.getItem("token");
+  //   fetch(`${apiHeader}/Customer/updateProfile`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     body: JSON.stringify({
+  //       customerId: id,
+  //       street: street,
+  //       city: updatedCity,
+  //       state: updatedState,
+  //       zipcode: zipcode,
+  //       firstName: customer.cusFirstName,
+  //       lastName: customer.cusLastName,
+  //       phonenumber: customer.cusPhoneNum,
+  //     }),
+  //   }).then((err) => err.message);
+  // };
   const handleUpdateCustomer = () => {
-    let token = localStorage.getItem('token')
+    if (
+      !customer ||
+      !customer.cusFirstName ||
+      !customer.cusLastName ||
+      !customer.cusPhoneNum
+    ) {
+      console.error("Customer details are incomplete or not loaded");
+      return; // Stop the function if customer details are not complete
+    }
+
+    let token = localStorage.getItem("token");
     fetch(`${apiHeader}/Customer/updateProfile`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "Authorization": `Bearer ${token}` 
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         customerId: id,
@@ -132,18 +166,17 @@ function AccountDetails() {
         zipcode: zipcode,
         firstName: customer.cusFirstName,
         lastName: customer.cusLastName,
-        phonenumber: customer.cusPhoneNum
+        phonenumber: customer.cusPhoneNum,
       }),
-    }).then(err => err.message)
-    
+    }).then((err) => err.message);
   };
-  const handleStateUpdate = (e)=>{
-    setUpdatedState(e.target.value)
-  }
-  const handleZipcode = (e)=>{
+  const handleStateUpdate = (e) => {
+    setUpdatedState(e.target.value);
+  };
+  const handleZipcode = (e) => {
     console.log(user);
-    setZipCode(e.target.value)
-  }
+    setZipCode(e.target.value);
+  };
 
   return (
     <Content>
@@ -215,7 +248,7 @@ function AccountDetails() {
                   </Button>
                 </ConfigProvider>
               </div>
-              <Row style={{width:'100%'}} className="myAccount__lower">
+              <Row style={{ width: "100%" }} className="myAccount__lower">
                 <Col span={4}>
                   <h1>Login Details:</h1>
                 </Col>
@@ -252,7 +285,7 @@ function AccountDetails() {
                       </p>
                     </Col>
                     <Col span={16} offset={4}>
-                    <p className="myAccount__lower__inform__text1">Address</p>
+                      <p className="myAccount__lower__inform__text1">Address</p>
                       <p
                         className="myAccount__lower__inform__text2"
                         style={{ textTransform: "capitalize" }}
@@ -307,10 +340,17 @@ function AccountDetails() {
                           <Col span={12}>
                             <div>
                               <div className="checkout__label">District</div>
-                              <select ref={stateRef} className="select1" onChange={(e) => handleStateUpdate(e)}>
+                              <select
+                                ref={stateRef}
+                                className="select1"
+                                onChange={(e) => handleStateUpdate(e)}
+                              >
                                 {state &&
                                   state.map((ward) => (
-                                    <option key={ward.id} value={ward.full_name_en}>
+                                    <option
+                                      key={ward.id}
+                                      value={ward.full_name_en}
+                                    >
                                       {ward.full_name_en}
                                     </option>
                                   ))}
@@ -325,7 +365,7 @@ function AccountDetails() {
                           value={street}
                         />
                       </Form.Item>
-                      <Form.Item  label="Zip Code">
+                      <Form.Item label="Zip Code">
                         <Input
                           onChange={(e) => handleZipcode(e)}
                           value={zipcode}
