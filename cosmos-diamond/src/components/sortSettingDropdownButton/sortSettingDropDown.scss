@@ -1,0 +1,25 @@
+.sort__setting{
+    width: 1440px;
+    margin: auto;
+}
+.sort__btn{
+    background-color: #fff;
+    border:  1px solid ;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover{
+        background-color: #efefef;
+    }
+   
+}
+.price-dropdown{
+    position: absolute;
+    top: 48px;
+    width: 100%;
+    box-shadow: 0 8px 16px rgb(215, 215, 215);
+    padding: 20px;
+    z-index: 2;
+    border-radius: 10px;
+}

@@ -1,0 +1,129 @@
+.site-layout-content {
+  background: #fff;
+  padding: 24px;
+  margin-top:89px;
+  border: none;
+}
+
+.account-section {
+  border: none;
+  &__upper {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Gantari";
+    margin-bottom: 0.7em;
+  }
+  &__banner {
+    width: 100%;
+    height: 65vh;
+    background-image: url("https://ecommo--ion.bluenile.com/static-my-account-bn/topBanner.af9ff.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    &__inform {
+      padding: 13em 0 0 5em;
+
+      &__intro {
+        font-family: "Lora";
+        font-weight: 100;
+        margin-left: 0;
+        font-style: italic;
+        font-size: 1.3em;
+      }
+
+      &__title {
+        font-family: "Lora";
+        font-weight: 200;
+        font-size: 3em;
+        margin: 0em 0 0.7em 0;
+      }
+
+      &__subtitle {
+        font-family: "Gantari";
+        font-weight: 400;
+        font-size: 1.1em;
+        margin: 2em 0 3em 0;
+      }
+    }
+  }
+
+  .account-details {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+
+    .account-info {
+      width: 100%;
+      font-family: "Gantari";
+      line-height: 0.1em;
+
+      &__divider {
+        font-size: 2em;
+      }
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 400;
+      margin-left: 1em;
+      margin-top: 2em;
+    }
+
+    p {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.myAccount {
+  width: 45%;
+  font-family: "Gantari";
+  &__upper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2em;
+
+    &__button {
+      margin-bottom:1em;
+      width:12em;
+    }
+  }
+
+  &__lower {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5em;
+    &__inform {
+      display: flex;
+      flex-direction: column;
+     
+      &__text1 {
+        color: grey;
+      }
+      &__text2 {
+        color: rgb(27, 27, 27);
+        font-weight: 550;
+        line-height: 2.5em;
+      }
+    }
+  }
+}
+.select1{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 97%;
+  background-position-y: 10px;
+  width: 100%;
+  padding: 12px 10px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  outline: none;
+  border: #b7b7c3 1px solid;
+  border-radius: 8px;
+}

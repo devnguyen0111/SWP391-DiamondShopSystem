@@ -1,0 +1,67 @@
+.cardDetail {
+  &__upper {
+    h5 {
+      font-family: "Gantari";
+      font-size: 1.5em;
+      font-weight: 400;
+    }
+
+    p {
+      text-transform: uppercase;
+      font-size: 0.6em;
+      color: lightgrey;
+    }
+  }
+
+  &__lower {
+    &__pic {
+      width: 45%;
+      height: 30vh;
+      padding-right: 1em;
+    }
+    &__detail {
+      display: flex;
+      flex-direction: column;
+      // gap: 8px;
+      margin-top: 35px;
+      // border-bottom: 1px solid #bdbdbd;
+      padding-bottom: 35px;
+      line-height: 2em;
+
+      h1 {
+        font-weight: 500;
+        font-size: 1.3em;
+        font-family: "Gantari";
+        margin-bottom: 1em;
+      }
+      p {
+        margin-left: 2em;
+      }
+
+      &__ring {
+        &__change {
+          color: black;
+          text-decoration: underline;
+          font-weight: 500;
+        }
+      }
+    }
+
+    &__total {
+        display:flex;
+        justify-content: flex-end;
+        font-weight: 500;
+        font-size: 1.2em;
+        input{
+          width: 65px;
+          padding: 8px 10px;
+          outline: none;
+        }
+    }
+  }
+}
+.cart-action{
+  &:hover{
+    color: #333;
+  }
+}

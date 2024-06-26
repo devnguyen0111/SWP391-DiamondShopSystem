@@ -1,0 +1,83 @@
+.cardWishlist {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  &__detail {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+    line-height: 1.8em;
+    &__ring {
+      &__change {
+        text-decoration: underline;
+        color: black;
+        font-weight: 500;
+        font-size: 0.8m;
+      }
+    }
+
+    h1 {
+      font-weight: 500;
+      font-size: 1.3em;
+      font-family: "Gantari";
+      margin-bottom: 1em;
+    }
+    p {
+      margin-left: 2em;
+    }
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+      font-size: 1.25em;
+    }
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    
+    h1 {
+      font-size: 1.4em;
+      font-weight: 600;
+      font-family: "Gantari";
+    }
+    p {
+      font-size: 1.2em;
+      font-weight: 600;
+      font-family: "Gantari";
+    }
+  }
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    border-radius: none;
+   
+    &__left {
+      width: 30%;
+      border-radius: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Gantari" !important; 
+      font-size: 0.9em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    &__right {
+      width:68%;
+       border-radius: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Gantari" !important;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+  }
+}

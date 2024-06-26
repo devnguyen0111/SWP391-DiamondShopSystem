@@ -2,9 +2,31 @@ import { Button, Col, ConfigProvider, Row } from "antd";
 import React from "react";
 import "./Banner.scss";
 import { useMediaQuery } from "react-responsive";
-
+import { useNavigate } from "react-router-dom";
 function Banner({ bg, intro, title, subtitle, buttons }) {
   const isMobile = useMediaQuery({ maxWidth: "1020px" });
+  const navigate = useNavigate();
+
+  const handleButtonClick = (item) => {
+    if (item == "Shop Diamonds") {
+      navigate("/diamond-search");
+    } else if (item == "Shop Wedding Rings") {
+      navigate("/wedding-rings");
+    } else if (item == "Shop Engagement Rings") {
+      navigate("/engagement-rings/catalog");
+    } else if (item == "Craft Your Rings") {
+      navigate("/diamond-search");
+    } else if(item == "Shop Pendant"){
+      navigate('/pendant/catalog')
+    }else if (item == "Craft Your Pendant") {
+      navigate("/diamond-search");
+    }else if (item == "Craft Your Earrings") {
+      navigate("/diamond-search");
+    }else if (item == "Shop Earrings") {
+      navigate("/earrings/catalog");
+    }
+  };
+
   return (
     <div>
       <div
@@ -40,7 +62,7 @@ function Banner({ bg, intro, title, subtitle, buttons }) {
                         },
                       }}
                     >
-                      <Button className="bannerContent__inform__buttons__button">
+                      <Button key={item} className="bannerContent__inform__buttons__button" onClick={() => handleButtonClick(item)}>
                         {item}
                       </Button>
                     </ConfigProvider>
@@ -88,7 +110,6 @@ function Banner({ bg, intro, title, subtitle, buttons }) {
               ))}
             </div>
           </Col>
-          
         </Row>
       ) : null}
     </div>

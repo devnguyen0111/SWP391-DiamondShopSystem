@@ -105,6 +105,7 @@ const diamonds02 = [
     href: "/",
     src: "https://dam.bluenile.com/images/public/19843/Pear.jpeg",
     name: "Pear",
+    
   },
   {
     href: "/",

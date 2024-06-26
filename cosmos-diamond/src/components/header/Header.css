@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 0 20px;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
   z-index: 1000;
@@ -22,13 +22,8 @@
 }
 
 .header-container img {
-  width: 100px;
-  height: 100px;
-}
-
-.logo {
-  
-  
+  width: 90px;
+  height: 85px;
 }
 
 .nav {
@@ -40,11 +35,13 @@
 .nav-link {
   text-decoration: none;
   color: #000;
-  font-size: 16px;
+  font-size: 14px;
+  text-wrap: nowrap;
 }
 
 .nav-link:hover {
-  text-decoration: none;
+  text-decoration: underline;
+  color: #3c3c3c;
 }
 
 .search-bar {
@@ -64,10 +61,80 @@
 .icon-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1px;
+}
+
+.icon-container a {
+  text-decoration: none;
+  color: #5d5d5d;
+}
+.icon-container a:hover {
+  text-decoration: none;
+  color: black;
 }
 
 .icon {
   font-size: 20px;
   cursor: pointer;
 }
+
+.pre_icon-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pre_icon-container a {
+  text-decoration: none;
+  color: #5d5d5d;
+}
+.pre_icon-container a:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.pre_icon {
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+/* ///////////////// */
+/* .dropdown-menu {
+  width: 300px;
+  padding: 20px;
+}
+
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.dropdown-menu ul li {
+  margin: 5px 0;
+}
+
+.ant-dropdown-link:hover .dropdown-menu {
+  display: block;
+}
+
+//
+.ant-dropdown {
+  position: relative;
+}
+
+.ant-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ant-dropdown:hover .ant-dropdown-menu {
+  display: block;
+}
+
+.blur-background {
+  filter: blur(5px);
+} */

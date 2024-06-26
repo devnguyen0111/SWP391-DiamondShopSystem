@@ -1,4 +1,4 @@
-//import React from "react";
+import React from "react";
 import Banner from "../../components/banner/Banner";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./DiamondsIntro.scss";
@@ -15,7 +15,7 @@ function DiamondsIntro() {
         artisans will pour their passion to every detail of your beautiful 
         custom engagement ring."
         bg="https://dam.bluenile.com/images/public/20446/5_loose_diamonds_in_varying_cuts_and_1_round_engagement_ring.jpeg"
-        buttons={["Shop Diamonds", "Shop Engagement Rings"]}
+        buttons={["Shop Diamonds"]}
       />
 
       <div className="diamondsGuide">
@@ -35,7 +35,7 @@ function DiamondsIntro() {
               </h5>
             </Row>
             <Row className="diamondsGuide__pic">
-              <Col md={12} sm={12}>
+              <Col md={12} sm={6}>
                 <Image
                   preview={false}
                   width={350}
@@ -44,7 +44,7 @@ function DiamondsIntro() {
                 />
                 <h5>OVAL DIAMONDS</h5>
               </Col>
-              <Col md={11} sm={11} style={{ marginLeft: "1em" }}>
+              <Col md={11} sm={6} style={{ marginLeft: "1em" }}>
                 <Image
                   preview={false}
                   width={350}
@@ -89,8 +89,8 @@ function DiamondsIntro() {
               Button: {
                 defaultHoverBg: "#100e31",
                 defaultHoverBorderColor: "black",
-                defaultHoverColor: "black",
-                // defaultHoverColor: "white",
+                // defaultHoverColor: "black",
+                defaultHoverColor: "white",
               },
             },
           }}
@@ -106,17 +106,18 @@ function DiamondsIntro() {
         <h2 className="shopLabGrown__title">Made for Your Moment</h2>
         <h5 className="shopLabGrown__description">
           Every occasion deserves its tribute. Our lab grown diamonds are a
-          high-quality, <br /> affordable way to mark your moment.
+          high-quality, <br/> affordable way to mark your moment.
         </h5>
         <ConfigProvider
           theme={{
             components: {
               Button: {
-                defaultBg: "#100e31",
-                defaultColor: "white",
+                defaultBg:"#100e31",
+                defaultColor:"white",
                 defaultHoverBg: "white",
                 defaultHoverBorderColor: "white",
                 defaultHoverColor: "#100e31",
+                
               },
             },
           }}

@@ -1,0 +1,41 @@
+/* tableStyles.css .table-container {
+  margin: 20px;
+}
+
+.ant-table {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background-color: #1890ff;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ant-table-tbody > tr > td {
+  text-align: center;
+  padding: 12px 8px;
+}
+
+.ant-table-tbody > tr:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+
+.ant-table-pagination {
+  text-align: right;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1890ff;
+} */
+
+.table-container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+}

@@ -1,0 +1,15 @@
+.wishlist {
+    margin-bottom: 2em;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        margin-top:3em;
+        font-family: "Gantari";
+        margin-bottom: 2em;
+        h1 {
+            font-size: 1.5em;
+            text-transform: uppercase;
+            font-family: "Gantari";
+        }
+    }
+}

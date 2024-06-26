@@ -1,6 +1,6 @@
 // src/components/Footer.jsx
 // import React from 'react';
-import './Footer.css';
+import "./Footer.css";
 
 const Footer = () => {
   return (
@@ -48,8 +48,12 @@ const Footer = () => {
           <a href="#">Marquise</a>
         </div>
         <div className="footer-column">
-          <h3>Join the Cosmos Diamonds - List</h3>
-          <input type="email" placeholder="Email Address" />
+          <h3>Join the Cosmos Diamonds</h3>
+          <input
+            type="email"
+            placeholder="Email Address"
+            className=" outline-none border-b-2 border-neutral-300 pb-1"
+          />
           <button>Sign Up</button>
         </div>
       </div>

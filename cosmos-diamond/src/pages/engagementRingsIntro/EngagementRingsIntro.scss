@@ -1,0 +1,128 @@
+.egrGuide {
+  margin: 3em 0;
+  &__inform {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h2 {
+      font-weight: 100;
+      font-family: "Lora";
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    h5 {
+      font-weight: 300;
+      font-family: "Gantari";
+      font-size: 1em;
+      text-align: center;
+      margin-bottom: 3em;
+    }
+  }
+
+  &__pics {
+    h5 {
+      font-weight: 650;
+      font-family: "Gantari";
+      font-size: 1.3em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5em;
+    }
+  }
+}
+
+.labGrownRingIntro {
+  background-color: #f5f7f8;
+  &__banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5.5em;
+    height: 100%;
+
+    h2 {
+      font-weight: 100;
+      font-family: "Lora";
+      font-size: 2em;
+    }
+
+    h5 {
+      font-weight: 300;
+      font-family: "Gantari";
+      font-size: 1.3em;
+      margin: 1em 0 4em 0;
+    }
+
+    &__button {
+      font-family: "Gantari";
+      font-weight: 500;
+      font-size: 1em;
+      border-radius: 0px;
+      height: 3em;
+      width: 40%;
+    }
+  }
+
+  &__pic {
+    width: 850px;
+    height: 550px;
+  }
+}
+
+@media screen and (max-width: 2600px) {
+  .labGrownRingIntro {
+    &__pic {
+      width: 1500px;
+      height: 950px;
+    }
+  }
+}
+@media screen and (max-width: 2000px) {
+  .labGrownRingIntro {
+    &__pic {
+      width: 850px;
+      height: 550px;
+    }
+  }
+}
+
+.ringsAvailable {
+  margin-top: 3em;
+  h1 {
+    display: flex;
+    justify-content: center;
+    font-family: "Lora";
+    font-weight: 400;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    margin: 0.8em 0.8em 2em 0;
+    &__title {
+      text-align: center;
+      font-family: "Gantari";
+      font-weight: 700;
+      font-size: 1.6em;
+    }
+
+    &__description {
+      text-align: center;
+      font-family: "Gantari";
+      font-weight: 400;
+      margin: 0.5em 0;
+    }
+
+    &__price {
+      text-align: center;
+      font-family: "Lora";
+      font-weight: 700;
+      font-size: 1.2em;
+      font-style: italic;
+    }
+  }
+}

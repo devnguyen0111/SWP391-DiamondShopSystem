@@ -1,31 +1,35 @@
 .homepage {
-    &__education {
-        margin: 2em 0;
-        &__inform {
-            text-align: center;
-            h1 {
-                font-family:'Lora';
-                font-weight: 100;
-                font-size: 3em;
-            
-            }
-            h5 {
-                font-family: 'Gantari';
-                font-weight: 300;
-                font-size: 1.1em;
-            }
-        }
-
-        &__pic {
-            display: flex;
-            justify-content: center;
-            margin-top: 2em;
-            h5 {
-                font-family: 'Gantari';
-                font-size: 1.3em;
-                margin: 0.7em 0;
-                text-transform: uppercase;
-            }
-        }
+  &__education {
+    margin: 2em 0;
+    &__inform {
+      text-align: center;
+      h1 {
+        font-family: "Lora";
+        font-weight: 100;
+        font-size: 3em;
+      }
+      h5 {
+        font-family: "Gantari";
+        font-weight: 300;
+        font-size: 1.1em;
+      }
     }
+
+    &__pics {
+      display: flex;
+      justify-content: center;
+      margin-top: 2em;
+      h5 {
+        font-family: "Gantari";
+        font-size: 1.3em;
+        margin: 0.7em 0;
+        text-transform: uppercase;
+      }
+
+      &__left {
+       
+      }
+
+    }
+  }
 }
