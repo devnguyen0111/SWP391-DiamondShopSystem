@@ -1,7 +1,6 @@
 import axios from "axios";
-const baseUrl =
-  "https://dss-api.azurewebsites.net";
-// const baseUrl = "http://localhost:5175";
+// const baseUrl = "https://dss-api.azurewebsites.net";
+const baseUrl = "https://localhost:7262";
 
 const config = {
   baseUrl,
