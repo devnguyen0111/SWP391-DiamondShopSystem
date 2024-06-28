@@ -69,7 +69,7 @@ const ProtectedRouteAuth = ({ children }) => {
 
 const ProtectedRouteCustomer = ({ children }) => {
   const user = useSelector(selectUser);
-  if (user?.Role === "admin" || user?.Role === "manager") {
+  if (user?.Role === "admin" || user?.Role === "manager" || user?.Role === "salestaff") {
     alertFail("You do not have permission to access this page.");
     return <Navigate to="/dashboard" replace />;
   }
@@ -430,6 +430,10 @@ export const router = createBrowserRouter([
       //salestaff
       {
         path: "/dashboard/salestaff",
+        element: <OrdersStaff/>,
+      },
+      {
+        path: "/dashboard/salestaff/orders",
         element: <OrdersStaff/>,
       },
     ],
