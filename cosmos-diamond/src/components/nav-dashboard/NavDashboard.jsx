@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./NavDashboard.scss";
-import navDashboardConfig, { navDashboardConfigAdmin } from "./config";
+import navDashboardConfig, { navDashboardConfigAdmin, navDashboardConfigStaff } from "./config";
 import { Link } from "react-router-dom";
 
 
@@ -10,7 +10,7 @@ function NavDashboard() {
   const user = useSelector(selectUser);
   return (
     <div className="dashboard-navigator">
-      {navDashboardConfig(user.Role == "admin" ? navDashboardConfigAdmin : user.Role == "manager" ? navDashboardConfig : null).map((nav, index) => (
+      {navDashboardConfig(user.Role == "admin" ? navDashboardConfigAdmin : user.Role == "manager" ? navDashboardConfig : user.Role == "salestaff" ? navDashboardConfigStaff : null).map((nav, index) => (
         <Link
           className={`dashboard-navigator__nav ${
             isActive == index ? "active" : ""

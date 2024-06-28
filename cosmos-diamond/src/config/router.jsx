@@ -57,8 +57,8 @@ import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
-
 import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
+
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -71,7 +71,7 @@ const ProtectedRouteAuth = ({ children }) => {
 
 const ProtectedRouteCustomer = ({ children }) => {
   const user = useSelector(selectUser);
-  if (user?.Role === "admin" || user?.Role === "manager") {
+  if (user?.Role === "admin" || user?.Role === "manager" || user?.Role === "salestaff") {
     alertFail("You do not have permission to access this page.");
     return <Navigate to="/dashboard" replace />;
   }
@@ -81,13 +81,16 @@ const ProtectedRouteCustomer = ({ children }) => {
 const ProtectedADMIN = ({ children }) => {
   const user = useSelector(selectUser);
   console.log(user);
-  if (user?.Role !== "admin") {
-    if (user?.Role !== "manager") {
-      return <Navigate to="*" replace />;
-    }
+
+  const validRoles = ["admin", "manager", "salestaff"];
+
+  if (!validRoles.includes(user?.Role)) {
+    return <Navigate to="*" replace />;
   }
+
   return children;
 };
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -392,6 +395,7 @@ export const router = createBrowserRouter([
       </ProtectedADMIN>
     ),
     children: [
+      //manager
       {
         path: "/dashboard/manager",
         element: <OrdersManager />,
@@ -408,7 +412,7 @@ export const router = createBrowserRouter([
         path: "/dashboard/manager/products",
         element: <ProductsManager />,
       },
-
+      //admin
       {
         path: "/dashboard/admin",
         element: <AdminPage />,
@@ -431,6 +435,10 @@ export const router = createBrowserRouter([
         element: <StaffChat />,
       },
       ///hiu
+
+      //salestaff
+    
+
     ],
   },
 ]);
