@@ -57,7 +57,9 @@ import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
-import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
+import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
+
+
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
   if (!user) {
@@ -427,15 +429,16 @@ export const router = createBrowserRouter([
         path: "/dashboard/admin/transaction",
         element: <AdminTransaction />,
       },
+      //hiu
+      {
+        path: "/dashboard/staff/chat",
+        element: <StaffChat />,
+      },
+      ///hiu
+
       //salestaff
-      {
-        path: "/dashboard/salestaff",
-        element: <OrdersStaff/>,
-      },
-      {
-        path: "/dashboard/salestaff/orders",
-        element: <OrdersStaff/>,
-      },
+    
+
     ],
   },
 ]);
