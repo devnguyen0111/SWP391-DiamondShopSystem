@@ -167,18 +167,20 @@ function OrdersManager() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "OrderPrice",
+      title: "Customer Name",
+      dataIndex: "CustomerName",
+      key: "CustomerName",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "OrderQuantity",
+      title: "Order Item",
+      dataIndex: "OrderItem",
+      key: "OrderItem",
+      render: (text) => <a>{text}</a>,
     },
+    
     {
-      title: "Assign Delivery",
+      title: "#",
       dataIndex: "assign",
       key: "OrderQuantity",
       render: (_, data) => (
@@ -204,29 +206,20 @@ function OrdersManager() {
               setModal1Open(!modal1Open);
             }}
           >
-            {selectedValue ?? "Assign"}
+            {selectedValue ?? "Reject"}
+          </Button>
+          <Button
+            
+            onClick={() => {
+              setId(data.id);
+              setModal1Open(!modal1Open);
+            }}
+          >
+            {selectedValue ?? "Approve"}
           </Button>
         </ConfigProvider>
-      ),
-    },
-
-    {
-      title: "Status",
-      dataIndex: "categoryEnum",
-      key: "deActive",
-      filters: [
-        { text: "ACTIVE", value: "ACTIVE" },
-        { text: "REMOVE", value: "REMOVE" },
-      ],
-      onFilter: (value, record) => record.categoryEnum === value,
-      render: (deActive) => (
-        <div>
-          {deActive ? (
-            <GoDotFill style={{ color: "green", fontSize: "1.7em" }} />
-          ) : (
-            <MdOutlineBlock style={{ color: "red", marginLeft: "0.2em" }} />
-          )}
-        </div>
+        
+        
       ),
     },
 
@@ -265,9 +258,9 @@ function OrdersManager() {
         columns={columns}
         dataSource={data}
         pagination={{
-          defaultPageSize: 5,
+          defaultPageSize: 10,
           showSizeChanger: true,
-          pageSizeOptions: ["5"],
+          pageSizeOptions: ["10"],
         }}
       />
       <Modal

@@ -57,7 +57,7 @@ import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
-
+import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
   if (!user) {
@@ -79,13 +79,16 @@ const ProtectedRouteCustomer = ({ children }) => {
 const ProtectedADMIN = ({ children }) => {
   const user = useSelector(selectUser);
   console.log(user);
-  if (user?.Role !== "admin") {
-    if (user?.Role !== "manager") {
-      return <Navigate to="*" replace />;
-    }
+
+  const validRoles = ["admin", "manager", "salestaff"];
+
+  if (!validRoles.includes(user?.Role)) {
+    return <Navigate to="*" replace />;
   }
+
   return children;
 };
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -390,6 +393,7 @@ export const router = createBrowserRouter([
       </ProtectedADMIN>
     ),
     children: [
+      //manager
       {
         path: "/dashboard/manager",
         element: <OrdersManager />,
@@ -406,7 +410,7 @@ export const router = createBrowserRouter([
         path: "/dashboard/manager/products",
         element: <ProductsManager />,
       },
-
+      //admin
       {
         path: "/dashboard/admin",
         element: <AdminPage />,
@@ -422,6 +426,11 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/admin/transaction",
         element: <AdminTransaction />,
+      },
+      //salestaff
+      {
+        path: "/dashboard/salestaff",
+        element: <OrdersStaff/>,
       },
     ],
   },
