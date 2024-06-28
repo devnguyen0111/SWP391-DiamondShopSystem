@@ -1,8 +1,8 @@
-import { Divider, Flex, Spin, Row, Col } from "antd";
+import { Divider, Flex, Spin, Row, Col, Select } from "antd";
 import SettingDropDownGroup from "../../components/sortSettingDropdownButton/sortSettingDropDownButton";
 import { useCallback, useEffect, useState } from "react";
 import Banner from "../../components/banner/Banner";
-import { debounce } from 'lodash';
+import { debounce, orderBy } from "lodash";
 import { apiHeader } from "../../components/urlApiHeader";
 import { Link } from "react-router-dom";
 
@@ -15,26 +15,26 @@ function PendantCatalog() {
   const [metalType, setMetalType] = useState([]);
   const [size, setSize] = useState([]);
   const [shape, setShape] = useState([]);
-  // const [order, setOrder] = useState('asc')
+  const [order, setOrder] = useState("desc");
   //fetch product
   const [price, setPrice] = useState([0, 50000]);
 
-  const fetchEngagementRing = async () => {
+  const fetchEngagementRing = async (reset = false) => {
     setLoading(true);
     try {
       let urlSize = size.map((s) => `sizeIds=${s}`).join("&");
       let urlMetal = metalType.map((m) => `metaltypeIds=${m}`).join("&");
       let urlShape = shape.map((shape) => `diamondShapes=${shape}`).join("&");
-      let url = `${apiHeader}/Product/getFilteredProductAd?categoryId=2&subCategoryId=2&${urlSize}&${urlMetal}&${urlShape}&pageNumber=${pageNumber}&pageSize=${pageSize}&minPrice=${price[0]}&maxPrice=${price[1]}`;
+      let url = `${apiHeader}/Product/getFilteredProductAd?categoryId=2&subCategoryId=2&${urlSize}&${urlMetal}&${urlShape}&pageNumber=${pageNumber}&pageSize=${pageSize}&minPrice=${price[0]}&maxPrice=${price[1]}&sortOrder=${order}`;
       console.log(url);
       const res = await fetch(url);
       const data = await res.json();
-      if (data.$values.length < pageSize) {
-        setHasMore(false);
+      if (reset) {
+        setRingList(data.$values);
+      } else {
         setRingList((prev) => [...prev, ...data.$values]);
       }
-      console.log(data);
-      setRingList((prev) => [...prev, ...data.$values]);
+
     } catch (error) {
       console.error("Failed to fetch data", error);
     } finally {
@@ -43,9 +43,9 @@ function PendantCatalog() {
   };
 
   useEffect(() => {
-    if (hasMore) {
-      fetchEngagementRing();
-    }
+    
+    fetchEngagementRing();
+    
   }, [pageNumber]);
 
   const handleScroll = useCallback(
@@ -71,11 +71,11 @@ function PendantCatalog() {
   useEffect(() => {
     setRingList([]);
     setPageNumber(1);
-    fetchEngagementRing();
-  }, [size, metalType, shape, price]);
-  // const handleOrder = (value)=>{
-  //   setOrder(value)
-  // }
+    fetchEngagementRing(true);
+  }, [size, metalType, shape, price, order]);
+  const handleOrder = (value) => {
+    setOrder(value);
+  };
   return (
     <>
       <Banner
@@ -90,37 +90,33 @@ function PendantCatalog() {
           size={{ size, setSize }}
           metalType={{ metalType, setMetalType }}
           shape={{ shape, setShape }}
-          category="Pendant"
+          category={2}
           price={price}
           setPrice={setPrice}
         />
       </Flex>
       <div className="list" style={{ width: "100%" }}>
-        {/* <div className="list__order">
-          <span style={{color:'#333'}}>Sort by:</span>
-        <Select
-          defaultValue= 'Best seller'
-          style={{
-            width: 120,
-            marginLeft: '12px'
-          }}
-          onChange={handleOrder}
-          options={[
-            {
-              value: "asc",
-              label: "Best seller",
-            },
-            {
-              value: "desc",
-              label: "High to Low",
-            },
-            {
-              value: "asc",
-              label: "Low to High",
-            },
-          ]}
-        />
-        </div> */}
+        <div className="list__order">
+          <span style={{ color: "#333" }}>Sort by:</span>
+          <Select
+            defaultValue="High to Low"
+            style={{
+              width: 120,
+              marginLeft: "12px",
+            }}
+            onChange={handleOrder}
+            options={[
+              {
+                value: "desc",
+                label: "High to Low",
+              },
+              {
+                value: "asc",
+                label: "Low to High",
+              },
+            ]}
+          />
+        </div>
         <Divider></Divider>
         <Row gutter={[13, 21]}>
           {ringList.map((ring, index) => (

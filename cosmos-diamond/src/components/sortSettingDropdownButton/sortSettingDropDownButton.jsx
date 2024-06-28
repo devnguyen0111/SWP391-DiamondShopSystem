@@ -82,32 +82,26 @@ function SettingDropDownGroup({
   }, [sortShape]);
 
   const handleMenuSelect = (info) => {
-   
     metalType.setMetalType((prev) => [...prev, info.key]);
   };
 
   const handleMenuDeselect = (info) => {
-    
     metalType.setMetalType((prev) => prev.filter((key) => key !== info.key));
   };
 
   const handleSizeSelect = (info) => {
-    
     size.setSize((prev) => [...prev, info.key]);
   };
 
   const handleSizeDeselect = (info) => {
-    
     size.setSize((prev) => prev.filter((key) => key !== info.key));
   };
 
   const handleShapeSelect = (info) => {
-   
     shape.setShape((prev) => [...prev, info.key]);
   };
 
   const handleShapeDeselect = (info) => {
-   
     shape.setShape((prev) => prev.filter((key) => key !== info.key));
   };
 
@@ -162,7 +156,10 @@ function SettingDropDownGroup({
       items={shapeItems}
     />
   );
-  const handlePriceChange = (newPrice) => setPrice(newPrice);
+  const handlePriceChange = (newPrice) => {
+    setPrice(newPrice);
+    console.log("Price Range Updated: ", newPrice);
+  };
 
   return (
     <>
