@@ -54,6 +54,27 @@ export const navDashboardConfigAdmin = [
  
 ];
 
+export const navDashboardConfigStaff = [
+  {
+    key: "7",
+    icon: <TeamOutlined />,
+    label: "Orders",
+  },
+  {
+    key: "8",
+    icon: <SolutionOutlined />,
+    label: "Inbox",
+  },
+];
+
+export const navDashboardConfigDelivery = [
+  {
+    key: "9",
+    icon: <TeamOutlined />,
+    label: "Delivery",
+  }
+];
+
 export const navpath = {
   
   1: {
@@ -73,6 +94,15 @@ export const navpath = {
   },
   6: {
     path: "/dashboard/admin/transaction",
+  },
+  7: {
+    path: "/dashboard/salestaff/orders",
+  },
+  8: {
+    path: "/dashboard/salestaff/inbox",
+  },
+  9: {
+    path: "/dashboard/deliverystaff/delivery",
   },
 };
 
