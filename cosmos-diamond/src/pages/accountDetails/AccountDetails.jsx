@@ -74,6 +74,7 @@ function AccountDetails() {
               res.ad.state && res.ad.state + ", "
             }${res.ad.city && res.ad.city + ", "}${res.ad.country}`
           );
+          setStreet(res.ad.street)
           setZipCode(res.ad.zipCode);
         });
     }, []);
@@ -168,7 +169,8 @@ function AccountDetails() {
         lastName: customer.cusLastName,
         phonenumber: customer.cusPhoneNum,
       }),
-    }).then((err) => err.message);
+    }).then((err) => err.message)
+    .then(hideModal);
   };
   const handleStateUpdate = (e) => {
     setUpdatedState(e.target.value);

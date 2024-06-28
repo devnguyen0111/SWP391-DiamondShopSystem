@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./CheckoutPage.scss";
-import { Collapse, Row, Col, Select, Popconfirm } from "antd";
+import { Collapse, Row, Col, Select, Popconfirm, Input } from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
 import { jwtDecode } from "jwt-decode"; // Correct the import statement
 import img from "../../assets/logo.png";
-import { token } from "./../../components/getToken";
+import { getToken } from "./../../components/getToken";
 import { apiHeader } from "../../components/urlApiHeader";
 
 function CheckoutPage() {
@@ -16,15 +16,19 @@ function CheckoutPage() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
-  const [city, setCity] = useState();
-  const [state, setState] = useState();
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [street, setStreet] = useState("");
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
   const [cart, setCart] = useState();
   const [error, setError] = useState();
   const [shipping, setShipping] = useState();
-
+  const [updatedCity, setUpdatedCity] = useState();
+  const [updatedState, setUpdatedState] = useState();
+  const cityRef = useRef();
+  const stateRef = useRef();
+  const token = getToken();
   const toggleConfirmEmail = () => {
     if (!email) {
       setError("*Please provide Email");
@@ -63,7 +67,7 @@ function CheckoutPage() {
         setPhone(customerinfo.cusPhoneNum);
         setCountry(address.country);
         setStreet(address.street);
-        setZipcode(address.zipcode);
+        setZipcode(address.zipCode);
       });
     fetch(`${apiHeader}/Cart/${userId}`)
       .then((res) => res.json())
@@ -88,38 +92,61 @@ function CheckoutPage() {
   };
 
   const createOrder = () => {
-    fetch(`${apiHeader}/Order/createOrderFromCart`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        cusId: token.UserID,
-        shippingMethodId: shipping,
-        deliveryAddress: `${street && street + ', '}${state && state + ', '}${city && city + ','}`,
-        contactNumber: `${phone}`,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok " + res.statusText);
-        }
-        return res.json();
+    const arr = {firstName, lastName, updatedCity, updatedState, country,street, phone, shipping, zipcode}
+    console.log(Object.entries(arr));
+    if (firstName.trim() === "" || lastName.trim() === "" || !updatedCity || !updatedState || country.trim() === "" || street.trim() === "" ||  phone.trim() === "" || !shipping || zipcode.trim() === "") {
+      console.log('no no no');
+    } else {
+      console.log(
+        `${street && street + ", "}${updatedState && updatedState + ", "}${
+          updatedCity && updatedCity
+        }`
+      );
+      fetch(`${apiHeader}/Order/createOrderFromCart`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          cusId: token.UserID,
+          shippingMethodId: shipping,
+          deliveryAddress: `${street && street + ", "}${
+            updatedState && updatedState + ", "
+          }${updatedCity && updatedCity}`,
+          contactNumber: `${phone}`,
+        }),
       })
-      .then((data) => {
-        console.log(data);
-        return data.orderId;
-      })
-      .then((orderID) => createPayment(orderID))
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Network response was not ok " + res.statusText);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          return data.orderId;
+        })
+        .then((orderID) => createPayment(orderID))
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
   };
   const handleCity = (e) => {
+    let arrCity = Array.from(cityRef.current.options);
+    let cityName = arrCity.filter((city) => city.value === e.target.value)[0]
+      .label;
+    setUpdatedCity(cityName);
+
     fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
       .then((res) => res.json())
       .then((data) => setState(data.data));
   };
+
+  const handleStateUpdate = (e) => {
+    setUpdatedState(e.target.value);
+  };
+
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -177,20 +204,16 @@ function CheckoutPage() {
                 >
                   {!emailConfirm && (
                     <Popconfirm
-                    title="Confirm email"
-                    description="Can you verify it's accurate?"
-                    okText= "Yes"
-                    cancelText="No"
-                    onConfirm = {toggleConfirmEmail}
-                  >
-                    <button
-                      type="button"
-                      className="checkout__btn"
+                      title="Confirm email"
+                      description="Can you verify it's accurate?"
+                      okText="Yes"
+                      cancelText="No"
+                      onConfirm={toggleConfirmEmail}
                     >
-                      Continue
-                    </button>
-                  </Popconfirm>
-                    
+                      <button type="button" className="checkout__btn">
+                        Continue
+                      </button>
+                    </Popconfirm>
                   )}
                 </div>
               </div>
@@ -204,7 +227,8 @@ function CheckoutPage() {
                   <Col span={12} className="checkout__name">
                     <div className="checkout__input-wrapper">
                       <div className="checkout__label">First Name</div>
-                      <input
+                      <Input
+                        required={true}
                         type="text"
                         id="firstName"
                         value={firstName}
@@ -239,12 +263,13 @@ function CheckoutPage() {
                     <div className="checkout__input-wrapper">
                       <div className="checkout__label">City/Province</div>
                       <select
-                        style={{ maxWidth: "300px" }}
+                        ref={cityRef}
+                        className="select1"
                         onChange={(e) => handleCity(e)}
                       >
                         {city &&
-                          city.map((city, index) => (
-                            <option key={index} value={city.id}>
+                          city.map((city) => (
+                            <option key={city.id} value={city.id}>
                               {city.full_name_en}
                             </option>
                           ))}
@@ -254,10 +279,14 @@ function CheckoutPage() {
                   <Col xs={24} sm={24} md={24} lg={24} xl={12}>
                     <div className="checkout__input-wrapper">
                       <div className="checkout__label">District</div>
-                      <select style={{ maxWidth: "300px" }}>
+                      <select
+                        ref={stateRef}
+                        className="select1"
+                        onChange={(e) => handleStateUpdate(e)}
+                      >
                         {state &&
-                          state.map((ward, i) => (
-                            <option key={i} value={ward.id}>
+                          state.map((ward) => (
+                            <option key={ward.id} value={ward.full_name_en}>
                               {ward.full_name_en}
                             </option>
                           ))}
