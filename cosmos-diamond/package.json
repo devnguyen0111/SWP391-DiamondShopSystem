@@ -15,7 +15,7 @@
     "@hookform/resolvers": "^3.6.0",
     "@lottiefiles/dotlottie-react": "^0.6.5",
     "@reduxjs/toolkit": "^2.2.5",
-    "antd": "^5.18.0",
+    "antd": "^5.18.3",
     "axios": "^1.7.2",
     "fireworks-js": "^2.10.7",
     "jwt-decode": "^4.0.0",
