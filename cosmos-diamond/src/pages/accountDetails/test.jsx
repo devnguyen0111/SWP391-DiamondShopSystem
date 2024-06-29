@@ -14,7 +14,6 @@ import {
   Form,
   Modal,
   Tabs,
-  Table,
 } from "antd";
 import {
   ExclamationCircleOutlined,
@@ -28,7 +27,6 @@ import useSelection from "antd/es/table/hooks/useSelection";
 import { useDispatch, useSelector } from "react-redux";
 import { apiHeader } from "../../components/urlApiHeader";
 import TabPane from "antd/es/tabs/TabPane";
-import api from "../../config/axios";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -52,7 +50,6 @@ function AccountDetails() {
   const stateRef = useRef();
   const [updatedCity, setUpdatedCity] = useState();
   const [updatedState, setUpdatedState] = useState();
-  const [vouchers, setVouchers] = useState([]);
   const dispatch = useDispatch();
   const showModal = () => {
     setOpen(true);
@@ -186,60 +183,6 @@ function AccountDetails() {
     setZipCode(e.target.value);
   };
 
-  const columns = [
-    {
-      title: "Voucher ID",
-      dataIndex: "voucherId",
-      key: "voucherId",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Expiration date",
-      dataIndex: "expDate",
-      key: "expDate",
-      render: (text) => <a>{text}</a>,
-    },
-
-    {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
-    },
-  ].filter((item) => !item.hidden);
-
-  const getVoucher = async () => {
-    try {
-      const response = await api.get("/get");
-      console.log(response.values);
-      const data = response.data.$values;
-      console.log("Voucher: ", data);
-
-      if (!Array.isArray(data)) {
-        throw new Error("Dữ liệu nhận được không phải là mảng");
-      }
-
-      setVouchers(data);
-    } catch (e) {
-      console.error(e);
-      alert(e.response?.data || e.message);
-    }
-  };
-
-  useEffect(() => {
-    getVoucher();
-  }, []);
-
   return (
     <Content>
       <div className="site-layout-content" style={{ marginTop: "70px" }}>
@@ -279,7 +222,7 @@ function AccountDetails() {
                 </h1>
               </div>
             </div>
-            <Tabs defaultActiveKey="1" style={{ marginTop: "1.5em" }}>
+            <Tabs defaultActiveKey="1">
               {/* <div className="account-details">
                 <div className="account-info">
                   <h3>Account Details</h3>
@@ -298,9 +241,8 @@ function AccountDetails() {
                         components: {
                           Button: {
                             borderRadius: "0px",
-                            defaultActiveBg: "rgb(27, 27, 27)",
-                            defaultActiveBorderColor: "rgb(27, 27, 27)",
-                            defaultActiveColor: "white",
+                            defaultBg:"rgb(27, 27, 27)",
+                            defaultColor:'black',
                             defaultHoverBg: " rgb(27, 27, 27)",
                             defaultHoverBorderColor: "rgb(27, 27, 27)",
                             defaultHoverColor: "white",
@@ -454,11 +396,10 @@ function AccountDetails() {
                             theme={{
                               components: {
                                 Button: {
-                                  borderRadius: "0px",
-                                  defaultActiveBg: "rgb(27, 27, 27)",
-                                  defaultActiveBorderColor: "rgb(27, 27, 27)",
-                                  defaultActiveColor: "white",
-                                  defaultHoverBg: " rgb(27, 27, 27)",
+                                  defaultColor: "#ffffff",
+                                  defaultBg: "rgb(21, 21, 66)",
+                                  borderRadius: "6px",
+                                  defaultHoverBg: "rgb(21, 21, 66)",
                                   defaultHoverBorderColor: "rgb(27, 27, 27)",
                                   defaultHoverColor: "white",
                                 },
@@ -479,14 +420,7 @@ function AccountDetails() {
                 </div>
               </TabPane>
               <TabPane tab="Voucher" key="2">
-                <Table
-                  className="voucherTable"
-                  columns={columns}
-                  dataSource={vouchers}
-                  pagination={{
-                    defaultPageSize: 5,
-                  }}
-                />
+
               </TabPane>
             </Tabs>
           </div>
