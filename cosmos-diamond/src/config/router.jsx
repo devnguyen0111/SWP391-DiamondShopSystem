@@ -434,6 +434,16 @@ export const router = createBrowserRouter([
       //hiu
       {
 
+        path: "/dashboard/salestaff/orders",
+        element: <StaffChat />,
+      },
+      {
+
+        path: "/dashboard/salestaff",
+        element: <StaffChat />,
+      },
+      {
+
         path: "/dashboard/salestaff/view-inbox",
         element: <StaffChat />,
       },
