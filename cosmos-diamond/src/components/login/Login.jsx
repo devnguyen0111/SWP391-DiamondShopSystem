@@ -11,7 +11,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../../redux/features/counterSlice";
 import LoadingScreen from "../loadingScreen/LoadingScreen";
 import { auth, provider } from "../../config/firebase";
-
+import api from "../../config/axios";
+import { jwtDecode } from "jwt-decode";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -54,9 +55,36 @@ const Login = () => {
     };
 
     const onSubmit = async (value) => {
-        // Hàm xử lý đăng nhập bình thường
-    };
+        try {
+          setIsLoading(true)
+          const response = await api.post("/api/Authentication/login", value);
+          localStorage.setItem("token", response.data.token);
+          const user = jwtDecode(response.data.token);
+          const responseUser = await api.get(`/api/Customer/${user.UserID}`);
 
+          console.log("Login: ", responseUser);
+          setIsLoading(false)
+          //redux
+          dispatch(login(user));
+          if (user.Role === "customer") {
+            navigate("/");
+          }
+          if (user.Role === "admin") {
+            navigate("/dashboard/admin");
+          }
+          if (user.Role === "salestaff") {
+            navigate("/dashboard/salestaff");
+          }
+          if (user.Role === "manager") {
+            navigate("/dashboard/manager");
+          }
+        } catch (e) {
+          setIsLoading(false)
+          console.log(e);
+          alertFail(e.response.data, "Please Try Again");
+        }
+      };
+    
     return (
         <div className="login-container">
             <div className="login-form">
