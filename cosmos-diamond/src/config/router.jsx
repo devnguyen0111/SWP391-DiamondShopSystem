@@ -442,9 +442,7 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/salestaff/send-request",
         element: <OrdersStaff/>,
-
-    
-
+      },
     ],
   },
 ]);
