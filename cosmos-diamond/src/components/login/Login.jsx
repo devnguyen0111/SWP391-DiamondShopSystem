@@ -68,6 +68,7 @@ const Login = () => {
         navigate("/dashboard/manager");
       }
     } catch (e) {
+      setIsLoading(false)
       console.log(e);
       alertFail(e.response.data, "Please Try Again");
     }

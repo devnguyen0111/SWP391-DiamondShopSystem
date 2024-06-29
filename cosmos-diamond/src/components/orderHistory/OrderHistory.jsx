@@ -3,13 +3,14 @@ import "./OrderHistory.scss";
 import { HeartOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import { Card, Col, ConfigProvider, Divider, Flex, Row, Segmented } from "antd";
-import { token } from "./../getToken";
+import { getToken } from "./../getToken";
 import { apiHeader } from "../urlApiHeader";
 function OrderHistory() {
-  console.log(token);
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
+  let token
   useEffect(() => {
+    token = getToken()
     fetch(`${apiHeader}/Customer/customer/${token.UserID}/profile`)
       .then((res) => res.json())
       .then((res) => {
@@ -93,7 +94,7 @@ function OrderHistory() {
                   </ConfigProvider>
                 </Flex>
               </Col>
-              {orderList && orderList.$values.length &&
+              {(orderList && orderList.$values && orderList.$values.length )&&
                 orderList.$values.map((order) => (
                   <Col
                     span={24}
