@@ -58,6 +58,8 @@ import OrderFail from "../pages/orderFail/OrderFail";
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
 import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
+import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
+
 
 
 const ProtectedRouteAuth = ({ children }) => {
