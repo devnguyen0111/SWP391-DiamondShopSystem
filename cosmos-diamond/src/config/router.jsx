@@ -433,7 +433,15 @@ export const router = createBrowserRouter([
         element: <OrdersStaff/>,
       },
       {
-        path: "/dashboard/salestaff/orders",
+        path: "/dashboard/salestaff/view-inbox",
+        element: <OrdersStaff/>,
+      },
+      {
+        path: "/dashboard/salestaff/send-mail",
+        element: <OrdersStaff/>,
+      },
+      {
+        path: "/dashboard/salestaff/send-request",
         element: <OrdersStaff/>,
       },
     ],

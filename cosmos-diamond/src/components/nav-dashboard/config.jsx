@@ -62,8 +62,22 @@ export const navDashboardConfigStaff = [
   },
   {
     key: "8",
-    icon: <SolutionOutlined />,
+    icon:  <SolutionOutlined />,
     label: "Inbox",
+    children: [
+      {
+        key: "81",
+        label: "View all inbox",
+      },
+      {
+        key: "82",
+        label: "Send an email",
+      },
+      {
+        key: "83",
+        label: "Send a request",
+      },
+    ]
   },
 ];
 
@@ -98,8 +112,14 @@ export const navpath = {
   7: {
     path: "/dashboard/salestaff/orders",
   },
-  8: {
-    path: "/dashboard/salestaff/inbox",
+  81: {
+    path: "/dashboard/salestaff/view-inbox",
+  },
+  82: {
+    path: "/dashboard/salestaff/send-mail",
+  },
+  83: {
+    path: "/dashboard/salestaff/send-request",
   },
   9: {
     path: "/dashboard/deliverystaff/delivery",
