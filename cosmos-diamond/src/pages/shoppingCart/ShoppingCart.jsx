@@ -4,6 +4,7 @@ import "./ShoppingCart.scss";
 import {
   Button,
   Card,
+  Checkbox,
   Col,
   Divider,
   Flex,
@@ -19,6 +20,7 @@ import EmptyCart from "../../components/emptyCart/EmptyCart";
 import { apiHeader } from "../../components/urlApiHeader";
 import { useStateValue } from "../../Context/StateProvider";
 import api from "../../config/axios";
+import { alertFail } from './../../hooks/useNotification';
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
@@ -27,8 +29,9 @@ function ShoppingCart() {
   const [isLoading, setIsLoading] = useState(true);
   const [remove, setRemove] = useState();
   const { checkout, setCheckout } = useStateValue();
+  const [checklist, setcheckList] = useState([]);
   const token = getToken();
-  const nav = useNavigate()
+  const nav = useNavigate();
   const fetchCart = async () => {
     try {
       const response = await fetch(`${apiHeader}/Cart/${token.UserID}`);
@@ -38,7 +41,6 @@ function ShoppingCart() {
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
-  
     } catch (error) {
       console.error("Failed to fetch cart", error);
     }
@@ -49,17 +51,26 @@ function ShoppingCart() {
   }, [remove]);
 
   const handleCheckout = async () => {
-    let products = cart.items.$values.map(c=> ({
-      "productId": c.pid,
-      "quantity": c.quantity
-    }))
-    let response = await api.post(`https://localhost:7262/api/Order/checkoutInfo`, {
-      userId: token.UserID,
-      products: products
-    });
-    setCheckout(response.data)
-    localStorage.setItem("checkout", JSON.stringify(response.data));
-    nav(`/checkout/${token.UserID}`)
+    let pids = new Set(checklist.map((l) => l.pid));
+    if (pids.size > 0) {
+      let products = cart.items.$values.filter((item) => pids.has(item.pid));
+      products = products.map((p) => ({
+        productId: p.pid,
+        quantity: p.quantity,
+      }));
+      let response = await api.post(
+        `${apiHeader}/Order/checkoutInfo`,
+        {
+          userId: token.UserID,
+          products: products,
+        }
+      );
+      setCheckout(response.data);
+      localStorage.setItem("checkout", JSON.stringify(response.data));
+      nav(`/checkout/${token.UserID}`);
+    } else{
+      alertFail("You have not checked any jewelry")
+    }
   };
 
   return (
@@ -98,6 +109,7 @@ function ShoppingCart() {
                         userID={token.UserID}
                         setCartTotalPrice={setCartTotalPrice}
                         setRemove={setRemove}
+                        setcheckList={setcheckList}
                       />
                     </Col>
                   ))
