@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./ShoppingCart.scss";
 import {
   Button,
@@ -11,14 +11,14 @@ import {
   Skeleton,
   Typography,
 } from "antd";
-import {
-  DownOutlined,
-} from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 import CardDetail from "../../components/cardDetail/CardDetail";
 import CartItemSkeleton from "../../components/cartItemSkeleton/CartItemSkeleton";
 import { getToken } from "../../components/getToken";
 import EmptyCart from "../../components/emptyCart/EmptyCart";
 import { apiHeader } from "../../components/urlApiHeader";
+import { useStateValue } from "../../Context/StateProvider";
+import api from "../../config/axios";
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
@@ -26,29 +26,41 @@ function ShoppingCart() {
   const [cartTotalPrice, setCartTotalPrice] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [remove, setRemove] = useState();
+  const { checkout, setCheckout } = useStateValue();
   const token = getToken();
+  const nav = useNavigate()
   const fetchCart = async () => {
     try {
-      
       const response = await fetch(`${apiHeader}/Cart/${token.UserID}`);
       const data = await response.json();
       setCart(data);
       setCartTotalPrice(data.totalPrice);
-      setTimeout(()=>{
+      setTimeout(() => {
         setIsLoading(false);
-      }, 500)
-      
-      console.log(data);
+      }, 500);
+  
     } catch (error) {
       console.error("Failed to fetch cart", error);
     }
   };
 
   useEffect(() => {
-    
-      fetchCart();
-    
+    fetchCart();
   }, [remove]);
+
+  const handleCheckout = async () => {
+    let products = cart.items.$values.map(c=> ({
+      "productId": c.pid,
+      "quantity": c.quantity
+    }))
+    let response = await api.post(`https://localhost:7262/api/Order/checkoutInfo`, {
+      userId: token.UserID,
+      products: products
+    });
+    setCheckout(response.data)
+    localStorage.setItem("checkout", JSON.stringify(response.data));
+    nav(`/checkout/${token.UserID}`)
+  };
 
   return (
     <div>
@@ -72,22 +84,24 @@ function ShoppingCart() {
               MY CART {cart && "(" + cart.quantity + ")"}
             </h5>
             <Row gutter={[32, 16]}>
-              {cart && token && (isLoading ? (
-                <Col span={12} md={24} sm={24}>
-                  <CartItemSkeleton />
-                </Col>
-              ) : (
-                cart.items.$values.map((product,index) => (
-                  <Col key={product.pid} span={12} md={24} sm={24}>
-                    <CardDetail
-                      product={product}
-                      userID={token.UserID}
-                      setCartTotalPrice={setCartTotalPrice}
-                      setRemove={setRemove}
-                    />
+              {cart &&
+                token &&
+                (isLoading ? (
+                  <Col span={12} md={24} sm={24}>
+                    <CartItemSkeleton />
                   </Col>
-                ))
-              ))}
+                ) : (
+                  cart.items.$values.map((product, index) => (
+                    <Col key={product.pid} span={12} md={24} sm={24}>
+                      <CardDetail
+                        product={product}
+                        userID={token.UserID}
+                        setCartTotalPrice={setCartTotalPrice}
+                        setRemove={setRemove}
+                      />
+                    </Col>
+                  ))
+                ))}
             </Row>
           </Col>
           {cart && token && cart.items.$values.length > 0 ? (
@@ -209,13 +223,11 @@ function ShoppingCart() {
                       className="orderSummary__pic"
                       style={{ width: "60%" }}
                     />
-                    <Button className="orderSummary__button">
-                      <Link
-                        style={{ width: "100%" }}
-                        to={`/checkout/${token.UserID}`}
-                      >
-                        CHECKOUT
-                      </Link>
+                    <Button
+                      className="orderSummary__button"
+                      onClick={handleCheckout}
+                    >
+                      CHECKOUT
                     </Button>
                     <Divider>OR</Divider>
                     <Button style={{ backgroundColor: "#0070BA" }}>
@@ -268,7 +280,7 @@ function ShoppingCart() {
               </Col>
             )
           ) : (
-            <Col span={24}  sm={24}>
+            <Col span={24} sm={24}>
               <EmptyCart />
             </Col>
           )}

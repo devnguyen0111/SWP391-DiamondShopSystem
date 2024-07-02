@@ -16,7 +16,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [productTotalPrice, setProductTotalPrice] = useState(product.total);
   const [loading, setLoading] = useState(false);
-  console.log('product', product);
+  
   const openNotification = (placement) => {
     notification.error({
       message: `Remove Product Successfully`,

@@ -5,12 +5,18 @@ const StateContext = createContext();
 export const StateProvider = ({ children }) => {
   const [theme, setTheme] = useState(false);
   const [active, setActive] = useState(0);
+  const [checkout, setCheckout] = useState(() => {
+    const savedCheckout = localStorage.getItem("checkout");
+    return savedCheckout ? JSON.parse(savedCheckout) : null;
+  });
 
   const state = {
     theme,
     setTheme,
     active,
     setActive,
+    checkout,
+    setCheckout,
   };
 
   return (
