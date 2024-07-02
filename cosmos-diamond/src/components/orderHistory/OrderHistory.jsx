@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./OrderHistory.scss";
-import { HeartOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  LoadingOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import { Card, Col, ConfigProvider, Divider, Flex, Row, Segmented } from "antd";
 import { getToken } from "./../getToken";
@@ -8,9 +12,11 @@ import { apiHeader } from "../urlApiHeader";
 function OrderHistory() {
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
-  let token
+  const [orderStatus, setOrderStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  let token = getToken();
+  console.log(token);
   useEffect(() => {
-    token = getToken()
     fetch(`${apiHeader}/Customer/customer/${token.UserID}/profile`)
       .then((res) => res.json())
       .then((res) => {
@@ -18,13 +24,25 @@ function OrderHistory() {
       });
   }, []);
   useEffect(() => {
-    fetch(`${apiHeader}/Order/customer/${token.UserID}/history?status=Paid`)
+    setIsLoading(true);
+    fetch(
+      `${apiHeader}/Order/customer/${token.UserID}/history?status=${orderStatus}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setOrderList(data);
         console.log(data);
+        setIsLoading(false);
       });
-  }, []);
+  }, [orderStatus]);
+
+  const handleStatus = (value) => {
+    if (value === "All Orders") {
+      setOrderStatus("");
+    } else {
+      setOrderStatus(value);
+    }
+  };
   return (
     <>
       <Content>
@@ -89,98 +107,122 @@ function OrderHistory() {
                         "Processing",
                         "Canceled ",
                       ]}
-                      onChange={(value) => console.log(value)}
+                      onChange={(value) => handleStatus(value)}
                     />
                   </ConfigProvider>
                 </Flex>
               </Col>
-              {(orderList && orderList.$values && orderList.$values.length )&&
-                orderList.$values.map((order) => (
+              {!isLoading ? (
+                orderList &&
+                orderList.$values &&
+                orderList.$values.length > 0 ? (
+                  orderList.$values.map((order) => (
+                    <Col
+                      span={24}
+                      style={{ marginTop: "50px" }}
+                      className="order-history__order"
+                      key={order.orderId}
+                    >
+                      {/* order ID */}
+                      <Flex vertical className="order-history__info">
+                        <p className="">
+                          <span style={{ fontWeight: "500" }}>Order:</span> #
+                          {order.orderId}
+                        </p>
+                        <p className="">
+                          <span style={{ fontWeight: "500" }}>
+                            Order Payment:
+                          </span>{" "}
+                          {order.orderDate}
+                        </p>
+                      </Flex>
+                      {/* Order Products */}
+                      <Flex className="order-history__products" vertical>
+                        {/* Product */}
+                        {order.items.$values.map((item) => (
+                          <Row
+                            justify="space-between"
+                            align="center"
+                            className="order-history__product"
+                          >
+                            <Col
+                              className="order-history__img"
+                              style={{ width: "150px" }}
+                            >
+                              <img
+                                src="https://ion.bluenile.com/sets/Jewelry-bn/194359/RND/Images/LS_stage_0.jpg"
+                                alt=""
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            </Col>
+                            <Flex
+                              gap={40}
+                              vertical
+                              className="order-history__summary"
+                            >
+                              <div className="order-history__name">
+                                {item.name}
+                              </div>
+                              <Flex
+                                gap={30}
+                                className="order-history__attribute"
+                              >
+                                <p>Size: {item.sizeName}</p>
+                                <p>Metal Type: {item.metaltypeName}</p>
+                              </Flex>
+                            </Flex>
+                            <div className="order-history__price">
+                              <p>Price</p>
+                              <div>${item.total}</div>
+                            </div>
+                            <Flex
+                              align=""
+                              vertical
+                              className="order-history__status"
+                            >
+                              <p>Status</p>
+                              <div>{order.status}</div>
+                            </Flex>
+                            <Flex vertical className="order-history__expect">
+                              <p>Delivery Expected by</p>
+                              <div>18th December 2024</div>
+                            </Flex>
+                          </Row>
+                        ))}
+                      </Flex>
+                      {/* Order Total Price */}
+                      <Flex
+                        justify="flex-end"
+                        className="order-total"
+                        align="flex-end"
+                        style={{ padding: "25px 0" }}
+                      >
+                        <div>Total Price:</div> <p> ${order.totalAmount}</p>
+                      </Flex>
+                    </Col>
+                  ))
+                ) : (
                   <Col
                     span={24}
-                    style={{ marginTop: "50px" }}
-                    className="order-history__order"
-                    key={order.orderId}
+                    style={{ textAlign: "center", marginTop: "30px" }}
                   >
-                    {/* order ID */}
-                    <Flex vertical className="order-history__info">
-                      <p className="">
-                        <span style={{ fontWeight: "500" }}>Order:</span> #{order.orderId}
-                      </p>
-                      <p className="">
-                        <span style={{ fontWeight: "500" }}>
-                          Order Payment:
-                        </span>{" "}
-                        {order.orderDate}
-                      </p>
-                    </Flex>
-                    {/* Order Products */}
-                    <Flex className="order-history__products" vertical>
-                      {/* Product */}
-                      {order.items.$values.map((item)=>(
-                        <Row
-                        justify="space-between"
-                        align="center"
-                        className="order-history__product"
-                      >
-                        <Col
-                          className="order-history__img"
-                          style={{ width: "150px" }}
-                        >
-                          <img
-                            src="https://ion.bluenile.com/sets/Jewelry-bn/194359/RND/Images/LS_stage_0.jpg"
-                            alt=""
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "contain",
-                            }}
-                          />
-                        </Col>
-                        <Flex
-                          gap={40}
-                          vertical
-                          className="order-history__summary"
-                        >
-                          <div className="order-history__name">
-                            {item.name}
-                          </div>
-                          <Flex gap={30} className="order-history__attribute">
-                            <p>Size: {item.sizeName}</p>
-                            <p>Metal Type: {item.metaltypeName}</p>
-                          </Flex>
-                        </Flex>
-                        <div className="order-history__price">
-                          <p>Price</p>
-                          <div>${item.total}</div>
-                        </div>
-                        <Flex
-                          align=""
-                          vertical
-                          className="order-history__status"
-                        >
-                          <p>Status</p>
-                          <div>{order.status}</div>
-                        </Flex>
-                        <Flex vertical className="order-history__expect">
-                          <p>Delivery Expected by</p>
-                          <div>18th December 2024</div>
-                        </Flex>
-                      </Row>
-                      ))}
-                      
-                    </Flex>
-                    {/* Order Total Price */}
-                    <Flex
-                      justify="flex-end"
-                      className="order-total"
-                      align="flex-end"
-                      style={{ padding: "25px 0" }}
-                    >
-                      <div>Total Price:</div> <p> ${order.totalAmount}</p>
+                    <h4>No order Found !</h4>
+                    <Flex justify="center">
+                      <img
+                        style={{ width: "30%", height: "100%" }}
+                        src="https://phucminhjewelry.vn/wp-content/uploads/2023/05/preview.png"
+                        alt=""
+                      />
                     </Flex>
                   </Col>
-                ))}
+                )
+              ) : (
+                <Col span={24} style={{height: '200px'}}><Flex style={{height:'100%'}} justify="center" align="center"><LoadingOutlined style={{fontSize:'37px', color:'#151542'}}/></Flex></Col>
+              )}
             </Row>
           </Card>
         </div>

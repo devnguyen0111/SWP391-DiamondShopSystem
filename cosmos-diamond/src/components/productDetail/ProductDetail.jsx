@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
-import { Col, Row, notification } from "antd";
+import { Col, Flex, Row, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
@@ -66,7 +66,7 @@ function ProductDetail({ product }) {
           <Col span={24}>
             <div className="summary__img">
               <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
+                src={product.imgUrl}
                 alt=""
               />
             </div>
@@ -74,13 +74,13 @@ function ProductDetail({ product }) {
           <Col span={24}>
             <div className="summary__album">
               <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
+                src={product.imgUrl}
                 alt=""
               />
             </div>
           </Col>
           <Col span={24} className="summary__action">
-            <div className="summary__item">
+            <Flex justify="center" vertical className="summary__item">
               <div className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
@@ -88,7 +88,7 @@ function ProductDetail({ product }) {
                 />
               </div>
               <div className="summary__action-name">GIA Report</div>
-            </div>
+            </Flex>
           </Col>
           <Col className="summary__table">
             <table class="details-table">
@@ -109,34 +109,6 @@ function ProductDetail({ product }) {
                 <td>1.00</td>
               </tr>
               <tr>
-                <th>Fluorescence</th>
-                <td>Strong</td>
-              </tr>
-              <tr>
-                <th>Length/Width Ratio</th>
-                <td>1.56</td>
-              </tr>
-              <tr>
-                <th>Depth %</th>
-                <td>62.6</td>
-              </tr>
-              <tr>
-                <th>Table %</th>
-                <td>62.0</td>
-              </tr>
-              <tr>
-                <th>Symmetry</th>
-                <td>Excellent</td>
-              </tr>
-              <tr>
-                <th>Girdle</th>
-                <td>Thick to Very Thick</td>
-              </tr>
-              <tr>
-                <th>Measurements</th>
-                <td>8.59x5.5x3.44 mm</td>
-              </tr>
-              <tr>
                 <th>Certificate</th>
                 <td>GIA</td>
               </tr>
@@ -146,7 +118,6 @@ function ProductDetail({ product }) {
         <Col span={12} className="right">
           <Col span={24} className="right__name">
             {product && product.productName}
-            
           </Col>
 
           <Col span={24}>
@@ -179,7 +150,6 @@ function ProductDetail({ product }) {
               <div className="right__tag">VS1</div>
               <div className="right__tag">Very Good</div>
               <div className="right__tag">0.3</div>
-              <div className="right__tag"></div>
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">
