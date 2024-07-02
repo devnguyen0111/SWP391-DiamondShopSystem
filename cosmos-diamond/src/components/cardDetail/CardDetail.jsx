@@ -81,7 +81,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove }) {
               <Flex gap={5}>
                 <p
                   className="cart-action"
-                  onClick={() => navigate("/complete-product")}
+                  onClick={() => navigate(`/Product/${product.pid}`)}
                 >
                   View |
                 </p>

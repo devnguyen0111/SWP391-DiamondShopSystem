@@ -77,7 +77,7 @@ function AccountDetails() {
           setAddress(
             `${res.ad.street && res.ad.street + ", "}${
               res.ad.state && res.ad.state + ", "
-            }${res.ad.city && res.ad.city + ", "}${res.ad.country}`
+            }${res.ad.city && res.ad.city}`
           );
           setStreet(res.ad.street);
           setZipCode(res.ad.zipCode);

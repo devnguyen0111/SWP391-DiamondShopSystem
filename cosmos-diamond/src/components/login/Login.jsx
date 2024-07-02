@@ -13,6 +13,7 @@ import LoadingScreen from "../loadingScreen/LoadingScreen";
 import { auth, provider } from "../../config/firebase";
 import api from "../../config/axios";
 import { jwtDecode } from "jwt-decode";
+import { alertFail } from './../../hooks/useNotification';
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -57,7 +58,8 @@ const Login = () => {
     const onSubmit = async (value) => {
         try {
           setIsLoading(true)
-          const response = await api.post("/api/Authentication/login", value);
+          
+          const response = await api.post("/api/Authentication/login", {...value, isGoogleLogin: false});
           localStorage.setItem("token", response.data.token);
           const user = jwtDecode(response.data.token);
           const responseUser = await api.get(`/api/Customer/${user.UserID}`);
@@ -81,7 +83,7 @@ const Login = () => {
         } catch (e) {
           setIsLoading(false)
           console.log(e);
-          alertFail(e.response.data, "Please Try Again");
+        //   alertFail(e.response.data, "Please Try Again");
         }
       };
     
