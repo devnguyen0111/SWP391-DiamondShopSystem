@@ -1,0 +1,41 @@
+.mode1 {
+    width: 100%;
+    padding: 0 3em;
+  
+    &__createMod {
+      border-radius: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white !important;
+      color: black;
+      font-family: "Gantari";
+      padding: 22px;
+      border: 1.8px solid rgb(231, 231, 231);
+      margin: 0.5em 0;
+      gap: 0.5em;
+    }
+    &__info {
+      display: flex;
+      h3{
+        font-size: 1.2em;
+        font-family: "Gantari";
+        padding: 1em;
+      }
+    }
+    .ant-table-content {
+      .ant-table-thead {
+        .ant-table-cell {
+          background-color: rgb(46, 46, 46);
+          color: rgb(255, 255, 255);
+          font-family: "Gantari" !important;
+        }
+      }
+      .ant-table-tbody {
+        .ant-table-cell {
+          font-family: "Gantari" !important;
+        }
+      }
+    }
+  }
+  
