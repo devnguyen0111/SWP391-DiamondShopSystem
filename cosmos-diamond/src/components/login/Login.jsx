@@ -93,7 +93,7 @@ const Login = () => {
         } catch (e) {
           setIsLoading(false)
           console.log(e);
-        //   alertFail(e.response.data, "Please Try Again");
+          alertFail(e.response.data, "Please Try Again");
         }
       };
     
@@ -127,7 +127,7 @@ const Login = () => {
           )}
 
           <div className="remember-forgot">
-            <a href="#">Forgot Password?</a>
+            <Link to='/forgot-password'>Forgot Password?</Link>
           </div>
           <button type="submit">Sign In</button>
           <Divider orientation="center" style={{ borderColor: "grey" }}>

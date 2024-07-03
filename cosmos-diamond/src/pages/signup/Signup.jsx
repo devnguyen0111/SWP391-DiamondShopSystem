@@ -11,7 +11,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Divider } from "antd";
-import { alertSuccessSignUp } from "../../hooks/useNotification";
+import { alertFail, alertSuccessSignUp } from "../../hooks/useNotification";
+import { apiHeader } from "./../../components/urlApiHeader";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -38,10 +39,24 @@ const Signup = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-    sessionStorage.setItem("account", JSON.stringify(data));
-    nav("/pincode");
-    alertSuccessSignUp;
+    let email = data.email.replace("@", "%40");
+
+    fetch(`${apiHeader}/Authentication/checkMail?mail=${email}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status === 400) {
+          alertFail("Email address is already registered.", "Please try again");
+        } else {
+          sessionStorage.setItem("account", JSON.stringify(data));
+          nav("/pincode");
+          alertSuccessSignUp;
+        }
+      })
+      .catch((error) => {});
   };
 
   return (
