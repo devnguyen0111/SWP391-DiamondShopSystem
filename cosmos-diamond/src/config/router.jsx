@@ -59,6 +59,8 @@ import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
 import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
 import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
+import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
+import ResetPassword from "../pages/resetPassword/ResetPassword";
 
 
 
@@ -384,6 +386,14 @@ export const router = createBrowserRouter([
   {
     path: "/pincode",
     element: <PinCode />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordEmail />,
+  },
+  {
+    path: "/reset-password/:email",
+    element: <ResetPassword />,
   },
   {
     path: "*",
