@@ -1,62 +1,79 @@
 import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
-import { Col, Row, notification } from "antd";
+import { Col, Flex, Row, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import Modal from "../modal/Modal";
-import { disableScroll } from "../disableScroll";
 import { jwtDecode } from "jwt-decode";
 import { apiHeader } from "../urlApiHeader";
+import { useStateValue } from "../../Context/StateProvider";
+import { getToken, token } from "./../getToken";
+import api from "./../../config/axios";
+
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
   // const openModal = () => {
   //   setShow(true);
   //   disableScroll()
   // };
-  const nav = useNavigate()
+  const { checkout, setCheckout } = useStateValue();
+  const nav = useNavigate();
+  console.log(product);
   const addToCart = () => {
     const url = window.location.href;
-    const productId = url.slice(url.lastIndexOf("/")+1, url.length);
-    const token = jwtDecode(localStorage.getItem("token"))
+    const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
+    const token = jwtDecode(localStorage.getItem("token"));
     console.log(token);
     const customerId = token.UserID;
     if (customerId) {
-      fetch(
-        `${apiHeader}/Cart/addToCart`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            
-          },
-          body: JSON.stringify({
-            id: customerId,
-            pid: productId,
-          }),
-        }
-      ).then(openNotification('topRight'))
+      fetch(`${apiHeader}/Cart/addToCart`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          id: customerId,
+          pid: productId,
+        }),
+      }).then(openNotification("topRight"));
     }
   };
-  const [api, contextHolder] = notification.useNotification();
+  const [api2, contextHolder] = notification.useNotification();
   const openNotification = (placement) => {
-    api.success({
+    api2.success({
       message: `Add to cart sucessfully`,
-      description:
-        <Link to={'/shopping-cart'}>View Cart</Link>,
+      description: <Link to={"/shopping-cart"}>View Cart</Link>,
       placement,
       pauseOnHover: true,
       stack: true,
-      duration: 2
+      duration: 2,
     });
   };
+  const buyNow = async () => {
+    const token = getToken();
 
+    let response = await api.post(
+      `${apiHeader}/Order/checkoutInfo`,
+      {
+        userId: token.UserID,
+        products: [
+          {
+            productId: product.productId,
+            quantity: 1,
+          },
+        ],
+      }
+    );
+    setCheckout(response.data);
+    localStorage.setItem("checkout", JSON.stringify(response.data));
+    nav(`/checkout/${token.UserID}`);
+  };
   return (
     <div className="detail">
       {contextHolder}
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <div onClick={()=> nav(-1)} className="summary__navigator">
+            <div onClick={() => nav(-1)} className="summary__navigator">
               <i class="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
@@ -65,22 +82,21 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24}>
             <div className="summary__img">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <img src={product.imgUrl} alt="" />
             </div>
           </Col>
           <Col span={24}>
             <div className="summary__album">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <img src={product.imgUrl} alt="" />
             </div>
           </Col>
           <Col span={24} className="summary__action">
-            <div className="summary__item">
+            <Flex
+              justify="center"
+              vertical
+              align="center"
+              className="summary__item"
+            >
               <div className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
@@ -88,53 +104,29 @@ function ProductDetail({ product }) {
                 />
               </div>
               <div className="summary__action-name">GIA Report</div>
-            </div>
+            </Flex>
           </Col>
           <Col className="summary__table">
             <table class="details-table">
               <tr>
                 <th>Shape</th>
-                <td>Pear</td>
+                <td>{product.shape}</td>
               </tr>
               <tr>
                 <th>Color</th>
-                <td>G</td>
+                <td>{product.color}</td>
               </tr>
               <tr>
                 <th>Clarity</th>
-                <td>VS1</td>
+                <td>{product.clarity}</td>
               </tr>
               <tr>
                 <th>Carat Weight</th>
-                <td>1.00</td>
+                <td>{product.carat}</td>
               </tr>
               <tr>
-                <th>Fluorescence</th>
-                <td>Strong</td>
-              </tr>
-              <tr>
-                <th>Length/Width Ratio</th>
-                <td>1.56</td>
-              </tr>
-              <tr>
-                <th>Depth %</th>
-                <td>62.6</td>
-              </tr>
-              <tr>
-                <th>Table %</th>
-                <td>62.0</td>
-              </tr>
-              <tr>
-                <th>Symmetry</th>
-                <td>Excellent</td>
-              </tr>
-              <tr>
-                <th>Girdle</th>
-                <td>Thick to Very Thick</td>
-              </tr>
-              <tr>
-                <th>Measurements</th>
-                <td>8.59x5.5x3.44 mm</td>
+                <th>Cut</th>
+                <td>{product.cut}</td>
               </tr>
               <tr>
                 <th>Certificate</th>
@@ -146,7 +138,6 @@ function ProductDetail({ product }) {
         <Col span={12} className="right">
           <Col span={24} className="right__name">
             {product && product.productName}
-            
           </Col>
 
           <Col span={24}>
@@ -176,10 +167,10 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24} className="right__tag-container">
             <div className="right__tag-wrapper">
-              <div className="right__tag">VS1</div>
-              <div className="right__tag">Very Good</div>
-              <div className="right__tag">0.3</div>
-              <div className="right__tag"></div>
+              <div className="right__tag">{product.carat}</div>
+              <div className="right__tag">{product.cut}</div>
+              <div className="right__tag">{product.color}</div>
+              <div className="right__tag">{product.clarity}</div>
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">
@@ -199,15 +190,8 @@ function ProductDetail({ product }) {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">
-              {/* Select This Diamond */}
-              <Link
-                style={{ display: "block", width: "100%", color: "#fff" }}
-                to={"/checkout"}
-              >
-                {" "}
-                Buy now
-              </Link>
+            <button className="right__button" onClick={() => buyNow()}>
+              Buy now
             </button>
             <button onClick={() => addToCart()} className="right__button">
               Add to Cart

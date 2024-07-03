@@ -17,7 +17,8 @@ import LoadingScreen from "../loadingScreen/LoadingScreen";
 import { auth, provider } from "../../config/firebase";
 import api from "../../config/axios";
 import { jwtDecode } from "jwt-decode";
-import { alertFail } from "../../hooks/useNotification";
+
+import { alertFail } from './../../hooks/useNotification';
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -63,55 +64,49 @@ const Login = () => {
     }
   };
 
-  const onSubmit = async (value) => {
-    try {
-      setIsLoading(true);
-      const response = await api.post("/api/Authentication/login", {
-        email: value.email,
-        password: value.password,
-        isGoogleLogin: false,
-      });
-      localStorage.setItem("token", response.data.token);
-      const user = jwtDecode(response.data.token);
-      const responseUser = await api.get(`/api/Customer/${user.UserID}`);
 
-      console.log("Login: ", responseUser);
-      setIsLoading(false);
-      //redux
-      dispatch(login(user));
-      if (user.Role === "customer") {
-        navigate("/");
-      }
-      if (user.Role === "admin") {
-        navigate("/dashboard/admin");
-      }
-      if (user.Role === "salestaff") {
-        navigate("/dashboard/salestaff");
-      }
-      if (user.Role === "manager") {
-        navigate("/dashboard/manager");
-      }
-    } catch (e) {
-      setIsLoading(false);
-      console.log(e);
-      alertFail(e.response.data, "Please Try Again");
-    }
-  };
+    const onSubmit = async (value) => {
+        try {
+          setIsLoading(true)
+          
+          const response = await api.post("/api/Authentication/login", {...value, isGoogleLogin: false});
+          localStorage.setItem("token", response.data.token);
+          const user = jwtDecode(response.data.token);
+          const responseUser = await api.get(`/api/Customer/${user.UserID}`);
 
-  return (
-    <div className="login-container">
-      <div className="login-form">
-        <h2>Sign in to Cosmos Diamonds</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>Email Address *</label>
-          <input
-            type="text"
-            placeholder="Email Address"
-            {...register("email")}
-          />
-          {errors.email && (
-            <p className="error-message">{errors.email.message}</p>
-          )}
+          console.log("Login: ", responseUser);
+          setIsLoading(false)
+          //redux
+          dispatch(login(user));
+          if (user.Role === "customer") {
+            navigate("/");
+          }
+          if (user.Role === "admin") {
+            navigate("/dashboard/admin");
+          }
+          if (user.Role === "salestaff") {
+            navigate("/dashboard/salestaff");
+          }
+          if (user.Role === "manager") {
+            navigate("/dashboard/manager");
+          }
+        } catch (e) {
+          setIsLoading(false)
+          console.log(e);
+        //   alertFail(e.response.data, "Please Try Again");
+        }
+      };
+    
+    return (
+        <div className="login-container">
+            <div className="login-form">
+                <h2>Sign in to Cosmos Diamonds</h2>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <label>Email Address *</label>
+                    <input type="text" placeholder="Email Address" {...register("email")} />
+                    {errors.email && <p className="error-message">{errors.email.message}</p>}
+
+
 
           <div className="password-container">
             <label>Password *</label>
