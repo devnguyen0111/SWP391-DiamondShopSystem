@@ -29,6 +29,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiHeader } from "../../components/urlApiHeader";
 import TabPane from "antd/es/tabs/TabPane";
 import api from "../../config/axios";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { IoCopyOutline } from "react-icons/io5";
+
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -197,7 +200,14 @@ function AccountDetails() {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      render: (text) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography style={{ marginRight: 8}}>{text}</Typography>
+          <CopyToClipboard text={text}>
+            <Button type="text" icon><IoCopyOutline/></Button>
+          </CopyToClipboard>
+        </div>
+      ),
     },
     {
       title: "Description",

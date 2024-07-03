@@ -400,7 +400,7 @@ export const router = createBrowserRouter([
       //manager
       {
         path: "/dashboard/manager",
-        element: <OrdersManager />,
+        element: <ProductsManager />,
       },
       {
         path: "/dashboard/manager/orders",

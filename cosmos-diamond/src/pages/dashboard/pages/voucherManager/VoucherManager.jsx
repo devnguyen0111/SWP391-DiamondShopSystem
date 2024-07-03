@@ -26,54 +26,7 @@ function VoucherManager() {
   const [showAlert, setShowAlert] = useState(false);
   const [status, setStatus] = useState(false);
 
-  const onChange1 = (selectedValue) => {
-    console.log(selectedValue);
-    if (selectedValue == null) {
-      setShowAlert(true);
-    } else {
-      console.log(`Selected value: ${selectedValue}`);
-      setSelectedValue(selectedValue);
-      setShowAlert(false);
-      setModal1Open(false);
-    }
-  };
-
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
-
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
-  const navigate = useNavigate();
-
-  const [modal1Open, setModal1Open] = useState(false);
-  const [modal2Open, setModal2Open] = useState(false);
-  const [categoryEnum, setCategoryEnum] = useState("");
-
-  const saleStaff = [
-    {
-      value: "1",
-      label: "Jack",
-    },
-    {
-      value: "2",
-      label: "Lucy",
-    },
-    {
-      value: "3",
-      label: "Tom",
-    },
-    {
-      value: "4",
-      label: "Henry",
-    },
-    {
-      value: "5",
-      label: "Tommy",
-    },
-  ];
-
+ 
   const columns = [
     {
       title: "Voucher ID",
