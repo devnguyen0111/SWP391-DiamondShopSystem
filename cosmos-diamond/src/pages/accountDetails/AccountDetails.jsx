@@ -33,6 +33,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { IoCopyOutline } from "react-icons/io5";
 
 
+
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
@@ -70,6 +71,10 @@ function AccountDetails() {
     localStorage.removeItem("customer");
     nav("/");
   };
+  //fetch voucher functions
+  const fetchVoucher = async ()=>{
+    const response = await api.get(`${apiHeader}/get`)
+  }
   if (id) {
     useEffect(() => {
       fetch(`${apiHeader}/Customer/customer/${id}/profile`)
@@ -85,6 +90,7 @@ function AccountDetails() {
           setStreet(res.ad.street);
           setZipCode(res.ad.zipCode);
         });
+
     }, []);
   }
   const handleEditStatus = () => {
