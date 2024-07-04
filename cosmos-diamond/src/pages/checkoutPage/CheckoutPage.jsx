@@ -14,13 +14,13 @@ import {
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
-import { jwtDecode } from "jwt-decode";
-import img from "../../assets/logo.png";
+
 import { getToken } from "./../../components/getToken";
 import { apiHeader } from "../../components/urlApiHeader";
 import { useStateValue } from "../../Context/StateProvider";
-import axios from "axios";
+
 import api from "../../config/axios";
+import Search from "antd/es/transfer/search";
 
 const { Option } = Select;
 
@@ -97,9 +97,7 @@ function CheckoutPage() {
       products: productDetails,
     });
 
-    
-    createPayment(response.data)
-  
+    createPayment(response.data);
   };
 
   const handleCity = (value) => {
@@ -486,6 +484,62 @@ function CheckoutPage() {
                           (s) => s.id == selectedMethod
                         ).cost}
                     </div>
+                  </li>
+                  <li>
+                    <Collapse
+                      size="small"
+                      expandIconPosition="end"
+                      ghost={true}
+                      items={[
+                        {
+                          key: "1",
+                          label: "Voucher",
+                          children: (
+                            <Select
+                              showSearch
+                              style={{
+                                width: 200,
+                              }}
+                              placeholder="Search to Select"
+                              optionFilterProp="label"
+                              filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? "")
+                                  .toLowerCase()
+                                  .localeCompare(
+                                    (optionB?.label ?? "").toLowerCase()
+                                  )
+                              }
+                              options={[
+                                {
+                                  value: "1",
+                                  label: "Not Identified",
+                                },
+                                {
+                                  value: "2",
+                                  label: "Closed",
+                                },
+                                {
+                                  value: "3",
+                                  label: "Communicated",
+                                },
+                                {
+                                  value: "4",
+                                  label: "Identified",
+                                },
+                                {
+                                  value: "5",
+                                  label: "Resolved",
+                                },
+                                {
+                                  value: "6",
+                                  label: "Cancelled",
+                                },
+                              ]}
+                            />
+                          ),
+                        },
+                      ]}
+                    />
                   </li>
                 </ul>
               </Col>
