@@ -71,10 +71,7 @@ function AccountDetails() {
     localStorage.removeItem("customer");
     nav("/");
   };
-  //fetch voucher functions
-  const fetchVoucher = async ()=>{
-    const response = await api.get(`${apiHeader}/get`)
-  }
+
   if (id) {
     useEffect(() => {
       fetch(`${apiHeader}/Customer/customer/${id}/profile`)
