@@ -21,6 +21,7 @@ import { useStateValue } from "../../Context/StateProvider";
 
 import api from "../../config/axios";
 import Search from "antd/es/transfer/search";
+import { set } from "lodash";
 
 const { Option } = Select;
 
@@ -32,12 +33,13 @@ function CheckoutPage() {
   const [emailConfirm, setEmailConfirm] = useState(false);
   const [error, setError] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(0);
-
+  const [selectedVoucher, setSelectedVoucher] = useState(null)
   const cityRef = useRef();
   const stateRef = useRef();
   const token = getToken();
   const [form] = Form.useForm();
-
+  const [vouchers, setVouchers] = useState([]);
+  const [amountVoucher, setAmountVoucher] = useState(0)
   const toggleConfirmEmail = () => {
     let email = checkout.userInfo.email;
     if (!email) {
@@ -87,7 +89,7 @@ function CheckoutPage() {
     const productDetails = checkout.products.$values.map(
       ({ productId, quantity }) => ({ productId, quantity })
     );
-    const response = await api.post(`https://localhost:7262/api/Order/create`, {
+    const response = await api.post(`${apiHeader}/Order/create`, {
       userId: checkout.userInfo.userId,
       shippingMethodId: arr.shipping,
       deliveryAddress: `${arr.street + ", "}${
@@ -95,6 +97,7 @@ function CheckoutPage() {
       }${checkout.shippingAddress1.city}`,
       contactNumber: arr.phone,
       products: productDetails,
+      voucherName: selectedVoucher
     });
 
     createPayment(response.data);
@@ -127,7 +130,7 @@ function CheckoutPage() {
   };
   const handleShipping = (e) => {
     setSelectedMethod(e.target.value);
-    console.log(e.target.value);
+    
   };
   const handleTotal = () => {
     let price =
@@ -135,12 +138,56 @@ function CheckoutPage() {
       checkout.shippingMethods.$values.find((s) => s.id == selectedMethod).cost;
     setCheckout((pre) => ({
       ...pre,
-      finalTotal: pre.total + price,
+      finalTotal: pre.total + price - +amountVoucher,
     }));
   };
   useEffect(() => {
     handleTotal();
-  }, [selectedMethod]);
+  }, [selectedMethod, selectedVoucher, amountVoucher]);
+
+  const getVoucher = async () => {
+    try {
+      const response = await api.get("/get");
+     
+      const data = response.data.$values;
+     
+
+      if (!Array.isArray(data)) {
+        throw new Error("Dữ liệu nhận được không phải là mảng");
+      }
+
+      setVouchers(data);
+    } catch (e) {
+      console.error(e);
+      alert(e.response?.data || e.message);
+    }
+  };
+
+  useEffect(() => {
+    getVoucher();
+  }, []);
+
+  const selectVoucher = (value) => {
+    setSelectedVoucher(value)
+    let products = checkout.products.$values.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    }));
+   
+    fetch(`${apiHeader}/Order/applyVoucher`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        products: products,
+        voucherName: value,
+      }),
+    }).then(res => res.text())
+    .then(data => {
+      setAmountVoucher(data)
+    });
+  };
   return (
     <div className="checkout">
       <Row className="checkout__wrapper">
@@ -497,11 +544,17 @@ function CheckoutPage() {
                           children: (
                             <Select
                               showSearch
+                              onSelect={selectVoucher}
                               style={{
                                 width: 200,
                               }}
                               placeholder="Search to Select"
                               optionFilterProp="label"
+                              filterOption={(input, option) =>
+                                (option?.label ?? "")
+                                  .toLowerCase()
+                                  .includes(input.toLowerCase())
+                              }
                               filterSort={(optionA, optionB) =>
                                 (optionA?.label ?? "")
                                   .toLowerCase()
@@ -509,37 +562,16 @@ function CheckoutPage() {
                                     (optionB?.label ?? "").toLowerCase()
                                   )
                               }
-                              options={[
-                                {
-                                  value: "1",
-                                  label: "Not Identified",
-                                },
-                                {
-                                  value: "2",
-                                  label: "Closed",
-                                },
-                                {
-                                  value: "3",
-                                  label: "Communicated",
-                                },
-                                {
-                                  value: "4",
-                                  label: "Identified",
-                                },
-                                {
-                                  value: "5",
-                                  label: "Resolved",
-                                },
-                                {
-                                  value: "6",
-                                  label: "Cancelled",
-                                },
-                              ]}
+                              options={vouchers.map((v) => ({
+                                value: v.name, 
+                                label: v.name,
+                              }))}
                             />
                           ),
                         },
                       ]}
                     />
+                    <div style={{paddingTop:'18px'}}>-{Math.round(amountVoucher * 100) / 100}</div>
                   </li>
                 </ul>
               </Col>
