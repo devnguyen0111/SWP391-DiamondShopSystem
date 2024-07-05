@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./CompleteProduct.scss";
 
 import { Col, Flex, Popover, Row, notification } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Stepper from "../stepper/Stepper";
 import { apiHeader } from "../urlApiHeader";
 import { jwtDecode } from "jwt-decode";
-import { token } from "../getToken";
+import { getToken, token } from "../getToken";
+import api from "../../config/axios";
+import { useStateValue } from "../../Context/StateProvider";
 
 function CompleteProduct() {
   const [cover, setCover] = useState();
   const [diamond, setDiamond] = useState();
-  const [api, contextHolder] = notification.useNotification();
-
+  const [api1, contextHolder] = notification.useNotification();
+  const nav = useNavigate()
+  const {setCheckout} = useStateValue()
   useEffect(() => {
     const coverSession = JSON.parse(sessionStorage.getItem("cover"));
     const diamondSession = JSON.parse(sessionStorage.getItem("diamond"));
@@ -21,7 +24,7 @@ function CompleteProduct() {
   }, []);
   const openNotification = (placement, type) => {
     if (type === "success") {
-      api.success({
+      api1.success({
         message: `Add to cart sucessfully`,
         description: <Link to={"/shopping-cart"}>View Cart</Link>,
         placement,
@@ -30,7 +33,7 @@ function CompleteProduct() {
         duration: 2,
       });
     } else if (type === "error") {
-      api.error({
+      api1.error({
         message: `Add to cart fail !`,
         description: "Some thing went wrong.",
         placement,
@@ -39,9 +42,9 @@ function CompleteProduct() {
         duration: 2,
       });
     } else if (type === "warning") {
-      api.warning({
+      api1.warning({
         message: `Add to cart fail !`,
-        description: <Link to={'/login'}>Please Login to Add To Cart.</Link>,
+        description: <Link to={"/login"}>Please Login to Add To Cart.</Link>,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -94,10 +97,26 @@ function CompleteProduct() {
           openNotification("topRight", "error");
         });
     } else {
-      openNotification("topRight", 'warning');
+      openNotification("topRight", "warning");
     }
   };
-  
+  const buyNow = async () => {
+    const token = getToken();
+    const productId = await createProduct()
+    console.log(productId);
+    let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
+      userId: token.UserID,
+      products: [
+        {
+          productId: productId,
+          quantity: 1,
+        },
+      ],
+    });
+    setCheckout(response.data);
+    localStorage.setItem("checkout", JSON.stringify(response.data));
+    nav(`/checkout/${token.UserID}`);
+  };
   return (
     <div className="detail" style={{ marginTop: "60px" }}>
       {contextHolder}
@@ -185,7 +204,6 @@ function CompleteProduct() {
                     <p className="right__detail-product__ring__name">
                       {cover && cover.name}
                     </p>
-                    
                   </div>
                 </Flex>
                 <p className="right__detail-product__ring__price">
@@ -197,7 +215,7 @@ function CompleteProduct() {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
-                  marginTop:'5px'
+                  marginTop: "5px",
                 }}
                 className="right__detail-product__diamond"
               >
@@ -250,7 +268,7 @@ function CompleteProduct() {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">Buy now</button>
+            <button className="right__button" onClick={buyNow}>Buy now</button>
             <button className="right__button" onClick={handleAddToCart}>
               Add to cart
             </button>
