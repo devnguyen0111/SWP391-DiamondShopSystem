@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { apiHeader } from "../urlApiHeader";
+import { alertFail } from "../../hooks/useNotification";
 
 function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckList }) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
@@ -36,6 +37,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
         method: "POST",
         headers: {
           "Content-type": "application/json",
+          Authoriaztion : `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           id: userID,
@@ -44,9 +46,13 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
       });
       setRemove((prev) => !prev);
       openNotification("topRight");
-    } finally {
+    }catch{
+      alertFail('Something went wrong. Please try again')
+    }
+     finally {
       setLoading(false);
     }
+    
   };
 
   const navigate = useNavigate();

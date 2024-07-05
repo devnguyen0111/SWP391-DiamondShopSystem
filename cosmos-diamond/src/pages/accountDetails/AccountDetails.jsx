@@ -31,6 +31,8 @@ import TabPane from "antd/es/tabs/TabPane";
 import api from "../../config/axios";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { IoCopyOutline } from "react-icons/io5";
+import { getToken } from "../../components/getToken";
+import { alertFail } from "../../hooks/useNotification";
 
 
 
@@ -49,7 +51,7 @@ function AccountDetails() {
   const [city, setCity] = useState();
   const [state, setState] = useState();
   const nav = useNavigate();
-  const { id } = useParams();
+  
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
   const cityRef = useRef();
@@ -58,6 +60,7 @@ function AccountDetails() {
   const [updatedState, setUpdatedState] = useState();
   const [vouchers, setVouchers] = useState([]);
   const dispatch = useDispatch();
+
   const showModal = () => {
     setOpen(true);
   };
@@ -65,30 +68,37 @@ function AccountDetails() {
   const hideModal = () => {
     setOpen(false);
   };
-  console.log(id);
   const logOut = () => {
     setCustomer(null);
     localStorage.removeItem("customer");
     nav("/");
   };
-
-  if (id) {
+  console.log(user);
+  
+  
+  if (user) {
     useEffect(() => {
-      fetch(`${apiHeader}/Customer/customer/${id}/profile`)
+      fetch(`${apiHeader}/Customer/customer/${user.UserID}/profile`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           setCustomer(res.customerinfo);
           setAddress(
             `${res.ad.street && res.ad.street + ", "}${
               res.ad.state && res.ad.state + ", "
             }${res.ad.city && res.ad.city}`
           );
+          console.log(res);
           setStreet(res.ad.street);
-          setZipCode(res.ad.zipCode);
-        });
+          setZipCode(res.ad.zipcode);
+        }).catch(e =>{
+         alertFail('Fail to fetch user profile')
+        })
 
-    }, []);
+    }, [edit]);
   }
   const handleEditStatus = () => {
     setEdit(!edit);
@@ -171,7 +181,7 @@ function AccountDetails() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        customerId: id,
+        customerId: user.UserID,
         street: street,
         city: updatedCity,
         state: updatedState,
@@ -181,14 +191,16 @@ function AccountDetails() {
         phonenumber: customer.cusPhoneNum,
       }),
     })
-      .then((err) => err.message)
-      .then(hideModal);
+      .then(()=>{
+        hideModal()
+        handleEditStatus()
+      });
   };
   const handleStateUpdate = (e) => {
     setUpdatedState(e.target.value);
   };
   const handleZipcode = (e) => {
-    console.log(user);
+    
     setZipCode(e.target.value);
   };
 
@@ -223,7 +235,6 @@ function AccountDetails() {
       key: "expDate",
       render: (text) => <a>{text}</a>,
     },
-
     {
       title: "Rate",
       dataIndex: "rate",
@@ -234,9 +245,9 @@ function AccountDetails() {
   const getVoucher = async () => {
     try {
       const response = await api.get("/get");
-      console.log(response.values);
+      
       const data = response.data.$values;
-      console.log("Voucher: ", data);
+      
 
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");

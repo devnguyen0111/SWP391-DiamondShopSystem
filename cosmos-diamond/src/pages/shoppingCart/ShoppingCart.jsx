@@ -20,7 +20,7 @@ import EmptyCart from "../../components/emptyCart/EmptyCart";
 import { apiHeader } from "../../components/urlApiHeader";
 import { useStateValue } from "../../Context/StateProvider";
 import api from "../../config/axios";
-import { alertFail } from './../../hooks/useNotification';
+import { alertFail } from "./../../hooks/useNotification";
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
@@ -34,13 +34,20 @@ function ShoppingCart() {
   const nav = useNavigate();
   const fetchCart = async () => {
     try {
-      const response = await fetch(`${apiHeader}/Cart/${token.UserID}`);
-      const data = await response.json();
-      setCart(data);
-      setCartTotalPrice(data.totalPrice);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
+      if (token) {
+        const response = await fetch(`${apiHeader}/Cart/${token.UserID}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setCart(data);
+        setCartTotalPrice(data.totalPrice);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      }
     } catch (error) {
       console.error("Failed to fetch cart", error);
     }
@@ -58,18 +65,15 @@ function ShoppingCart() {
         productId: p.pid,
         quantity: p.quantity,
       }));
-      let response = await api.post(
-        `${apiHeader}/Order/checkoutInfo`,
-        {
-          userId: token.UserID,
-          products: products,
-        }
-      );
+      let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
+        userId: token.UserID,
+        products: products,
+      });
       setCheckout(response.data);
       localStorage.setItem("checkout", JSON.stringify(response.data));
       nav(`/checkout/${token.UserID}`);
-    } else{
-      alertFail("You have not checked any jewelry")
+    } else {
+      alertFail("You have not checked any jewelry");
     }
   };
 

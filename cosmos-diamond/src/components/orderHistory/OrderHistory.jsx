@@ -9,31 +9,59 @@ import { Content } from "antd/es/layout/layout";
 import { Card, Col, ConfigProvider, Divider, Flex, Row, Segmented } from "antd";
 import { getToken } from "./../getToken";
 import { apiHeader } from "../urlApiHeader";
+import { alertFail } from "../../hooks/useNotification";
+import { useNavigate } from "react-router-dom";
 function OrderHistory() {
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
   const [orderStatus, setOrderStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   let token = getToken();
-  console.log(token);
+  
+  const nav = useNavigate();
+
   useEffect(() => {
-    fetch(`${apiHeader}/Customer/customer/${token.UserID}/profile`)
-      .then((res) => res.json())
-      .then((res) => {
-        setCustomer(res.customerinfo);
-      });
+    if (token) {
+      fetch(`${apiHeader}/Customer/customer/${token.UserID}/profile`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setCustomer(res.customerinfo);
+        })
+        .catch((e) => {
+          alertFail(e.response.data);
+          nav("/login");
+        });
+    } else {
+      alertFail("You need to Login");
+      nav("/login");
+    }
   }, []);
   useEffect(() => {
-    setIsLoading(true);
-    fetch(
-      `${apiHeader}/Order/customer/${token.UserID}/history?status=${orderStatus}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setOrderList(data);
-        console.log(data);
-        setIsLoading(false);
-      });
+    if (token) {
+      setIsLoading(true);
+      fetch(
+        `${apiHeader}/Order/customer/${token.UserID}/history?status=${orderStatus}`,
+        {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setOrderList(data);
+          setIsLoading(false);
+        });
+    } else {
+      alertFail('You need to login first')
+      nav('/login')
+    }
   }, [orderStatus]);
 
   const handleStatus = (value) => {
@@ -221,7 +249,17 @@ function OrderHistory() {
                   </Col>
                 )
               ) : (
-                <Col span={24} style={{height: '200px'}}><Flex style={{height:'100%'}} justify="center" align="center"><LoadingOutlined style={{fontSize:'37px', color:'#151542'}}/></Flex></Col>
+                <Col span={24} style={{ height: "200px" }}>
+                  <Flex
+                    style={{ height: "100%" }}
+                    justify="center"
+                    align="center"
+                  >
+                    <LoadingOutlined
+                      style={{ fontSize: "37px", color: "#151542" }}
+                    />
+                  </Flex>
+                </Col>
               )}
             </Row>
           </Card>

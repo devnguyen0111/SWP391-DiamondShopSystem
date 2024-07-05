@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Banner from "../../components/banner/Banner";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./DiamondsIntro.scss";
 import ExploreDiamond from "../../components/exploreDiamondBanner/ExploreDiamond";
+
+
 
 function DiamondsIntro() {
   return (
@@ -106,18 +108,17 @@ function DiamondsIntro() {
         <h2 className="shopLabGrown__title">Made for Your Moment</h2>
         <h5 className="shopLabGrown__description">
           Every occasion deserves its tribute. Our lab grown diamonds are a
-          high-quality, <br/> affordable way to mark your moment.
+          high-quality, <br /> affordable way to mark your moment.
         </h5>
         <ConfigProvider
           theme={{
             components: {
               Button: {
-                defaultBg:"#100e31",
-                defaultColor:"white",
+                defaultBg: "#100e31",
+                defaultColor: "white",
                 defaultHoverBg: "white",
                 defaultHoverBorderColor: "white",
                 defaultHoverColor: "#100e31",
-                
               },
             },
           }}
