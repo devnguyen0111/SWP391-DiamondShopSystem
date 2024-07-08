@@ -28,8 +28,8 @@ function ProductDetailPage() {
   return (
     <div>
       {product && <ProductDetail product={product}/>}
-      <CommitExperience/>
-      <Review/>
+      <CommitExperience />
+      {product && <Review product={product}/>}
     </div>
     
   );
