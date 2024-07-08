@@ -5,6 +5,7 @@ import ProductDetail from "../../components/productDetail/ProductDetail";
 import CommitExperience from "../../components/commitExperience/CommitExperience";
 import { apiHeader } from "../../components/urlApiHeader";
 import DiamondDetailComponent from "../../components/diamondDetailComponent/DiamondDetailComponet";
+import Review from "../../components/review/Review";
 function ProductDetailPage() {
   const [product, setProduct] = useState(null)
   const url = window.location.href
@@ -28,6 +29,7 @@ function ProductDetailPage() {
     <div>
       {product && <ProductDetail product={product}/>}
       <CommitExperience/>
+      <Review/>
     </div>
     
   );
