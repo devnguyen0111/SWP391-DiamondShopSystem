@@ -33,6 +33,9 @@ const Header = () => {
           <Link to={`/orders-history`} style={{ display: "block" }}>
             <TruckOutlined /> Order History
           </Link>
+          <Link to={`/wishlist`} style={{ display: "block" }}>
+            <HeartOutlined /> Wishlist
+          </Link>
         </>
       )}
     </div>
