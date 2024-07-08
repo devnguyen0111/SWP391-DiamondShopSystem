@@ -5,37 +5,38 @@ import {
   TeamOutlined,
   UserOutlined,
   ShoppingCartOutlined,
+  DashboardTwoTone,
 } from "@ant-design/icons";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { TbCategory2 } from "react-icons/tb";
 import { PiTicketLight } from "react-icons/pi";
 import { LuBox } from "react-icons/lu";
 
-
-
-
 export const navDashboardConfig = [
-
   {
     key: "1",
     icon: <ShoppingCartOutlined />,
     label: "Orders",
-   
   },
   {
     key: "2",
-    icon: <PiTicketLight  style={{fontSize:'1.4em'}} />,
+    icon: <PiTicketLight style={{ fontSize: "1.4em" }} />,
     label: "Voucher",
   },
   {
     key: "3",
-    icon: <LuBox style={{fontSize:'1.4em'}} />,
+    icon: <LuBox style={{ fontSize: "1.4em" }} />,
     label: "Products",
   },
 ];
 
-
 export const navDashboardConfigAdmin = [
+  {
+    key: "10",
+    icon: <DashboardTwoTone />,
+    label: "Dashboard",
+  },
+
   {
     key: "4",
     icon: <TeamOutlined />,
@@ -51,7 +52,6 @@ export const navDashboardConfigAdmin = [
     icon: <FileExclamationOutlined />,
     label: "Transaction",
   },
- 
 ];
 
 export const navDashboardConfigStaff = [
@@ -62,7 +62,7 @@ export const navDashboardConfigStaff = [
   },
   {
     key: "8",
-    icon:  <SolutionOutlined />,
+    icon: <SolutionOutlined />,
     label: "Inbox",
     children: [
       {
@@ -77,7 +77,7 @@ export const navDashboardConfigStaff = [
         key: "83",
         label: "Send a request",
       },
-    ]
+    ],
   },
 ];
 
@@ -86,11 +86,10 @@ export const navDashboardConfigDelivery = [
     key: "9",
     icon: <TeamOutlined />,
     label: "Delivery",
-  }
+  },
 ];
 
 export const navpath = {
-  
   1: {
     path: "/dashboard/manager/orders",
   },
@@ -123,6 +122,9 @@ export const navpath = {
   },
   9: {
     path: "/dashboard/deliverystaff/delivery",
+  },
+  10: {
+    path: "/dashboard/admin",
   },
 };
 
