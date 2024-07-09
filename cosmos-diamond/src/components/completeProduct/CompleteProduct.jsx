@@ -5,24 +5,25 @@ import { Col, Flex, Popover, Row, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import Stepper from "../stepper/Stepper";
 import { apiHeader } from "../urlApiHeader";
-import { jwtDecode } from "jwt-decode";
-import { getToken, token } from "../getToken";
+
 import api from "../../config/axios";
 import { useStateValue } from "../../Context/StateProvider";
+import { getToken } from "../getToken";
+import { alertFail } from "../../hooks/useNotification";
 
 function CompleteProduct() {
   const [cover, setCover] = useState();
   const [diamond, setDiamond] = useState();
   const [api1, contextHolder] = notification.useNotification();
-  const nav = useNavigate()
-  const {setCheckout} = useStateValue()
+  const nav = useNavigate();
+  const { setCheckout } = useStateValue();
   useEffect(() => {
     const coverSession = JSON.parse(sessionStorage.getItem("cover"));
     const diamondSession = JSON.parse(sessionStorage.getItem("diamond"));
     setCover(coverSession);
     setDiamond(diamondSession);
   }, []);
-  const openNotification = (placement, type) => {
+  const openNotification = (placement, type, text) => {
     if (type === "success") {
       api1.success({
         message: `Add to cart sucessfully`,
@@ -43,8 +44,8 @@ function CompleteProduct() {
       });
     } else if (type === "warning") {
       api1.warning({
-        message: `Add to cart fail !`,
-        description: <Link to={"/login"}>Please Login to Add To Cart.</Link>,
+        message: text,
+        description: <Link to={"/login"}>Login</Link>,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -71,18 +72,16 @@ function CompleteProduct() {
   };
 
   const handleAddToCart = async () => {
+    let token = getToken();
     if (token) {
       const productId = await createProduct();
-      const token = localStorage.getItem("token");
-      const cus = jwtDecode(token);
-      console.log(cus);
       fetch(`${apiHeader}/Cart/addToCart`, {
         method: "POST",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
         body: JSON.stringify({
-          id: cus.UserID,
+          id: token.UserID,
           pid: productId,
         }),
       })
@@ -97,25 +96,34 @@ function CompleteProduct() {
           openNotification("topRight", "error");
         });
     } else {
-      openNotification("topRight", "warning");
+      openNotification("topRight", "warning", "Please Login to add to Cart");
     }
   };
   const buyNow = async () => {
     const token = getToken();
-    const productId = await createProduct()
-    console.log(productId);
-    let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
-      userId: token.UserID,
-      products: [
-        {
-          productId: productId,
-          quantity: 1,
-        },
-      ],
-    });
-    setCheckout(response.data);
-    localStorage.setItem("checkout", JSON.stringify(response.data));
-    nav(`/checkout/${token.UserID}`);
+    if (token) {
+      try{
+        const productId = await createProduct();
+        console.log(productId);
+        let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
+          userId: token.UserID,
+          products: [
+            {
+              productId: productId,
+              quantity: 1,
+            },
+          ],
+        });
+        setCheckout(response.data);
+        localStorage.setItem("checkout", JSON.stringify(response.data));
+        nav(`/checkout/${token.UserID}`);
+      }catch(e){
+        alertFail('Something went wrong')
+      }
+      
+    } else {
+      openNotification("topRight", "warning", "Please Login to Buy Now");
+    }
   };
   return (
     <div className="detail" style={{ marginTop: "60px" }}>
@@ -130,13 +138,13 @@ function CompleteProduct() {
 
           <Col span={24} className="complete__action">
             <div className="complete__item">
-              <Flex justify="center" className="sumarry__action-icon">
+              {/* <Flex justify="center" className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
                   alt=""
                 />
               </Flex>
-              <div className="complete__action-name">GIA Report</div>
+              <div className="complete__action-name">GIA Report</div> */}
             </div>
           </Col>
         </Col>
@@ -268,7 +276,9 @@ function CompleteProduct() {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button" onClick={buyNow}>Buy now</button>
+            <button className="right__button" onClick={buyNow}>
+              Buy now
+            </button>
             <button className="right__button" onClick={handleAddToCart}>
               Add to cart
             </button>
