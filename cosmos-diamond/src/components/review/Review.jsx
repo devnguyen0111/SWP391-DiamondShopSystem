@@ -27,7 +27,7 @@ function Review({ product }) {
   const [review, setReview] = useState();
   const [activeTabKey, setActiveTabKey] = useState("1"); 
   const nav = useNavigate();
-
+  
   const fetchReview = () => {
     if (product) {
       fetch(
@@ -35,9 +35,11 @@ function Review({ product }) {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.rating[1]);
           setReview(data);
-        });
+        })
+        .catch(e => {
+          
+        })
     }
   };
 
@@ -51,7 +53,7 @@ function Review({ product }) {
       <Divider orientation="left">
         <p className="review__header">Item reviews</p>
       </Divider>
-      {review && (
+      {review ? (
         <>
           <div className="review__upper">
             <Row className="total" justify={"center"}>
@@ -204,7 +206,7 @@ function Review({ product }) {
             </Tabs>
           </div>
         </>
-      )}
+      ) : 'There are no reviews for this jewelry yet.'}
     </div>
   );
 }
