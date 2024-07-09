@@ -25,7 +25,7 @@ const { TabPane } = Tabs;
 
 function Review({ product }) {
   const [review, setReview] = useState();
-  const [activeTabKey, setActiveTabKey] = useState("1"); // State for managing the active tab
+  const [activeTabKey, setActiveTabKey] = useState("1"); 
   const nav = useNavigate();
 
   const fetchReview = () => {
@@ -45,37 +45,6 @@ function Review({ product }) {
     fetchReview();
   }, []);
 
-  const handleSubmit = (values) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log({
-        ...values,
-        cusId: getToken().UserID,
-        productId: product.productId,
-      });
-      fetch(`https://localhost:7262/api/Review/addReview`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ...values,
-          cusId: getToken().UserID,
-          productId: product.productId,
-        }),
-      })
-        .then((res) => res.text())
-        .then((data) => {
-          alertSuccess(data);
-          fetchReview();
-          setActiveTabKey("1"); // Switch back to the "Review" tab
-        });
-    } else {
-      alertFail("You need to login first");
-      nav("/login");
-    }
-  };
 
   return (
     <div className="review">
@@ -231,67 +200,6 @@ function Review({ product }) {
                       </div>
                     ))}
                 </div>
-              </TabPane>
-              <TabPane tab="Write a review" tabKey="2" key="2">
-                <div
-                  className=""
-                  style={{ textAlign: "center", fontSize: "1.8em" }}
-                >
-                  We love to hear your feedback on this piece from Cosmos
-                  Diamonds.
-                </div>
-
-                <ConfigProvider
-                  theme={{
-                    components: {
-                      Form: {
-                        labelFontSize: "1.4em",
-                      },
-                    },
-                  }}
-                >
-                  <Form
-                    layout="vertical"
-                    style={{ width: "40%" }}
-                    onFinish={handleSubmit}
-                  >
-                    <Form.Item
-                      label="Overall Rating"
-                      name="rating"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please provide a rating",
-                        },
-                        {
-                          validator: (_, value) =>
-                            value && value >= 1
-                              ? Promise.resolve()
-                              : Promise.reject("Rating must be at least 1"),
-                        },
-                      ]}
-                    >
-                      <Rate></Rate>
-                    </Form.Item>
-                    <Form.Item
-                      label="Jewelry Review"
-                      name="reviewContent"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please provide a review",
-                        },
-                      ]}
-                    >
-                      <TextArea style={{ height: "100px" }} />
-                    </Form.Item>
-                    <Form.Item>
-                      <Button htmlType="submit" type="primary">
-                        Submit
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </ConfigProvider>
               </TabPane>
             </Tabs>
           </div>

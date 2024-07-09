@@ -8,6 +8,7 @@ import { apiHeader } from "../urlApiHeader";
 import { useStateValue } from "../../Context/StateProvider";
 import { getToken, token } from "./../getToken";
 import api from "./../../config/axios";
+import { alertFail } from "../../hooks/useNotification";
 
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
@@ -21,39 +22,49 @@ function ProductDetail({ product }) {
   const addToCart = () => {
     const url = window.location.href;
     const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
-    const token = jwtDecode(localStorage.getItem("token"));
-    console.log(token);
-    const customerId = token.UserID;
-    if (customerId) {
+    const token = getToken();
+    if (token) {
       fetch(`${apiHeader}/Cart/addToCart`, {
         method: "POST",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
         body: JSON.stringify({
-          id: customerId,
+          id: token.UserID,
           pid: productId,
         }),
-      }).then(openNotification("topRight"));
+      }).then(openNotification("topRight", "success"));
+    } else {
+      openNotification("topRight", "warning");
     }
   };
   const [api2, contextHolder] = notification.useNotification();
-  const openNotification = (placement) => {
-    api2.success({
-      message: `Add to cart sucessfully`,
-      description: <Link to={"/shopping-cart"}>View Cart</Link>,
-      placement,
-      pauseOnHover: true,
-      stack: true,
-      duration: 2,
-    });
+  const openNotification = (placement, type) => {
+    if (type == "success") {
+      api2.success({
+        message: `Add to cart sucessfully`,
+        description: <Link to={"/shopping-cart"}>View Cart</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    } else if (type == "warning") {
+      api2.warning({
+        message: `You need to Login first`,
+        description: <Link to={"/login"}>Login</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    }
   };
   const buyNow = async () => {
     const token = getToken();
 
-    let response = await api.post(
-      `${apiHeader}/Order/checkoutInfo`,
-      {
+    if (token) {
+      let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
         userId: token.UserID,
         products: [
           {
@@ -61,11 +72,13 @@ function ProductDetail({ product }) {
             quantity: 1,
           },
         ],
-      }
-    );
-    setCheckout(response.data);
-    localStorage.setItem("checkout", JSON.stringify(response.data));
-    nav(`/checkout/${token.UserID}`);
+      });
+      setCheckout(response.data);
+      localStorage.setItem("checkout", JSON.stringify(response.data));
+      nav(`/checkout/${token.UserID}`);
+    } else {
+      openNotification("topRight", "warning");
+    }
   };
   return (
     <div className="detail">

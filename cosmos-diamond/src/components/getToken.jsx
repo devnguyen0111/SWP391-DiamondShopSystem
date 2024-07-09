@@ -5,5 +5,5 @@ export const token = localStorage.getItem('token') && jwtDecode(localStorage.get
 
 export const getToken = ()=>{
     let token = localStorage.getItem('token')
-    return token ? jwtDecode(token) : console.log('token is null');
+    return token ? jwtDecode(token) : null;
 }
