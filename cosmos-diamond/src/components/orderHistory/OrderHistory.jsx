@@ -6,18 +6,34 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
-import { Card, Col, ConfigProvider, Divider, Flex, Row, Segmented } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  ConfigProvider,
+  Divider,
+  Flex,
+  Form,
+  Modal,
+  Rate,
+  Row,
+  Segmented,
+} from "antd";
 import { getToken } from "./../getToken";
 import { apiHeader } from "../urlApiHeader";
-import { alertFail } from "../../hooks/useNotification";
+import { alertFail, alertSuccess } from "../../hooks/useNotification";
 import { useNavigate } from "react-router-dom";
+import formatDate from "../formatDate";
+import TextArea from "antd/es/input/TextArea";
 function OrderHistory() {
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
   const [orderStatus, setOrderStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [reviewId, setReviewId] = useState();
   let token = getToken();
-  
+
   const nav = useNavigate();
 
   useEffect(() => {
@@ -55,12 +71,13 @@ function OrderHistory() {
       )
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setOrderList(data);
           setIsLoading(false);
         });
     } else {
-      alertFail('You need to login first')
-      nav('/login')
+      alertFail("You need to login first");
+      nav("/login");
     }
   }, [orderStatus]);
 
@@ -69,6 +86,40 @@ function OrderHistory() {
       setOrderStatus("");
     } else {
       setOrderStatus(value);
+    }
+  };
+  const handleSubmit = (values) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log({
+        ...values,
+        cusId: getToken().UserID,
+        productId: reviewId,
+      });
+      fetch(`https://localhost:7262/api/Review/addReview`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...values,
+          cusId: getToken().UserID,
+          productId: reviewId,
+        }),
+      })
+        .then((res) => res.text())
+        .then((data) => {
+          setOpen(false)
+          alertSuccess(data);
+          nav(`/Product/${reviewId}`);
+        })
+        .catch(e=>{
+          alertFail('Cannot add Review')
+        })
+    } else {
+      alertFail("You need to login first");
+      nav("/login");
     }
   };
   return (
@@ -161,7 +212,7 @@ function OrderHistory() {
                           <span style={{ fontWeight: "500" }}>
                             Order Payment:
                           </span>{" "}
-                          {order.orderDate}
+                          {formatDate(order.orderDate)}
                         </p>
                       </Flex>
                       {/* Order Products */}
@@ -178,13 +229,15 @@ function OrderHistory() {
                               style={{ width: "150px" }}
                             >
                               <img
-                                src="https://ion.bluenile.com/sets/Jewelry-bn/194359/RND/Images/LS_stage_0.jpg"
+                                src={item.img}
                                 alt=""
                                 style={{
                                   width: "100%",
                                   height: "100%",
                                   objectFit: "contain",
+                                  cursor: "pointer",
                                 }}
+                                onClick={() => nav(`/Product/${item.pId}`)}
                               />
                             </Col>
                             <Flex
@@ -213,11 +266,47 @@ function OrderHistory() {
                               className="order-history__status"
                             >
                               <p>Status</p>
-                              <div>{order.status}</div>
+                              <div style={{ textTransform: "capitalize" }}>
+                                {order.status}
+                              </div>
                             </Flex>
                             <Flex vertical className="order-history__expect">
-                              <p>Delivery Expected by</p>
-                              <div>18th December 2024</div>
+                              {order.status == "Delivered" &&
+                                !item.reviewCheck && (
+                                  <>
+                                    <Button
+                                      style={{
+                                        backgroundColor: "#151542",
+                                        color: "#fff",
+                                      }}
+                                      onClick={() => {
+                                        setReviewId(item.pId)
+                                        setOpen(true);
+                                      }}
+                                    >
+                                      Review
+                                    </Button>
+                                  </>
+                                )}
+                              {order.status == "Delivering" && (
+                                <>
+                                  <p>Delivery Expected by</p>
+                                  <div>18-12-2024</div>
+                                </>
+                              )}
+                              {order.status == "processing" && (
+                                <>
+                                  <p>Delivery Expected by</p>
+                                  <div
+                                    style={{
+                                      color: "#c38a45",
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    Awaiting confirmation
+                                  </div>
+                                </>
+                              )}
                             </Flex>
                           </Row>
                         ))}
@@ -264,6 +353,74 @@ function OrderHistory() {
             </Row>
           </Card>
         </div>
+        <Modal
+          title="We love to hear your feedback on this piece from Cosmos Diamonds."
+          centered
+          open={open}
+          onOk={() => setOpen(false)}
+          onCancel={() => setOpen(false)}
+          width={1000}
+          maskClosable={false}
+          footer={[
+            <Button key="back" onClick={() => setOpen(false)}>
+              Return
+            </Button>,
+          ]}
+        >
+          <>
+            <ConfigProvider
+              theme={{
+                components: {
+                  Form: {
+                    labelFontSize: "1.4em",
+                  },
+                },
+              }}
+            >
+              <Form
+                layout="vertical"
+                style={{ width: "40%" }}
+                onFinish={handleSubmit}
+              >
+                <Form.Item
+                  label="Overall Rating"
+                  name="rating"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please provide a rating",
+                    },
+                    {
+                      validator: (_, value) =>
+                        value && value >= 1
+                          ? Promise.resolve()
+                          : Promise.reject("Rating must be at least 1"),
+                    },
+                  ]}
+                >
+                  <Rate></Rate>
+                </Form.Item>
+                <Form.Item
+                  label="Jewelry Review"
+                  name="reviewContent"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please provide a review",
+                    },
+                  ]}
+                >
+                  <TextArea style={{ height: "100px" }} />
+                </Form.Item>
+                <Form.Item>
+                  <Button htmlType="submit" type="primary">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </ConfigProvider>
+          </>
+        </Modal>
       </Content>
     </>
   );
