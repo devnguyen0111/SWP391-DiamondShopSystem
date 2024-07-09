@@ -40,37 +40,37 @@ function CustomerProducts() {
       dataIndex: "unitPrice",
       key: "unitPrice",
     },
-    {
-      title: "Detail",
-      dataIndex: "detail",
-      key: "detail",
-      render: (_, data) => (
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                borderRadius: "18px",
-                defaultBg: "white",
-                defaultColor: "black",
-                defaultHoverBg: "white",
-                defaultHoverBorderColor: "black",
-                defaultHoverColor: "black",
-                defaultActiveBg: "black",
-                defaultActiveBorderColor: "black",
-                defaultActiveColor: "white",
-              },
-            },
-          }}
-        >
-          <Button
-            type="default"
-            onClick={() => showDetailModal(data.productId)}
-          >
-            Detail
-          </Button>
-        </ConfigProvider>
-      ),
-    },
+    // {
+    //   title: "Detail",
+    //   dataIndex: "detail",
+    //   key: "detail",
+    //   render: (_, data) => (
+    //     <ConfigProvider
+    //       theme={{
+    //         components: {
+    //           Button: {
+    //             borderRadius: "18px",
+    //             defaultBg: "white",
+    //             defaultColor: "black",
+    //             defaultHoverBg: "white",
+    //             defaultHoverBorderColor: "black",
+    //             defaultHoverColor: "black",
+    //             defaultActiveBg: "black",
+    //             defaultActiveBorderColor: "black",
+    //             defaultActiveColor: "white",
+    //           },
+    //         },
+    //       }}
+    //     >
+    //       <Button
+    //         type="default"
+    //         onClick={() => showDetailModal(data.productId)}
+    //       >
+    //         Detail
+    //       </Button>
+    //     </ConfigProvider>
+    //   ),
+    // },
   ].filter((item) => !item.hidden);
 
   const getProducts = async () => {
@@ -90,88 +90,79 @@ function CustomerProducts() {
     }
   };
 
-  const getProductDetail = async (productId) => {
-    setIsLoading(true);
-    try {
-      const response = await api.get(`/api/Product/productDetail/${productId}`);
-      setSelectedProduct(response.data);
-      form.setFieldsValue(response.data);
-      setIsLoading(false);
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-      setIsLoading(false);
-    }
-  };
+  // const getProductDetail = async (productId) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await api.get(`/api/Product/productDetail/${productId}`);
+  //     setSelectedProduct(response.data);
+  //     form.setFieldsValue(response.data);
+  //     setIsLoading(false);
+  //   } catch (e) {
+  //     console.error(e);
+  //     alertFail(e.response?.data || e.message);
+  //     setIsLoading(false);
+  //   }
+  // };
 
 
 
-  const showDetailModal = (productId) => {
-    getProductDetail(productId);
-    setIsDetailModalVisible(true);
-  };
+  // const showDetailModal = (productId) => {
+  //   getProductDetail(productId);
+  //   setIsDetailModalVisible(true);
+  // };
 
-  const handleDetailModalCancel = () => {
-    setIsDetailModalVisible(false);
-    setSelectedProduct(null);
-  };
+  // const handleDetailModalCancel = () => {
+  //   setIsDetailModalVisible(false);
+  //   setSelectedProduct(null);
+  // };
 
-  const handleUpdateProduct = async (values) => {
-    setIsLoading(true);
-    try {
-      await api.put(
-        `/api/Product/updateProduct/${selectedProduct.productId}`,
-        values
-      );
-      alertSuccess("Product updated successfully!");
-      setIsDetailModalVisible(false);
-      getProducts();
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleUpdateProduct = async (values) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await api.put(
+  //       `/api/Product/updateProduct/${selectedProduct.productId}`,
+  //       values
+  //     );
+  //     alertSuccess("Product updated successfully!");
+  //     setIsDetailModalVisible(false);
+  //     getProducts();
+  //   } catch (e) {
+  //     console.error(e);
+  //     alertFail(e.response?.data || e.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const getCovers = async () => {
-    try {
-      const response = await api.get("/api/Cover/getAllCover");
-      const data = response.data.$values;
-      setCovers(data);
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-    }
-  };
+  // const getCovers = async () => {
+  //   try {
+  //     const response = await api.get("/api/Cover/getAllCover");
+  //     const data = response.data.$values;
+  //     setCovers(data);
+  //   } catch (e) {
+  //     console.error(e);
+  //     alertFail(e.response?.data || e.message);
+  //   }
+  // };
 
-  const getDiamonds = async () => {
-    try {
-      const response = await api.get("/api/Cover/getAllCover");
-      const data = response.data.$values;
-      setCovers(data);
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-    }
-  };
+  // const getDiamonds = async () => {
+  //   try {
+  //     const response = await api.get("/api/Cover/getAllCover");
+  //     const data = response.data.$values;
+  //     setCovers(data);
+  //   } catch (e) {
+  //     console.error(e);
+  //     alertFail(e.response?.data || e.message);
+  //   }
+  // };
 
   useEffect(() => {
     getProducts();
-    getCovers();
+    // getCovers();
   }, []);
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          style={{ backgroundColor: "white" }}
-          onClick={() => setStatus(true)}
-          className="mode__createMod"
-        >
-          Create New Product <IoMdAdd />
-        </Button>
-      </div>
       <Table
         columns={columns}
         dataSource={products}
@@ -181,7 +172,7 @@ function CustomerProducts() {
           pageSizeOptions: ["5"],
         }}
       />
-      <Modal
+      {/* <Modal
         title="Product Details"
         open={isDetailModalVisible}
         onCancel={handleDetailModalCancel}
@@ -228,7 +219,7 @@ function CustomerProducts() {
         ) : (
           <p>No product details available.</p>
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
