@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
-import { Col, Flex, Row, notification } from "antd";
+import { Button, Col, Flex, Modal, Row, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { apiHeader } from "../urlApiHeader";
@@ -9,6 +9,7 @@ import { useStateValue } from "../../Context/StateProvider";
 import { getToken, token } from "./../getToken";
 import api from "./../../config/axios";
 import { alertFail } from "../../hooks/useNotification";
+import GiaReport from "../GIAreport/GiaReport";
 
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
@@ -18,6 +19,7 @@ function ProductDetail({ product }) {
   // };
   const { checkout, setCheckout } = useStateValue();
   const nav = useNavigate();
+  const [modal2Open, setModal2Open] = useState(false);
   console.log(product);
   const addToCart = () => {
     const url = window.location.href;
@@ -33,7 +35,10 @@ function ProductDetail({ product }) {
           id: token.UserID,
           pid: productId,
         }),
-      }).then(openNotification("topRight", "success"));
+      }).then(openNotification("topRight", "success"))
+      .catch(()=>{
+        alertFail('Cannot add to Cart, Please try again')
+      })
     } else {
       openNotification("topRight", "warning");
     }
@@ -116,7 +121,7 @@ function ProductDetail({ product }) {
                   alt=""
                 />
               </div>
-              <div className="summary__action-name">GIA Report</div>
+              <div className="summary__action-name" onClick={()=>setModal2Open(true)}>GIA Report</div>
             </Flex>
           </Col>
           <Col className="summary__table">
@@ -246,6 +251,21 @@ function ProductDetail({ product }) {
           </Col>
         </Col>
       </Row>
+      <Modal
+        title="GIA Report"
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
+        style={{minWidth: '1000px'}}
+        footer={[
+          <Button type="primary" key="back" onClick={()=>setModal2Open(false)}>
+            OK
+          </Button>
+        ]}
+      >
+        <GiaReport product={product}/>
+      </Modal>
     </div>
   );
 }
