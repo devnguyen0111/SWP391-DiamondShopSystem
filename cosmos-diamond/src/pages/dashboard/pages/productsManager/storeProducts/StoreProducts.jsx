@@ -76,7 +76,10 @@ function StoreProducts() {
   const getProducts = async () => {
     try {
       const response = await api.get("/api/Product/products");
-      const data = response.data.$values;
+      
+      const data = response.data.$values.filter((product) => product.pp === "premade");
+      
+      console.log(data)
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");
       }
@@ -100,6 +103,8 @@ function StoreProducts() {
       setIsLoading(false);
     }
   };
+
+
 
   const showDetailModal = (productId) => {
     getProductDetail(productId);
@@ -172,13 +177,13 @@ function StoreProducts() {
         dataSource={products}
         pagination={{
           defaultPageSize: 5,
-          showSizeChanger: true,
+          showSizeChanger: false,
           pageSizeOptions: ["5"],
         }}
       />
       <Modal
         title="Product Details"
-        visible={isDetailModalVisible}
+        open={isDetailModalVisible}
         onCancel={handleDetailModalCancel}
         footer={[
           <Button key="cancel" onClick={handleDetailModalCancel}>
