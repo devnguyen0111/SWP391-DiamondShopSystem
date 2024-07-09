@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  ConfigProvider,
-  Modal,
-  Select,
-  Table,
-} from "antd";
+import { Alert, Button, ConfigProvider, Modal, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import "./OrdersManager.scss";
 import { Form, useNavigate } from "react-router-dom";
@@ -22,7 +15,6 @@ function OrdersManager() {
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const navigate = useNavigate();
-  const [id, setId] = useState("");
   const [modal1Open, setModal1Open] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -31,19 +23,12 @@ function OrdersManager() {
 
   const assignStaff = async (orderId, saleStaffId) => {
     try {
-     
-      const response =  await api.post(`/api/shipping/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`);
-      console.log(response)
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, assignedStaffName: staff.find(s => s.value === saleStaffId).label }
-            : order
-        )
+      await api.post(
+        `/api/shipping/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
       );
-
-      setModal1Open(false);
+      // Gọi lại API để lấy danh sách đơn hàng sau khi gán nhân viên
       getOrders();
+      setModal1Open(false);
     } catch (e) {
       console.error(e);
       setModal1Open(false);
@@ -55,7 +40,7 @@ function OrdersManager() {
       title: "Order ID",
       dataIndex: "orderId",
       key: "orderId",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <p>{text}</p>,
     },
     {
       title: "Date",
@@ -71,7 +56,7 @@ function OrdersManager() {
     },
     {
       title: "Assign Staff",
-      dataIndex: "assignedStaffName", 
+      dataIndex: "assignedStaffName",
       key: "assignedStaffName",
       render: (text, data) =>
         text ? (
@@ -115,8 +100,15 @@ function OrdersManager() {
     try {
       const response = await api.get("/api/Order/getAllOrders/");
       const data = response.data.$values;
-      console.log(data)
-      setOrders(data);
+      // Kết hợp thông tin đơn hàng với thông tin nhân viên
+      const updatedOrders = data.map((order) => {
+        const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
+        return {
+          ...order,
+          assignedStaffName: assignedStaff ? assignedStaff.label : null,
+        };
+      });
+      setOrders(updatedOrders);
     } catch (e) {
       console.error(e);
     }
@@ -138,11 +130,17 @@ function OrdersManager() {
   };
 
   useEffect(() => {
-    getOrders();
     getStaff();
   }, []);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (staff.length > 0) {
+      getOrders();
+    }
+  }, [staff]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (selectedValue == null) {
       setShowAlert(true);
     } else {
