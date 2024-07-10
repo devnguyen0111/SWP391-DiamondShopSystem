@@ -263,7 +263,9 @@ function AccountDetails() {
   useEffect(() => {
     getVoucher();
   }, []);
-
+  const handleSubmit = (value)=>{
+    console.log(value);
+  }
   return (
     <Content>
       <div className="site-layout-content" style={{ marginTop: "70px" }}>
@@ -395,7 +397,7 @@ function AccountDetails() {
                     )}
                     {edit && (
                       <Col span={20} style={{ width: "100%" }}>
-                        <Form layout="vertical">
+                        <Form layout="vertical" onFinish={handleSubmit}>
                           <Form.Item label="First Name">
                             <Input
                               onChange={(e) => handleFirstName(e)}

@@ -61,6 +61,7 @@ import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
 import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
 import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
 import ResetPassword from "../pages/resetPassword/ResetPassword";
+import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
 
 
 
@@ -427,15 +428,15 @@ export const router = createBrowserRouter([
       //admin
       {
         path: "/dashboard/admin",
-        element: <AdminPage />,
+        element: <AdminPage/>,
       },
       {
         path: "/dashboard/admin/summary",
-        element: <OrdersManager />,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/users",
-        element: <OrdersManager />,
+        element: <UsersManager />,
       },
       {
         path: "/dashboard/admin/transaction",
