@@ -1,6 +1,6 @@
-.mode1 {
+.mode3 {
     width: 100%;
-    padding: 0 3em;
+    padding: 2em;
   
     &__createMod {
       border-radius: 100px;
@@ -37,9 +37,6 @@
       .ant-table-tbody {
         .ant-table-cell {
           font-family: "Gantari" !important;
-          p {
-            font-family: "Gantari" !important;
-          }
         }
       }
     }

@@ -90,6 +90,9 @@ const Login = () => {
           if (user.Role === "manager") {
             navigate("/dashboard/manager");
           }
+          if (user.Role === "deliverystaff") {
+            navigate("/dashboard/deliverystaff/delivery");
+          }
         } catch (e) {
           setIsLoading(false)
           console.log(e);

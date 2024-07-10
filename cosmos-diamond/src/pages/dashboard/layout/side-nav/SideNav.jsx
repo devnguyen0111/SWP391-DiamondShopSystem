@@ -11,6 +11,7 @@ import "./SideNav.scss";
 import { AiOutlineLogout } from "react-icons/ai";
 import navDashboardConfig, {
   navDashboardConfigAdmin,
+  navDashboardConfigDelivery,
   navDashboardConfigStaff,
   navpath,
 } from "../../../../components/nav-dashboard/config";
@@ -34,9 +35,17 @@ function SideNav({}) {
         defaultOpenKeys={["sub1"]}
         mode="vertical"
         theme="dark"
-         items={
-          user.Role == "manager" ? navDashboardConfig : user.Role == "admin" ? navDashboardConfigAdmin : user.Role == "salestaff" ? navDashboardConfigStaff
-        : null }
+        items={
+          user.Role == "manager"
+            ? navDashboardConfig
+            : user.Role == "admin"
+            ? navDashboardConfigAdmin
+            : user.Role == "salestaff"
+            ? navDashboardConfigStaff
+            : user.Role == "deliverystaff"
+            ? navDashboardConfigDelivery
+            : null
+        }
         className="menu-sidebar"
       />
       {/* <div
