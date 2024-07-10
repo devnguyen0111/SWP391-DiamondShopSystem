@@ -18,7 +18,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
   const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [productTotalPrice, setProductTotalPrice] = useState(product.total);
   const [loading, setLoading] = useState(false);
-
+  console.log('heeh', product);
   const openNotification = (placement) => {
     notification.error({
       message: `Remove Product Successfully`,
@@ -113,7 +113,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
             <Checkbox onChange={(e) => handleCheck(e)}></Checkbox>
             <img
               alt="avatar"
-              src="https://ion.bluenile.com/sets/Jewelry-bn/195871/RND/Images/stage.jpg"
+              src={product.img}
               className="cardDetail__lower__pic"
             />
             <Flex vertical className="cardDetail__lower__detail">

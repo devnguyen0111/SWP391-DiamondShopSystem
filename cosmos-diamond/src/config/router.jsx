@@ -61,6 +61,8 @@ import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
 import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
 import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
 import ResetPassword from "../pages/resetPassword/ResetPassword";
+import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
+import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
 
 
 
@@ -75,7 +77,7 @@ const ProtectedRouteAuth = ({ children }) => {
 
 const ProtectedRouteCustomer = ({ children }) => {
   const user = useSelector(selectUser);
-  if (user?.Role === "admin" || user?.Role === "manager" || user?.Role === "salestaff") {
+  if (user?.Role === "admin" || user?.Role === "manager" || user?.Role === "salestaff" || user?.Role === "deliverystaff") {
     alertFail("You do not have permission to access this page.");
     return <Navigate to="/dashboard" replace />;
   }
@@ -86,7 +88,7 @@ const ProtectedADMIN = ({ children }) => {
   const user = useSelector(selectUser);
   console.log(user);
 
-  const validRoles = ["admin", "manager", "salestaff"];
+  const validRoles = ["admin", "manager", "salestaff", "deliverystaff"];
 
   if (!validRoles.includes(user?.Role)) {
     return <Navigate to="*" replace />;
@@ -427,15 +429,15 @@ export const router = createBrowserRouter([
       //admin
       {
         path: "/dashboard/admin",
-        element: <AdminPage />,
+        element: <AdminPage/>,
       },
       {
         path: "/dashboard/admin/summary",
-        element: <OrdersManager />,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/users",
-        element: <OrdersManager />,
+        element: <UsersManager />,
       },
       {
         path: "/dashboard/admin/transaction",
@@ -445,12 +447,12 @@ export const router = createBrowserRouter([
       {
 
         path: "/dashboard/salestaff/orders",
-        element: <StaffChat />,
+        element: <OrdersStaff />,
       },
       {
 
         path: "/dashboard/salestaff",
-        element: <StaffChat />,
+        element: <OrdersStaff />,
       },
       {
 
@@ -464,6 +466,15 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/salestaff/send-request",
         element: <OrdersStaff/>,
+      },
+
+      {
+        path: "/dashboard/deliverytaff",
+        element: <DeliveryStaff/>,
+      },
+      {
+        path: "/dashboard/deliverystaff/delivery",
+        element: <DeliveryStaff/>,
       },
     ],
   },
