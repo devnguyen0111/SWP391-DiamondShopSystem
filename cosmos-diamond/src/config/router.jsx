@@ -61,6 +61,7 @@ import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
 import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
 import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
 import ResetPassword from "../pages/resetPassword/ResetPassword";
+import LocationTracker from "../components/LocationTracker";
 import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
 import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
 
@@ -104,6 +105,7 @@ export const router = createBrowserRouter([
       <div>
         <ScrollToTop />
         <Header />
+        <LocationTracker/>
         <Outlet />
         <Footer />
       </div>
