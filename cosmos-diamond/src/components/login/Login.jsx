@@ -68,7 +68,7 @@ const Login = () => {
     const onSubmit = async (value) => {
         try {
           setIsLoading(true)
-          
+          let previousPage = sessionStorage.getItem('location')
           const response = await api.post("/api/Authentication/login", {...value, isGoogleLogin: false});
           localStorage.setItem("token", response.data.token);
           const user = jwtDecode(response.data.token);
@@ -79,7 +79,7 @@ const Login = () => {
           //redux
           dispatch(login(user));
           if (user.Role === "customer") {
-            navigate("/");
+            previousPage ? navigate(previousPage) : navigate('/');
           }
           if (user.Role === "admin") {
             navigate("/dashboard/admin");
