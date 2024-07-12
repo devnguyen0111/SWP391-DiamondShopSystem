@@ -1,7 +1,5 @@
 import { Button, ConfigProvider, Table, Modal, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
 import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import api from "../../../../config/axios";
@@ -17,13 +15,13 @@ function UsersManager() {
       title: "User ID",
       dataIndex: "userId",
       key: "userId",
-      render: (text) => <p>{text}</p>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      render: (text) => <p>{text}</p>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: "Role",

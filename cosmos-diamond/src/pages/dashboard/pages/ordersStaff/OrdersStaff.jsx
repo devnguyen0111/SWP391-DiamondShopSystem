@@ -1,189 +1,173 @@
-import {
-  Alert,
-  Button,
-  ConfigProvider,
-  Drawer,
-  Input,
-  Modal,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Alert, Button, ConfigProvider, Modal, Select, Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
-import { IoPersonAddOutline } from "react-icons/io5";
-import "./OrdersStaff.scss";
-import { Form, Link, useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
-import TextArea from "antd/es/input/TextArea";
-
-import { IoMdAdd } from "react-icons/io";
-// import FormNewCategory from "../../../../component/formNewCategory/FormNewCategory";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/features/counterSlice";
 import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import { CiNoWaitingSign } from "react-icons/ci";
 
-function OrdersManager() {
+function OrdersStaff() {
   const [selectedValue, setSelectedValue] = useState(null);
-  const onChange1 = (selectedValue) => {
-    console.log(selectedValue);
-    if (selectedValue == null) {
-      setShowAlert(true);
-    } else {
-      console.log(`Selected value: ${selectedValue}`);
-      setSelectedValue(selectedValue);
-      setShowAlert(false);
-      setModal1Open(false);
-    }
-  };
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const onSearch = (value) => {
     console.log("search:", value);
   };
-
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-  const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [status, setStatus] = useState(false);
-  const [allUsers, setAllUsers] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [modal1Open, setModal1Open] = useState(false);
-  const [modal2Open, setModal2Open] = useState(false);
-  const [categoryEnum, setCategoryEnum] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [update, setUpdate] = useState(false);
-  const onFinishActive = () => {};
-
-  const onChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const data = [
-    {
-      id: "1",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-      categoryEnum: "ACTIVE",
-    },
-    {
-      id: "2",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-    },
-    {
-      id: "3",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-    },
-    {
-      id: "4",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-    },
-    {
-      id: "5",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-    },
-    {
-      id: "6",
-      OrderItem: "Diamonds Rings",
-      quantity: "123",
-      CustomerName: "Yen Nhu",
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [staff, setStaff] = useState([]);
+  const user = useSelector(selectUser);
 
   const columns = [
     {
       title: "Order ID",
-      dataIndex: "id",
-      key: "OrderId",
+      dataIndex: "orderId",
+      key: "orderId",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Customer Name",
-      dataIndex: "CustomerName",
-      key: "CustomerName",
+      title: "Date",
+      dataIndex: "orderDate",
+      key: "orderDate",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Order Item",
-      dataIndex: "OrderItem",
-      key: "OrderItem",
-      render: (text) => <a>{text}</a>,
+      title: "Total",
+      dataIndex: "totalAmount",
+      key: "totalAmount",
+      render: (text) => <a>${text}</a>,
     },
-
     {
-      title: "Assign Delivery",
-      dataIndex: "assign",
-      key: "OrderQuantity",
-      render: (_, data) => (
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                border: "none",
-                borderRadius: "0px",
-                defaultBg: " rgb(27, 27, 27)",
-                defaultColor: "white",
-                defaultHoverBg: "white",
-                // defaultHoverBorderColor: "black",
-                defaultHoverColor: "black",
-              },
-            },
-          }}
-        >
+      title: "Assign Delivery Staff",
+      dataIndex: "status",
+      key: "status",
+      render: (status, data) =>
+        status === "delivered" ||
+        status === "Delivered" ||
+        status === "shipping" ||
+        status === "Shipping" ? (
+          <span>Assigned</span>
+        ) : (
+          // <ConfigProvider
+          //   theme={{
+          //     components: {
+          //       Button: {
+          //         border: "none",
+          //         borderRadius: "0px",
+          //         defaultBg: " rgb(27, 27, 27)",
+          //         defaultColor: "white",
+          //         defaultHoverBg: "white",
+          //         defaultHoverColor: "black",
+          //       },
+          //     },
+          //   }}
+          // >
           <Button
-            type="link"
             onClick={() => {
-              setId(data.id);
-              setModal1Open(!modal1Open);
+              setSelectedOrderId(data.orderId);
+              setModal1Open(true);
             }}
           >
-            {selectedValue ?? "Assign"}
+            Assign
           </Button>
-        </ConfigProvider>
-      ),
+          // </ConfigProvider>
+        ),
     },
+
     {
       title: "Status",
-      dataIndex: "categoryEnum",
-      key: "deActive",
-
-      onFilter: (value, record) => record.categoryEnum === value,
-      render: (deActive) => (
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        { text: "Pending", value: "pending" },
+        { text: "Delivered", value: "delivered" },
+        { text: "Shipping", value: "shipping" },
+      ],
+      onFilter: (value, record) => record.status === value,
+      render: (status, { tags }) => (
         <div>
-          {deActive ? (
-            <span
+          {status === "pending" || status === "Pending" ? (
+            <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
+              Pending
+            </Tag>
+          ) : status === "delivered" || status === "Delivered" ? (
+            <Tag style={{ backgroundColor: "#C3FF93", fontFamily: "Gantari" }}>
+              Delivered
+            </Tag>
+          ) : status === "Shipping" || status === "shipping" ? (
+            <Tag
               style={{
-                display: "flex",
-                gap: "0.6em",
-                color: "green",
-                fontWeight: "500",
+                backgroundColor: "#102C57",
+                color: "white",
+                fontFamily: "Gantari",
               }}
             >
-              <GoDotFill style={{ color: "green", fontSize: "1.5em" }} />{" "}
-              Delivering
-            </span>
-          ) : (
-            <MdOutlineBlock style={{ color: "red", marginLeft: "0.2em" }} />
-          )}
+              Shipping
+            </Tag>
+          ) : null}
         </div>
       ),
     },
   ].filter((item) => !item.hidden);
 
-  const assignDelivery = async () => {
+  const getOrders = async () => {
     try {
-      const response = await api.post("/");
-      console.log(response.data.data);
-      setAllUsers(response.data.data);
+      const response = await api.get(
+        `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
+      );
+      const data = response.data.$values;
+      setOrders(data);
     } catch (e) {
-      alertFail(e.response.data);
+      console.error(e);
+    }
+  };
+
+  const getStaff = async () => {
+    try {
+      const response = await api.get("/api/Assign/getAllDeliveryStaff");
+      const data = response.data.$values;
+      console.log(data);
+      setStaff(
+        data.map((staff) => ({ label: staff.name, value: staff.staffId }))
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const assignStaff = async (orderId, deliveryStaffId) => {
+    try {
+      await api.post(
+        `/api/Assign/assignDelivery?orderId=${orderId}&deliveryStaffId=${deliveryStaffId}`
+      );
+      getOrders();
+      setModal1Open(false);
+    } catch (e) {
+      console.error(e);
+      setModal1Open(false);
+    }
+  };
+
+  useEffect(() => {
+    getStaff();
+  }, []);
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (selectedValue == null) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+      await assignStaff(selectedOrderId, selectedValue);
     }
   };
 
@@ -191,32 +175,31 @@ function OrdersManager() {
     <div className="mode">
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={orders}
         pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ["10"],
+          defaultPageSize: 5,
+          showSizeChanger: false,
+          pageSizeOptions: ["5"],
         }}
       />
       <Modal
-        title="Confirm delivery person"
+        title="Confirm delivery staff"
         centered
-        dataSource={data}
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}
+        confirmLoading={isLoading}
       >
-        <Form name="form_item_path" layout="vertical" onSubmit={onFinishActive}>
-          <label>Order ID</label>
-          <Input style={{ margin: "8px 0" }} value={id} disabled />
+        <Form name="form_item_path" layout="vertical" onSubmit={handleSubmit}>
           <label>Assign delivery staff</label>
           <Select
             showSearch
             placeholder="Select a person"
             optionFilterProp="children"
-            onChange={onChange1}
+            onChange={setSelectedValue}
             onSearch={onSearch}
             filterOption={filterOption}
+            options={staff}
             style={{ width: "100%", margin: "8px 0" }}
           />
           {showAlert && (
@@ -231,4 +214,4 @@ function OrdersManager() {
   );
 }
 
-export default OrdersManager;
+export default OrdersStaff;

@@ -1,10 +1,13 @@
-import { Alert, Button, ConfigProvider, Modal, Select, Table } from "antd";
+import { Alert, Button, ConfigProvider, Modal, Select, Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import "./OrdersManager.scss";
 import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
+import { MdOutlineBlock } from "react-icons/md";
+import { GoDotFill } from "react-icons/go";
+import { CiNoWaitingSign } from "react-icons/ci";
 
 function OrdersManager() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -20,13 +23,13 @@ function OrdersManager() {
   const [orders, setOrders] = useState([]);
   const [staff, setStaff] = useState([]);
   const user = useSelector(selectUser);
+  const [isLoading, setIsLoading] = useState(false);
 
   const assignStaff = async (orderId, saleStaffId) => {
     try {
       await api.post(
-        `/api/shipping/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
+        `/api/Assign/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
       );
-      // Gọi lại API để lấy danh sách đơn hàng sau khi gán nhân viên
       getOrders();
       setModal1Open(false);
     } catch (e) {
@@ -40,7 +43,7 @@ function OrdersManager() {
       title: "Order ID",
       dataIndex: "orderId",
       key: "orderId",
-      render: (text) => <p>{text}</p>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: "Date",
@@ -56,28 +59,31 @@ function OrdersManager() {
     },
     {
       title: "Assign Staff",
-      dataIndex: "assignedStaffName",
-      key: "assignedStaffName",
-      render: (text, data) =>
-        text ? (
-          <span>{text}</span>
+      dataIndex: "status",
+      key: "status",
+      render: (status, data) =>
+        status === "delivered" ||
+        status === "Delivered" ||
+        status === "pending" ||
+        status === "Pending" ? (
+          <span>Assigned</span>
         ) : (
-          <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  border: "none",
-                  borderRadius: "0px",
-                  defaultBg: " rgb(27, 27, 27)",
-                  defaultColor: "white",
-                  defaultHoverBg: "white",
-                  defaultHoverColor: "black",
-                },
-              },
-            }}
-          >
+          // <ConfigProvider
+          //   theme={{
+          //     components: {
+          //       Button: {
+          //         border: "none",
+          //         borderRadius: "0px",
+          //         defaultBg: " rgb(27, 27, 27)",
+          //         defaultColor: "white",
+          //         defaultHoverBg: "white",
+          //         defaultHoverColor: "black",
+          //       },
+          //     },
+          //   }}
+          // >
             <Button
-              type="link"
+             
               onClick={() => {
                 setSelectedOrderId(data.orderId);
                 setModal1Open(true);
@@ -85,22 +91,44 @@ function OrdersManager() {
             >
               Assign
             </Button>
-          </ConfigProvider>
+          // </ConfigProvider>
         ),
     },
+
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => <a>{text}</a>,
+      filters: [
+        { text: "Processing", value: "processing" },
+        { text: "Pending", value: "pending" },
+        { text: "Delivered", value: "delivered" },
+      ],
+      onFilter: (value, record) => record.status === value,
+      render: (status, data) => (
+        <div>
+          {status === "processing" ? (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Tag style={{ fontFamily: "Gantari" }}>Processing</Tag>
+            </div>
+          ) : status === "pending" || status === "Pending" ? (
+            <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
+              Pending
+            </Tag>
+          ) : status === "delivered" || status === "Delivered" ? (
+            <Tag style={{ backgroundColor: "#C3FF93", fontFamily: "Gantari" }}>
+              Delivered
+            </Tag>
+          ) : null}
+        </div>
+      ),
     },
   ].filter((item) => !item.hidden);
 
   const getOrders = async () => {
     try {
-      const response = await api.get("/api/Order/getAllOrders/");
+      const response = await api.get("/api/Order/getAllOrders");
       const data = response.data.$values;
-      // Kết hợp thông tin đơn hàng với thông tin nhân viên
       const updatedOrders = data.map((order) => {
         const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
         return {
@@ -117,12 +145,12 @@ function OrdersManager() {
   const getStaff = async () => {
     try {
       const response = await api.get(
-        `/api/shipping/saleStaffListByManagerId/${user.UserID}`
+        `/api/Assign/saleStaffListByManagerId/${user.UserID}`
       );
       const data = response.data.$values;
-      console.log(data);
+    
       setStaff(
-        data.map((staff) => ({ label: staff.name, value: staff.sStaffId }))
+        data.map((staff) => ({ label: staff.name, value: staff.staffId }))
       );
     } catch (e) {
       console.error(e);
@@ -134,10 +162,8 @@ function OrdersManager() {
   }, []);
 
   useEffect(() => {
-    if (staff.length > 0) {
-      getOrders();
-    }
-  }, [staff]);
+    getOrders();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,13 +185,15 @@ function OrdersManager() {
           showSizeChanger: false,
           pageSizeOptions: ["5"],
         }}
+        confirmLoading={isLoading}
       />
-      <Modal
-        title="Confirm sale staff"
+       <Modal
+        title="Confirm delivery staff"
         centered
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}
+        confirmLoading={isLoading}
       >
         <Form name="form_item_path" layout="vertical" onSubmit={handleSubmit}>
           <label>Assign delivery staff</label>

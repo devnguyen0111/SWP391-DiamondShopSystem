@@ -21,6 +21,7 @@ function StoreProducts() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [covers, setCovers] = useState([]);
+  const [diamonds, setDiamonds] = useState([]);
 
   const columns = [
     {
@@ -40,37 +41,37 @@ function StoreProducts() {
       dataIndex: "unitPrice",
       key: "unitPrice",
     },
-    {
-      title: "Detail",
-      dataIndex: "detail",
-      key: "detail",
-      render: (_, data) => (
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                borderRadius: "18px",
-                defaultBg: "white",
-                defaultColor: "black",
-                defaultHoverBg: "white",
-                defaultHoverBorderColor: "black",
-                defaultHoverColor: "black",
-                defaultActiveBg: "black",
-                defaultActiveBorderColor: "black",
-                defaultActiveColor: "white",
-              },
-            },
-          }}
-        >
-          <Button
-            type="default"
-            onClick={() => showDetailModal(data.productId)}
-          >
-            Detail
-          </Button>
-        </ConfigProvider>
-      ),
-    },
+    // {
+    //   title: "Detail",
+    //   dataIndex: "detail",
+    //   key: "detail",
+    //   render: (_, data) => (
+    //     <ConfigProvider
+    //       theme={{
+    //         components: {
+    //           Button: {
+    //             borderRadius: "18px",
+    //             defaultBg: "white",
+    //             defaultColor: "black",
+    //             defaultHoverBg: "white",
+    //             defaultHoverBorderColor: "black",
+    //             defaultHoverColor: "black",
+    //             defaultActiveBg: "black",
+    //             defaultActiveBorderColor: "black",
+    //             defaultActiveColor: "white",
+    //           },
+    //         },
+    //       }}
+    //     >
+    //       <Button
+    //         type="default"
+    //         onClick={() => showDetailModal(data.productId)}
+    //       >
+    //         Detail
+    //       </Button>
+    //     </ConfigProvider>
+    //   ),
+    // },
   ].filter((item) => !item.hidden);
 
   const getProducts = async () => {
@@ -147,7 +148,7 @@ function StoreProducts() {
 
   const getDiamonds = async () => {
     try {
-      const response = await api.get("/api/Cover/getAllCover");
+      const response = await api.get("/api/Cover/getAllDiamonds");
       const data = response.data.$values;
       setCovers(data);
     } catch (e) {
@@ -159,11 +160,12 @@ function StoreProducts() {
   useEffect(() => {
     getProducts();
     getCovers();
+    // getDiamonds();
   }, []);
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           style={{ backgroundColor: "white" }}
           onClick={() => setStatus(true)}
@@ -171,7 +173,7 @@ function StoreProducts() {
         >
           Create New Product <IoMdAdd />
         </Button>
-      </div>
+      </div> */}
       <Table
         columns={columns}
         dataSource={products}
