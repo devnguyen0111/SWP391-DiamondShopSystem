@@ -1,8 +1,10 @@
 // import { useDispatch, useSelector } from "react-redux";
+
 import { Link, Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 // import { increment } from "../redux/features/counterSlice";
 // import { useEffect } from "react";
 // import api from "./axios";
+
 import Homepage from "../pages/homepage/Homepage";
 import DiamondsIntro from "../pages/diamondsIntro/DiamondsIntro";
 import Header from "../components/header/Header";
@@ -55,17 +57,20 @@ import CustomPendant from "../pages/customPendant/CustomerPendant";
 import CustomEarrings from "../pages/customEarrings/CustomEarrings";
 import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
+
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
 import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
 import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
 import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
+
 import ResetPassword from "../pages/resetPassword/ResetPassword";
 import LocationTracker from "../components/LocationTracker";
 import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
 import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
 
-
+import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
+import SendRequest from "../pages/dashboard/pages/staffChat/SendRequest";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -78,7 +83,12 @@ const ProtectedRouteAuth = ({ children }) => {
 
 const ProtectedRouteCustomer = ({ children }) => {
   const user = useSelector(selectUser);
-  if (user?.Role === "admin" || user?.Role === "manager" || user?.Role === "salestaff" || user?.Role === "deliverystaff") {
+  if (
+    user?.Role === "admin" ||
+    user?.Role === "manager" ||
+    user?.Role === "salestaff" ||
+    user?.Role === "deliverystaff"
+  ) {
     alertFail("You do not have permission to access this page.");
     return <Navigate to="/dashboard" replace />;
   }
@@ -105,7 +115,7 @@ export const router = createBrowserRouter([
       <div>
         <ScrollToTop />
         <Header />
-        <LocationTracker/>
+        <LocationTracker />
         <Outlet />
         <Footer />
       </div>
@@ -431,7 +441,7 @@ export const router = createBrowserRouter([
       //admin
       {
         path: "/dashboard/admin",
-        element: <AdminPage/>,
+        element: <AdminPage />,
       },
       {
         path: "/dashboard/admin/summary",
@@ -447,36 +457,37 @@ export const router = createBrowserRouter([
       },
       //hiu
       {
-
         path: "/dashboard/salestaff/orders",
         element: <OrdersStaff />,
       },
       {
-
         path: "/dashboard/salestaff",
         element: <OrdersStaff />,
       },
       {
-
         path: "/dashboard/salestaff/view-inbox",
         element: <StaffChat />,
       },
+      // {
+      //   path: "/dashboard/salestaff/send-mail",
+      //   element: <OrdersStaff/>,
+      // },
       {
         path: "/dashboard/salestaff/send-mail",
-        element: <OrdersStaff/>,
+        element: <SendEmail />,
       },
       {
         path: "/dashboard/salestaff/send-request",
-        element: <OrdersStaff/>,
+        element: <SendRequest />,
       },
 
       {
         path: "/dashboard/deliverytaff",
-        element: <DeliveryStaff/>,
+        element: <DeliveryStaff />,
       },
       {
         path: "/dashboard/deliverystaff/delivery",
-        element: <DeliveryStaff/>,
+        element: <DeliveryStaff />,
       },
     ],
   },

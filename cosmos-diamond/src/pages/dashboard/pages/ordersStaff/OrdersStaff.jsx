@@ -67,15 +67,14 @@ function OrdersStaff() {
           //     },
           //   }}
           // >
-            <Button
-              
-              onClick={() => {
-                setSelectedOrderId(data.orderId);
-                setModal1Open(true);
-              }}
-            >
-              Assign
-            </Button>
+          <Button
+            onClick={() => {
+              setSelectedOrderId(data.orderId);
+              setModal1Open(true);
+            }}
+          >
+            Assign
+          </Button>
           // </ConfigProvider>
         ),
     },
@@ -101,7 +100,13 @@ function OrdersStaff() {
               Delivered
             </Tag>
           ) : status === "Shipping" || status === "shipping" ? (
-            <Tag style={{ backgroundColor: "#102C57", color:'white', fontFamily: "Gantari" }}>
+            <Tag
+              style={{
+                backgroundColor: "#102C57",
+                color: "white",
+                fontFamily: "Gantari",
+              }}
+            >
               Shipping
             </Tag>
           ) : null}
