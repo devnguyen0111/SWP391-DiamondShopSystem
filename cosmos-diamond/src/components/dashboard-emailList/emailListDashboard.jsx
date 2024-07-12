@@ -23,6 +23,74 @@ const initialEmailData = [
     time: "19:24",
     unread: true,
   },
+  {
+    id: 3,
+    sender: "Matt from Nas Acade.",
+    subject: "Can you do this in one night?",
+    details: "AI + your ideas → 🎉 [Join the Challenge?]",
+    time: "20:04",
+    unread: true,
+  },
+  {
+    id: 4,
+    sender: "LinkedIn",
+    subject: "Sahil Gaba recently posted",
+    details:
+      "Trending on LinkedIn: Google offers 100+ free courses for programming. Here are my ...",
+    time: "19:24",
+    unread: true,
+  },
+  {
+    id: 5,
+    sender: "Matt from Nas Acade.",
+    subject: "Can you do this in one night?",
+    details: "AI + your ideas → 🎉 [Join the Challenge?]",
+    time: "20:04",
+    unread: true,
+  },
+  {
+    id: 6,
+    sender: "LinkedIn",
+    subject: "Sahil Gaba recently posted",
+    details:
+      "Trending on LinkedIn: Google offers 100+ free courses for programming. Here are my ...",
+    time: "19:24",
+    unread: true,
+  },
+  {
+    id: 7,
+    sender: "Matt from Nas Acade.",
+    subject: "Can you do this in one night?",
+    details: "AI + your ideas → 🎉 [Join the Challenge?]",
+    time: "20:04",
+    unread: true,
+  },
+  {
+    id: 8,
+    sender: "LinkedIn",
+    subject: "Sahil Gaba recently posted",
+    details:
+      "Trending on LinkedIn: Google offers 100+ free courses for programming. Here are my ...",
+    time: "19:24",
+    unread: true,
+  },
+  {
+    id: 9,
+    sender: "Matt from Nas Acade.",
+    subject: "Can you do this in one night?",
+    details: "AI + your ideas → 🎉 [Join the Challenge?]",
+    time: "20:04",
+    unread: true,
+  },
+  {
+    id: 10,
+    sender: "LinkedIn",
+    subject: "Sahil Gaba recently posted",
+    details:
+      "Trending on LinkedIn: Google offers 100+ free courses for programming. Here are my ...",
+    time: "19:24",
+    unread: true,
+  },
   // Thêm các email khác ở đây
 ];
 
