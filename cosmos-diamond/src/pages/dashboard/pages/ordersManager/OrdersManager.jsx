@@ -65,7 +65,9 @@ function OrdersManager() {
         status === "delivered" ||
         status === "Delivered" ||
         status === "pending" ||
-        status === "Pending" ? (
+        status === "Pending" ||
+        status === "shipping" ||
+        status === "Shipping" ? (
           <span>Assigned</span>
         ) : (
           // <ConfigProvider
@@ -82,15 +84,14 @@ function OrdersManager() {
           //     },
           //   }}
           // >
-            <Button
-             
-              onClick={() => {
-                setSelectedOrderId(data.orderId);
-                setModal1Open(true);
-              }}
-            >
-              Assign
-            </Button>
+          <Button
+            onClick={() => {
+              setSelectedOrderId(data.orderId);
+              setModal1Open(true);
+            }}
+          >
+            Assign
+          </Button>
           // </ConfigProvider>
         ),
     },
@@ -100,9 +101,11 @@ function OrdersManager() {
       dataIndex: "status",
       key: "status",
       filters: [
-        { text: "Processing", value: "processing" },
+        { text: "Paid", value: "paid" },
         { text: "Pending", value: "pending" },
         { text: "Delivered", value: "delivered" },
+        { text: "Shipping", value: "shipping" },
+        { text: "Processing", value: "processing" },
       ],
       onFilter: (value, record) => record.status === value,
       render: (status, data) => (
@@ -118,6 +121,20 @@ function OrdersManager() {
           ) : status === "delivered" || status === "Delivered" ? (
             <Tag style={{ backgroundColor: "#C3FF93", fontFamily: "Gantari" }}>
               Delivered
+            </Tag>
+          ) : status === "paid" || status === "Paid" ? (
+            <Tag style={{fontFamily: "Gantari" }}>
+              Paid
+            </Tag>
+          ) : status === "shipping" || status === "Shipping" ? (
+            <Tag
+              style={{
+                backgroundColor: "#102C57",
+                color: "white",
+                fontFamily: "Gantari",
+              }}
+            >
+              Shipping
             </Tag>
           ) : null}
         </div>
@@ -148,7 +165,7 @@ function OrdersManager() {
         `/api/Assign/saleStaffListByManagerId/${user.UserID}`
       );
       const data = response.data.$values;
-    
+
       setStaff(
         data.map((staff) => ({ label: staff.name, value: staff.staffId }))
       );
@@ -187,7 +204,7 @@ function OrdersManager() {
         }}
         confirmLoading={isLoading}
       />
-       <Modal
+      <Modal
         title="Confirm delivery staff"
         centered
         open={modal1Open}
