@@ -39,12 +39,12 @@ function DiamondDetailComponent({ product }) {
           </Col>
           <Col span={24}>
             <div className="summary__img">
-              <Image src={"/" + product.shape} />
+              <img src={`/${product.shape}.jpg`} alt="" />
             </div>
           </Col>
           <Col span={24}>
             <div className="summary__album">
-              <Image src={"/" + product.shape} />
+              <img src={`/${product.shape}.jpg`} alt="" />
             </div>
           </Col>
           <Col span={24} className="summary__action">

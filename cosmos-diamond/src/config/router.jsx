@@ -68,6 +68,8 @@ import ResetPassword from "../pages/resetPassword/ResetPassword";
 import LocationTracker from "../components/LocationTracker";
 import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
 import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
+import ManangerProductDetail from "../pages/dashboard/pages/productsManager/manangerProductDetail/ManangerProductDetail";
+import ManagerDiamondCatalog from './../pages/dashboard/pages/productsManager/managerDiamondCatalog/ManagerDiamondCatalog';
 
 import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
 import SendRequest from "../pages/dashboard/pages/staffChat/SendRequest";
@@ -437,6 +439,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manager/products",
         element: <ProductsManager />,
+      },
+      {
+        path: "/dashboard/manager/product/:id",
+        element: <ManangerProductDetail />,
+      },
+      {
+        path: "/dashboard/manager/diamonds",
+        element: <ManagerDiamondCatalog />,
       },
       //admin
       {
