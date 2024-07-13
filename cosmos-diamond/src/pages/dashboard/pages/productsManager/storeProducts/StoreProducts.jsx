@@ -11,6 +11,8 @@ import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import api from "../../../../../config/axios";
 import { alertFail, alertSuccess } from "../../../../../hooks/useNotification";
+import ProductDetail from "../../../../../components/productDetail/ProductDetail";
+import { useNavigate } from "react-router-dom";
 
 function StoreProducts() {
   const [id, setId] = useState("");
@@ -22,7 +24,7 @@ function StoreProducts() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [covers, setCovers] = useState([]);
   const [diamonds, setDiamonds] = useState([]);
-
+  const nav = useNavigate()
   const columns = [
     {
       title: "Product ID",
@@ -41,46 +43,47 @@ function StoreProducts() {
       dataIndex: "unitPrice",
       key: "unitPrice",
     },
-    // {
-    //   title: "Detail",
-    //   dataIndex: "detail",
-    //   key: "detail",
-    //   render: (_, data) => (
-    //     <ConfigProvider
-    //       theme={{
-    //         components: {
-    //           Button: {
-    //             borderRadius: "18px",
-    //             defaultBg: "white",
-    //             defaultColor: "black",
-    //             defaultHoverBg: "white",
-    //             defaultHoverBorderColor: "black",
-    //             defaultHoverColor: "black",
-    //             defaultActiveBg: "black",
-    //             defaultActiveBorderColor: "black",
-    //             defaultActiveColor: "white",
-    //           },
-    //         },
-    //       }}
-    //     >
-    //       <Button
-    //         type="default"
-    //         onClick={() => showDetailModal(data.productId)}
-    //       >
-    //         Detail
-    //       </Button>
-    //     </ConfigProvider>
-    //   ),
-    // },
+    {
+      title: "Detail",
+      dataIndex: "detail",
+      key: "detail",
+      render: (_, data) => (
+        <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                borderRadius: "18px",
+                defaultBg: "white",
+                defaultColor: "black",
+                defaultHoverBg: "white",
+                defaultHoverBorderColor: "black",
+                defaultHoverColor: "black",
+                defaultActiveBg: "black",
+                defaultActiveBorderColor: "black",
+                defaultActiveColor: "white",
+              },
+            },
+          }}
+        >
+          <Button
+            type="default"
+            onClick={() => nav(`/dashboard/manager/product/${data.productId}`)}
+          >
+            Detail
+          </Button>
+        </ConfigProvider>
+      ),
+    },
   ].filter((item) => !item.hidden);
 
   const getProducts = async () => {
     try {
       const response = await api.get("/api/Product/products");
-      
-      const data = response.data.$values.filter((product) => product.pp === "premade");
-      
-      console.log(data)
+
+      const data = response.data.$values.filter(
+        (product) => product.pp === "premade"
+      );
+
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");
       }
@@ -105,46 +108,35 @@ function StoreProducts() {
     }
   };
 
-
-
   const showDetailModal = (productId) => {
     getProductDetail(productId);
     setIsDetailModalVisible(true);
   };
 
-  const handleDetailModalCancel = () => {
-    setIsDetailModalVisible(false);
-    setSelectedProduct(null);
-  };
+  // const handleDetailModalCancel = () => {
+  //   setIsDetailModalVisible(false);
+  //   setSelectedProduct(null);
+  // };
 
-  const handleUpdateProduct = async (values) => {
-    setIsLoading(true);
-    try {
-      await api.put(
-        `/api/Product/updateProduct/${selectedProduct.productId}`,
-        values
-      );
-      alertSuccess("Product updated successfully!");
-      setIsDetailModalVisible(false);
-      getProducts();
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleUpdateProduct = async (values) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await api.put(
+  //       `/api/Product/updateProduct/${selectedProduct.productId}`,
+  //       values
+  //     );
+  //     alertSuccess("Product updated successfully!");
+  //     setIsDetailModalVisible(false);
+  //     getProducts();
+  //   } catch (e) {
+  //     console.error(e);
+  //     alertFail(e.response?.data || e.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const getCovers = async () => {
-    try {
-      const response = await api.get("/api/Cover/getAllCover");
-      const data = response.data.$values;
-      setCovers(data);
-    } catch (e) {
-      console.error(e);
-      alertFail(e.response?.data || e.message);
-    }
-  };
+
 
   const getDiamonds = async () => {
     try {
@@ -159,13 +151,13 @@ function StoreProducts() {
 
   useEffect(() => {
     getProducts();
-    getCovers();
+    
     // getDiamonds();
   }, []);
 
   return (
     <div>
-      {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           style={{ backgroundColor: "white" }}
           onClick={() => setStatus(true)}
@@ -173,7 +165,7 @@ function StoreProducts() {
         >
           Create New Product <IoMdAdd />
         </Button>
-      </div> */}
+      </div>
       <Table
         columns={columns}
         dataSource={products}
@@ -183,10 +175,11 @@ function StoreProducts() {
           pageSizeOptions: ["5"],
         }}
       />
-      <Modal
+      {/* <Modal
         title="Product Details"
         open={isDetailModalVisible}
         onCancel={handleDetailModalCancel}
+        width={1000}
         footer={[
           <Button key="cancel" onClick={handleDetailModalCancel}>
             Cancel
@@ -213,24 +206,25 @@ function StoreProducts() {
         {isLoading ? (
           <p>Loading...</p>
         ) : selectedProduct ? (
-          <Form form={form} layout="vertical" initialValues={selectedProduct}>
-          
-            <Form.Item
-              label="Cover"
-              name="coverId"
-              rules={[{ required: true, message: "Please select a cover!" }]}
-            >
-              <Select>
-                {covers.map((cover) => (
-                  <Select.Option value={cover.coverId}>{cover.coverName}</Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Form>
+          // <Form form={form} layout="vertical" initialValues={selectedProduct}>
+
+          //   <Form.Item
+          //     label="Cover"
+          //     name="coverId"
+          //     rules={[{ required: true, message: "Please select a cover!" }]}
+          //   >
+          //     <Select>
+          //       {covers.map((cover) => (
+          //         <Select.Option value={cover.coverId}>{cover.coverName}</Select.Option>
+          //       ))}
+          //     </Select>
+          //   </Form.Item>
+          // </Form>
+          <ProductDetail product={selectedProduct} />
         ) : (
           <p>No product details available.</p>
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
