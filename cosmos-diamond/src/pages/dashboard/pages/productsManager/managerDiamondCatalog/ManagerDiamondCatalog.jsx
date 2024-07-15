@@ -74,9 +74,10 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
       if (data.diamonds.$values.length < pageSize) {
         setHasMore(false);
       }
-      console.log(data);
+      
       setDiamondList(data.diamonds.$values);
       setAmount(data.totalDiamond);
+      
     } catch (error) {
       console.error("Failed to fetch diamonds", error);
     } finally {
@@ -92,17 +93,18 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
     pageNumber,
     pageSize,
     order,
+    amount
   ]);
 
   useEffect(() => {
     setDiamondList([]);
     setPageNumber(1);
     fetchDiamonds();
-  }, [diamondShape, price, carat, clarity, color, cut, order]);
+  }, [diamondShape, price, carat, clarity, color, cut, order, amount]);
 
   useEffect(() => {
     fetchDiamonds();
-  }, [pageNumber, pageSize, fetchDiamonds]);
+  }, [pageNumber, pageSize, fetchDiamonds, amount]);
 
   const handleOrder = (value) => {
     setOrder(value);
@@ -126,19 +128,19 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   };
 
   const handlePageChange = (page, pageSize) => {
-    console.log(page, pageSize);
+  
     setPageNumber(page);
     setPageSize(pageSize);
   };
   const handleSelectDiamond = (diamondId) => {
-    console.log(diamondId);
+    
     setOpen1(true);
     setSelectedDiamond(diamondId);
   };
   const handleOk = async () => {
     if (selectedDiamond) {
       const response = await api.get(`/api/Diamond/${selectedDiamond}`);
-      console.log(response.data);
+      
       setDiamondInfo([
         {
           key: 1,

@@ -73,6 +73,7 @@ import ManagerDiamondCatalog from './../pages/dashboard/pages/productsManager/ma
 
 import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
 import SendRequest from "../pages/dashboard/pages/staffChat/SendRequest";
+import ManangerAddProduct from './../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct';
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -447,6 +448,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manager/diamonds",
         element: <ManagerDiamondCatalog />,
+      },
+      {
+        path: "/dashboard/manager/product/add",
+        element: <ManangerAddProduct />,
       },
       //admin
       {
