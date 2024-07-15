@@ -12,7 +12,7 @@ import { IoMdAdd } from "react-icons/io";
 import api from "../../../../../config/axios";
 import { alertFail, alertSuccess } from "../../../../../hooks/useNotification";
 import ProductDetail from "../../../../../components/productDetail/ProductDetail";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function StoreProducts() {
   const [id, setId] = useState("");
@@ -157,15 +157,14 @@ function StoreProducts() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <Link to='/dashboard/manager/product/add' style={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           style={{ backgroundColor: "white" }}
-          onClick={() => setStatus(true)}
           className="mode__createMod"
         >
           Create New Product <IoMdAdd />
         </Button>
-      </div>
+      </Link>
       <Table
         columns={columns}
         dataSource={products}

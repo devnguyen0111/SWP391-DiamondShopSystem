@@ -38,38 +38,7 @@ function ManangerProductDetail() {
       console.log(response.data);
       fetchCover(response.data.categoryId);
       fetchCoverOptions(response.data.coverId);
-      setDiamondInfo([
-        {
-          key: 1,
-          label: "Diamond Name",
-          children: response.data.diamondName,
-          span: 6,
-        },
-        {
-          key: 7,
-          label: "Shape",
-          children: response.data.shape,
-        },
-        {
-          key: 5,
-          label: "Carat",
-          children: response.data.carat,
-        },
-        {
-          key: 2,
-          label: "Clarity",
-          children: response.data.clarity,
-        },
-        {
-          key: 3,
-          label: "Color",
-          children: response.data.color,
-        },
-        {
-          label: "Cut",
-          children: response.data.cut,
-        },
-      ]);
+      fetchDiamondInfo(response.data.diamondId);
     } catch (e) {
       console.error(e);
       alertFail(e.response?.data || e.message);
@@ -80,10 +49,16 @@ function ManangerProductDetail() {
     const response = await api.get(`/api/Diamond/${diamondId}`);
     setDiamondInfo([
       {
+        key: 0,
+        label: "Diamond ID",
+        children: response.data.diamondId,
+        span: 2,
+      },
+      {
         key: 1,
         label: "Diamond Name",
         children: response.data.diamondName,
-        span: 6,
+        span: 2,
       },
       {
         key: 5,
@@ -117,7 +92,7 @@ function ManangerProductDetail() {
     console.log(response.data);
 
     let covers = response.data.$values.filter(
-      (c) => c.categoryId == categoryId
+      (c) => c.categoryId == categoryId && c.status == "Available"
     );
     setCover(covers);
   };
@@ -134,24 +109,30 @@ function ManangerProductDetail() {
   }, []);
 
   const handleFinish = async (values) => {
-    fetch(`${apiHeader}/Product/updateProduct`,{
+    console.log({
+      ...values,
+      diamondId: diamondInfo[0].children,
+      pp: "premade",
+      productId: productId,
+    });
+
+    fetch(`${apiHeader}/Product/updateProduct`, {
       method: "PUT",
       headers: {
-        'Content-type': 'application/json'
+        "Content-type": "application/json",
       },
       body: JSON.stringify({
-        ...values,  
-       diamondId: diamondInfo[0].children,
-       pp: 'premade',
-       productId: productId
+        ...values,
+        diamondId: diamondInfo[0].children,
+        pp: "premade",
+        productId: productId,
       }),
-    }).then(res =>res.json())
-    .then(data =>{
-      alertSuccess('Update Jewelry succesfull')
-      nav('/dashboard/manager/products')
-
     })
-
+      .then((res) => res.json())
+      .then((data) => {
+        alertSuccess("Update Jewelry succesfull");
+        // nav("/dashboard/manager/products");
+      });
   };
   const handleImg = (value) => {
     if (metalTypes) {
@@ -165,6 +146,7 @@ function ManangerProductDetail() {
         <Row
           style={{ width: "100%", color: "#1f1f1f" }}
           className="product-update"
+          gutter={[0,40]}
         >
           <Col lg={5} md={24} className="side">
             <Flex vertical gap={40}>
@@ -184,17 +166,28 @@ function ManangerProductDetail() {
                   <div className="side__header">Status</div>
                   <div className="side__icon"></div>
                 </Flex>
-                <Select className="" style={{ width: "100%", marginTop:'20px' }}></Select>
-                <p style={{marginTop:'10px', fontSize:'12px', color:'#99a1b7'}}>Set Jewlery Status</p>
+                <Select
+                  className=""
+                  style={{ width: "100%", marginTop: "20px" }}
+                ></Select>
+                <p
+                  style={{
+                    marginTop: "10px",
+                    fontSize: "12px",
+                    color: "#99a1b7",
+                  }}
+                >
+                  Set Jewlery Status
+                </p>
               </div>
             </Flex>
           </Col>
-          <Col lg={16} md={24} className="form" offset={1}>
+          <Col lg={{span: 16, offset:1}} xs={24} className="form">
             <div className="side__header">General Information</div>
 
             <Form layout="vertical" onFinish={handleFinish}>
               <Form.Item label="Jewelry name">
-                <Input disabled value={product && product.productName} />
+                <Input disabled value={product.productName} />
               </Form.Item>
               <div className="side__header">Pricing</div>
               <Form.Item
@@ -205,34 +198,46 @@ function ManangerProductDetail() {
                     required: true,
                   },
                 ]}
-                initialValue={product && product.unitPrice}
+                initialValue={product.realUnitPrice}
               >
                 <InputNumber min={1} addonAfter="$" />
               </Form.Item>
               <div className="side__header">Cover</div>
-              <Form.Item
-                label="Cover Name"
-                name="coverId"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                initialValue={product && product.coverId}
-              >
-                <Select
-                  placeholder={product && product.coverName}
-                  onSelect={(value) => fetchCoverOptions(value)}
-                  options={
-                    cover &&
-                    cover.length > 0 &&
-                    cover.map((c) => ({
-                      label: c.coverName,
-                      value: c.coverId,
-                    }))
-                  }
-                ></Select>
-              </Form.Item>
+              <Flex wrap gap="large">
+                <Form.Item
+                  label="Cover Name"
+                  name="coverId"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  initialValue={product.coverId}
+                >
+                  <Select
+                    placeholder={product.coverName}
+                    onSelect={(value) => fetchCoverOptions(value)}
+                    options={
+                      cover &&
+                      cover.length > 0 &&
+                      cover.map((c) => ({
+                        label: c.coverName,
+                        value: c.coverId,
+                      }))
+                    }
+                  />
+                </Form.Item>
+                <Flex vertical gap="small">
+                  <Flex className="" justify="flex-start" gap="small">
+                    <div className="">Status</div>
+                    <div
+                      className="side__icon"
+                      style={{ width: "5px", height: "5px" }}
+                    ></div>
+                  </Flex>
+                  <Input disabled value={product.coverStatus} />
+                </Flex>
+              </Flex>
               <Flex gap="large">
                 <Form.Item
                   label="Metal type"
@@ -242,9 +247,10 @@ function ManangerProductDetail() {
                       required: true,
                     },
                   ]}
-                  initialValue={product && product.metaltypeName}
+                  initialValue={product && product.metalTypeId}
                 >
                   <Select
+                    style={{ minWidth: "160px" }}
                     placeholder={product && product.metalTypeId}
                     onChange={handleImg}
                     options={
@@ -269,7 +275,6 @@ function ManangerProductDetail() {
                   initialValue={product && product.sizeId}
                 >
                   <Select
-                    placeholder={product && product.sizeName}
                     options={
                       sizes &&
                       sizes.length > 0 &&
@@ -291,6 +296,16 @@ function ManangerProductDetail() {
                   Choose Diamond
                 </Button>
               </Flex>
+              <Flex vertical gap="small" style={{ width: "180px" }}>
+                <Flex className="" justify="flex-start" gap="small">
+                  <div className="">Status</div>
+                  <div
+                    className="side__icon"
+                    style={{ width: "5px", height: "5px" }}
+                  ></div>
+                </Flex>
+                <Input disabled value={product.diamondStatus} />
+              </Flex>
               <Descriptions
                 bordered
                 layout="vertical"
@@ -299,7 +314,11 @@ function ManangerProductDetail() {
                 title="Diamond Information"
               />
               <Form.Item>
-                <Button style={{marginTop:'20px'}} type="primary" htmlType="submit">
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="primary"
+                  htmlType="submit"
+                >
                   Save
                 </Button>
               </Form.Item>
