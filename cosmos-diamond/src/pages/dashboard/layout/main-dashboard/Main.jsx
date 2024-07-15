@@ -19,7 +19,7 @@ function Main({ children }) {
   pathname = pathname.replace("/", "");
 
   return (
-    <Layout className="layout-dashboard">
+    <Layout className="layout-dashboard" style={{overflowY:"hidden"}}>
       <Drawer
         title={false}
         placement="left"
@@ -87,7 +87,7 @@ function Main({ children }) {
             <p style={{ fontSize:"1.5em"}}>Welcome back to Dashboard.</p>
           </Card>
         </div> */}
-        <div className="div-ant" style={{ height: "86vh" }}>
+        <div className="div-ant" style={{ height: "86vh", overflowY:'scroll' }}>
           <Outlet />
         </div>
       </Layout>

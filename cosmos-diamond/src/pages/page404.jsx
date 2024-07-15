@@ -11,6 +11,8 @@ function page404() {
     homeLink = "/dashboard/manager";
   } else if (user?.Role === "salestaff") {
     homeLink = "/dashboard/salestaff";
+  } else if (user?.Role === "deliverystaff") {
+    homeLink = "/dashboard/deliverytaff";
   } else if (user?.Role === "customer") {
     homeLink = "/";
   }

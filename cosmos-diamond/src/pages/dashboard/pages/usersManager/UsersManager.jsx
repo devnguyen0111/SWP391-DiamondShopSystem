@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Table, Modal, message } from "antd";
+import { Button, Table, Modal, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
@@ -27,19 +27,35 @@ function UsersManager() {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      render: (role) => (
+        <div>
+          {role === "manager" ? (
+            <a>Manager</a>
+          ) : role === "salestaff" ? (
+            <a>Sale staff</a>
+          ) : role === "deliverystaff" ? (
+            <a>Delivery staff</a>
+          ) : role === "customer" ? (
+            <a>Customer</a>
+          ) : role === "staff" ? (
+            <a>Staff</a>
+          ) : null}
+        </div>
+      ),
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       filters: [
-        { text: "Active", value: "active" },
-        { text: "Disable", value: "disable" },
+        { text: "Active", value: "Active" },
+        { text: "Disabled", value: "Disabled" },
       ],
-      onFilter: (value, record) => record.status === value,
+      onFilter: (value, record) =>
+        record.status.toLowerCase() === value.toLowerCase(),
       render: (status) => (
         <div>
-          {status === "active" ? (
+          {status.toLowerCase() === "active" ? (
             <GoDotFill style={{ color: "green", fontSize: "1.7em" }} />
           ) : (
             <MdOutlineBlock style={{ color: "red", marginLeft: "0.2em" }} />
@@ -52,7 +68,6 @@ function UsersManager() {
       key: "action",
       render: (text, record) => (
         <Button
-          type="primary"
           onClick={() => {
             setSelectedUser(record);
             setModalVisible(true);
@@ -62,17 +77,15 @@ function UsersManager() {
         </Button>
       ),
     },
-  ].filter((item) => !item.hidden);
+  ];
 
   const getUsers = async () => {
     try {
-      const response = await api.get("/api/Admin/users");
-      const data = response.data.$values.filter(
-        (user) =>
-          user.role === "staff" ||
-          user.role === "manager" ||
-          user.role === "customer"
-      );
+      const response = await api.get("/api/Admin/usersWithoutAdmin");
+      const data = response.data.$values.map((user) => ({
+        ...user,
+        status: user.status.toLowerCase() === "active" ? "Active" : "Disabled",
+      }));
       setUsers(data);
     } catch (e) {
       console.error(e);
@@ -81,16 +94,25 @@ function UsersManager() {
 
   const changeUserStatus = async () => {
     setIsLoading(true);
-    const newStatus = selectedUser.status === "active" ? "disable" : "active";
+    const newStatus = selectedUser.status === "Active" ? "Disabled" : "Active";
     try {
-      const response = await api.post(`/api/Admin/statusManagement/${selectedUser.userId}`);
-      message.success(`Status changed to ${newStatus} for user ${selectedUser.userId}`);
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.userId === selectedUser.userId ? { ...user, status: newStatus } : user
-        )
+      const response = await api.post(
+        `/api/Admin/statusManagement/${selectedUser.userId}`,
+        { status: newStatus.toLowerCase() }
       );
-      setModalVisible(false);
+      console.log(response.data);
+      if (response.status === 200) {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.userId === selectedUser.userId
+              ? { ...user, status: newStatus }
+              : user
+          )
+        );
+        setModalVisible(false);
+      } else {
+        throw new Error("Failed to change status");
+      }
     } catch (e) {
       console.error(e);
       message.error(`Failed to change status for user ${selectedUser.userId}`);
@@ -117,16 +139,16 @@ function UsersManager() {
       <Modal
         title="Confirm Status Change"
         centered
-        visible={modalVisible}
+        open={modalVisible}
         onOk={changeUserStatus}
         onCancel={() => setModalVisible(false)}
         confirmLoading={isLoading}
       >
-        <p>
+        <a>
           Are you sure you want to change the status of user{" "}
           {selectedUser?.userId} from {selectedUser?.status} to{" "}
-          {selectedUser?.status === "active" ? "disable" : "active"}?
-        </p>
+          {selectedUser?.status === "Active" ? "Disabled" : "Active"}?
+        </a>
       </Modal>
     </div>
   );

@@ -2,10 +2,33 @@ import React, { useEffect, useRef, useState } from "react";
 import api from "../../config/axios";
 import Chart from "chart.js/auto";
 import "./AdminPage.css";
+import { BsCart2 } from "react-icons/bs";
+import { IoIosApps } from "react-icons/io";
+import { CiCreditCard1 } from "react-icons/ci";
+import { AiOutlineSync } from "react-icons/ai";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { FaShippingFast } from "react-icons/fa";
+import { FaArrowsRotate } from "react-icons/fa6";
+import { TbCash } from "react-icons/tb";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
 
 function AdminPage() {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
+  const [todayOrders, setTodayOrders] = useState(0);
+  const [thisMonthOrders, setThisMonthOrders] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [processing, setProcessing]  = useState(0);
+  const [shipping, setShipping]  = useState(0);
+  const [delivered, setDelivered]  = useState(0);
+  const [cancelled, setCancelled]  = useState(0);
+  const [paid, setPaid]  = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const [orderStats, setOrderStats] = useState({
+    total: 0,
+    pending: 0,
+    processing: 0,
+    delivered: 0,
+  });
 
   const [datas, setData] = useState({
     users: 0,
@@ -13,132 +36,154 @@ function AdminPage() {
     diamonds: 0,
   });
 
+  const getTodayOrders = async () => {
+    try {
+      const response = await api.get("/api/Admin/TodayOrders");
+      const data = response.data;
+      setTodayOrders(data.todayOrder);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getThisMonthOrders = async () => {
+    try {
+      const response = await api.get("/api/Admin/ThisMonthOrders");
+      const data = response.data;
+      setThisMonthOrders(data.thisMonthOrder);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getTotalOrders = async () => {
+    try {
+      const response = await api.get("/api/Admin/ThisMonthOrders");
+      const data = response.data;
+      setTotalOrders(data.thisMonthOrder);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getTotal = async () => {
+    try {
+      const response = await api.get("/api/Admin/CountOrders");
+      const data = response.data;
+      setTotal(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getStatusOrder = async () => {
+    try {
+      const response = await api.get("/api/Admin/OrderCheckStatus");
+      const data = response.data;
+      setProcessing(data.processing);
+      setShipping(data.shipping);
+      setDelivered(data.delivered);
+      setCancelled(data.cancelled);
+      setPaid(data.paid);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
-    // Fetch data for users, products, and diamonds
-    const fetchData = async () => {
-      try {
-        const userResponse = await api.get("/api/Admin/CountUser");
-        const productResponse = await api.get("/api/Product/CountProduct");
-        const diamondResponse = await api.get("/api/Diamond/CountDiamond");
-
-        setData({
-          users: userResponse,
-          products: productResponse,
-          diamonds: diamondResponse,
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    getTodayOrders();
+    getThisMonthOrders();
+    getTotalOrders();
+    getStatusOrder();
+    getTotal();
   }, []);
 
-  useEffect(() => {
-    if (!chartRef.current) return;
-
-    const chartData = {
-      labels: ["Users", "Products", "Diamonds"],
-      datasets: [
-        {
-          label: "Count",
-          data: [datas.users, datas.products, datas.diamonds],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255,99,132,1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-
-    const initializeOrUpdateChart = () => {
-      if (chartInstance.current) {
-        chartInstance.current.data = chartData;
-        chartInstance.current.update();
-      } else {
-        chartInstance.current = new Chart(chartRef.current, {
-          type: "bar", // Change to 'bar' for Bar Chart
-          data: chartData,
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-    };
-
-    if (datas.users || datas.products || datas.diamonds) {
-      initializeOrUpdateChart();
-    }
-
-    return () => {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-    };
-  }, [datas]);
-
   return (
-    <div className="wrapper-card">
-      <div className="card">
-        <h2>New Users</h2>
-        <div className="detail-back">
-          <div className="number">230</div>
+    <div>
+      <div className="wrapper-card">
+        <div className="card todayOrders">
           <div className="percentage">
-            <span className="arrow">↑</span>
-            25%
+            <IoIosApps />
           </div>
-          <div className="description">vs previous 30 days</div>
+          <h2>Today orders </h2>
+          <div className="detail-back">
+            <div className="number">${todayOrders}</div>
+          </div>
+        </div>
+        <div className="card thisMonth">
+          <div className="percentage">
+            <AiOutlineSync />
+          </div>
+          <h2>This month orders </h2>
+          <div className="detail-back">
+            <div className="number">${thisMonthOrders}</div>
+          </div>
+        </div>
+        <div className="card totalOrders">
+          <div className="percentage">
+            <CiCreditCard1 />
+          </div>
+          <h2>Total orders </h2>
+          <div className="detail-back">
+            <div className="number">${totalOrders}</div>
+          </div>
         </div>
       </div>
-      <div className="card">
-        <h2>New Users</h2>
-        <div className="detail-back">
-          <div className="number">230</div>
-          <div className="percentage">
-            <span className="arrow">↑</span>
-            25%
+      <div className="wrapper-card-lower">
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <BsCart2 />
           </div>
-          <div className="description">vs previous 30 days</div>
-        </div>
-      </div>
-      <div className="card">
-        <h2>New Users</h2>
-        <div className="detail-back">
-          <div className="number">230</div>
-          <div className="percentage">
-            <span className="arrow">↑</span>
-            25%
+          <div className="card-lower-info">
+            <p>Total Order</p>
+            <h2>{total}</h2>
           </div>
-          <div className="description">vs previous 30 days</div>
         </div>
-      </div>
-      <div className="card">
-        <h2>New Users</h2>
-        <div className="detail-back">
-          <div className="number">230</div>
-          <div className="percentage">
-            <span className="arrow">↑</span>
-            25%
+
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <FaArrowsRotate />
           </div>
-          <div className="description">vs previous 30 days</div>
+          <div className="card-lower-info">
+            <p>Order Processing</p>
+            <h2>{processing}</h2>
+          </div>
         </div>
-      </div>
-      {/* Chart container */}
-      <div className="card chart-card">
-        <h2>Summary</h2>
-        <div className="chart" id="combined-chart">
-          <canvas ref={chartRef}></canvas>
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <FaShippingFast />
+          </div>
+          <div className="card-lower-info">
+            <p>Order Shipping</p>
+            <h2>{shipping}</h2>
+          </div>
+        </div>
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <IoMdCheckmarkCircleOutline />
+          </div>
+          <div className="card-lower-info">
+            <p>Order Delivered</p>
+            <h2>{delivered}</h2>
+          </div>
+        </div>
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <TbCash />
+          </div>
+          <div className="card-lower-info">
+            <p>Order Paid</p>
+            <h2>{paid}</h2>
+          </div>
+        </div>
+        <div className="card-lower">
+          <div className="card-lower-icon">
+            <FaArrowRightArrowLeft />
+          </div>
+          <div className="card-lower-info">
+            <p>Order Cancelled</p>
+            <h2>{cancelled}</h2>
+          </div>
         </div>
       </div>
     </div>

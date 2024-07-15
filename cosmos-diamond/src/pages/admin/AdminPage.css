@@ -1,102 +1,103 @@
 .wrapper-card {
-  margin-top: 30px;
   display: flex;
   flex-direction: row;
   width: 100% !important;
   justify-content: center;
-  gap: 1.3em;
-  padding-left: 1.7em;
+  padding: 0 2em;
+  gap: 1em;
 }
 
 .card {
   font-family: "Gantari";
   display: flex;
   flex-direction: column;
-  background-color: #fcf5de;
-  border-radius: 10px;
-  width: calc(100% / 4);
-  height: 200px;
-  padding: 20px;
+  border-radius: 5px;
+  width: calc(100% / 3);
+  align-items: center;
 }
 
 .card h2 {
-  margin: 0;
-  font-weight: bold;
-  font-size: 1.1rem;
-  color: #666;
+  margin-top: 0.5em;
+  font-size: 1rem;
+  color: rgb(235, 232, 232);
   text-align: start !important;
 }
 
 .number {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: bold;
-  color: #333;
+  color: white;
+  padding-bottom: 0.3em;
 }
 
 .percentage {
-  font-size: 1.1rem;
-  color: green;
+  font-size: 1.7em;
   display: flex;
   align-items: center;
+  padding-top: 1em;
 }
 
 .arrow {
-  margin-right: 5px;
-}
-
-.description {
-  font-size: 0.75rem;
-  color: #999;
-  margin-top: 5px;
 }
 
 .detail-back {
   flex-direction: column;
   display: flex;
   align-items: center;
-  margin-top: 8px;
-  padding-bottom: 15px;
 }
 
-@media only screen and (max-width: 1280px) {
-  .card {
-    padding: 20px;
-    width: 200px;
-    height: 150px;
-    margin-right: 50px;
-  }
+.todayOrders {
+  background-color: #1f95a3;
+  color: white;
 }
 
-.wrapper-card {
-  margin-top: 30px;
+.thisMonth {
+  background-color: #3e83f8;
+  color: white;
+}
+
+.totalOrders {
+  background-color: #1d9f6e;
+  color: white;
+}
+
+.wrapper-card-lower {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  width: 100% !important;
   justify-content: center;
-  gap: 1.3em;
-  padding-left: 1.7em;
+  padding: 1em 2em;
+  gap: 1em;
 }
 
-.card {
+.card-lower {
   font-family: "Gantari";
   display: flex;
-  flex-direction: column;
-  background-color: #fcf5de;
-  border-radius: 10px;
-  width: calc(100% / 4 - 20px); /* Adjust width to fit 3 cards */
-  height: 200px;
-  padding: 20px;
+  flex-direction: row;
+  border-radius: 5px;
+  width: calc(100% / 6);
+  align-items: center;
+  background-color: rgb(34, 49, 71);
+  padding: 1em;
 }
 
-/* Styles for .wrapper-card, .card, and other elements are already defined */
-.chart-card {
-  padding: 20px;
-  margin: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+.card-lower-icon {
+  padding: 0 0.5em;
+  font-size: 1.7em;
 }
 
-.chart {
-  width: 100%;
-  height: 300px;
+.card-lower-info {
+  padding-left: 1em;
 }
-/* Ensure other styles are correctly applied */
+
+.card-lower-info p {
+  font-family:"Gantari";
+ font-weight: 500;
+ font-size: 1.1em;
+}
+
+.card-lower-info h2 {
+  font-family:"Gantari";
+  
+}
+

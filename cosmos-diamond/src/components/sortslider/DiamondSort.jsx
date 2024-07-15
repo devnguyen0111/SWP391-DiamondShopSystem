@@ -109,22 +109,22 @@ function DiamondSort() {
     setOrder(value);
   };
   const resetFilter = () => {
-     setPrice([MIN_PRICE, MAX_PRICE]);
-     setCarat([MIN_CARAT, MAX_CARAT]);
-     setClarity([1, 9]);
-     setClarityName(INIT_CLARITY);
-     setColor([1, 9]);
-     setColorName(INIT_COLOR_NAME);
-     setCut([1, 5]);
-     setOrder("desc")
-     setDiamondList([])
-     setPageNumber(1)
-     setDiamondShape("Round")
-     const shapes = document.querySelectorAll(".shape__block");
-     shapes.forEach((s,i)=>{
-      s.classList.remove('chosen')
-     })
-     shapes[0].classList.add("chosen");
+    setPrice([MIN_PRICE, MAX_PRICE]);
+    setCarat([MIN_CARAT, MAX_CARAT]);
+    setClarity([1, 9]);
+    setClarityName(INIT_CLARITY);
+    setColor([1, 9]);
+    setColorName(INIT_COLOR_NAME);
+    setCut([1, 5]);
+    setOrder("desc");
+    setDiamondList([]);
+    setPageNumber(1);
+    setDiamondShape("Round");
+    const shapes = document.querySelectorAll(".shape__block");
+    shapes.forEach((s, i) => {
+      s.classList.remove("chosen");
+    });
+    shapes[0].classList.add("chosen");
   };
   return (
     <>
@@ -196,7 +196,7 @@ function DiamondSort() {
               INIT_CUT={INIT_CUT}
             />
           </Col>
-          <Col span={24}className="sort__reset">
+          <Col span={24} className="sort__reset">
             <button className="sort__btn--reset">
               <i class="fa-solid fa-arrow-rotate-right"></i>
               <span onClick={resetFilter}>Reset Filters</span>
@@ -226,9 +226,7 @@ function DiamondSort() {
                         },
                       ]}
                     />
-                    
                   </div>
-                  
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>
@@ -236,7 +234,9 @@ function DiamondSort() {
                       diamondList.map((diamond, index) => (
                         <Col
                           span={6}
-                          xs={12} md={8} lg={6}
+                          xs={12}
+                          md={8}
+                          lg={6}
                           className="product__container"
                           key={index}
                         >
