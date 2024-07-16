@@ -1,0 +1,26 @@
+.new-row {
+  animation: success linear 1s;
+}
+.remove {
+  animation: removed linear 1s;
+}
+
+@keyframes success {
+  0% {
+  }
+
+  60% {
+    background-color: rgb(177, 240, 177);
+  }
+  100% {
+    background-color: unset;
+  }
+}
+@keyframes removed {
+    60%{
+        background-color: #ffc7c8;
+    }
+    100%{
+        background-color: unset;
+    }
+}

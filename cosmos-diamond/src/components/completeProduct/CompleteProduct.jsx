@@ -54,31 +54,46 @@ function CompleteProduct() {
     }
   };
   const createProduct = async () => {
-    const res = await fetch(`${apiHeader}/Product/confirm`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        coverId: cover.coverId,
-        metaltypeId: cover.metalId,
-        sizeId: cover.sizeId,
-        diamondId: diamond.diamondId,
-      }),
-    });
-    const data = await res.json();
-    console.log(data.productId);
-    return data.productId;
+    try {
+      if (!cover || !diamond) {
+        throw new Error("Cover or diamond is not set");
+      }
+      const res = await fetch(`${apiHeader}/Product/confirm`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          coverId: cover.coverId,
+          metaltypeId: cover.metalId,
+          sizeId: cover.sizeId,
+          diamondId: diamond.diamondId,
+        }),
+      });
+      if (res.status === 200) {
+        const data = await res.json();
+        console.log("1 data productId", data);
+        return data;
+      }
+      else{
+        const data = res.responseText
+        alertFail(data)
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAddToCart = async () => {
     let token = getToken();
     if (token) {
       const productId = await createProduct();
+      console.log(productId);
       fetch(`${apiHeader}/Cart/addToCart`, {
         method: "POST",
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           id: token.UserID,
@@ -99,28 +114,34 @@ function CompleteProduct() {
       openNotification("topRight", "warning", "Please Login to add to Cart");
     }
   };
+
   const buyNow = async () => {
     const token = getToken();
     if (token) {
-      try{
-        const productId = await createProduct();
-        console.log(productId);
-        let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
-          userId: token.UserID,
-          products: [
-            {
-              productId: productId,
-              quantity: 1,
-            },
-          ],
-        });
-        setCheckout(response.data);
-        localStorage.setItem("checkout", JSON.stringify(response.data));
-        nav(`/checkout/${token.UserID}`);
-      }catch(e){
-        alertFail('Something went wrong')
+      try {
+        let productId = await createProduct();
+        console.log("2 productid", productId);
+        if (productId) {
+          console.log("3 productId", productId);
+          let response = await api.post(`/api/Order/checkoutInfo`, {
+            userId: token.UserID,
+            products: [
+              {
+                productId: productId,
+                quantity: 1,
+              },
+            ],
+          });
+          setCheckout(response.data);
+          localStorage.setItem("checkout", JSON.stringify(response.data));
+          nav(`/checkout/${token.UserID}`);
+        } else {
+          alertFail("No product Id returned from product creation");
+        }
+      } catch (e) {
+        console.error("Failed to process buy now", e);
+        alertFail("Something went wrong during the checkout process");
       }
-      
     } else {
       openNotification("topRight", "warning", "Please Login to Buy Now");
     }

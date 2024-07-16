@@ -6,6 +6,7 @@ import {
   Table,
   Form,
   Select,
+  Flex,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -13,6 +14,7 @@ import api from "../../../../../config/axios";
 import { alertFail, alertSuccess } from "../../../../../hooks/useNotification";
 import ProductDetail from "../../../../../components/productDetail/ProductDetail";
 import { Link, useNavigate } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 function StoreProducts() {
   const [id, setId] = useState("");
@@ -24,7 +26,10 @@ function StoreProducts() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [covers, setCovers] = useState([]);
   const [diamonds, setDiamonds] = useState([]);
-  const nav = useNavigate()
+
+  const [filteredProduct, setFilteredProduct] = useState([]);
+  const [search, setSearch] = useState();
+  const nav = useNavigate();
   const columns = [
     {
       title: "Product ID",
@@ -88,6 +93,7 @@ function StoreProducts() {
         throw new Error("Dữ liệu nhận được không phải là mảng");
       }
       setProducts(data);
+      setFilteredProduct(data);
     } catch (e) {
       console.error(e);
       alertFail(e.response?.data || e.message);
@@ -136,8 +142,6 @@ function StoreProducts() {
   //   }
   // };
 
-
-
   const getDiamonds = async () => {
     try {
       const response = await api.get("/api/Cover/getAllDiamonds");
@@ -151,23 +155,47 @@ function StoreProducts() {
 
   useEffect(() => {
     getProducts();
-    
+
     // getDiamonds();
   }, []);
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
 
+    setSearch(value);
+    setSearch(value);
+    const filteredData = products.filter(
+      (product) =>
+        product.productName.toLowerCase().includes(value) ||
+        product.productId.toString().includes(value)
+    );
+    setFilteredProduct(filteredData);
+  };
   return (
     <div>
-      <Link to='/dashboard/manager/product/add' style={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          style={{ backgroundColor: "white" }}
-          className="mode__createMod"
+      <Flex justify="space-between">
+        <Link
+          to="/dashboard/manager/product/add"
+          style={{ display: "flex", justifyContent: "space-between" }}
         >
-          Create New Product <IoMdAdd />
-        </Button>
-      </Link>
+          <Button
+            style={{ backgroundColor: "white" }}
+            className="mode__createMod"
+          >
+            Create New Product <IoMdAdd />
+          </Button>
+        </Link>
+        <div style={{ width: "300px" }}>
+          <Input
+            placeholder="Search Product Name or ID"
+            addonBefore={<SearchOutlined />}
+            onChange={(e) => handleSearch(e)}
+            value={search}
+          />
+        </div>
+      </Flex>
       <Table
         columns={columns}
-        dataSource={products}
+        dataSource={filteredProduct}
         pagination={{
           defaultPageSize: 5,
           showSizeChanger: false,

@@ -146,7 +146,7 @@ function ManangerProductDetail() {
         <Row
           style={{ width: "100%", color: "#1f1f1f" }}
           className="product-update"
-          gutter={[0,40]}
+          gutter={[0, 40]}
         >
           <Col lg={5} md={24} className="side">
             <Flex vertical gap={40}>
@@ -182,7 +182,7 @@ function ManangerProductDetail() {
               </div>
             </Flex>
           </Col>
-          <Col lg={{span: 16, offset:1}} xs={24} className="form">
+          <Col lg={{ span: 16, offset: 1 }} xs={24} className="form">
             <div className="side__header">General Information</div>
 
             <Form layout="vertical" onFinish={handleFinish}>
