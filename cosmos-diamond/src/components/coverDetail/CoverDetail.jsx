@@ -87,6 +87,7 @@ const CoverDetail = () => {
         metalId: selectedMetal.metalId,
         categoryId: cover.categoryId
       };
+      console.log(selectedCover);
       sessionStorage.setItem("cover", JSON.stringify(selectedCover));
       nav("/custom-ring-by-diamond/complete-product");
     } else {

@@ -155,10 +155,7 @@ function CheckoutPage() {
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");
       }
-      console.log('checkout', checkout);
-      console.log('voucher', data);
       data = data.filter((v)=> (checkout.total >= v.bottomPrice  && checkout.total <= v.topPrice ))
-      console.log(data);
       setVouchers(data);
     } catch (e) {
       console.error(e);

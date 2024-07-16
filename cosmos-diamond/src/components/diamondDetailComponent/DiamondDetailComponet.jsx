@@ -24,7 +24,6 @@ function DiamondDetailComponent({ product }) {
   const url = window.location.href;
   const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
  
-
   return (
     <div className="detail" style={{marginTop:'70px'}}>
       <Row className="summary" gutter={[20, 16]}>

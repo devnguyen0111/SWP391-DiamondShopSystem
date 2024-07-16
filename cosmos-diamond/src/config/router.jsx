@@ -74,6 +74,9 @@ import ManagerDiamondCatalog from './../pages/dashboard/pages/productsManager/ma
 import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
 import SendRequest from "../pages/dashboard/pages/staffChat/SendRequest";
 import ManangerAddProduct from './../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct';
+import CoversManager from "../pages/dashboard/pages/coversManager/CoversManager";
+import ManagerCoverDetail from "../pages/dashboard/pages/coversManager/ManagerCoverDetail/ManagerCoverDetail";
+import ManagerAddCover from "../pages/dashboard/pages/coversManager/ManagerAddCover/ManagerAddCover";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -452,6 +455,18 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manager/product/add",
         element: <ManangerAddProduct />,
+      },
+      {
+        path: "/dashboard/manager/covers",
+        element: <CoversManager />,
+      },
+      {
+        path: "/dashboard/manager/cover/:id",
+        element: <ManagerCoverDetail />,
+      },
+      {
+        path: "/dashboard/manager/cover/add",
+        element: <ManagerAddCover />,
       },
       //admin
       {
