@@ -1,3 +1,7 @@
+.ag-charts-canvas-container {
+  border-radius: 20px;
+}
+
 /* tableStyles.css .table-container {
   margin: 20px;
 }

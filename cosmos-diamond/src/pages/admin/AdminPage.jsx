@@ -11,16 +11,19 @@ import { FaShippingFast } from "react-icons/fa";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { TbCash } from "react-icons/tb";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import AdminTransaction from "../adminTransaction/AdminTransaction";
+import TopRevenue from "./TopRevenue";
+import ConversionsChart from "./ConversionsChart";
 
 function AdminPage() {
   const [todayOrders, setTodayOrders] = useState(0);
   const [thisMonthOrders, setThisMonthOrders] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
-  const [processing, setProcessing]  = useState(0);
-  const [shipping, setShipping]  = useState(0);
-  const [delivered, setDelivered]  = useState(0);
-  const [cancelled, setCancelled]  = useState(0);
-  const [paid, setPaid]  = useState(0);
+  const [processing, setProcessing] = useState(0);
+  const [shipping, setShipping] = useState(0);
+  const [delivered, setDelivered] = useState(0);
+  const [cancelled, setCancelled] = useState(0);
+  const [paid, setPaid] = useState(0);
   const [total, setTotal] = useState(0);
 
   const [orderStats, setOrderStats] = useState({
@@ -186,6 +189,8 @@ function AdminPage() {
           </div>
         </div>
       </div>
+      <ConversionsChart />
+      <TopRevenue />
     </div>
   );
 }

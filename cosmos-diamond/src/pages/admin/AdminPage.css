@@ -77,13 +77,15 @@
   border-radius: 5px;
   width: calc(100% / 6);
   align-items: center;
-  background-color: rgb(34, 49, 71);
+  background-color:white;
   padding: 1em;
+  /* border: 1px solid rgb(177, 177, 177);  */
 }
 
 .card-lower-icon {
   padding: 0 0.5em;
   font-size: 1.7em;
+  color:rgba(22, 22, 22, 0.788);
 }
 
 .card-lower-info {
@@ -94,10 +96,12 @@
   font-family:"Gantari";
  font-weight: 500;
  font-size: 1.1em;
+ color:black;
 }
 
 .card-lower-info h2 {
   font-family:"Gantari";
+  color:black;
   
 }
 
