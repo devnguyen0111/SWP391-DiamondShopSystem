@@ -8,3 +8,9 @@
 body {
   overflow-x: hidden;
 }
+
+::-webkit-scrollbar {
+  width: 8px !important;  /* Độ rộng của thanh cuộn dọc */
+  height: 8px !important; /* Độ cao của thanh cuộn ngang */
+}
+

@@ -32,12 +32,6 @@ export const navDashboardConfig = [
 
 export const navDashboardConfigAdmin = [
   {
-    key: "10",
-    icon: <DashboardTwoTone />,
-    label: "Dashboard",
-  },
-
-  {
     key: "4",
     icon: <TeamOutlined />,
     label: "Users",
