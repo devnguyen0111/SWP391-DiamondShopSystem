@@ -33,7 +33,7 @@ function SideNav({}) {
       <Menu
         onClick={onClick}
         defaultOpenKeys={["sub1"]}
-        mode="vertical"
+        mode="inline"
         theme="dark"
         items={
           user.Role == "manager"
