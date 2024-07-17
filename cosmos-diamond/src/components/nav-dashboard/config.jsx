@@ -17,7 +17,7 @@ export const navDashboardConfig = [
   {
     key: "2",
     icon: <PiTicketLight style={{ fontSize: "1.4em" }} />,
-    label: "Voucher",
+    label: "Vouchers",
   },
   {
     key: "3",
@@ -29,24 +29,26 @@ export const navDashboardConfig = [
     icon: <LiaRingSolid style={{ fontSize: "1.4em" }} />,
     label: "Covers",
   },
+  {
+    key: "11",
+    icon: <SolutionOutlined style={{ fontSize: "1.4em" }} />,
+    label: "Requests",
+  },
 ];
 
 export const navDashboardConfigAdmin = [
-  {
-    key: "4",
-    icon: <TeamOutlined />,
-    label: "Users",
-  },
   {
     key: "5",
     icon: <SolutionOutlined />,
     label: "Summary",
   },
   {
-    key: "6",
-    icon: <FileExclamationOutlined />,
-    label: "Transaction",
+    key: "4",
+    icon: <TeamOutlined />,
+    label: "Users",
   },
+  
+  
 ];
 
 export const navDashboardConfigStaff = [
@@ -58,15 +60,11 @@ export const navDashboardConfigStaff = [
   {
     key: "8",
     icon: <SolutionOutlined />,
-    label: "Inbox",
+    label: "Requests",
     children: [
       {
         key: "81",
-        label: "View all inbox",
-      },
-      {
-        key: "82",
-        label: "Send an email",
+        label: "View request status",
       },
       {
         key: "83",
@@ -120,6 +118,9 @@ export const navpath = {
   },
   10: {
     path: "/dashboard/manager/covers",
+  },
+  11: {
+    path: "/dashboard/manager/requests",
   },
 };
 

@@ -72,12 +72,13 @@ import ManangerProductDetail from "../pages/dashboard/pages/productsManager/mana
 import ManagerDiamondCatalog from './../pages/dashboard/pages/productsManager/managerDiamondCatalog/ManagerDiamondCatalog';
 
 import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
-import SendRequest from "../pages/dashboard/pages/staffChat/SendRequest";
+import SendRequest from "../pages/dashboard/pages/requestStaff/SendRequest";
 import ManangerAddProduct from './../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct';
 import CoversManager from "../pages/dashboard/pages/coversManager/CoversManager";
 import ManagerCoverDetail from "../pages/dashboard/pages/coversManager/ManagerCoverDetail/ManagerCoverDetail";
 import ManagerAddCover from "../pages/dashboard/pages/coversManager/ManagerAddCover/ManagerAddCover";
 import GiaAndWarranty from "../pages/GiaAndWarranty/GiaAndWarranty";
+import RequestStaff from "../pages/dashboard/pages/requestStaff/RequestStaff";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -477,6 +478,11 @@ export const router = createBrowserRouter([
         path: "/dashboard/manager/cover/add",
         element: <ManagerAddCover />,
       },
+      {
+        path: "/dashboard/manager/requests",
+        element: <StaffChat />,
+      },
+
       //admin
       {
         path: "/dashboard/admin",
@@ -505,7 +511,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/salestaff/view-inbox",
-        element: <StaffChat />,
+        element: <RequestStaff />,
       },
       // {
       //   path: "/dashboard/salestaff/send-mail",
