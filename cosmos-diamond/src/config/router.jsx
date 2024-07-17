@@ -77,6 +77,7 @@ import ManangerAddProduct from './../pages/dashboard/pages/productsManager/manag
 import CoversManager from "../pages/dashboard/pages/coversManager/CoversManager";
 import ManagerCoverDetail from "../pages/dashboard/pages/coversManager/ManagerCoverDetail/ManagerCoverDetail";
 import ManagerAddCover from "../pages/dashboard/pages/coversManager/ManagerAddCover/ManagerAddCover";
+import GiaAndWarranty from "../pages/GiaAndWarranty/GiaAndWarranty";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -208,6 +209,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRouteCustomer>
             <CompleteProductPage />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: "/certificate/:id",
+        element: (
+          <ProtectedRouteCustomer>
+            <GiaAndWarranty />
           </ProtectedRouteCustomer>
         ),
       },

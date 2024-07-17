@@ -1,8 +1,8 @@
 
-.gia {
-    width: 100%;
+.gia-small {
+    min-width: 530px;
+    
     /* max-width: 600px; Set maximum width for better email client support */
-    margin: 1em auto;
     border: 0.3em solid #ccc;
     background-color: white;
 }
@@ -11,6 +11,7 @@
     vertical-align: top;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
+    padding-bottom: 10px;
 }
 .column:first-child{
     background-color: #f5f3ef;
@@ -18,20 +19,19 @@
 .column:last-child {
     border-right: none;
     background-color: #f5f3ef;
-
 }
 .h5 {
     background-color: #d8b993;
     color: white;
-    padding: 0.3em;
+    padding: 5px;
     font-family: 'Mukta', Arial, sans-serif;
     margin-top: 0;
-    font-size: 1em;
+    font-size: 0.8em;
 }
 .h4{
     color: #c5965d;
     padding-top: 21px;
-    font-size: 3em;
+    font-size: 1em;
 }
 p {
     font-family: "Roboto", sans-serif;

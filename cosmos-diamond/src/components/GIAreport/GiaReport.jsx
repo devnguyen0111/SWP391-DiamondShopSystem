@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./GiaReport.css";
 import { Flex } from "antd";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-const GiaReport = ({product}) => {
+const GiaReport = ({product, scale}) => {
   const dottedSpace = {
     flexGrow: 1,
     borderBottom: "1px dotted black",
@@ -10,8 +12,28 @@ const GiaReport = ({product}) => {
   };
   let src = `/${product.shape}.jpg`
   
+  const printRef = useRef();
+
+  const handleDownloadPdf = async () => {
+    const element = printRef.current;
+    const canvas = await html2canvas(element);
+    const data = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF();
+    const imgProperties = pdf.getImageProperties(data);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
+
+    pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('download.pdf');
+  };
+  
+  useEffect(()=>{
+    handleDownloadPdf()
+  }, [])
+
   return (
-    <table className="gia" cellPadding="0" cellSpacing="0" border="0">
+    <table style={{transform: `scale(${scale})` }} ref={printRef} className="gia" cellPadding="0" cellSpacing="0" border="0">
       <tbody>
         <tr>
           <td className="column">
@@ -200,3 +222,5 @@ const GiaReport = ({product}) => {
 };
 
 export default GiaReport;
+
+
