@@ -109,7 +109,7 @@ function CoversManager() {
   }, []);
 
   return (
-    <div className="model1" style={{ padding: "30px" }}>
+    <div className="model1 mode" style={{ padding: "30px" }}>
       <Flex justify="space-between">
         <Link
           to="/dashboard/manager/cover/add"

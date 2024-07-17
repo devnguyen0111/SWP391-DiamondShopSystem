@@ -1,14 +1,10 @@
 import {
   FileExclamationOutlined,
   SolutionOutlined,
-  StockOutlined,
   TeamOutlined,
-  UserOutlined,
   ShoppingCartOutlined,
-  DashboardTwoTone,
 } from "@ant-design/icons";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { TbCategory2 } from "react-icons/tb";
+import { LiaRingSolid } from "react-icons/lia";
 import { PiTicketLight } from "react-icons/pi";
 import { LuBox } from "react-icons/lu";
 
@@ -27,6 +23,11 @@ export const navDashboardConfig = [
     key: "3",
     icon: <LuBox style={{ fontSize: "1.4em" }} />,
     label: "Products",
+  },
+  {
+    key: "10",
+    icon: <LiaRingSolid style={{ fontSize: "1.4em" }} />,
+    label: "Covers",
   },
 ];
 
@@ -118,7 +119,7 @@ export const navpath = {
     path: "/dashboard/deliverystaff/delivery",
   },
   10: {
-    path: "/dashboard/admin",
+    path: "/dashboard/manager/covers",
   },
 };
 
