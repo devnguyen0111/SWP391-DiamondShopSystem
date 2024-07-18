@@ -1,39 +1,25 @@
 import React, { useEffect, useRef } from "react";
 import "./GiaReport.css";
 import { Flex } from "antd";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
-const GiaReport = ({product, scale}) => {
+const GiaReport = ({ product, scale }) => {
   const dottedSpace = {
     flexGrow: 1,
     borderBottom: "1px dotted black",
     margin: "7px 1px", // Adjust the margin as needed
   };
-  let src = `/${product.shape}.jpg`
-  
-  const printRef = useRef();
-
-  const handleDownloadPdf = async () => {
-    const element = printRef.current;
-    const canvas = await html2canvas(element);
-    const data = canvas.toDataURL('image/png');
-
-    const pdf = new jsPDF();
-    const imgProperties = pdf.getImageProperties(data);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-
-    pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('download.pdf');
-  };
-  
-  useEffect(()=>{
-    handleDownloadPdf()
-  }, [])
+  let src = `/${product.shape}.jpg`;
 
   return (
-    <table style={{transform: `scale(${scale})` }} ref={printRef} className="gia" cellPadding="0" cellSpacing="0" border="0">
+    <table
+      style={{ transform: `scale(${scale})` }}
+      className="gia"
+      cellPadding="0"
+      cellSpacing="0"
+      border="0"
+    >
       <tbody>
         <tr>
           <td className="column">
@@ -171,9 +157,9 @@ const GiaReport = ({product, scale}) => {
             </div>
             <div className="border-top pt-3 text-center">
               <h3 className="h5">CLARITY CHARACTERISTICS</h3>
-              <Flex justify="center" style={{marginTop:'4px'}}>
+              <Flex justify="center" style={{ marginTop: "4px" }}>
                 <img
-                  src={product.imgUrl || src}
+                  src={src}
                   alt="Clarity Characteristics"
                   className="scaled-image"
                 />
@@ -190,7 +176,7 @@ const GiaReport = ({product, scale}) => {
             </div>
           </td>
           <td className="column">
-            <div className="" style={{padding:'10px'}}>
+            <div className="" style={{ padding: "10px" }}>
               <div className="pt-3">
                 <p>
                   The results documented in this report refer only to the
@@ -222,5 +208,3 @@ const GiaReport = ({product, scale}) => {
 };
 
 export default GiaReport;
-
-

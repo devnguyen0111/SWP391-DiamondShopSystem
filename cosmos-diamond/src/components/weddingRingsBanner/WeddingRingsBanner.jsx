@@ -35,7 +35,7 @@ export default function WeddingRingsBanner() {
           }}
         >
           <Button onClick={() => navigate("/diamonds")} className="wdrbContent__buttons__button">Shop Diamonds</Button>
-          <Button className="wdrbContent__buttons__button">Shop Wedding Rings</Button>
+          {/* <Button className="wdrbContent__buttons__button">Shop Wedding Rings</Button> */}
         </ConfigProvider>
       </div>
     </div>

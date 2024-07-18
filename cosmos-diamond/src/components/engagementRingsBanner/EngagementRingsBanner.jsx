@@ -1,8 +1,10 @@
 import { Button, ConfigProvider } from 'antd'
 import React from 'react'
 import './EngagementRingsBanner.scss'
+import { useNavigate } from 'react-router-dom'
 
 export default function EngagementRingsBanner() {
+    const nav = useNavigate()
     return (
         <div>
 
@@ -27,8 +29,8 @@ export default function EngagementRingsBanner() {
                             },
                         }}
                     >
-                        <Button className='erContent__button'>Shop Diamonds</Button>
-                        <Button className='erContent__button'>Shop Engagement Rings</Button>
+                        <Button className='erContent__button' onClick={()=> nav('/diamond-search')}>Shop Diamonds</Button>
+                        <Button className='erContent__button'  onClick={()=> nav('/engagement-rings/catalog')}>Shop Engagement Rings</Button>
 
                     </ConfigProvider>
                 </div>
