@@ -140,7 +140,8 @@ function OrdersManager() {
   const getOrders = async () => {
     try {
       const response = await api.get("/api/Order/getAllOrders");
-      const data = response.data.$values;
+      let data = response.data.$values;
+      data = response.data.$values.sort((a,b)=> b.orderId - a.orderId)
       setOrderSearch(response.data.$values);
       const updatedOrders = data.map((order) => {
         const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
