@@ -180,7 +180,7 @@ function ProductDetail({ product }) {
                 <span>Free Overnight Shipping, Hassle-Free Returns</span>
               </div>
 
-              <i class="fa-regular fa-heart right__wishlist"></i>
+              {/* <i class="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
           <Col span={24} className="right__tag-container">

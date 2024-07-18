@@ -27,7 +27,7 @@ function ShoppingCart() {
   const [cart, setCart] = useState();
   const [cartTotalPrice, setCartTotalPrice] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [remove, setRemove] = useState();
+  const [remove, setRemove] = useState(false);
   const { checkout, setCheckout } = useStateValue();
   const [checklist, setcheckList] = useState([]);
   const token = getToken();
@@ -55,7 +55,7 @@ function ShoppingCart() {
 
   useEffect(() => {
     fetchCart();
-  }, [remove]);
+  }, [remove, fetchCart()]);
 
   const handleCheckout = async () => {
     let pids = new Set(checklist.map((l) => l.pid));

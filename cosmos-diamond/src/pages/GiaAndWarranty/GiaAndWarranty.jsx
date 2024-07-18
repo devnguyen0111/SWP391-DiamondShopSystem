@@ -36,7 +36,7 @@ function GiaAndWarranty() {
     fetchOrderId();
   }, []);
   return (
-    <div className="" style={{ backgroundColor: "#f5f3ef" }}>
+    <div className="" style={{ backgroundColor: "#f5f3ef", paddingTop:'100px'}}>
       <div
         style={{
           maxWidth: "1840px",
@@ -57,6 +57,7 @@ function GiaAndWarranty() {
             </div>
           ))}
       </div>
+      <div className="" style={{height:'140px'}}></div>
     </div>
   );
 }

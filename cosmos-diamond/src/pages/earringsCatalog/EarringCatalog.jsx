@@ -124,7 +124,7 @@ function EarringCatalog() {
               >
                 <div className="product__img">
                   <img src={ring.imgUrl} alt={ring.productName} />
-                  <i className="fa-regular fa-heart list__wishlist"></i>
+                  {/* <i className="fa-regular fa-heart list__wishlist"></i> */}
                 </div>
                 <div className="product__info">
                   <div className="product__name">{ring.productName}</div>

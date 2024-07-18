@@ -98,11 +98,11 @@ const Header = () => {
               <ShoppingCartOutlined />
             </Link>
           </div>
-          <div className="pre_icon">
+          {/* <div className="pre_icon">
             <Link to="/wishlist">
               <HeartOutlined />
             </Link>
-          </div>
+          </div> */}
 
           <div className="pre_icon">
             {/* <Link to={`/profile/${user.UserID}`}>

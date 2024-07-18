@@ -1,4 +1,13 @@
-import { Alert, Button, ConfigProvider, Modal, Select, Table, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  ConfigProvider,
+  Modal,
+  Segmented,
+  Select,
+  Table,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "./OrdersManager.scss";
 import { Form, useNavigate } from "react-router-dom";
@@ -8,10 +17,12 @@ import { selectUser } from "../../../../redux/features/counterSlice";
 import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
+import formatDate from "./../../../../components/formatDate";
 
 function OrdersManager() {
   const [selectedValue, setSelectedValue] = useState(null);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedSegment, setSelectedSegment] = useState("All Orders");
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -24,6 +35,7 @@ function OrdersManager() {
   const [staff, setStaff] = useState([]);
   const user = useSelector(selectUser);
   const [isLoading, setIsLoading] = useState(false);
+  const [orderSearch, setOrderSearch] = useState([]);
 
   const assignStaff = async (orderId, saleStaffId) => {
     try {
@@ -49,7 +61,7 @@ function OrdersManager() {
       title: "Date",
       dataIndex: "orderDate",
       key: "orderDate",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <span>{formatDate(text)}</span>,
     },
     {
       title: "Total",
@@ -70,20 +82,6 @@ function OrdersManager() {
         status === "Shipping" ? (
           <span>Assigned</span>
         ) : (
-          // <ConfigProvider
-          //   theme={{
-          //     components: {
-          //       Button: {
-          //         border: "none",
-          //         borderRadius: "0px",
-          //         defaultBg: " rgb(27, 27, 27)",
-          //         defaultColor: "white",
-          //         defaultHoverBg: "white",
-          //         defaultHoverColor: "black",
-          //       },
-          //     },
-          //   }}
-          // >
           <Button
             onClick={() => {
               setSelectedOrderId(data.orderId);
@@ -92,7 +90,6 @@ function OrdersManager() {
           >
             Assign
           </Button>
-          // </ConfigProvider>
         ),
     },
 
@@ -123,9 +120,7 @@ function OrdersManager() {
               Delivered
             </Tag>
           ) : status === "paid" || status === "Paid" ? (
-            <Tag style={{fontFamily: "Gantari" }}>
-              Paid
-            </Tag>
+            <Tag style={{ fontFamily: "Gantari" }}>Paid</Tag>
           ) : status === "shipping" || status === "Shipping" ? (
             <Tag
               style={{
@@ -146,6 +141,7 @@ function OrdersManager() {
     try {
       const response = await api.get("/api/Order/getAllOrders");
       const data = response.data.$values;
+      setOrderSearch(response.data.$values);
       const updatedOrders = data.map((order) => {
         const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
         return {
@@ -186,17 +182,62 @@ function OrdersManager() {
     e.preventDefault();
     if (selectedValue == null) {
       setShowAlert(true);
+      setSelectedSegment("All Orders");
     } else {
       setShowAlert(false);
       await assignStaff(selectedOrderId, selectedValue);
+      setSelectedSegment("All Orders");
+      filterOrder("All Orders");
+    }
+  };
+
+  const filterOrder = (value) => {
+    console.log(value.toLowerCase());
+    setSelectedSegment(value);
+    if (value === "All Orders") {
+      setOrderSearch(orders);
+    } else {
+      setOrderSearch(
+        orders.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+      );
     }
   };
 
   return (
     <div className="mode">
+      <ConfigProvider
+        theme={{
+          components: {
+            Segmented: {
+              itemSelectedColor: "#fff",
+              itemSelectedBg: "#151542",
+              itemHoverColor: "#fff",
+              itemHoverBg: "rgba(21,21,66,0.2)",
+              itemActiveBg: "rgba(21,21,66,0.2)",
+              motionDurationSlow: "0.2s",
+            },
+          },
+        }}
+      >
+        <Segmented
+          style={{ marginBottom: "20px" }}
+          size="large"
+          options={[
+            "All Orders",
+            "Paid",
+            "Pending",
+            "Shipping",
+            "Delivered",
+            "Canceled",
+          ]}
+          value={selectedSegment}
+          onChange={filterOrder}
+        />
+      </ConfigProvider>
+
       <Table
         columns={columns}
-        dataSource={orders}
+        dataSource={orderSearch}
         pagination={{
           defaultPageSize: 5,
           showSizeChanger: false,

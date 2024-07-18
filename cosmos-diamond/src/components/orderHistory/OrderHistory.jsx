@@ -28,7 +28,8 @@ import TextArea from "antd/es/input/TextArea";
 function OrderHistory() {
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("");
+  // const [orderStatus, setOrderStatus] = useState("");
+  const [orderFiltered, setOrderFiltered] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [reviewId, setReviewId] = useState();
@@ -61,7 +62,7 @@ function OrderHistory() {
     if (token) {
       setIsLoading(true);
       fetch(
-        `${apiHeader}/Order/customer/${token.UserID}/history?status=${orderStatus}`,
+        `${apiHeader}/Order/customer/${token.UserID}/history?status=${""}`,
         {
           headers: {
             "Content-type": "application/json",
@@ -72,20 +73,30 @@ function OrderHistory() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setOrderList(data);
+          const temp = data.$values.sort((a, b) => b.orderId - a.orderId);
+          setOrderList(temp);
+          setOrderFiltered(temp);
           setIsLoading(false);
+        })
+        .catch((e) => {
+          setOrderList([]);
         });
     } else {
       alertFail("You need to login first");
       nav("/login");
     }
-  }, [orderStatus]);
+  }, []);
 
   const handleStatus = (value) => {
     if (value === "All Orders") {
-      setOrderStatus("");
+      setOrderFiltered(orderList);
     } else {
-      setOrderStatus(value);
+      console.log(
+        orderList.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+      );
+      setOrderFiltered(
+        orderList.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+      );
     }
   };
   const handleSubmit = (values) => {
@@ -110,13 +121,13 @@ function OrderHistory() {
       })
         .then((res) => res.text())
         .then((data) => {
-          setOpen(false)
+          setOpen(false);
           alertSuccess(data);
           nav(`/Product/${reviewId}`);
         })
-        .catch(e=>{
-          alertFail('Cannot add Review')
-        })
+        .catch((e) => {
+          alertFail("Cannot add Review");
+        });
     } else {
       alertFail("You need to login first");
       nav("/login");
@@ -181,9 +192,10 @@ function OrderHistory() {
                       size="large"
                       options={[
                         "All Orders",
+                        "Paid",
+                        "Pending",
+                        "Shipping",
                         "Delivered",
-                        "Delivering",
-                        "Processing",
                         "Canceled ",
                       ]}
                       onChange={(value) => handleStatus(value)}
@@ -192,10 +204,8 @@ function OrderHistory() {
                 </Flex>
               </Col>
               {!isLoading ? (
-                orderList &&
-                orderList.$values &&
-                orderList.$values.length > 0 ? (
-                  orderList.$values.map((order) => (
+                orderFiltered && orderFiltered.length > 0 ? (
+                  orderFiltered.map((order) => (
                     <Col
                       span={24}
                       style={{ marginTop: "50px" }}
@@ -203,17 +213,34 @@ function OrderHistory() {
                       key={order.orderId}
                     >
                       {/* order ID */}
-                      <Flex vertical className="order-history__info">
-                        <p className="">
-                          <span style={{ fontWeight: "500" }}>Order:</span> #
-                          {order.orderId}
-                        </p>
-                        <p className="">
-                          <span style={{ fontWeight: "500" }}>
-                            Order Payment:
-                          </span>{" "}
-                          {formatDate(order.orderDate)}
-                        </p>
+                      <Flex justify="space-between">
+                        <Flex vertical className="order-history__info">
+                          <p className="">
+                            <span style={{ fontWeight: "500" }}>Order:</span> #
+                            {order.orderId}
+                          </p>
+                          <p className="">
+                            <span style={{ fontWeight: "500" }}>
+                              Order Payment:
+                            </span>{" "}
+                            {formatDate(order.orderDate)}
+                          </p>
+                        </Flex>
+                        {order.status == "Delivered" && (
+                          <>
+                            <Button
+                              style={{
+                                backgroundColor: "#151542",
+                                color: "#fff",
+                              }}
+                              onClick={() => {
+                                nav(`/certificate/${order.orderId}`);
+                              }}
+                            >
+                              View GIA and Warranty Card
+                            </Button>
+                          </>
+                        )}
                       </Flex>
                       {/* Order Products */}
                       <Flex className="order-history__products" vertical>
@@ -275,12 +302,8 @@ function OrderHistory() {
                                 !item.reviewCheck && (
                                   <>
                                     <Button
-                                      style={{
-                                        backgroundColor: "#151542",
-                                        color: "#fff",
-                                      }}
                                       onClick={() => {
-                                        setReviewId(item.pId)
+                                        setReviewId(item.pId);
                                         setOpen(true);
                                       }}
                                     >
@@ -294,7 +317,7 @@ function OrderHistory() {
                                   <div>18-12-2024</div>
                                 </>
                               )}
-                              {order.status == "processing" && (
+                              {order.status.toLowerCase() == "paid" && (
                                 <>
                                   <p>Delivery Expected by</p>
                                   <div

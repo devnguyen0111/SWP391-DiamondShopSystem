@@ -186,7 +186,7 @@ const CoverDetail = () => {
                 <span>Free Overnight Shipping, Hassle-Free Returns</span>
               </div>
 
-              <i className="fa-regular fa-heart right__wishlist"></i>
+              {/* <i className="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">
