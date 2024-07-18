@@ -107,9 +107,9 @@ function OrdersManager() {
       onFilter: (value, record) => record.status === value,
       render: (status, data) => (
         <div>
-          {status === "processing" ? (
+          {status === "cancel" || status === "Cancel" ? (
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <Tag style={{ fontFamily: "Gantari" }}>Processing</Tag>
+              <Tag color="red" style={{ fontFamily: "Gantari" }}>Cancelled</Tag>
             </div>
           ) : status === "pending" || status === "Pending" ? (
             <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
@@ -159,12 +159,16 @@ function OrdersManager() {
   const getStaff = async () => {
     try {
       const response = await api.get(
-        `/api/Assign/saleStaffListByManagerId/${user.UserID}`
+        `/api/Assign/getAllSaleStaff`
       );
       const data = response.data.$values;
 
       setStaff(
-        data.map((staff) => ({ label: staff.name, value: staff.staffId }))
+        data.map((staff) => ({
+          label: `${staff.name} (${staff.status})`,
+          value: staff.staffId,
+          disabled: staff.status == "Busy",
+        }))
       );
     } catch (e) {
       console.error(e);
@@ -229,7 +233,7 @@ function OrdersManager() {
             "Pending",
             "Shipping",
             "Delivered",
-            "Canceled",
+            "Cancel",
           ]}
           value={selectedSegment}
           onChange={filterOrder}
@@ -265,6 +269,7 @@ function OrdersManager() {
             filterOption={filterOption}
             options={staff}
             style={{ width: "100%", margin: "8px 0" }}
+            
           />
           {showAlert && (
             <Alert message="Please selected a staff." type="error" />

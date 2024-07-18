@@ -133,7 +133,7 @@ function OrdersStaff() {
       const data = response.data.$values;
       console.log(data);
       setStaff(
-        data.map((staff) => ({ label: staff.name, value: staff.dStaffId }))
+        data.map((staff) => ({ label: staff.name, value: staff.dStaffId, disabled: staff.status === "Busy" }))
       );
     } catch (e) {
       console.error(e);
