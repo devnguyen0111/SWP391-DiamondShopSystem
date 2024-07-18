@@ -1,10 +1,11 @@
 .request-container {
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  padding: 16px;
-  background-color: #fff;
+  /* border: 1px solid #d9d9d9;
+  border-radius: 4px; */
+  padding: 4em;
+
+  /* background-color: #fff; */
 }
 
 /* .div-ant {
@@ -13,6 +14,7 @@
 
 .request-field {
   margin-bottom: 16px;
+  
 }
 
 .request-select {
@@ -22,6 +24,7 @@
 .reason-input {
   min-height: 200px;
   margin-bottom: 16px;
+  background-color: white;
 }
 
 .file-upload {
@@ -35,4 +38,11 @@
 
 .ql-editor {
   height: 180px !important;
+}
+
+.titleRequest {
+  font-size: 2em;
+  font-family: "Gantari";
+  color:black;
+  margin-bottom:0.7em;
 }
