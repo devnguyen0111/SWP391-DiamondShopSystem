@@ -1,4 +1,13 @@
-import { Alert, Button, ConfigProvider, Modal, Select, Table, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  ConfigProvider,
+  Modal,
+  Segmented,
+  Select,
+  Table,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
@@ -22,6 +31,8 @@ function OrdersStaff() {
   const [orders, setOrders] = useState([]);
   const [staff, setStaff] = useState([]);
   const user = useSelector(selectUser);
+  const [selectedSegment, setSelectedSegment] = useState("All Orders");
+  const [orderSearch, setOrderSearch] = useState([]);
 
   const columns = [
     {
@@ -49,24 +60,14 @@ function OrdersStaff() {
       render: (status, data) =>
         status === "delivered" ||
         status === "Delivered" ||
+       
         status === "shipping" ||
         status === "Shipping" ? (
-          <span>Assigned</span>
+          <Tag color="geekblue">Assigned</Tag>
+        ) :  status === "cancel" ||
+        status === "Cancel" ? (
+          <Tag color="red">Order Cancelled</Tag>
         ) : (
-          // <ConfigProvider
-          //   theme={{
-          //     components: {
-          //       Button: {
-          //         border: "none",
-          //         borderRadius: "0px",
-          //         defaultBg: " rgb(27, 27, 27)",
-          //         defaultColor: "white",
-          //         defaultHoverBg: "white",
-          //         defaultHoverColor: "black",
-          //       },
-          //     },
-          //   }}
-          // >
           <Button
             onClick={() => {
               setSelectedOrderId(data.orderId);
@@ -75,7 +76,6 @@ function OrdersStaff() {
           >
             Assign
           </Button>
-          // </ConfigProvider>
         ),
     },
 
@@ -87,6 +87,7 @@ function OrdersStaff() {
         { text: "Pending", value: "pending" },
         { text: "Delivered", value: "delivered" },
         { text: "Shipping", value: "shipping" },
+        { text: "Cancel", value: "cancel" },
       ],
       onFilter: (value, record) => record.status === value,
       render: (status, { tags }) => (
@@ -109,23 +110,32 @@ function OrdersStaff() {
             >
               Shipping
             </Tag>
+          ) : status === "Cancel" || status === "cancel" ? (
+            <Tag
+              color="red"
+              style={{
+                fontFamily: "Gantari",
+              }}
+            >
+              Cancel
+            </Tag>
           ) : null}
         </div>
       ),
     },
   ].filter((item) => !item.hidden);
 
-  const getOrders = async () => {
-    try {
-      const response = await api.get(
-        `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
-      );
-      const data = response.data.$values;
-      setOrders(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const getOrders = async () => {
+  //   try {
+  //     const response = await api.get(
+  //       `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
+  //     );
+  //     const data = response.data.$values;
+  //     setOrders(data);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const getStaff = async () => {
     try {
@@ -133,8 +143,33 @@ function OrdersStaff() {
       const data = response.data.$values;
       console.log(data);
       setStaff(
-        data.map((staff) => ({ label: staff.name, value: staff.dStaffId, disabled: staff.status === "Busy" }))
+        data.map((staff) => ({
+          label: staff.name,
+          value: staff.dStaffId,
+          disabled: staff.status === "Busy",
+        }))
       );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getOrders = async () => {
+    try {
+      const response = await api.get(
+        `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
+      );
+      let data = response.data.$values;
+      data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
+      setOrderSearch(response.data.$values);
+      const updatedOrders = data.map((order) => {
+        const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
+        return {
+          ...order,
+          assignedStaffName: assignedStaff ? assignedStaff.label : null,
+        };
+      });
+      setOrders(updatedOrders);
     } catch (e) {
       console.error(e);
     }
@@ -153,6 +188,18 @@ function OrdersStaff() {
     }
   };
 
+  const filterOrder = (value) => {
+    console.log(value.toLowerCase());
+    setSelectedSegment(value);
+    if (value === "All Orders") {
+      setOrderSearch(orders);
+    } else {
+      setOrderSearch(
+        orders.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+      );
+    }
+  };
+
   useEffect(() => {
     getStaff();
   }, []);
@@ -165,19 +212,45 @@ function OrdersStaff() {
     e.preventDefault();
     if (selectedValue == null) {
       setShowAlert(true);
+      setSelectedSegment("All Orders");
     } else {
       setShowAlert(false);
       await assignStaff(selectedOrderId, selectedValue);
+      setSelectedSegment("All Orders");
+      filterOrder("All Orders");
     }
   };
-  const handleSelect = (value)=>{
-    setSelectedValue(value)
-  }
+
+  const handleSelect = (value) => {
+    setSelectedValue(value);
+  };
   return (
     <div className="mode">
+      <ConfigProvider
+        theme={{
+          components: {
+            Segmented: {
+              itemSelectedColor: "#fff",
+              itemSelectedBg: "#151542",
+              itemHoverColor: "#fff",
+              itemHoverBg: "rgba(21,21,66,0.2)",
+              itemActiveBg: "rgba(21,21,66,0.2)",
+              motionDurationSlow: "0.2s",
+            },
+          },
+        }}
+      >
+        <Segmented
+          style={{ marginBottom: "20px" }}
+          size="large"
+          options={["All Orders", "Pending", "Shipping", "Delivered", "Cancel"]}
+          value={selectedSegment}
+          onChange={filterOrder}
+        />
+      </ConfigProvider>
       <Table
         columns={columns}
-        dataSource={orders}
+        dataSource={orderSearch}
         pagination={{
           defaultPageSize: 5,
           showSizeChanger: false,

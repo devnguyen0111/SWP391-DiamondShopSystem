@@ -1,67 +1,79 @@
-import React, { useState } from "react";
-import { Select, Input, Button, Upload } from "antd";
-import ReactQuill from "react-quill";
-import { InboxOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Select, Button, Upload } from "antd";
 import "react-quill/dist/quill.snow.css";
 import "./SendRequest.css";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/features/counterSlice";
+import api from "../../../../config/axios";
+import TextArea from "antd/es/input/TextArea";
 
 const { Option } = Select;
-const { Dragger } = Upload;
-
 const SendRequest = () => {
-  const [reason, setReason] = useState("");
-
-  const handleSelectChange = (value) => {
-    console.log(`Selected: ${value}`);
+  const [orders, setOrders] = useState();
+  const user = useSelector(selectUser);
+  const onChange = (e) => {
+    console.log('Change:', e.target.value);
   };
 
-  const modules = {
-    toolbar: [
-      [{ header: "1" }, { header: "2" }, { font: [] }],
-      [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
-      ["clean"],
-    ],
+  const [loading, setLoading] = useState(true);
+
+  const getOrders = async () => {
+    try {
+      const response = await api.get(`/api/Assign/ordersFromSaleStaffId/${user.UserID}`);
+      const data = response.data.$values.filter(
+        (order) => order.status.toLowerCase() === "pending"
+      );
+      console.log(data);
+      setOrders(data.map((order) => ({ label: `#${order.orderId}`, value: order.orderId })));
+    } catch (e) {
+      console.error(e);
+    }
   };
+  
+  useEffect(() => {
+    getOrders();
+  }, []);
+  
+  // const modules = {
+  //   toolbar: [
+  //     [{ header: "1" }, { header: "2" }],
+  //     [{ size: [] }],
+  //     ["bold", "italic", "underline", "strike", "blockquote"],
+  //     [{ list: "ordered" }, { list: "bullet" }],
+  //     ["clean"],
+  //   ],
+  // };
+
+  useEffect(() => {
+    getOrders();
+  }, [])
 
   return (
     <div className="request-container">
+      <h1 className="titleRequest">Send a request</h1>
       <div className="request-field">
-        <label>Application type:</label>
         <Select
+          title="Application type"
           className="request-select"
           placeholder="Type of Request"
-          onChange={handleSelectChange}
         >
           <Option value="cancel_order">Cancel Order</Option>
-          <Option value="other_reason">Other Reasons</Option>
         </Select>
       </div>
-      <div className="request-field">
-        <label>Reason:</label>
-        <ReactQuill
-          theme="snow"
-          value={reason}
-          onChange={setReason}
-          modules={modules}
-          className="reason-input"
-        />
+      <div>
+        <Select title="Application type" placeholder="Order list"  options={orders}/>
       </div>
       <div className="request-field">
-        <label>File Attach:</label>
-        <Dragger className="file-upload">
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload.
-          </p>
-        </Dragger>
+      <TextArea
+      showCount
+      maxLength={200}
+      onChange={onChange}
+      placeholder="Reason"
+      style={{
+        height: 150,
+      margin:'1em 0'
+      }}
+    />
       </div>
       <Button type="primary" className="submit-button">
         Submit Request
