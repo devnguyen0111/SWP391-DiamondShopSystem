@@ -21,7 +21,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
   console.log('heeh', product);
   const openNotification = (placement) => {
     notification.error({
-      message: `Remove Product Successfully`,
+      message: "Remove Product Successfully",
       description: "Product Removed",
       placement,
       pauseOnHover: true,

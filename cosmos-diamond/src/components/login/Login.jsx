@@ -18,7 +18,8 @@ import { auth, provider } from "../../config/firebase";
 import api from "../../config/axios";
 import { jwtDecode } from "jwt-decode";
 
-import { alertFail } from './../../hooks/useNotification';
+import { alertFail } from "./../../hooks/useNotification";
+import { apiHeader } from "./../urlApiHeader";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -46,70 +47,147 @@ const Login = () => {
   const handleLoginGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log(result);
       const user = result.user;
-      const token = await user.getIdToken();
+      let finalUser;
+      const loginResponse = await fetch(`${apiHeader}/Authentication/login`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          password: "123",
+          isGoogleLogin: true,
+        }),
+      });
 
-      // // Lưu token và thông tin người dùng vào localStorage
-      // localStorage.setItem("token", token);
-      // localStorage.setItem("accountId", user.uid);
+      if (loginResponse.status === 400) {
+        const [firstName, ...lastName] = user.displayName.split(" ");
+        const lastNameString = lastName.join(" ");
+        const tempUser = {
+          email: user.email,
+          firstName: firstName,
+          lastName: lastNameString,
+          phoneNumber: user.phoneNumber,
+          password: user.uid,
+        };
 
-      // // Cập nhật trạng thái đăng nhập bằng redux
-      // dispatch(login({ token, uid: user.uid, displayName: user.displayName }));
+        await registerGg(tempUser);
 
-      // Điều hướng đến trang chủ hoặc trang phù hợp
-      navigate("/");
+        // Attempt to login again after successful registration
+        const newLoginResponse = await fetch(
+          `${apiHeader}/Authentication/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              password: "123",
+              isGoogleLogin: true,
+            }),
+          }
+        );
+
+        finalUser = await newLoginResponse.json();
+        console.log(finalUser);
+      } else {
+        finalUser = await loginResponse.json();
+        console.log(finalUser);
+      }
+      localStorage.setItem("token", finalUser.token);
+      finalUser = jwtDecode(finalUser.token);
+      const responseUser = await api.get(`/api/Customer/${finalUser.UserID}`);
+
+      console.log("Login: ", responseUser);
+      setIsLoading(false);
+      //redux
+      dispatch(login(finalUser));
+      if (finalUser.Role === "customer") {
+        let previousPage = sessionStorage.getItem("location");
+
+        previousPage ? navigate(previousPage) : navigate("/");
+      }
     } catch (error) {
       console.error("Error during Google sign-in:", error);
     }
   };
 
+  const registerGg = async (user) => {
+    try {
+      const response = await fetch(`${apiHeader}/Authentication/register`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          firstname: user.firstName,
+          lastname: user.lastName,
+          phonenumber: "0394388330",
+          password: user.password,
+        }),
+      });
 
-    const onSubmit = async (value) => {
-        try {
-          setIsLoading(true)
-          let previousPage = sessionStorage.getItem('location')
-          const response = await api.post("/api/Authentication/login", {...value, isGoogleLogin: false});
-          localStorage.setItem("token", response.data.token);
-          const user = jwtDecode(response.data.token);
-          const responseUser = await api.get(`/api/Customer/${user.UserID}`);
+      const data = await response.json();
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
 
-          console.log("Login: ", responseUser);
-          setIsLoading(false)
-          //redux
-          dispatch(login(user));
-          if (user.Role === "customer") {
-            previousPage ? navigate(previousPage) : navigate('/');
-          }
-          if (user.Role === "admin") {
-            navigate("/dashboard/admin");
-          }
-          if (user.Role === "salestaff") {
-            navigate("/dashboard/salestaff");
-          }
-          if (user.Role === "manager") {
-            navigate("/dashboard/manager");
-          }
-          if (user.Role === "deliverystaff") {
-            navigate("/dashboard/deliverystaff/delivery");
-          }
-        } catch (e) {
-          setIsLoading(false)
-          console.log(e);
-          alertFail(e.response.data, "Please Try Again");
-        }
-      };
-    
-    return (
-        <div className="login-container">
-            <div className="login-form">
-                <h2>Sign in to Cosmos Diamonds</h2>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <label>Email Address *</label>
-                    <input type="text" placeholder="Email Address" {...register("email")} />
-                    {errors.email && <p className="error-message">{errors.email.message}</p>}
+  const onSubmit = async (value) => {
+    try {
+      setIsLoading(true);
+      let previousPage = sessionStorage.getItem("location");
+      const response = await api.post("/api/Authentication/login", {
+        ...value,
+        isGoogleLogin: false,
+      });
+      localStorage.setItem("token", response.data.token);
+      const user = jwtDecode(response.data.token);
+      const responseUser = await api.get(`/api/Customer/${user.UserID}`);
 
+      console.log("Login: ", responseUser);
+      setIsLoading(false);
+      //redux
+      dispatch(login(user));
+      if (user.Role === "customer") {
+        previousPage ? navigate(previousPage) : navigate("/");
+      }
+      if (user.Role === "admin") {
+        navigate("/dashboard/admin");
+      }
+      if (user.Role === "salestaff") {
+        navigate("/dashboard/salestaff");
+      }
+      if (user.Role === "manager") {
+        navigate("/dashboard/manager");
+      }
+      if (user.Role === "deliverystaff") {
+        navigate("/dashboard/deliverystaff/delivery");
+      }
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
+      alertFail(e.response.data, "Please Try Again");
+    }
+  };
 
+  return (
+    <div className="login-container">
+      <div className="login-form">
+        <h2>Sign in to Cosmos Diamonds</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label>Email Address *</label>
+          <input
+            type="text"
+            placeholder="Email Address"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="error-message">{errors.email.message}</p>
+          )}
 
           <div className="password-container">
             <label>Password *</label>
@@ -130,7 +208,7 @@ const Login = () => {
           )}
 
           <div className="remember-forgot">
-            <Link to='/forgot-password'>Forgot Password?</Link>
+            <Link to="/forgot-password">Forgot Password?</Link>
           </div>
           <button type="submit">Sign In</button>
           <Divider orientation="center" style={{ borderColor: "grey" }}>
