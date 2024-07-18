@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "../../components/banner/Banner";
 import "./EngagementRingsIntro.scss";
-import { Button, Col, ConfigProvider, Image, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Card, Col, ConfigProvider, Image, Row } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { apiHeader } from "./../../components/urlApiHeader";
+import Meta from "antd/es/card/Meta";
 
 function EngagementRingsIntro() {
+  const [ringList, setRingList] = useState([]);
+  const nav = useNavigate()
+  useEffect(() => {
+    fetch(`${apiHeader}/Product/getMostSaleProduct?count=10&cate=1`)
+      .then((res) => res.json())
+      .then((data) => setRingList(data.$values));
+  }, []);
   return (
     <div>
       <Banner
@@ -24,7 +33,8 @@ function EngagementRingsIntro() {
           <h5>
             There are several things to keep in mind when you’re shopping for an
             engagement ring. It's important to know your partner’s style, their
-            ring size and the 4Cs of diamonds
+            ring size and the 4Cs import {apiHeader} from
+            './../../components/urlApiHeader'; of diamonds
             <br />. Many people think they need to spend three months of their
             salary on an engagement ring, but this is not a real rule. Instead,
             you should focus on choosing a ring that best fits your
@@ -65,7 +75,7 @@ function EngagementRingsIntro() {
                       defaultColor: "white",
                       defaultHoverBg: "white",
                       defaultHoverBorderColor: "white",
-                      defaultHoverColor: "#100e31"
+                      defaultHoverColor: "#100e31",
                     },
                   },
                 }}
@@ -85,8 +95,14 @@ function EngagementRingsIntro() {
         </Row>
       </div>
 
-      <div className="ringsAvailable">
-        <h1>Available Engagement Rings</h1>
+      <div
+        className="ringsAvailable"
+        style={{
+          maxWidth: "1840px",
+          padding: "0 100px 0 100px",
+        }}
+      >
+        <h1>Top Engagement Rings</h1>
         <Row
           gutter={{
             xs: 8,
@@ -96,158 +112,24 @@ function EngagementRingsIntro() {
           }}
           style={{ marginLeft: "0.8em" }}
         >
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5434/Solitaire_ring.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">SOLITAIRE</h5>
-              <h5 className="ringsAvailable__content__description">
-                Timeless and traditional, a diamond solitaire engagement ring
-                highlights your center stone in classic style.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5440/Halo_ring.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">HALO</h5>
-              <h5 className="ringsAvailable__content__description">
-                Frame your center stone with a sparkling single or double
-                diamond halo, including designs with fancy shapes.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5446/Vintage_ring.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">
-                VINTAGE - INSPIRED
-              </h5>
-              <h5 className="ringsAvailable__content__description">
-                A vintage-inspired engagement ring gives you heirloom-looks with
-                custom details from milgrain to hand-engraving.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5452/Sapphire_Sidestone.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">
-                SAPPHIRE SIDESTONE
-              </h5>
-              <h5 className="ringsAvailable__content__description">
-                Bold sapphires and sparkling diamonds make great friends. It's
-                no surprise sapphire sidestone rings are so popular.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-        </Row>
-        <Row
-            gutter={{
-              xs: 8,
-              sm: 16,
-              md: 24,
-              lg: 24,
-            }}
-            style={{ marginLeft: "0.8em" }}
-        >
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5482/Diamond_Sidestone_ring.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">
-                DIAMOND SIDESTONE
-              </h5>
-              <h5 className="ringsAvailable__content__description">
-                Diamond sidestones add extra sparkle, and come in stunning
-                options like delicate pavé and tapered baguettes.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5488/Gemstone_Ring.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-              <h5 className="ringsAvailable__content__description">
-                When you're looking for a unique option, a gemstone engagement
-                ring adds a beautiful pop of color to your style.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Row>
-              <Image src="https://dam.bluenile.com/images/public/5494/Three-Stone.webp" />
-            </Row>
-            <Row className="ringsAvailable__content">
-              <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-              <h5 className="ringsAvailable__content__description">
-                A three-stone engagement ring features two diamond or gemstone
-                sidestones that frame your center stone.
-              </h5>
-              <h5 className="ringsAvailable__content__price">$450</h5>
-            </Row>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Link to={"/Product/1"}>
-              <Row>
-                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
-              </Row>
-              <Row className="ringsAvailable__content" align={"middle"}>
-                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-                <h5 className="ringsAvailable__content__description">
-                  Crafted with petite diamond accents to add brilliance to your
-                  band or extra sparkle to your halo engagement ring setting.
-                </h5>
-                <h5 className="ringsAvailable__content__price">$450</h5>
-              </Row>
-            </Link>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Link to={"/Product/4"}>
-              <Row>
-                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
-              </Row>
-              <Row className="ringsAvailable__content" align={"middle"}>
-                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-                <h5 className="ringsAvailable__content__description">
-                  Crafted with petite diamond accents to add brilliance to your
-                  band or extra sparkle to your halo engagement ring setting.
-                </h5>
-                <h5 className="ringsAvailable__content__price">$450</h5>
-              </Row>
-            </Link>
-          </Col>
-          <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
-            <Link to={"/Product/5"}>
-              <Row>
-                <Image src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp" />
-              </Row>
-              <Row className="ringsAvailable__content" align={"middle"}>
-                <h5 className="ringsAvailable__content__title">ZAC POSEN</h5>
-                <h5 className="ringsAvailable__content__description">
-                  Crafted with petite diamond accents to add brilliance to your
-                  band or extra sparkle to your halo engagement ring setting.
-                </h5>
-                <h5 className="ringsAvailable__content__price">$450</h5>
-              </Row>
-            </Link>
-          </Col>
+          {ringList &&
+            ringList.map((ring) => (
+              <Col className="gutter-row" span={6} md={6} sm={12} xs={24}>
+                <Card
+                  hoverable
+                  style={{
+                    width: 240,
+                  }}
+                  cover={<img alt={ring.productName} src={ring.imgUrl} />}
+                  onClick={()=> nav(`/Product/${ring.productId}`)}
+                >
+                  <div className="product__info1">
+                    <div className="product__name">{ring.productName}</div>
+                    <div className="product__price">${ring.unitPrice}</div>
+                  </div>
+                </Card>
+              </Col>
+            ))}
         </Row>
       </div>
     </div>

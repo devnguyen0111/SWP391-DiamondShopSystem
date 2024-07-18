@@ -76,10 +76,10 @@ const Header = () => {
           Pendant{" "}
           {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
-        <Link to="/jewelry" className="nav-link">
+        {/* <Link to="/jewelry" className="nav-link">
           Jewelry{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
-        </Link>
+          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
+        </Link> */}
 
         <Link to="/education" className="nav-link">
           Education{" "}
