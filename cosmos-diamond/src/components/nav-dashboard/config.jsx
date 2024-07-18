@@ -3,6 +3,7 @@ import {
   SolutionOutlined,
   TeamOutlined,
   ShoppingCartOutlined,
+  RubyOutlined,
 } from "@ant-design/icons";
 import { LiaRingSolid } from "react-icons/lia";
 import { PiTicketLight } from "react-icons/pi";
@@ -28,6 +29,11 @@ export const navDashboardConfig = [
     key: "10",
     icon: <LiaRingSolid style={{ fontSize: "1.4em" }} />,
     label: "Covers",
+  },
+  {
+    key: "12",
+    icon:   <RubyOutlined  style={{ fontSize: "1.2em" }} />,
+    label: "Diamonds",
   },
   {
     key: "11",
@@ -121,6 +127,9 @@ export const navpath = {
   },
   11: {
     path: "/dashboard/manager/requests",
+  },
+  12: {
+    path: "/dashboard/manager/diamonds",
   },
 };
 

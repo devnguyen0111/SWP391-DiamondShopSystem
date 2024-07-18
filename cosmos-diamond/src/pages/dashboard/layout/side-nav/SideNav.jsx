@@ -18,6 +18,7 @@ import navDashboardConfig, {
 import img from "../../../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
+
 function SideNav({}) {
   const { pathname } = useLocation();
   const navigate = useNavigate();

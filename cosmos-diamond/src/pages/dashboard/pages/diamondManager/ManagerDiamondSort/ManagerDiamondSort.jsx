@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Row, Col, Select, Pagination, Card, Modal } from "antd";
-
-import SortPriceSlider from "./../../../../../components/sortslider/SortPriceSlider";
-import SortCaratSlider from "./../../../../../components/sortslider/SortCaratSlider";
-import SortColorSlider from "./../../../../../components/sortslider/SortColorSlider";
-import SortClaritySlider from "./../../../../../components/sortslider/SortClaritySlider";
-import SortCutSlider from "./../../../../../components/sortslider/SortCutSlider";
-import { diamonds } from "./../../../../../components/sortslider/Diamonds";
-import Image from "./../../../../../components/Image";
+import { Row, Col, Select, Pagination, Card, Modal, Button } from "antd";
 import { apiHeader } from "../../../../../components/urlApiHeader";
-import "./ManagerDiamondCatalog.scss";
-import api from "../../../../../config/axios";
-import { alertSuccess } from "../../../../../hooks/useNotification";
-function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
+import api from "./../../../../../config/axios";
+import SortPriceSlider from "../../../../../components/sortslider/SortPriceSlider";
+import SortCaratSlider from "../../../../../components/sortslider/SortCaratSlider";
+import SortColorSlider from "../../../../../components/sortslider/SortColorSlider";
+import SortClaritySlider from "../../../../../components/sortslider/SortClaritySlider";
+import SortCutSlider from "../../../../../components/sortslider/SortCutSlider";
+import { diamonds } from "../../../../../components/sortslider/Diamonds";
+import { useNavigate } from "react-router-dom";
+import { CiRollingSuitcase } from "react-icons/ci";
+import { PlusCircleFilled, PlusCircleOutlined } from "@ant-design/icons";
+
+function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
   const MIN_PRICE = 0;
   const MAX_PRICE = 50000;
   const MIN_CARAT = 0.05;
@@ -38,7 +38,7 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   const [order, setOrder] = useState("desc");
   const [amount, setAmount] = useState(0);
   const [open1, setOpen1] = useState(false);
-
+  const nav = useNavigate();
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
     shapes[0].classList.add("chosen");
@@ -74,10 +74,9 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
       if (data.diamonds.$values.length < pageSize) {
         setHasMore(false);
       }
-      
+
       setDiamondList(data.diamonds.$values);
       setAmount(data.totalDiamond);
-      
     } catch (error) {
       console.error("Failed to fetch diamonds", error);
     } finally {
@@ -93,7 +92,7 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
     pageNumber,
     pageSize,
     order,
-    amount
+    amount,
   ]);
 
   useEffect(() => {
@@ -128,19 +127,17 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   };
 
   const handlePageChange = (page, pageSize) => {
-  
     setPageNumber(page);
     setPageSize(pageSize);
   };
   const handleSelectDiamond = (diamondId) => {
-    
     setOpen1(true);
     setSelectedDiamond(diamondId);
   };
   const handleOk = async () => {
     if (selectedDiamond) {
       const response = await api.get(`/api/Diamond/${selectedDiamond}`);
-      
+
       setDiamondInfo([
         {
           key: 1,
@@ -158,7 +155,6 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
           key: 3,
           label: "Shape",
           children: response.data.shape,
-         
         },
         {
           key: 4,
@@ -176,19 +172,31 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
           children: response.data.color,
         },
         {
-          key:7,
+          key: 7,
           label: "Cut",
           children: response.data.cut,
         },
       ]);
-      setOpen(false)
-      setOpen1(false)
-      alertSuccess('Diamond Chosen')
+      setOpen(false);
+      setOpen1(false);
+      alertSuccess("Diamond Chosen");
     }
   };
   return (
     <>
-      <div className="sort">
+      <div className="sort" style={{ color: "black", padding: "40px 100px" }}>
+        <div className="" style={{ textAlign: "right" }}>
+          <Button
+            style={{
+              padding: "20px 20px",
+              backgroundColor: "#171742",
+              color: "#fff",
+            }}
+            onClick={()=> nav('/dashboard/manager/diamond/add')}
+          >
+            <PlusCircleOutlined /> Add Diamond
+          </Button>
+        </div>
         <Row className="sort__wrapper" gutter={[24, 16]}>
           <Col span={8} xs={24} lg={8} className="sort__area">
             <div className="shape">
@@ -312,7 +320,9 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
                               />
                             }
                             onClick={() =>
-                              handleSelectDiamond(diamond.diamondId)
+                              nav(
+                                `/dashboard/manager/diamond/${diamond.diamondId}`
+                              )
                             }
                           >
                             <div className="product__info1">
@@ -340,17 +350,9 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
             </>
           </Col>
         </Row>
-        <Modal
-          open={open1}
-          onClose={() => setOpen1(false)}
-          onCancel={() => setOpen1(false)}
-          onOk={handleOk}
-        >
-          Sure
-        </Modal>
       </div>
     </>
   );
 }
 
-export default ManagerDiamondCatalog;
+export default ManagerDiamondSort;
