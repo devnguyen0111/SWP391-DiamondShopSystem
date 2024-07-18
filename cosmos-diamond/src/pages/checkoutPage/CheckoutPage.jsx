@@ -150,7 +150,7 @@ function CheckoutPage() {
       const response = await api.get("/get");
      
       let data = response.data.$values;
-     
+      
 
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");
@@ -565,7 +565,14 @@ function CheckoutPage() {
                               options={vouchers.map((v) => ({
                                 value: v.name, 
                                 label: v.name,
+                                description: v.description
                               }))}
+                              optionRender={option =>(
+                                <>
+                                  <div className="">{option.data.label}</div>
+                                  <div className="" style={{opacity:'0.8', fontSize:'12px'}}>{option.data.description}</div>
+                                </>
+                              )}
                             />
                           ),
                         },
