@@ -69,16 +69,19 @@ import LocationTracker from "../components/LocationTracker";
 import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
 import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
 import ManangerProductDetail from "../pages/dashboard/pages/productsManager/manangerProductDetail/ManangerProductDetail";
-import ManagerDiamondCatalog from './../pages/dashboard/pages/productsManager/managerDiamondCatalog/ManagerDiamondCatalog';
+import ManagerDiamondCatalog from "./../pages/dashboard/pages/productsManager/managerDiamondCatalog/ManagerDiamondCatalog";
 
 import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
 import SendRequest from "../pages/dashboard/pages/requestStaff/SendRequest";
-import ManangerAddProduct from './../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct';
+import ManangerAddProduct from "./../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct";
 import CoversManager from "../pages/dashboard/pages/coversManager/CoversManager";
 import ManagerCoverDetail from "../pages/dashboard/pages/coversManager/ManagerCoverDetail/ManagerCoverDetail";
 import ManagerAddCover from "../pages/dashboard/pages/coversManager/ManagerAddCover/ManagerAddCover";
 import GiaAndWarranty from "../pages/GiaAndWarranty/GiaAndWarranty";
 import RequestStaff from "../pages/dashboard/pages/requestStaff/RequestStaff";
+import DiamondManager from "../pages/dashboard/pages/diamondManager/DiamondManager";
+import ManagerDiamondDetail from "../pages/dashboard/pages/diamondManager/ManagerDiamondDetail/ManagerDiamondDetail";
+import ManagerAddDiamond from "../pages/dashboard/pages/diamondManager/ManagerAddDiamond/ManagerAddDiamond";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -460,7 +463,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/manager/diamonds",
+        element: <DiamondManager />,
+      },
+      {
+        path: "/dashboard/manager/diamond/:id",
+        element: <ManagerDiamondDetail />,
+      },
+      {
+        path: "/dashboard/manager/diamonds",
         element: <ManagerDiamondCatalog />,
+      },
+      {
+        path: "/dashboard/manager/diamond/add",
+        element: <ManagerAddDiamond />,
       },
       {
         path: "/dashboard/manager/product/add",
