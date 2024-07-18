@@ -55,7 +55,7 @@ function ShoppingCart() {
 
   useEffect(() => {
     fetchCart();
-  }, [remove, fetchCart()]);
+  }, [remove]);
 
   const handleCheckout = async () => {
     let pids = new Set(checklist.map((l) => l.pid));
