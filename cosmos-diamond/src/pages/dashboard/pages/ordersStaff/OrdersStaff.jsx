@@ -133,7 +133,7 @@ function OrdersStaff() {
       const data = response.data.$values;
       console.log(data);
       setStaff(
-        data.map((staff) => ({ label: staff.name, value: staff.staffId }))
+        data.map((staff) => ({ label: staff.name, value: staff.dStaffId }))
       );
     } catch (e) {
       console.error(e);
@@ -170,7 +170,9 @@ function OrdersStaff() {
       await assignStaff(selectedOrderId, selectedValue);
     }
   };
-
+  const handleSelect = (value)=>{
+    setSelectedValue(value)
+  }
   return (
     <div className="mode">
       <Table
@@ -196,7 +198,7 @@ function OrdersStaff() {
             showSearch
             placeholder="Select a person"
             optionFilterProp="children"
-            onChange={setSelectedValue}
+            onChange={handleSelect}
             onSearch={onSearch}
             filterOption={filterOption}
             options={staff}

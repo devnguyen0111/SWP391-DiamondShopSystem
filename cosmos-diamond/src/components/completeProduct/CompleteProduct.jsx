@@ -71,7 +71,7 @@ function CompleteProduct() {
         }),
       });
       if (res.status === 200) {
-        const data = await res.json();
+        const data = await res.text();
         console.log("1 data productId", data);
         return data;
       }
