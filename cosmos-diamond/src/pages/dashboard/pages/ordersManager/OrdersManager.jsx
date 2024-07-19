@@ -18,6 +18,7 @@ import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
 import formatDate from "./../../../../components/formatDate";
+import { alertSuccess } from "../../../../hooks/useNotification";
 
 function OrdersManager() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -42,6 +43,7 @@ function OrdersManager() {
       await api.post(
         `/api/Assign/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
       );
+      alertSuccess("Successfully assigned sale staff to the order!")
       getOrders();
       setModal1Open(false);
     } catch (e) {
@@ -244,9 +246,9 @@ function OrdersManager() {
         columns={columns}
         dataSource={orderSearch}
         pagination={{
-          defaultPageSize: 5,
+          defaultPageSize: 10,
           showSizeChanger: false,
-          pageSizeOptions: ["5"],
+          pageSizeOptions: ["10"],
         }}
         confirmLoading={isLoading}
       />

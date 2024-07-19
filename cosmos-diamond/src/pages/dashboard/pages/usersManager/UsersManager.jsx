@@ -131,9 +131,9 @@ function UsersManager() {
         columns={columns}
         dataSource={users}
         pagination={{
-          defaultPageSize: 5,
+          defaultPageSize: 10,
           showSizeChanger: false,
-          pageSizeOptions: ["7"],
+          pageSizeOptions: ["10"],
         }}
       />
       <Modal
