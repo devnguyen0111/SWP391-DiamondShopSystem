@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, ConfigProvider, Popover } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/features/counterSlice";
+import DropdownDiamondMain from "../dropdownDiamondMain/DropdownDiamondMain";
 
 const Header = () => {
   const user = useSelector(selectUser);
@@ -44,13 +45,11 @@ const Header = () => {
           <img src={img} alt="Cosmos Diamonds" />
         </Link>
       </div>
+
       <nav className="nav">
         {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link to="/diamonds" className="nav-link">
-          {" "}
-          Diamonds
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
-        </Link>
+
+        <DropdownDiamondMain />
 
         {/* </Popover> */}
 
