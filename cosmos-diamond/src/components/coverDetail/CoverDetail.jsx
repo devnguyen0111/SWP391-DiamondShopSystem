@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Col, Row, Select, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { apiHeader } from "../urlApiHeader";
+import api from "./../../config/axios";
+import { alertFail } from './../../hooks/useNotification';
 
 const CoverDetail = () => {
   const [cover, setCover] = useState({});
@@ -76,7 +78,7 @@ const CoverDetail = () => {
     [coverSize]
   );
 
-  const handleCoverSelect = () => {
+  const handleCoverSelect = async () => {
     if (selectedMetal && selectedSize) {
       let selectedCover = {
         coverId: cover.coverId,
@@ -85,11 +87,23 @@ const CoverDetail = () => {
         name: cover.name + " " + selectedMetal.name,
         sizeId: selectedSize.sizeId,
         metalId: selectedMetal.metalId,
-        categoryId: cover.categoryId
+        categoryId: cover.categoryId,
       };
       console.log(selectedCover);
-      sessionStorage.setItem("cover", JSON.stringify(selectedCover));
-      nav("/custom-ring-by-diamond/complete-product");
+      //Check out of stock
+      fetch(
+        `${apiHeader}/Cover/CheckForInventory?coverId=${cover.coverId}&metalTypeid=${selectedMetal.metalId}&sizeId=${selectedSize.sizeId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data) {
+            sessionStorage.setItem("cover", JSON.stringify(selectedCover));
+            nav("/custom-ring-by-diamond/complete-product");
+          } else {
+            alertFail(`Sorry but ${selectedCover.name} is out of stock. Please Choose another Metal Type or Size`)
+            
+          }
+        });
     } else {
       openNotification();
     }
