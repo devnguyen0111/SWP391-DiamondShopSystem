@@ -27,12 +27,20 @@ import { useForm } from "antd/es/form/Form";
 import "./ManagerCoverDetail.scss";
 import { apiHeader } from "./../../../../../components/urlApiHeader";
 function ManagerCoverDetail() {
+  const [open2, setOpen2] = useState(false);
+
   const [cover, setCover] = useState(null);
   const [metalTypes, setMetalTypes] = useState(null);
   const [metalTable, setMetalTable] = useState();
   const [sizes, setSizes] = useState();
   const [sizeTable, setSizeTable] = useState();
   const [imageURL, setImageURL] = useState("");
+
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+
+  const [metalTypeStatus, setMetalTypeStatus] = useState();
+  const [sizeStatus, setSizeStatus] = useState();
 
   const [open, setOpen] = useState(false);
   const [formMetal] = useForm();
@@ -70,15 +78,13 @@ function ManagerCoverDetail() {
         const notCurrentSizes = res.data.sizes.$values.filter(
           (s) => !currentSizes.includes(s.id)
         );
-
         setMetalTypes(notCurrentMetal);
-
         setSizes(notCurrentSizes);
       }
     },
     [metalTypes]
   );
-  //columns
+  //metal columns
   const columns = [
     {
       title: "Metal ID",
@@ -108,6 +114,21 @@ function ManagerCoverDetail() {
       key: "price",
     },
     {
+      title: "Status",
+      key: "status",
+      render: (data) => (
+        <div
+          className=""
+          style={{
+            color:
+              data.status.toLowerCase() === "disabled" ? "#ff4d4f" : "green",
+          }}
+        >
+          {data.status}
+        </div>
+      ),
+    },
+    {
       title: "Action",
       key: "action",
       render: (data) =>
@@ -123,10 +144,18 @@ function ManagerCoverDetail() {
         ) : (
           <Button
             type="primary"
-            danger
-            onClick={() => disableMetal(data.metalId)}
+            style={{
+              backgroundColor:
+                data.status.toLowerCase() === "available" ? "#ff4d4f" : "green",
+            }}
+            onClick={() => {
+              setOpen3(true);
+              setMetalTypeStatus(data);
+            }}
           >
-            Disable
+            {data.status.toLowerCase() === "available"
+              ? "Disable"
+              : "Available"}
           </Button>
         ),
     },
@@ -145,8 +174,18 @@ function ManagerCoverDetail() {
     },
     {
       title: "Status",
-      dataIndex: "status",
       key: "status",
+      render: (data) => (
+        <div
+          className=""
+          style={{
+            color:
+              data.status.toLowerCase() === "disabled" ? "#ff4d4f" : "green",
+          }}
+        >
+          {data.status}
+        </div>
+      ),
     },
     {
       title: "Price ($)",
@@ -168,10 +207,18 @@ function ManagerCoverDetail() {
         ) : (
           <Button
             type="primary"
-            danger
-            onClick={() => handleDisableSize(data.id)}
+            style={{
+              backgroundColor:
+                data.status.toLowerCase() === "available" ? "#ff4d4f" : "green",
+            }}
+            onClick={() => {
+              setOpen4(true);
+              setSizeStatus(data);
+            }}
           >
-            Disable
+            {data.status.toLowerCase() === "available"
+              ? "Disable"
+              : "Available"}
           </Button>
         ),
     },
@@ -225,36 +272,36 @@ function ManagerCoverDetail() {
       sizeId: s.sizeId,
       status: s.status,
     }));
-    console.log({
-      coverName: value.coverName,
-      unitPrice: value.unitPrice,
-      coverMetaltypes: metalApi,
-      coverSizes: sizeApi,
-    });
-   
+    // console.log({
+    //   coverName: value.coverName,
+    //   unitPrice: value.unitPrice,
+    //   coverMetaltypes: metalApi,
+    //   coverSizes: sizeApi,
+    // });
 
-   if(cover){
-     fetch(`${apiHeader}/Cover/UpdateCover?id=${cover.coverId}`, {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        coverName: value.coverName,
-        unitPrice: value.unitPrice,
-        coverMetaltypes: metalApi,
-        coverSizes: sizeApi,
-        status: cover.status
-      }),
-    })
-      .then((data) => {
-        alertSuccess('Update Successfully')
-        console.log(data)
+    if (cover) {
+      fetch(`${apiHeader}/Cover/UpdateCover?id=${cover.coverId}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          coverName: value.coverName,
+          unitPrice: value.unitPrice,
+          coverMetaltypes: metalApi,
+          coverSizes: sizeApi,
+          status: cover.status,
+        }),
       })
-      .catch(e=>{
-        alertFail(e)
-      })
-   }
+        .then((data) => {
+          alertSuccess("Update Successfully");
+          fetchCover(coverId)
+          // console.log(data);
+        })
+        .catch((e) => {
+          alertFail(e);
+        });
+    }
   };
 
   const handleImg = () => {};
@@ -288,8 +335,42 @@ function ManagerCoverDetail() {
       alertFail("Please Select Image");
     }
   };
-  //Disable Metal
-  const disableMetal = () => {};
+  //Change Metal
+  const changeStatusMetal = (data) => {
+    try {
+      let id = data.metalId;
+      fetch(
+        `${apiHeader}/Status/checkChangeability?what=CoverMetalType&id=${coverId}&subid=${id}`
+      )
+        .then((res) => res.json())
+        .then(async (data) => {
+          if (data.canChange) {
+            let coverMetalType = cover.metals.$values.find(
+              (m) => m.metalId == id
+            );
+            let statusApi =
+              coverMetalType.status.toLowerCase() === "available"
+                ? "Disabled"
+                : "Available";
+            let res = await api.put(
+              `api/Status/UpdateStatusAdvanced?what=CoverMetalType&id=${coverId}&subId=${id}&newStatus=${statusApi}`
+            );
+            if (res.status !== 200) {
+              throw new Error(res.statusText);
+            }
+            fetchCover(coverId);
+            setOpen3(false);
+
+            alertSuccess("Update Cover Metal Type Status Successful");
+          } else {
+            throw new Error(data.reason);
+          }
+        });
+    } catch (error) {
+      setOpen3(false);
+      alertFail(error.message);
+    }
+  };
   //Remove newly added metal
   const removeNewlyAdded = (data) => {
     // setMetalTable((pre) => pre.filter((m) => !(m.metalId === data.metalId)));
@@ -339,6 +420,64 @@ function ManagerCoverDetail() {
     sizeTemp = sizeTemp.sort((a, b) => a.id - b.id);
     setSizes(sizeTemp);
   };
+  const handleCoverStatus = () => {
+    if (coverId) {
+      if (cover) {
+        fetch(`${apiHeader}/Status/checkChangeability?what=Cover&id=${coverId}`)
+          .then((res) => res.json())
+          .then(async (data) => {
+            if (data.canChange) {
+              let res = await api.put(
+                `api/Status/UpdateStatusAdvanced?what=Cover&id=${coverId}`
+              );
+              if (res.status === 200) {
+                setOpen2(false);
+                fetchCover(coverId);
+                alertSuccess("Changer Cover status successful");
+              }
+            } else {
+              setOpen2(false);
+              alertFail(data.reason);
+            }
+          });
+      } else {
+        alertFail("Can not get Cover");
+      }
+    }
+  };
+  const changeSizeStatus = (size) => {
+    try {
+      let id = size.sizeId;
+      fetch(
+        `${apiHeader}/Status/checkChangeability?what=CoverSize&id=${coverId}&subid=${id}`
+      )
+        .then((res) => res.json())
+        .then(async (data) => {
+          if (data.canChange) {
+            let coverSize = cover.sizes.$values.find((m) => m.sizeId == id);
+            let statusApi =
+              coverSize.status.toLowerCase() === "available"
+                ? "Disabled"
+                : "Available";
+            let res = await api.put(
+              `api/Status/UpdateStatusAdvanced?what=CoverSize&id=${coverId}&subId=${id}&newStatus=${statusApi}`
+            );
+            if (res.status !== 200) {
+              throw new Error(res.statusText);
+            }
+            fetchCover(coverId);
+            setOpen4(false);
+
+            alertSuccess("Update Cover Size Status Successful");
+          } else {
+            throw new Error(data.reason);
+          }
+        });
+    } catch (error) {
+      setOpen4(false);
+      alertFail(error.message);
+    }
+  };
   return (
     <>
       {cover && (
@@ -364,18 +503,28 @@ function ManagerCoverDetail() {
                 <div className="side__status">
                   <Flex justify="space-between" align="center">
                     <div className="side__header">Status</div>
-                    <div className="side__icon"></div>
+                    <div
+                      className="side__icon"
+                      style={{
+                        backgroundColor:
+                          cover.status.toLowerCase() === "available"
+                            ? "green"
+                            : "red",
+                      }}
+                    ></div>
                   </Flex>
-                  <Select
-                    options={[
-                      {
-                        label: "Available",
-                        value: "Available",
-                      },
-                    ]}
-                    defaultValue={cover.status}
-                    style={{ width: "100%", marginTop: "20px" }}
-                  ></Select>
+                  <Button
+                    style={{
+                      width: "100%",
+                      borderColor:
+                        cover.status.toLowerCase() === "available"
+                          ? "green"
+                          : "red",
+                    }}
+                    onClick={() => setOpen2(true)}
+                  >
+                    {cover.status}
+                  </Button>
                   <p
                     style={{
                       marginTop: "10px",
@@ -383,7 +532,7 @@ function ManagerCoverDetail() {
                       color: "#99a1b7",
                     }}
                   >
-                    Set Jewlery Status
+                    Set Cover Status
                   </p>
                 </div>
               </Flex>
@@ -560,6 +709,55 @@ function ManagerCoverDetail() {
                 </Form>
               )}
             </Flex>
+          </Modal>
+          <Modal
+            open={open2}
+            onClose={() => setOpen2(false)}
+            onCancel={() => setOpen2(false)}
+            onOk={handleCoverStatus}
+          >
+            Are you sure to{" "}
+            <span
+              style={{ color: cover.status === "Available" ? "red" : "green" }}
+            >
+              {cover.status === "Available" ? "Disable" : "Available"}
+            </span>{" "}
+            this Cover ?
+          </Modal>
+          <Modal
+            open={open3}
+            onClose={() => setOpen3(false)}
+            onCancel={() => setOpen3(false)}
+            onOk={() => changeStatusMetal(metalTypeStatus)}
+          >
+            Are you sure to{" "}
+            <span
+              style={{
+                color:
+                  metalTypeStatus?.status === "Available" ? "red" : "green",
+              }}
+            >
+              {metalTypeStatus?.status === "Available"
+                ? "Disable"
+                : "Available"}
+            </span>{" "}
+            Cover Metal Type {metalTypeStatus?.metalId} ?
+          </Modal>
+          <Modal
+            open={open4}
+            onClose={() => setOpen4(false)}
+            onCancel={() => setOpen4(false)}
+            onOk={() => changeSizeStatus(sizeStatus)}
+          >
+            Are you sure to{" "}
+            <span
+              style={{
+                color: sizeStatus?.status === "Available" ? "red" : "green",
+              }}
+            >
+              {sizeStatus?.status === "Available" ? "Disable" : "Available"}
+            </span>{" "}
+            Cover Size {sizeStatus?.sizeId} ?
           </Modal>
         </div>
       )}

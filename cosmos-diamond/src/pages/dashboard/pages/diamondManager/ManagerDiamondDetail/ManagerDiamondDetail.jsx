@@ -38,7 +38,10 @@ function ManagerDiamondDetail() {
   const imgRef = useRef();
   const [status, setSatus] = useState();
 
-  useEffect(() => {
+  const [open, setOpen] = useState(false);
+
+  //Get diamond detail
+  const fecthDiamondDetail = () => {
     fetch(`${apiHeader}/Diamond/getDiamondDetail?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -48,6 +51,9 @@ function ManagerDiamondDetail() {
       .catch((e) => {
         alertFail(e.response.data);
       });
+  };
+  useEffect(() => {
+    fecthDiamondDetail();
   }, []);
   const handleImg = (value) => {
     imgRef.current.src = `/${value}.jpg`;
@@ -72,10 +78,31 @@ function ManagerDiamondDetail() {
       alertFail(error.data);
     }
   };
+  const changeDiamondStatus = () => {
+    if (id) {
+      fetch(`${apiHeader}/Status/checkChangeability?what=Diamond&id=${id}`)
+        .then((res) => res.json())
+        .then(async (data) => {
+          setOpen(false);
+          if (data.canChange) {
+            let statusApi = diamond.status.toLowerCase() === 'available' ? 'Disabled' : 'Available'
+            let res = await api.put(
+              `api/Status/UpdateStatusAdvanced?what=Diamond&id=${id}&newStatus=${statusApi}`
+            );
+            if (res.status === 200) {
+              fecthDiamondDetail()
+              alertSuccess("Change status successfully");
+            }
+          } else {
+            alertFail(data.reason);
+          }
+        });
+    }
+  };
   return (
     <>
       {diamond && (
-        <div className="manger-update-form" >
+        <div className="manger-update-form">
           <Row
             style={{ width: "100%", color: "#1f1f1f" }}
             className="product-update"
@@ -97,23 +124,28 @@ function ManagerDiamondDetail() {
                 <div className="side__status">
                   <Flex justify="space-between" align="center">
                     <div className="side__header">Status</div>
-                    <div className="side__icon"></div>
+                    <div
+                      className="side__icon"
+                      style={{
+                        backgroundColor:
+                          diamond.status.toLowerCase() === "available"
+                            ? "green"
+                            : "red",
+                      }}
+                    ></div>
                   </Flex>
-                  <Select
-                    options={[
-                      {
-                        label: "Available",
-                        value: "Available",
-                      },
-                      {
-                        label: "Disable",
-                        value: "Disable",
-                      },
-                    ]}
-                    defaultValue={diamond.status}
-                    onSelect={(value) => setSatus(value)}
-                    style={{ width: "100%", marginTop: "20px" }}
-                  ></Select>
+                  <Button
+                    style={{
+                      width: "100%",
+                      borderColor:
+                        diamond.status.toLowerCase() === "available"
+                          ? "green"
+                          : "red",
+                    }}
+                    onClick={() => setOpen(true)}
+                  >
+                    {diamond.status}
+                  </Button>
                   <p
                     style={{
                       marginTop: "10px",
@@ -139,7 +171,8 @@ function ManagerDiamondDetail() {
                       message: "Please provide Diamond Name",
                     },
                   ]}
-                  initialValue={diamond.diamondName}s
+                  initialValue={diamond.diamondName}
+                  s
                 >
                   <Input />
                 </Form.Item>
@@ -248,6 +281,22 @@ function ManagerDiamondDetail() {
               </Form>
             </Col>
           </Row>
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            onCancel={() => setOpen(false)}
+            onOk={() => changeDiamondStatus()}
+          >
+            Are you sure to{" "}
+            <span
+              style={{
+                color: diamond?.status === "Available" ? "red" : "green",
+              }}
+            >
+              {diamond?.status === "Available" ? "Disable" : "Available"}
+            </span>{" "}
+            Diamond {diamond?.diamondId} ?
+          </Modal>
         </div>
       )}
     </>

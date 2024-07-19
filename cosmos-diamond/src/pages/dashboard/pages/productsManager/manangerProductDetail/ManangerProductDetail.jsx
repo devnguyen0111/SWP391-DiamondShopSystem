@@ -21,11 +21,13 @@ import { apiHeader } from "../../../../../components/urlApiHeader";
 function ManangerProductDetail() {
   const [product, setProduct] = useState();
   const [cover, setCover] = useState();
+  const [selectedCover, setSelectedCover] = useState(null);
   const [metalTypes, setMetalTypes] = useState();
   const [sizes, setSizes] = useState();
   const [open, setOpen] = useState(false);
   const [diamondInfo, setDiamondInfo] = useState();
-  // const [open2, setOpen2] = useState(false)
+  const [open2, setOpen2] = useState(false);
+
   const imgRef = useRef();
   const nav = useNavigate();
   let url = window.location.href;
@@ -89,8 +91,6 @@ function ManangerProductDetail() {
   //Get cover name for <Select/>
   const fetchCover = async (categoryId) => {
     const response = await api.get(`/api/Cover/getAllCovers`);
-    console.log(response.data);
-
     let covers = response.data.$values.filter(
       (c) => c.categoryId == categoryId && c.status == "Available"
     );
@@ -100,8 +100,15 @@ function ManangerProductDetail() {
   const fetchCoverOptions = async (coverId) => {
     const response = await api.get(`/api/Cover/getCoverDetail?id=${coverId}`);
     console.log(response.data);
-    setMetalTypes(response.data.metals.$values);
-    setSizes(response.data.sizes.$values);
+    setSelectedCover(response.data);
+    let availableMetals = response.data.metals.$values.filter(
+      (m) => m.status.toLowerCase() == "available"
+    );
+    let availableSize = response.data.sizes.$values.filter(
+      (s) => s.status.toLowerCase() == "available"
+    );
+    setMetalTypes(availableMetals);
+    setSizes(availableSize);
   };
 
   useEffect(() => {
@@ -140,6 +147,29 @@ function ManangerProductDetail() {
       imgRef.current.src = img.url;
     }
   };
+  const handleProductStatus = async () => {
+    if (productId) {
+      fetch(
+        `${apiHeader}/Status/checkChangeability?what=Product&id=${productId}`
+      )
+        .then((res) => res.json())
+        .then(async (data) => {
+          setOpen2(false);
+          console.log(data.canChange);
+          if (data.canChange) {
+            let res = await api.put(
+              `api/Status/UpdateStatusAdvanced?what=Product&id=${productId}`
+            );
+            if (res.status === 200) {
+              await getProductDetail(productId);
+              alertSuccess("Change status successfully");
+            }
+          } else {
+            alertFail(data.reason);
+          }
+        });
+    }
+  };
   return (
     <div className="manger-update-form">
       {product && (
@@ -155,7 +185,7 @@ function ManangerProductDetail() {
                 <div className="side__img">
                   <img
                     ref={imgRef}
-                    src={product && product.imgUrl}
+                    src={product?.imgUrl}
                     style={{ width: "100%" }}
                     alt=""
                   />
@@ -164,12 +194,35 @@ function ManangerProductDetail() {
               <div className="side__status">
                 <Flex justify="space-between" align="center">
                   <div className="side__header">Status</div>
-                  <div className="side__icon"></div>
+                  <div
+                    className="side__icon"
+                    style={{
+                      backgroundColor:
+                        product.productStatus.toLowerCase() === "available"
+                          ? "green"
+                          : "red",
+                    }}
+                  ></div>
                 </Flex>
-                <Select
-                  className=""
-                  style={{ width: "100%", marginTop: "20px" }}
-                ></Select>
+                {product.productStatus.toLowerCase() === "available" ? (
+                  <Button
+                    onClick={() => {
+                      setOpen2(true);
+                    }}
+                    style={{ width: "100%", borderColor: "green" }}
+                  >
+                    {product.productStatus}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      setOpen2(true);
+                    }}
+                    style={{ width: "100%", borderColor: "red" }}
+                  >
+                    {product.productStatus}
+                  </Button>
+                )}
                 <p
                   style={{
                     marginTop: "10px",
@@ -203,6 +256,9 @@ function ManangerProductDetail() {
                 <InputNumber min={1} addonAfter="$" />
               </Form.Item>
               <div className="side__header">Cover</div>
+              <div className="">
+                ID: {selectedCover?.coverId || product.coverId}
+              </div>
               <Flex wrap gap="large">
                 <Form.Item
                   label="Cover Name"
@@ -230,12 +286,11 @@ function ManangerProductDetail() {
                 <Flex vertical gap="small">
                   <Flex className="" justify="flex-start" gap="small">
                     <div className="">Status</div>
-                    <div
-                      className="side__icon"
-                      style={{ width: "5px", height: "5px" }}
-                    ></div>
                   </Flex>
-                  <Input disabled value={product.coverStatus} />
+                  <Input
+                    disabled
+                    value={selectedCover?.status || product.coverStatus}
+                  />
                 </Flex>
               </Flex>
               <Flex gap="large">
@@ -258,7 +313,6 @@ function ManangerProductDetail() {
                       metalTypes.length > 0 &&
                       metalTypes.map((metal) => ({
                         label: metal.name,
-
                         value: metal.metalId,
                       }))
                     }
@@ -336,13 +390,22 @@ function ManangerProductDetail() {
               setOpen={setOpen}
             />
           </Modal>
-          {/* <Modal
+          <Modal
             open={open2}
             onClose={() => setOpen2(false)}
             onCancel={() => setOpen2(false)}
+            onOk={handleProductStatus}
           >
-            Sure ?
-          </Modal> */}
+            Are you sure to{" "}
+            <span
+              style={{
+                color: product.productStatus === "Available" ? "red" : "green",
+              }}
+            >
+              {product.productStatus === "Available" ? "Disable" : "Available"}
+            </span>{" "}
+            this Product ?
+          </Modal>
         </Row>
       )}
     </div>
