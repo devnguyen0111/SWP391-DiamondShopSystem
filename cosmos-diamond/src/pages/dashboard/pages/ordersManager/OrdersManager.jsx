@@ -3,6 +3,7 @@ import {
   Button,
   ConfigProvider,
   Modal,
+  Popconfirm,
   Segmented,
   Select,
   Table,
@@ -43,7 +44,7 @@ function OrdersManager() {
       await api.post(
         `/api/Assign/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
       );
-      alertSuccess("Successfully assigned sale staff to the order!")
+      alertSuccess("Successfully assigned sale staff to the order!");
       getOrders();
       setModal1Open(false);
     } catch (e) {
@@ -82,7 +83,9 @@ function OrdersManager() {
         status === "Pending" ||
         status === "shipping" ||
         status === "Shipping" ? (
-          <span>Assigned</span>
+          <Tag color="geekblue">Assigned</Tag>
+        ) : status === "cancel" || status === "Cancel" ? (
+          <Tag color="red">Order Cancelled</Tag>
         ) : (
           <Button
             onClick={() => {
@@ -111,7 +114,9 @@ function OrdersManager() {
         <div>
           {status === "cancel" || status === "Cancel" ? (
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <Tag color="red" style={{ fontFamily: "Gantari" }}>Cancelled</Tag>
+              <Tag color="red" style={{ fontFamily: "Gantari" }}>
+                Cancelled
+              </Tag>
             </div>
           ) : status === "pending" || status === "Pending" ? (
             <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
@@ -137,13 +142,34 @@ function OrdersManager() {
         </div>
       ),
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <div>
+          {record.status.toLowerCase() === "pending" ||
+          record.status.toLowerCase() === "paid" ? (
+            <Popconfirm
+              title="Are you sure to approve this request?"
+              onConfirm={() => cancelOrder(record.orderId)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>Cancel Order</Button>
+            </Popconfirm>
+          ) : (
+            <Button disabled>Cancel Order</Button>
+          )}
+        </div>
+      ),
+    },
   ].filter((item) => !item.hidden);
 
   const getOrders = async () => {
     try {
       const response = await api.get("/api/Order/getAllOrders");
       let data = response.data.$values;
-      data = response.data.$values.sort((a,b)=> b.orderId - a.orderId)
+      data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
       setOrderSearch(response.data.$values);
       const updatedOrders = data.map((order) => {
         const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
@@ -160,9 +186,7 @@ function OrdersManager() {
 
   const getStaff = async () => {
     try {
-      const response = await api.get(
-        `/api/Assign/getAllSaleStaff`
-      );
+      const response = await api.get(`/api/Assign/getAllSaleStaff`);
       const data = response.data.$values;
 
       setStaff(
@@ -173,6 +197,18 @@ function OrdersManager() {
         }))
       );
     } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    try {
+      await api.post(`/api/Order/cancel/${user.UserID}/${orderId}`);
+      alertSuccess("Cancel order successfully!");
+      setSelectedSegment("All Orders")
+      getOrders();
+    } catch (e) {
+      alertFail("Order cancellation failed!");
       console.error(e);
     }
   };
@@ -271,7 +307,6 @@ function OrdersManager() {
             filterOption={filterOption}
             options={staff}
             style={{ width: "100%", margin: "8px 0" }}
-            
           />
           {showAlert && (
             <Alert message="Please selected a staff." type="error" />
