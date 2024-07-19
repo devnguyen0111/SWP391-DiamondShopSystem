@@ -13,12 +13,20 @@ import { Link, useNavigate } from "react-router-dom";
 import "./CardDetail.scss";
 import { apiHeader } from "../urlApiHeader";
 import { alertFail } from "../../hooks/useNotification";
+import api from "../../config/axios";
 
-function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckList }) {
+function CardDetail({
+  product,
+  userID,
+  setCartTotalPrice,
+  setRemove,
+  setcheckList,
+}) {
   const [productQuantity, setProductQuantity] = useState(product.quantity);
   const [productTotalPrice, setProductTotalPrice] = useState(product.total);
   const [loading, setLoading] = useState(false);
-  console.log('heeh', product);
+  const [diamond, setDiamond] = useState()
+  console.log("heeh", product);
   const openNotification = (placement) => {
     notification.error({
       message: "Remove Product Successfully",
@@ -29,7 +37,15 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
       duration: 2,
     });
   };
-
+  const getDiamondDetail = async ()=>{
+    const res = await api.get(`/api/Product/productDetail/${product.pid}`)
+    if(res.status == 200){
+      console.log(res.data);
+      setDiamond(res.data)
+    }else{
+      alertFail('Something went wrong, cannot get Jewelry Detail')
+    }
+  }
   const removeCartItem = async () => {
     setLoading(true);
     try {
@@ -37,7 +53,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
         method: "POST",
         headers: {
           "Content-type": "application/json",
-          Authoriaztion : `Bearer ${localStorage.getItem('token')}`
+          Authoriaztion: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           id: userID,
@@ -46,39 +62,39 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
       });
       setRemove((prev) => !prev);
       openNotification("topRight");
-    }catch{
-      alertFail('Something went wrong. Please try again')
-    }
-     finally {
+    } catch {
+      alertFail("Something went wrong. Please try again");
+    } finally {
       setLoading(false);
     }
-    
   };
-
+  useEffect(()=>{
+    getDiamondDetail()
+  }, [])
   const navigate = useNavigate();
 
-  const handleQuantity = async (e) => {
-    const newQuantity = e.target.value;
-    setProductQuantity(newQuantity);
-    setProductTotalPrice(newQuantity * product.price);
+  // const handleQuantity = async (e) => {
+  //   const newQuantity = e.target.value;
+  //   setProductQuantity(newQuantity);
+  //   setProductTotalPrice(newQuantity * product.price);
 
-    try {
-      const response = await fetch(
-        `${apiHeader}/Cart/updateCart?id=${userID}&pid=${product.pid}&quantity=${newQuantity}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      setCartTotalPrice(data.total);
-      setRemove(prev => !prev)
-    } catch (error) {
-      console.error("Failed to update cart", error);
-    }
-  };
+  //   try {
+  //     const response = await fetch(
+  //       `${apiHeader}/Cart/updateCart?id=${userID}&pid=${product.pid}&quantity=${newQuantity}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     setCartTotalPrice(data.total);
+  //     setRemove((prev) => !prev);
+  //   } catch (error) {
+  //     console.error("Failed to update cart", error);
+  //   }
+  // };
 
   const handleCheck = (e) => {
     if (e.target.checked) {
@@ -136,11 +152,14 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
                   <p className="cardDetail__lower__detail__ring__name">
                     {product.cover}
                   </p>
-                  <Link to="/setting-search">
+                  <Flex>
                     <p className="cardDetail__lower__detail__ring__change">
-                      Change Setting
+                      Metal Type: {product.metal}
                     </p>
-                  </Link>
+                    <p className="cardDetail__lower__detail__ring__change">
+                      Size: {product.size}
+                    </p>
+                  </Flex>
                 </div>
                 <p className="cardDetail__lower__detail__ring__price">
                   {"$" + product.coverPrice}
@@ -166,11 +185,12 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
                   <p className="cardDetail__lower__detail__ring__name">
                     {product.diamond}
                   </p>
-                  <Link to="/diamond-search">
-                    <p className="cardDetail__lower__detail__ring__change">
-                      Change Diamond
-                    </p>
-                  </Link>
+                  <Flex gap={12} style={{marginTop:'10px'}}>
+                    <div className="right__tag" style={{height:'auto', padding: '5px 10px'}}>{diamond?.color}</div>
+                    <div className="right__tag" style={{height:'auto', padding: '5px 10px'}}>{diamond?.clarity}</div>
+                    <div className="right__tag" style={{height:'auto', padding: '5px 10px'}}>{diamond?.carat}</div>
+                    <div className="right__tag" style={{height:'auto', padding: '5px 10px'}}>{diamond?.cut}</div>
+                  </Flex>
                 </div>
                 <p className="cardDetail__lower__detail__ring__price">
                   {"$" + product.diamondPrice}
@@ -183,18 +203,7 @@ function CardDetail({ product, userID, setCartTotalPrice, setRemove, setcheckLis
           className="cardDetail__lower__total"
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <div className="">
-            Quantity
-            <input
-              min={1}
-              value={productQuantity}
-              type="number"
-              max={5}
-              onChange={(e) => handleQuantity(e)}
-              onKeyDown={(e) => e.preventDefault()}
-              onKeyUp={(e) => e.preventDefault()}
-            />
-          </div>
+          <div className=""></div>
           <p>{"$" + productTotalPrice}</p>
         </div>
       </Card>

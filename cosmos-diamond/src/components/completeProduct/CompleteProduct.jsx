@@ -51,6 +51,15 @@ function CompleteProduct() {
         stack: true,
         duration: 2,
       });
+    }else if (type === "in-cart") {
+      api1.warning({
+        message: 'This jewelry has already in Your Cart',
+        description: <Link to={`/shopping-cart`}>View Cart</Link >,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
     }
   };
   const createProduct = async () => {
@@ -72,44 +81,67 @@ function CompleteProduct() {
       });
       if (res.status === 200) {
         const data = await res.text();
-        console.log("1 data productId", data);
+       
         return data;
+      } else {
+        const data = res.responseText;
+        alertFail(data);
       }
-      else{
-        const data = res.responseText
-        alertFail(data)
-      }
-
     } catch (error) {
-      console.log(error);
+      alertFail('Something went wrong, cannot custom Jewelry')
     }
   };
-
+  // Get cart item
+  const fetchCart = async () => {
+    try {
+      let token = getToken();
+      if (token) {
+        const response = await fetch(`${apiHeader}/Cart/${token.UserID}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        return data;
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
+    }
+  };
   const handleAddToCart = async () => {
     let token = getToken();
     if (token) {
       const productId = await createProduct();
-      console.log(productId);
-      fetch(`${apiHeader}/Cart/addToCart`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          id: token.UserID,
-          pid: productId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
+
+      console.log(await fetchCart());
+      let res = await fetchCart();
+      let cartItem = res.items.$values.map((i) => i.pid);
+
+      if (cartItem.filter((i) => i == productId).length > 0) {
+        openNotification("topRight", "in-cart");
+      } else {
+        fetch(`${apiHeader}/Cart/addToCart`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            id: token.UserID,
+            pid: productId,
+          }),
         })
-        .finally(() => {
-          openNotification("topRight", "success");
-        })
-        .catch(() => {
-          openNotification("topRight", "error");
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .finally(() => {
+            openNotification("topRight", "success");
+          })
+          .catch(() => {
+            openNotification("topRight", "error");
+          });
+      }
     } else {
       openNotification("topRight", "warning", "Please Login to add to Cart");
     }

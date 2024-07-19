@@ -21,26 +21,51 @@ function ProductDetail({ product }) {
   const nav = useNavigate();
   const [modal2Open, setModal2Open] = useState(false);
   console.log(product);
-  const addToCart = () => {
+  const addToCart = async () => {
     const url = window.location.href;
     const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
     const token = getToken();
     if (token) {
-      fetch(`${apiHeader}/Cart/addToCart`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify({
-          id: token.UserID,
-          pid: productId,
-        }),
-      }).then(openNotification("topRight", "success"))
-      .catch(()=>{
-        alertFail('Cannot add to Cart, Please try again')
-      })
+      let res = await fetchCart();
+      let cartItem = res.items.$values;
+      if (cartItem.filter((item) => item.pid == productId).length > 0) {
+        openNotification('topRight', 'in-cart')
+      } else {
+        fetch(`${apiHeader}/Cart/addToCart`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({
+            id: token.UserID,
+            pid: productId,
+          }),
+        })
+          .then(openNotification("topRight", "success"))
+          .catch(() => {
+            alertFail("Cannot add to Cart, Please try again");
+          });
+      }
     } else {
       openNotification("topRight", "warning");
+    }
+  };
+  //get cart itme
+  const fetchCart = async () => {
+    try {
+      let token = getToken();
+      if (token) {
+        const response = await fetch(`${apiHeader}/Cart/${token.UserID}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        return data;
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
     }
   };
   const [api2, contextHolder] = notification.useNotification();
@@ -58,6 +83,16 @@ function ProductDetail({ product }) {
       api2.warning({
         message: `You need to Login first`,
         description: <Link to={"/login"}>Login</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    }
+    else if (type === "in-cart") {
+      api2.warning({
+        message: 'This jewelry has already in Your Cart',
+        description: <Link to={`/shopping-cart`}>View Cart</Link >,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -121,7 +156,12 @@ function ProductDetail({ product }) {
                   alt=""
                 />
               </div>
-              <div className="summary__action-name" onClick={()=>setModal2Open(true)}>GIA Report</div>
+              <div
+                className="summary__action-name"
+                onClick={() => setModal2Open(true)}
+              >
+                GIA Report
+              </div>
             </Flex>
           </Col>
           <Col className="summary__table">
@@ -257,14 +297,18 @@ function ProductDetail({ product }) {
         open={modal2Open}
         onOk={() => setModal2Open(false)}
         onCancel={() => setModal2Open(false)}
-        style={{minWidth: '1000px'}}
+        style={{ minWidth: "1000px" }}
         footer={[
-          <Button type="primary" key="back" onClick={()=>setModal2Open(false)}>
+          <Button
+            type="primary"
+            key="back"
+            onClick={() => setModal2Open(false)}
+          >
             OK
-          </Button>
+          </Button>,
         ]}
       >
-        <GiaReport product={product}/>
+        <GiaReport product={product} />
       </Modal>
     </div>
   );

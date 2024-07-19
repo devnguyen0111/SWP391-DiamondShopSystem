@@ -42,6 +42,7 @@ function ShoppingCart() {
           },
         });
         const data = await response.json();
+        console.log(data);
         setCart(data);
         setCartTotalPrice(data.totalPrice);
         setTimeout(() => {
@@ -53,6 +54,12 @@ function ShoppingCart() {
     }
   };
 
+  //Check duplicate diamond id
+  const hasDuplicateDiamondId = (product) => {
+    const diamondIds = product.map((item) => item.diamondId);
+    const uniqueDiamondIds = new Set(diamondIds);
+    return uniqueDiamondIds.size !== diamondIds.length;
+  };
   useEffect(() => {
     fetchCart();
   }, [remove]);
@@ -61,17 +68,28 @@ function ShoppingCart() {
     let pids = new Set(checklist.map((l) => l.pid));
     if (pids.size > 0) {
       let products = cart.items.$values.filter((item) => pids.has(item.pid));
+
+      let productsWithDiamond = products.map((p) => ({
+        productId: p.pid,
+        quantity: p.quantity,
+        diamondId: p.diamondId,
+      }));
       products = products.map((p) => ({
         productId: p.pid,
         quantity: p.quantity,
+        diamondId: p.diamondId,
       }));
-      let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
-        userId: token.UserID,
-        products: products,
-      });
-      setCheckout(response.data);
-      localStorage.setItem("checkout", JSON.stringify(response.data));
-      nav(`/checkout/${token.UserID}`);
+      if (hasDuplicateDiamondId(productsWithDiamond)) {
+        alertFail("You cannot checkout Jewlery that have the same diamond");
+      } else {
+        let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
+          userId: token.UserID,
+          products: products,
+        });
+        setCheckout(response.data);
+        localStorage.setItem("checkout", JSON.stringify(response.data));
+        nav(`/checkout/${token.UserID}`);
+      }
     } else {
       alertFail("You have not checked any jewelry");
     }
