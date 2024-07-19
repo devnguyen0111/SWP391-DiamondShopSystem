@@ -82,6 +82,7 @@ import RequestStaff from "../pages/dashboard/pages/requestStaff/RequestStaff";
 import DiamondManager from "../pages/dashboard/pages/diamondManager/DiamondManager";
 import ManagerDiamondDetail from "../pages/dashboard/pages/diamondManager/ManagerDiamondDetail/ManagerDiamondDetail";
 import ManagerAddDiamond from "../pages/dashboard/pages/diamondManager/ManagerAddDiamond/ManagerAddDiamond";
+import RequestManager from "../pages/dashboard/pages/requestManager/RequestManager";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -495,7 +496,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/manager/requests",
-        element: <StaffChat />,
+        element: <RequestManager />,
       },
 
       //admin

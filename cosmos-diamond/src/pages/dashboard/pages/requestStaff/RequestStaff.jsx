@@ -1,10 +1,24 @@
-import { Button, Table, Tag } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  Popconfirm,
+  Segmented,
+  Table,
+  Tag,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import api from "../../../../config/axios";
 import { alertFail } from "../../../../hooks/useNotification";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/features/counterSlice";
 
 function RequestStaff() {
-  const [products, setProducts] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [requestSearch, setRequestSearch] = useState([]);
+  const [selectedSegment, setSelectedSegment] = useState("All Requests");
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [selectedRequestDetail, setSelectedRequestDetail] = useState(null);
+  const user = useSelector(selectUser);
 
   const data = [
     {
@@ -16,71 +30,130 @@ function RequestStaff() {
     {
       title: "Request ID",
       dataIndex: "requestId",
-      key: "productId",
-      render: (text) => <p>{text}</p>,
+      key: "requestId",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Date",
+      dataIndex: "requestedDate",
+      key: "requestedDate",
+      render: (text) => {
+        const date = new Date(text);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
     },
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status, data) =>
-        status === "Pending" ? (
-          <Tag color="volcano">Pending</Tag>
-        ) : status === "Approve" ? (
-          <Tag color="green">Approve</Tag>
-        ) : (
-          <Tag color="red">Reject</Tag>
-        ),
+      dataIndex: "requestStatus",
+      key: "requestStatus",
+      render: (status) => (
+        <div>
+          {status === "approved" || status === "Approved" ? (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Tag color="green" style={{ fontFamily: "Gantari" }}>
+                Approved
+              </Tag>
+            </div>
+          ) : status === "rejected" || status === "Rejected" ? (
+            <Tag color="volcano" style={{ fontFamily: "Gantari" }}>
+              Rejected
+            </Tag>
+          ) : status === "pending" || status === "Pending" ? (
+            <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
+              Pending
+            </Tag>
+          ) : null}
+        </div>
+      ),
     },
     {
       title: "Action",
-      dataIndex: "status",
-      key: "status",
-      render: (status, data) =>
-        status === "Pending" ? (
-          <div>
-            <Button>Cancel Order</Button>
-          </div>
-        ) : status === "Approve" ? (
-          <Tag color="green">Cancel Successfully</Tag>
-        ) : status === "Reject" ? (
-          <Tag color="red">Request has been rejected</Tag>
-        ) : null,
+      key: "action",
+      render: (text, record) => (
+        <div>
+          {record.requestStatus.toLowerCase() === "approved" ? (
+            <Popconfirm
+              title="Are you sure to approve this request?"
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>Cancel Order</Button>
+            </Popconfirm>
+          ) : record.requestStatus.toLowerCase() === "pending" || "rejected" ? (
+            <Button disabled>Cancel Order</Button>
+          ) : null}
+        </div>
+      ),
     },
-  ].filter((item) => !item.hidden);
+  ];
 
-  const getProducts = async () => {
+  const getRequests = async () => {
     try {
-      const response = await api.get("/api/Product/products");
-
-      const data = response.data.$values.filter(
-        (product) => product.pp === "cus"
+      const response = await api.get(`/api/Requests/requests/${user.UserID}`);
+      let data = response.data.$values.sort(
+        (a, b) => b.requestId - a.requestId
       );
-
-      console.log(data);
-      if (!Array.isArray(data)) {
-        throw new Error("Dữ liệu nhận được không phải là mảng");
-      }
-      setProducts(data);
+      setRequests(data);
+      setRequestSearch(data);
     } catch (e) {
       console.error(e);
-      alertFail(e.response?.data || e.message);
+    }
+  };
+
+  const filterOrder = (value) => {
+    setSelectedSegment(value);
+    if (value === "All Requests") {
+      setRequestSearch(requests);
+    } else {
+      setRequestSearch(
+        requests.filter(
+          (o) => o.requestStatus.toLowerCase() === value.toLowerCase()
+        )
+      );
     }
   };
 
   useEffect(() => {
-    getProducts();
+    getRequests();
   }, []);
 
   return (
     <div className="mode">
+      <ConfigProvider
+        theme={{
+          components: {
+            Segmented: {
+              itemSelectedColor: "#fff",
+              itemSelectedBg: "#151542",
+              itemHoverColor: "#fff",
+              itemHoverBg: "rgba(21,21,66,0.2)",
+              itemActiveBg: "rgba(21,21,66,0.2)",
+              motionDurationSlow: "0.2s",
+            },
+          },
+        }}
+      >
+        <Segmented
+          style={{ marginBottom: "20px" }}
+          size="large"
+          options={["All Requests","Approved" ,"Pending", "Rejected"]}
+          value={selectedSegment}
+          onChange={filterOrder}
+        />
+      </ConfigProvider>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={requestSearch}
         pagination={{
-          defaultPageSize: 5,
+          defaultPageSize: 10,
           showSizeChanger: false,
-          pageSizeOptions: ["5"],
+          pageSizeOptions: ["10"],
         }}
       />
     </div>

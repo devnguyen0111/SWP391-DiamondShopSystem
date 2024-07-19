@@ -16,6 +16,7 @@ import { selectUser } from "../../../../redux/features/counterSlice";
 import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
+import { alertSuccess } from "../../../../hooks/useNotification";
 
 function OrdersStaff() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -68,6 +69,7 @@ function OrdersStaff() {
         status === "Cancel" ? (
           <Tag color="red">Order Cancelled</Tag>
         ) : (
+          
           <Button
             onClick={() => {
               setSelectedOrderId(data.orderId);
@@ -125,18 +127,6 @@ function OrdersStaff() {
     },
   ].filter((item) => !item.hidden);
 
-  // const getOrders = async () => {
-  //   try {
-  //     const response = await api.get(
-  //       `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
-  //     );
-  //     const data = response.data.$values;
-  //     setOrders(data);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
   const getStaff = async () => {
     try {
       const response = await api.get("/api/Assign/getAllDeliveryStaff");
@@ -180,6 +170,7 @@ function OrdersStaff() {
       await api.post(
         `/api/Assign/assignDelivery?orderId=${orderId}&deliveryStaffId=${deliveryStaffId}`
       );
+      alertSuccess("Successfully assigned delivery staff to the order!")
       getOrders();
       setModal1Open(false);
     } catch (e) {
@@ -252,9 +243,9 @@ function OrdersStaff() {
         columns={columns}
         dataSource={orderSearch}
         pagination={{
-          defaultPageSize: 5,
+          defaultPageSize: 10,
           showSizeChanger: false,
-          pageSizeOptions: ["5"],
+          pageSizeOptions: ["10"],
         }}
       />
       <Modal
