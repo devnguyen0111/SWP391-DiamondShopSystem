@@ -125,6 +125,7 @@ function RequestManager() {
     try {
       await api.post(`/api/Requests/approve/${requestId}`);
       alertSuccess("Request approved successfully!");
+      setSelectedSegment("All Requests");
       getRequests();
     } catch (e) {
       console.error("Error:", e);
@@ -136,6 +137,7 @@ function RequestManager() {
     try {
       await api.post(`/api/Requests/reject/${requestId}`);
       alertSuccess("Request rejected successfully!");
+      setSelectedSegment("All Requests");
       getRequests();
     } catch (e) {
       console.error("Error:", e);

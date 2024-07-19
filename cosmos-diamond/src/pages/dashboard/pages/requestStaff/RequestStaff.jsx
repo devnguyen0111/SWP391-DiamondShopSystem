@@ -8,7 +8,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import api from "../../../../config/axios";
-import { alertFail } from "../../../../hooks/useNotification";
+import { alertFail, alertSuccess } from "../../../../hooks/useNotification";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
 
@@ -31,6 +31,12 @@ function RequestStaff() {
       title: "Request ID",
       dataIndex: "requestId",
       key: "requestId",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Order ID",
+      dataIndex: "orderId",
+      key: "orderId",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -80,6 +86,7 @@ function RequestStaff() {
           {record.requestStatus.toLowerCase() === "approved" ? (
             <Popconfirm
               title="Are you sure to approve this request?"
+              onConfirm={() => cancelOrder(record.orderId)}
               okText="Yes"
               cancelText="No"
             >
@@ -102,6 +109,17 @@ function RequestStaff() {
       setRequests(data);
       setRequestSearch(data);
     } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    try {
+      await api.post(`/api/Order/cancel/${user.UserID}/${orderId}`);
+      alertSuccess("Cancel order successfully!");
+      getRequests();
+    } catch (e) {
+      alertFail("Order cancellation failed!");
       console.error(e);
     }
   };
