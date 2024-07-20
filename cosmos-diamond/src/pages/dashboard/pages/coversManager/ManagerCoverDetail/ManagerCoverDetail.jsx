@@ -26,6 +26,7 @@ import { useForm } from "antd/es/form/Form";
 
 import "./ManagerCoverDetail.scss";
 import { apiHeader } from "./../../../../../components/urlApiHeader";
+import CoverInventory from "./CoverInventory";
 function ManagerCoverDetail() {
   const [open2, setOpen2] = useState(false);
 
@@ -223,6 +224,7 @@ function ManagerCoverDetail() {
         ),
     },
   ];
+  //Size optrioon colomn
   const sizeOptionColumns = [
     {
       title: "Size ID",
@@ -258,7 +260,8 @@ function ManagerCoverDetail() {
       ),
     },
   ];
-
+  
+  
   useEffect(() => {
     fetchCover(coverId);
   }, []);
@@ -616,6 +619,8 @@ function ManagerCoverDetail() {
                     row.added == "removed" ? "removed" : ""
                   }
                 />
+                <div className="side__header">Inventory</div>
+                <CoverInventory coverId={coverId}/>
                 <Form.Item>
                   <Button
                     style={{ marginTop: "20px" }}

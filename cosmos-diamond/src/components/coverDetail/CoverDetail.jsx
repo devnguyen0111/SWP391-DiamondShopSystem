@@ -20,6 +20,7 @@ const CoverDetail = () => {
   const url = window.location.href;
   const coverId = url.slice(url.lastIndexOf("/") + 1, url.length);
   const nav = useNavigate();
+  //Get cover detal
   useEffect(() => {
     fetch(`${apiHeader}/Cover/getCoverDetail?id=${coverId}`)
       .then((res) => res.json())
@@ -77,7 +78,7 @@ const CoverDetail = () => {
       })),
     [coverSize]
   );
-
+  // select cover
   const handleCoverSelect = async () => {
     if (selectedMetal && selectedSize) {
       let selectedCover = {
@@ -101,7 +102,6 @@ const CoverDetail = () => {
             nav("/custom-ring-by-diamond/complete-product");
           } else {
             alertFail(`Sorry but ${selectedCover.name} is out of stock. Please Choose another Metal Type or Size`)
-            
           }
         });
     } else {
