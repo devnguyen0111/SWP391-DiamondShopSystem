@@ -127,9 +127,8 @@ function RequestStaff() {
       key: "action",
       render: (text, record) => (
         <div>
-          {(record.requestStatus.toLowerCase() === "approved" &&
-            record.orderStatus.toLowerCase() === "pending") ||
-          record.orderStatus.toLowerCase() === "shipping" ? (
+          {record.requestStatus.toLowerCase() === "approved" && 
+          (record.orderStatus.toLowerCase() === "pending" || record.orderStatus.toLowerCase() === "shipping") ? (
             <Popconfirm
               title="Are you sure to cancel this order?"
               onConfirm={() => cancelOrder(record.orderId)}
@@ -144,6 +143,7 @@ function RequestStaff() {
         </div>
       ),
     },
+    
   ];
 
   const getRequests = async () => {
