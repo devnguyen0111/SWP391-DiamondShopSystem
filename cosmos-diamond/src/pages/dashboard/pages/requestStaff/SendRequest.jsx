@@ -22,7 +22,9 @@ const SendRequest = () => {
         `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
       );
       const data = response.data.$values.filter(
-        (order) => order.status.toLowerCase() === "pending"
+        (order) =>
+          order.status.toLowerCase() === "pending" ||
+          order.status.toLowerCase() === "shipping"
       );
       setOrders(
         data.map((order) => ({
