@@ -63,6 +63,8 @@ function ShoppingCart() {
   useEffect(() => {
     fetchCart();
   }, [remove]);
+  //check product status in cart
+  
 
   const handleCheckout = async () => {
     let pids = new Set(checklist.map((l) => l.pid));
