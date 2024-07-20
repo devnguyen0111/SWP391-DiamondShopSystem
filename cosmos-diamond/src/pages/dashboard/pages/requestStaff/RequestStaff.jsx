@@ -55,7 +55,7 @@ function RequestStaff() {
       },
     },
     {
-      title: "Status",
+      title: "Request Status",
       dataIndex: "requestStatus",
       key: "requestStatus",
       render: (status) => (
@@ -79,22 +79,68 @@ function RequestStaff() {
       ),
     },
     {
+      title: "Order Status",
+      dataIndex: "orderStatus",
+      key: "orderStatus",
+      filters: [
+        { text: "Pending", value: "pending" },
+        { text: "Delivered", value: "delivered" },
+        { text: "Shipping", value: "shipping" },
+        { text: "Cancel", value: "cancel" },
+      ],
+      onFilter: (value, record) => record.status === value,
+      render: (status, { tags }) => (
+        <div>
+          {status === "pending" || status === "Pending" ? (
+            <Tag style={{ backgroundColor: "#FDFFD2", fontFamily: "Gantari" }}>
+              Pending
+            </Tag>
+          ) : status === "delivered" || status === "Delivered" ? (
+            <Tag style={{ backgroundColor: "#C3FF93", fontFamily: "Gantari" }}>
+              Delivered
+            </Tag>
+          ) : status === "Shipping" || status === "shipping" ? (
+            <Tag
+              style={{
+                backgroundColor: "#102C57",
+                color: "white",
+                fontFamily: "Gantari",
+              }}
+            >
+              Shipping
+            </Tag>
+          ) : status === "Cancel" || status === "cancel" ? (
+            <Tag
+              color="red"
+              style={{
+                fontFamily: "Gantari",
+              }}
+            >
+              Cancel
+            </Tag>
+          ) : null}
+        </div>
+      ),
+    },
+    {
       title: "Action",
       key: "action",
       render: (text, record) => (
         <div>
-          {record.requestStatus.toLowerCase() === "approved" ? (
+          {(record.requestStatus.toLowerCase() === "approved" &&
+            record.orderStatus.toLowerCase() === "pending") ||
+          record.orderStatus.toLowerCase() === "shipping" ? (
             <Popconfirm
-              title="Are you sure to approve this request?"
+              title="Are you sure to cancel this order?"
               onConfirm={() => cancelOrder(record.orderId)}
               okText="Yes"
               cancelText="No"
             >
               <Button danger>Cancel Order</Button>
             </Popconfirm>
-          ) : record.requestStatus.toLowerCase() === "pending" || "rejected" ? (
+          ) : (
             <Button disabled>Cancel Order</Button>
-          ) : null}
+          )}
         </div>
       ),
     },
@@ -160,7 +206,7 @@ function RequestStaff() {
         <Segmented
           style={{ marginBottom: "20px" }}
           size="large"
-          options={["All Requests","Approved" ,"Pending", "Rejected"]}
+          options={["All Requests", "Approved", "Pending", "Rejected"]}
           value={selectedSegment}
           onChange={filterOrder}
         />

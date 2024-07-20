@@ -46,7 +46,10 @@ function OrdersStaff() {
       title: "Date",
       dataIndex: "orderDate",
       key: "orderDate",
-      render: (text) => <a>{text}</a>,
+      render: (text) => {
+        const date = new Date(text);
+        return `${date.toLocaleDateString()}`;
+      },
     },
     {
       title: "Total",
@@ -249,8 +252,9 @@ function OrdersStaff() {
         }}
       />
       <Modal
+      
         title="Confirm delivery staff"
-        centered
+        
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}

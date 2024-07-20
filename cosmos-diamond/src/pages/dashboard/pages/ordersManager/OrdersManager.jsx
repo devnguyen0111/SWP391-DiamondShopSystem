@@ -10,7 +10,7 @@ import {
   Tag,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import "./OrdersManager.scss";
+import "./OrdersManager.scss"; // Import tệp SCSS của bạn
 import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
 import { useSelector } from "react-redux";
@@ -148,6 +148,7 @@ function OrdersManager() {
       render: (text, record) => (
         <div>
           {record.status.toLowerCase() === "pending" ||
+          record.status.toLowerCase() === "shipping" ||
           record.status.toLowerCase() === "paid" ? (
             <Popconfirm
               title="Are you sure to approve this request?"
@@ -186,13 +187,13 @@ function OrdersManager() {
 
   const getStaff = async () => {
     try {
-      const response = await api.get(`/api/Assign/getAllSaleStaff`);
+      const response = await api.get(`/api/Assign/saleStaffListByManagerId/${user.UserID}`);
       const data = response.data.$values;
 
       setStaff(
         data.map((staff) => ({
           label: `${staff.name} (${staff.status})`,
-          value: staff.staffId,
+          value: staff.sStaffId,
           disabled: staff.status == "Busy",
         }))
       );
@@ -205,7 +206,7 @@ function OrdersManager() {
     try {
       await api.post(`/api/Order/cancel/${user.UserID}/${orderId}`);
       alertSuccess("Cancel order successfully!");
-      setSelectedSegment("All Orders")
+      setSelectedSegment("All Orders");
       getOrders();
     } catch (e) {
       alertFail("Order cancellation failed!");
@@ -290,11 +291,12 @@ function OrdersManager() {
       />
       <Modal
         title="Confirm delivery staff"
-        centered
+        
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}
         confirmLoading={isLoading}
+    
       >
         <Form name="form_item_path" layout="vertical" onSubmit={handleSubmit}>
           <label>Assign delivery staff</label>
