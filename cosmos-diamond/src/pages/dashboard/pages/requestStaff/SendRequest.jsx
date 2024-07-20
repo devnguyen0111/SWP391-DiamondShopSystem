@@ -49,7 +49,6 @@ const SendRequest = () => {
       title: "Cancel Order",
       context: reason,
       sStaffId: user.UserID,
-      manId: 3,
       orderId: selectedOrder,
     };
 
