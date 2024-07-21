@@ -1,43 +1,24 @@
 import {
-  Alert,
   Button,
   ConfigProvider,
   Descriptions,
   Flex,
   Input,
   Modal,
-  Popconfirm,
   Segmented,
-  Select,
   Table,
   Tag,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
-import { MdOutlineBlock } from "react-icons/md";
-import { GoDotFill } from "react-icons/go";
-import { CiNoWaitingSign } from "react-icons/ci";
 import formatDate from "./../../../../components/formatDate";
-import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
 
-function OrdersManager() {
-  const [selectedValue, setSelectedValue] = useState(null);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+function OrdersAdmin() {
   const [selectedSegment, setSelectedSegment] = useState("All Orders");
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-  const navigate = useNavigate();
-  const [modal1Open, setModal1Open] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [staff, setStaff] = useState([]);
   const user = useSelector(selectUser);
   const [isLoading, setIsLoading] = useState(false);
   const [orderSearch, setOrderSearch] = useState([]);
@@ -45,20 +26,6 @@ function OrdersManager() {
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProduct, setFilteredProduct] = useState([]);
-
-  const assignStaff = async (orderId, saleStaffId) => {
-    try {
-      await api.post(
-        `/api/Assign/assignStaff?orderId=${orderId}&saleStaffId=${saleStaffId}`
-      );
-      alertSuccess("Successfully assigned sale staff to the order!");
-      getOrders();
-      setModal1Open(false);
-    } catch (e) {
-      console.error(e);
-      setModal1Open(false);
-    }
-  };
 
   const columns = [
     {
@@ -81,31 +48,6 @@ function OrdersManager() {
       key: "totalAmount",
       sorter: (a, b) => a.totalAmount - b.totalAmount,
       render: (text) => <a>${text}</a>,
-    },
-    {
-      title: "Assign Staff",
-      dataIndex: "status",
-      key: "status",
-      render: (status, data) =>
-        status === "delivered" ||
-        status === "Delivered" ||
-        status === "pending" ||
-        status === "Pending" ||
-        status === "shipping" ||
-        status === "Shipping" ? (
-          <Tag color="geekblue">Assigned</Tag>
-        ) : status === "cancel" || status === "Cancel" ? (
-          <Tag color="red">Order Cancelled</Tag>
-        ) : (
-          <Button
-            onClick={() => {
-              setSelectedOrderId(data.orderId);
-              setModal1Open(true);
-            }}
-          >
-            Assign
-          </Button>
-        ),
     },
 
     {
@@ -154,28 +96,6 @@ function OrdersManager() {
     },
 
     {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <div>
-          {record.status.toLowerCase() === "pending" ||
-          record.status.toLowerCase() === "shipping" ||
-          record.status.toLowerCase() === "paid" ? (
-            <Popconfirm
-              title="Are you sure to approve this request?"
-              onConfirm={() => cancelOrder(record.orderId)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button danger>Cancel Order</Button>
-            </Popconfirm>
-          ) : (
-            <Button disabled>Cancel Order</Button>
-          )}
-        </div>
-      ),
-    },
-    {
       title: "Detail",
       dataIndex: "detail",
       key: "detail",
@@ -210,47 +130,10 @@ function OrdersManager() {
       let data = response.data.$values;
       data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
       setOrderSearch(response.data.$values);
-      const updatedOrders = data.map((order) => {
-        const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
-        return {
-          ...order,
-          assignedStaffName: assignedStaff ? assignedStaff.label : null,
-        };
-      });
-      setOrders(updatedOrders);
-      setFilteredProduct(updatedOrders); // Cập nhật filteredProduct
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
-  const getStaff = async () => {
-    try {
-      const response = await api.get(
-        `/api/Assign/saleStaffListByManagerId/${user.UserID}`
-      );
-      const data = response.data.$values;
-
-      setStaff(
-        data.map((staff) => ({
-          label: `${staff.name} (${staff.status})`,
-          value: staff.sStaffId,
-          disabled: staff.status == "Busy",
-        }))
-      );
+      setOrders(data);
+      setFilteredProduct(data);
     } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const cancelOrder = async (orderId) => {
-    try {
-      await api.post(`/api/Order/cancel/${user.UserID}/${orderId}`);
-      alertSuccess("Cancel order successfully!");
-      setSelectedSegment("All Orders");
-      getOrders();
-    } catch (e) {
-      alertFail("Order cancellation failed!");
       console.error(e);
     }
   };
@@ -273,25 +156,8 @@ function OrdersManager() {
   };
 
   useEffect(() => {
-    getStaff();
-  }, []);
-
-  useEffect(() => {
     getOrders();
   }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedValue == null) {
-      setShowAlert(true);
-      setSelectedSegment("All Orders");
-    } else {
-      setShowAlert(false);
-      await assignStaff(selectedOrderId, selectedValue);
-      setSelectedSegment("All Orders");
-      filterOrder("All Orders");
-    }
-  };
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -373,33 +239,7 @@ function OrdersManager() {
         }}
         confirmLoading={isLoading}
       />
-      <Modal
-        title="Confirm delivery staff"
-        open={modal1Open}
-        footer={null}
-        onCancel={() => setModal1Open(false)}
-        confirmLoading={isLoading}
-      >
-        <Form name="form_item_path" layout="vertical" onSubmit={handleSubmit}>
-          <label>Assign delivery staff</label>
-          <Select
-            showSearch
-            placeholder="Select a person"
-            optionFilterProp="children"
-            onChange={setSelectedValue}
-            onSearch={onSearch}
-            filterOption={filterOption}
-            options={staff}
-            style={{ width: "100%", margin: "8px 0" }}
-          />
-          {showAlert && (
-            <Alert message="Please selected a staff." type="error" />
-          )}
-          <Button style={{ marginTop: "1em" }} type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form>
-      </Modal>
+
       <Modal
         title="Order Detail"
         open={isDetailModalVisible}
@@ -471,4 +311,4 @@ function OrdersManager() {
   );
 }
 
-export default OrdersManager;
+export default OrdersAdmin;

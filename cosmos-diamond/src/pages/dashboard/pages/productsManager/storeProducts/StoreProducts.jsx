@@ -57,7 +57,7 @@ function StoreProducts() {
           theme={{
             components: {
               Button: {
-                borderRadius: "18px",
+               
                 defaultBg: "white",
                 defaultColor: "black",
                 defaultHoverBg: "white",

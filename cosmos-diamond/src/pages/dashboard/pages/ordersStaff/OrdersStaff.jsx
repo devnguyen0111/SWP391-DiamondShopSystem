@@ -2,6 +2,9 @@ import {
   Alert,
   Button,
   ConfigProvider,
+  Descriptions,
+  Flex,
+  Input,
   Modal,
   Segmented,
   Select,
@@ -17,6 +20,8 @@ import { MdOutlineBlock } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { alertSuccess } from "../../../../hooks/useNotification";
+import { SearchOutlined } from "@ant-design/icons";
+import "./OrdersStaff.scss"
 
 function OrdersStaff() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -34,18 +39,24 @@ function OrdersStaff() {
   const user = useSelector(selectUser);
   const [selectedSegment, setSelectedSegment] = useState("All Orders");
   const [orderSearch, setOrderSearch] = useState([]);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filteredProduct, setFilteredProduct] = useState([]);
 
   const columns = [
     {
       title: "Order ID",
       dataIndex: "orderId",
       key: "orderId",
+      sorter: (a, b) => a.orderId - b.orderId,
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Date",
       dataIndex: "orderDate",
       key: "orderDate",
+      sorter: (a, b) => new Date(a.orderDate) - new Date(b.orderDate),
       render: (text) => {
         const date = new Date(text);
         return `${date.toLocaleDateString()}`;
@@ -55,6 +66,7 @@ function OrdersStaff() {
       title: "Total",
       dataIndex: "totalAmount",
       key: "totalAmount",
+      sorter: (a, b) => a.totalAmount - b.totalAmount,
       render: (text) => <a>${text}</a>,
     },
     {
@@ -64,15 +76,12 @@ function OrdersStaff() {
       render: (status, data) =>
         status === "delivered" ||
         status === "Delivered" ||
-       
         status === "shipping" ||
         status === "Shipping" ? (
           <Tag color="geekblue">Assigned</Tag>
-        ) :  status === "cancel" ||
-        status === "Cancel" ? (
+        ) : status === "cancel" || status === "Cancel" ? (
           <Tag color="red">Order Cancelled</Tag>
         ) : (
-          
           <Button
             onClick={() => {
               setSelectedOrderId(data.orderId);
@@ -128,6 +137,33 @@ function OrdersStaff() {
         </div>
       ),
     },
+    {
+      title: "Detail",
+      dataIndex: "detail",
+      key: "detail",
+      render: (_, record) => (
+        <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                defaultBg: "white",
+                defaultColor: "black",
+                defaultHoverBg: "white",
+                defaultHoverBorderColor: "black",
+                defaultHoverColor: "black",
+                defaultActiveBg: "black",
+                defaultActiveBorderColor: "black",
+                defaultActiveColor: "white",
+              },
+            },
+          }}
+        >
+          <Button onClick={() => showDetailModal(record.orderId)}>
+            Detail Request
+          </Button>
+        </ConfigProvider>
+      ),
+    },
   ].filter((item) => !item.hidden);
 
   const getStaff = async () => {
@@ -163,6 +199,7 @@ function OrdersStaff() {
         };
       });
       setOrders(updatedOrders);
+      setFilteredProduct(updatedOrders);
     } catch (e) {
       console.error(e);
     }
@@ -173,7 +210,7 @@ function OrdersStaff() {
       await api.post(
         `/api/Assign/assignDelivery?orderId=${orderId}&deliveryStaffId=${deliveryStaffId}`
       );
-      alertSuccess("Successfully assigned delivery staff to the order!")
+      alertSuccess("Successfully assigned delivery staff to the order!");
       getOrders();
       setModal1Open(false);
     } catch (e) {
@@ -182,17 +219,63 @@ function OrdersStaff() {
     }
   };
 
-  const filterOrder = (value) => {
-    console.log(value.toLowerCase());
-    setSelectedSegment(value);
-    if (value === "All Orders") {
-      setOrderSearch(orders);
-    } else {
-      setOrderSearch(
-        orders.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+  const showDetailModal = async (orderId) => {
+    try {
+      const response = await api.get(
+        `/api/Order/getOrderDetail?orderId=${orderId}`
       );
+      setSelectedDetail(response.data);
+      setIsDetailModalVisible(true);
+    } catch (e) {
+      console.error(e);
     }
   };
+
+  const handleDetailModalClose = () => {
+    setIsDetailModalVisible(false);
+    setSelectedDetail(null);
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+    applyFilters(value, selectedSegment);
+  };
+
+  const filterOrder = (value) => {
+    setSelectedSegment(value);
+    applyFilters(search, value);
+  };
+
+  const applyFilters = (searchValue, segmentValue) => {
+    let filteredData = orders;
+
+    if (segmentValue !== "All Orders") {
+      filteredData = filteredData.filter(
+        (order) => order.status.toLowerCase() === segmentValue.toLowerCase()
+      );
+    }
+
+    if (searchValue) {
+      filteredData = filteredData.filter((order) =>
+        order.orderId.toString().includes(searchValue)
+      );
+    }
+
+    setFilteredProduct(filteredData);
+  };
+
+  // const filterOrder = (value) => {
+  //   console.log(value.toLowerCase());
+  //   setSelectedSegment(value);
+  //   if (value === "All Orders") {
+  //     setOrderSearch(orders);
+  //   } else {
+  //     setOrderSearch(
+  //       orders.filter((o) => o.status.toLowerCase() === value.toLowerCase())
+  //     );
+  //   }
+  // };
 
   useEffect(() => {
     getStaff();
@@ -220,31 +303,47 @@ function OrdersStaff() {
   };
   return (
     <div className="mode">
-      <ConfigProvider
-        theme={{
-          components: {
-            Segmented: {
-              itemSelectedColor: "#fff",
-              itemSelectedBg: "#151542",
-              itemHoverColor: "#fff",
-              itemHoverBg: "rgba(21,21,66,0.2)",
-              itemActiveBg: "rgba(21,21,66,0.2)",
-              motionDurationSlow: "0.2s",
+      <Flex justify="space-between">
+        <ConfigProvider
+          theme={{
+            components: {
+              Segmented: {
+                itemSelectedColor: "#fff",
+                itemSelectedBg: "#151542",
+                itemHoverColor: "#fff",
+                itemHoverBg: "rgba(21,21,66,0.2)",
+                itemActiveBg: "rgba(21,21,66,0.2)",
+                motionDurationSlow: "0.2s",
+              },
             },
-          },
-        }}
-      >
-        <Segmented
-          style={{ marginBottom: "20px" }}
-          size="large"
-          options={["All Orders", "Pending", "Shipping", "Delivered", "Cancel"]}
-          value={selectedSegment}
-          onChange={filterOrder}
-        />
-      </ConfigProvider>
+          }}
+        >
+          <Segmented
+            style={{ marginBottom: "20px" }}
+            size="large"
+            options={[
+              "All Orders",
+              "Pending",
+              "Shipping",
+              "Delivered",
+              "Cancel",
+            ]}
+            value={selectedSegment}
+            onChange={filterOrder}
+          />
+        </ConfigProvider>
+        <div style={{ width: "300px" }}>
+          <Input
+            placeholder="Search Order ID"
+            addonBefore={<SearchOutlined />}
+            onChange={handleSearch}
+            value={search}
+          />
+        </div>
+      </Flex>
       <Table
         columns={columns}
-        dataSource={orderSearch}
+        dataSource={filteredProduct}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: false,
@@ -252,9 +351,7 @@ function OrdersStaff() {
         }}
       />
       <Modal
-      
         title="Confirm delivery staff"
-        
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}
@@ -279,6 +376,73 @@ function OrdersStaff() {
             Submit
           </Button>
         </Form>
+      </Modal>
+      <Modal
+        title="Order Detail"
+        open={isDetailModalVisible}
+        onCancel={handleDetailModalClose}
+        footer={[
+          <Button key="close" onClick={handleDetailModalClose}>
+            Close
+          </Button>,
+        ]}
+        className="detail-modal"
+      >
+        {selectedDetail && (
+          <>
+            <Descriptions bordered>
+              <Descriptions.Item label="Order ID">
+                #{selectedDetail.orderId}
+              </Descriptions.Item>
+              <Descriptions.Item label="Requested Date">
+                {new Date(selectedDetail.orderDate).toLocaleString()}
+              </Descriptions.Item>
+              <Descriptions.Item label="Total Amount">
+                ${selectedDetail.totalAmount}
+              </Descriptions.Item>
+              <Descriptions.Item label="Shipping Method">
+                {selectedDetail.shippingMethodName}
+              </Descriptions.Item>
+            </Descriptions>
+
+            <h1
+              style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
+            >
+              Item
+            </h1>
+            {selectedDetail.items.$values.map((item) => (
+              <Descriptions
+                bordered
+                key={item.pId}
+                style={{ marginTop: "20px" }}
+              >
+                <Descriptions.Item label="Item Image" span={3}>
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    style={{ width: "10vw" }}
+                  />
+                </Descriptions.Item>
+                <Descriptions.Item label="Item Name" span={3}>
+                  {item.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Diamond Name" span={3}>
+                  {item.diamondName}
+                </Descriptions.Item>
+                <Descriptions.Item label="Size">
+                  {item.sizeName}
+                </Descriptions.Item>
+                <Descriptions.Item label="Metal Type">
+                  {item.metaltypeName}
+                </Descriptions.Item>
+
+                <Descriptions.Item label="Total">
+                  ${item.total}
+                </Descriptions.Item>
+              </Descriptions>
+            ))}
+          </>
+        )}
       </Modal>
     </div>
   );

@@ -43,6 +43,7 @@ export const navDashboardConfig = [
 ];
 
 export const navDashboardConfigAdmin = [
+
   {
     key: "5",
     icon: <SolutionOutlined />,
@@ -53,7 +54,11 @@ export const navDashboardConfigAdmin = [
     icon: <TeamOutlined />,
     label: "Users",
   },
-  
+  {
+    key: "13",
+    icon: <ShoppingCartOutlined />,
+    label: "Orders",
+  },
   
 ];
 
@@ -130,6 +135,9 @@ export const navpath = {
   },
   12: {
     path: "/dashboard/manager/diamonds",
+  },
+  13: {
+    path: "/dashboard/admin/orders",
   },
 };
 

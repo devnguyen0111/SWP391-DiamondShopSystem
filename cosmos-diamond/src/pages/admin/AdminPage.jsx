@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../config/axios";
-import Chart from "chart.js/auto";
 import "./AdminPage.css";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosApps } from "react-icons/io";
@@ -8,9 +7,8 @@ import { CiCreditCard1 } from "react-icons/ci";
 import { AiOutlineSync } from "react-icons/ai";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { FaShippingFast } from "react-icons/fa";
-import { FaArrowsRotate } from "react-icons/fa6";
+import { FaArrowsRotate, FaArrowRightArrowLeft } from "react-icons/fa6";
 import { TbCash } from "react-icons/tb";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import AdminTransaction from "../adminTransaction/AdminTransaction";
 import TopRevenue from "./TopRevenue";
 import ConversionsChart from "./ConversionsChart";
@@ -25,19 +23,6 @@ function AdminPage() {
   const [cancelled, setCancelled] = useState(0);
   const [paid, setPaid] = useState(0);
   const [total, setTotal] = useState(0);
-
-  const [orderStats, setOrderStats] = useState({
-    total: 0,
-    pending: 0,
-    processing: 0,
-    delivered: 0,
-  });
-
-  const [datas, setData] = useState({
-    users: 0,
-    products: 0,
-    diamonds: 0,
-  });
 
   const getTodayOrders = async () => {
     try {
@@ -101,6 +86,10 @@ function AdminPage() {
     getTotal();
   }, []);
 
+  const formatNumber = (number) => {
+    return number.toLocaleString();
+  };
+
   return (
     <div>
       <div className="wrapper-card">
@@ -108,27 +97,27 @@ function AdminPage() {
           <div className="percentage">
             <IoIosApps />
           </div>
-          <h2>Today orders </h2>
+          <h2>Today orders</h2>
           <div className="detail-back">
-            <div className="number">${todayOrders}</div>
+            <div className="number">${formatNumber(todayOrders)}</div>
           </div>
         </div>
         <div className="card thisMonth">
           <div className="percentage">
             <AiOutlineSync />
           </div>
-          <h2>This month orders </h2>
+          <h2>This month orders</h2>
           <div className="detail-back">
-            <div className="number">${thisMonthOrders}</div>
+            <div className="number">${formatNumber(thisMonthOrders)}</div>
           </div>
         </div>
         <div className="card totalOrders">
           <div className="percentage">
             <CiCreditCard1 />
           </div>
-          <h2>Total orders </h2>
+          <h2>Total orders</h2>
           <div className="detail-back">
-            <div className="number">${totalOrders}</div>
+            <div className="number">${formatNumber(totalOrders)}</div>
           </div>
         </div>
       </div>
@@ -139,17 +128,16 @@ function AdminPage() {
           </div>
           <div className="card-lower-info">
             <p>Total Order</p>
-            <h2>{total}</h2>
+            <h2>{formatNumber(total)}</h2>
           </div>
         </div>
-
         <div className="card-lower">
           <div className="card-lower-icon">
             <FaArrowsRotate />
           </div>
           <div className="card-lower-info">
             <p>Order Processing</p>
-            <h2>{processing}</h2>
+            <h2>{formatNumber(processing)}</h2>
           </div>
         </div>
         <div className="card-lower">
@@ -158,7 +146,7 @@ function AdminPage() {
           </div>
           <div className="card-lower-info">
             <p>Order Shipping</p>
-            <h2>{shipping}</h2>
+            <h2>{formatNumber(shipping)}</h2>
           </div>
         </div>
         <div className="card-lower">
@@ -167,7 +155,7 @@ function AdminPage() {
           </div>
           <div className="card-lower-info">
             <p>Order Delivered</p>
-            <h2>{delivered}</h2>
+            <h2>{formatNumber(delivered)}</h2>
           </div>
         </div>
         <div className="card-lower">
@@ -176,7 +164,7 @@ function AdminPage() {
           </div>
           <div className="card-lower-info">
             <p>Order Paid</p>
-            <h2>{paid}</h2>
+            <h2>{formatNumber(paid)}</h2>
           </div>
         </div>
         <div className="card-lower">
@@ -185,7 +173,7 @@ function AdminPage() {
           </div>
           <div className="card-lower-info">
             <p>Order Cancelled</p>
-            <h2>{cancelled}</h2>
+            <h2>{formatNumber(cancelled)}</h2>
           </div>
         </div>
       </div>

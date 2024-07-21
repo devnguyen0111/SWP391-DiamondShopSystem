@@ -6,7 +6,9 @@ import ExploreDiamond from "../../components/exploreDiamondBanner/ExploreDiamond
 import { useNavigate } from "react-router-dom";
 
 function DiamondsIntro() {
+
   const nav = useNavigate();
+
   return (
     <div>
       <Banner
@@ -98,8 +100,10 @@ function DiamondsIntro() {
           }}
         >
           <Button
+
             onClick={() => nav("/diamond-search?sortBy=Round")}
             className="shopEarthBanner__button"
+
           >
             Shop Earth Created
           </Button>
@@ -126,7 +130,12 @@ function DiamondsIntro() {
             },
           }}
         >
-          <Button className="shopLabGrownBanner__button">Shop Lab Grown</Button>
+          <Button
+            className="shopLabGrownBanner__button"
+            onClick={() => navigate("/diamond-search")}
+          >
+            Shop Lab Grown
+          </Button>
         </ConfigProvider>
       </div> */}
     </div>

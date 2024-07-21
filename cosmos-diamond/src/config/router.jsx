@@ -83,6 +83,7 @@ import ManagerDiamondDetail from "../pages/dashboard/pages/diamondManager/Manage
 import ManagerAddDiamond from "../pages/dashboard/pages/diamondManager/ManagerAddDiamond/ManagerAddDiamond";
 import RequestManager from "../pages/dashboard/pages/requestManager/RequestManager";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import OrdersAdmin from "../pages/dashboard/pages/ordersAdmin/OrdersAdmin";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -503,6 +504,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/admin",
         element: <AdminPage />,
+      },
+      {
+        path: "/dashboard/admin/orders",
+        element: <OrdersAdmin />,
       },
       {
         path: "/dashboard/admin/summary",

@@ -33,8 +33,7 @@ function EngagementRingsIntro() {
           <h5>
             There are several things to keep in mind when you’re shopping for an
             engagement ring. It's important to know your partner’s style, their
-            ring size and the 4Cs import {apiHeader} from
-            './../../components/urlApiHeader'; of diamonds
+            ring size and the 4Cs of diamonds
             <br />. Many people think they need to spend three months of their
             salary on an engagement ring, but this is not a real rule. Instead,
             you should focus on choosing a ring that best fits your
@@ -79,8 +78,10 @@ function EngagementRingsIntro() {
                   },
                 }}
               >
+
                 <Button onClick={()=> nav('/diamond-search')} className="labGrownRingIntro__banner__button">
                   SHOP EARTH GROWN
+
                 </Button>
               </ConfigProvider>
             </div>
