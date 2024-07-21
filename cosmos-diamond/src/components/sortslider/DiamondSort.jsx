@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./DiamondSort.scss";
 import "./DiamondList.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Row, Col, Select } from "antd";
 import SortPriceSlider from "./SortPriceSlider";
 import SortCaratSlider from "./SortCaratSlider";
@@ -12,7 +12,13 @@ import { diamonds } from "./Diamonds";
 import Image from "../Image";
 import { apiHeader } from "../urlApiHeader";
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function DiamondSort() {
+  const query = useQuery();
+  let shape = query.get("sortBy");
+
   const MIN_PRICE = 0;
   const MAX_PRICE = 50000;
   const MIN_CARAT = 0.05;
@@ -29,7 +35,7 @@ function DiamondSort() {
   const [cut, setCut] = useState([1, 5]);
   const [cutName, setCutName] = useState(INIT_CUT);
   const [diamondList, setDiamondList] = useState([]);
-  const [diamondShape, setDiamondShape] = useState("Round");
+  const [diamondShape, setDiamondShape] = useState(shape || "Round");
   const [pageSize, setPageSize] = useState(16);
   const [pageNumber, setPageNumber] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -38,7 +44,13 @@ function DiamondSort() {
 
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
-    shapes[0].classList.add("chosen");
+    if (shape) {
+      const shapesArr = Array.from(shapes);
+      let i = shapesArr.findIndex((s) => s.innerText == shape);
+      shapes[i].classList.add("chosen");
+    } else {
+      shapes[0].classList.add("chosen");
+    }
     shapes.forEach((shape) => {
       shape.addEventListener("click", (e) => {
         shapes.forEach((s) => s.classList.remove("chosen"));
@@ -65,13 +77,23 @@ function DiamondSort() {
 
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data);
+
     if (data.diamonds.$values.length < pageSize) {
       setHasMore(false);
     }
     setIsLoading(true);
     setDiamondList((prev) => [...prev, ...data.diamonds.$values]);
-  }, [clarityName, colorName, cutName, carat, price, diamondShape, pageNumber, pageSize, order]);
+  }, [
+    clarityName,
+    colorName,
+    cutName,
+    carat,
+    price,
+    diamondShape,
+    pageNumber,
+    pageSize,
+    order,
+  ]);
 
   useEffect(() => {
     if (hasMore) {
@@ -241,9 +263,7 @@ function DiamondSort() {
                           <div className="product__name">
                             {diamond.diamondName}
                           </div>
-                          <div className="product__price">
-                            ${diamond.price}
-                          </div>
+                          <div className="product__price">${diamond.price}</div>
                         </div>
                       </Link>
                     </Col>

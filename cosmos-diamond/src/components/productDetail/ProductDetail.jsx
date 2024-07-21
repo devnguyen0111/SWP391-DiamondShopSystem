@@ -10,6 +10,7 @@ import { getToken, token } from "./../getToken";
 import api from "./../../config/axios";
 import { alertFail } from "../../hooks/useNotification";
 import GiaReport from "../GIAreport/GiaReport";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
@@ -29,7 +30,7 @@ function ProductDetail({ product }) {
       let res = await fetchCart();
       let cartItem = res.items.$values;
       if (cartItem.filter((item) => item.pid == productId).length > 0) {
-        openNotification('topRight', 'in-cart')
+        openNotification("topRight", "in-cart");
       } else {
         fetch(`${apiHeader}/Cart/addToCart`, {
           method: "POST",
@@ -88,11 +89,10 @@ function ProductDetail({ product }) {
         stack: true,
         duration: 2,
       });
-    }
-    else if (type === "in-cart") {
+    } else if (type === "in-cart") {
       api2.warning({
-        message: 'This jewelry has already in Your Cart',
-        description: <Link to={`/shopping-cart`}>View Cart</Link >,
+        message: "This jewelry has already in Your Cart",
+        description: <Link to={`/shopping-cart`}>View Cart</Link>,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -223,13 +223,90 @@ function ProductDetail({ product }) {
               {/* <i class="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
-          <Col span={24} className="right__tag-container">
-            <div className="right__tag-wrapper">
-              <div className="right__tag">{product.carat}</div>
-              <div className="right__tag">{product.cut}</div>
-              <div className="right__tag">{product.color}</div>
-              <div className="right__tag">{product.clarity}</div>
+          <Col span={24} className="right__detail-product">
+            <div>
+              <h1>Complete Jewelry:</h1>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+                className="right__detail-product__ring"
+              >
+                <Flex className="">
+                  <svg
+                    viewBox="0 2 26 15"
+                    fill="none"
+                    width={"25px"}
+                    height={35}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10 5.878c-4.694 0-8.5 3.833-8.5 8.56C1.5 19.169 5.306 23 10 23s8.5-3.833 8.5-8.561-3.806-8.561-8.5-8.561Zm0 0L4.673 1M10 5.878 15.327 1"
+                      stroke="#151542"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div>
+                    <p className="right__detail-product__ring__name">
+                      {product && `#${product.coverId} ${product.coverName}`}
+                    </p>
+                  </div>
+                </Flex>
+                <p className="right__detail-product__ring__price">
+                  ${product && product.coverPrice}
+                </p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  marginTop: "5px",
+                }}
+                className="right__detail-product__diamond"
+              >
+                <Flex>
+                  <svg
+                    viewBox="0 0 26 16"
+                    fill="none"
+                    width={"25px"}
+                    height={35}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      d="M20.95 1H5.055L1 6.763 13 21 25 6.764 20.95 1Z"
+                      stroke="#151542"
+                      strokeWidth="1.2"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                  <div>
+                    <p className="right__detail-product__ring__name">
+                      {product && product.diamondName}
+                    </p>
+                  </div>
+                </Flex>
+                <p
+                  className="right__detail-product__ring__price"
+                  style={{ justifySelf: "flex-end" }}
+                >
+                  ${product && product.diamondPrice}
+                </p>
+              </div>
             </div>
+            <Flex className="" gap={10}>
+              <h1 className="">Size: {product?.sizeName}</h1>
+              {product?.categoryId === 1 && (
+                <Link to={'/education/rings'} title="How to measure your size" className="">
+                  <QuestionCircleOutlined />
+                </Link>
+              )}
+            </Flex>
           </Col>
           <Col span={24} className="right__price-wrapper">
             <div className="right__price">

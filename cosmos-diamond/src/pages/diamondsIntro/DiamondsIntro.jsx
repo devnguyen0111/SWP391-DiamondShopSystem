@@ -3,10 +3,10 @@ import Banner from "../../components/banner/Banner";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./DiamondsIntro.scss";
 import ExploreDiamond from "../../components/exploreDiamondBanner/ExploreDiamond";
-
-
+import { useNavigate } from "react-router-dom";
 
 function DiamondsIntro() {
+  const nav = useNavigate();
   return (
     <div>
       <Banner
@@ -76,14 +76,14 @@ function DiamondsIntro() {
 
       <ExploreDiamond version="diamonds02" />
 
-      <div className="shopEarthBanner">
+      <div className="shopEarthBanner" style={{ marginBottom: "200px" }}>
         <h2 className="shopEarthBanner__title">
           High Quality Diamonds to Cherish Forever
         </h2>
         <h5 className="shopEarthBanner__description">
-          Blue Nile offers beautiful GIA-graded natural diamonds and our
-          exclusive Astor by Blue Nile™ diamonds, <br /> the brightest diamonds
-          in our collection.
+          Cosmons Diamond offers beautiful GIA-graded natural diamonds and our
+          exclusive Astor by Cosmons Diamond™ diamonds, <br /> the brightest
+          diamonds in our collection.
         </h5>
         <ConfigProvider
           theme={{
@@ -97,13 +97,16 @@ function DiamondsIntro() {
             },
           }}
         >
-          <Button className="shopEarthBanner__button">
+          <Button
+            onClick={() => nav("/diamond-search?sortBy=Round")}
+            className="shopEarthBanner__button"
+          >
             Shop Earth Created
           </Button>
         </ConfigProvider>
       </div>
 
-      <div className="shopLabGrownBanner">
+      {/* <div className="shopLabGrownBanner">
         <h4 className="shopLabGrown__title__intro">LAB GROWN DIAMONDS</h4>
         <h2 className="shopLabGrown__title">Made for Your Moment</h2>
         <h5 className="shopLabGrown__description">
@@ -125,7 +128,7 @@ function DiamondsIntro() {
         >
           <Button className="shopLabGrownBanner__button">Shop Lab Grown</Button>
         </ConfigProvider>
-      </div>
+      </div> */}
     </div>
   );
 }
