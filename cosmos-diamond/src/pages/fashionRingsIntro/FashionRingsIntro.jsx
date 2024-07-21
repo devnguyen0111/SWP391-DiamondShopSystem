@@ -16,7 +16,7 @@ function FashionRingsIntro() {
         buttons={["Shop Pendant"]}
       />
 
-      <div className="bandPairings">
+      <div className="bandPairings" style={{marginBottom:'200px'}}>
         <Row container>
           <Col md={12} sm={12}>
             <Row className="bandPairings__banner">
@@ -65,7 +65,7 @@ function FashionRingsIntro() {
           </Col>
         </Row>
       </div>
-      <FashionRingsBanner />
+      {/* <FashionRingsBanner /> */}
     </div>
   );
 }

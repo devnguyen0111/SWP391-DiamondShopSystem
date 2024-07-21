@@ -63,8 +63,7 @@ function EngagementRingsIntro() {
             <div className="labGrownRingIntro__banner">
               <h2>A New Path to Brilliance</h2>
               <h5>
-                Our lab grown diamonds are made with care and graded for <br />
-                excellence—a perfect choice for your engagement ring.
+              Our earth-grown diamonds are formed naturally over millions of years <br/> and are graded for excellence—a timeless choice for your engagement ring.
               </h5>
               <ConfigProvider
                 theme={{
@@ -79,8 +78,10 @@ function EngagementRingsIntro() {
                   },
                 }}
               >
-                <Button className="labGrownRingIntro__banner__button" onClick={() => nav("/engagement-rings/catalog")}>
-                  SHOP LAB GROWN
+
+                <Button onClick={()=> nav('/diamond-search')} className="labGrownRingIntro__banner__button">
+                  SHOP EARTH GROWN
+
                 </Button>
               </ConfigProvider>
             </div>

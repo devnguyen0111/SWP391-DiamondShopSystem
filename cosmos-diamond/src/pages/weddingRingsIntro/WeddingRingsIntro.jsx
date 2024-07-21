@@ -4,7 +4,9 @@ import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./WeddingRingsIntro.scss";
 import { useNavigate } from "react-router-dom";
 function WeddingRingsIntro() {
-  const navigate = useNavigate();
+
+  const nav = useNavigate()
+
   return (
     <div>
       <Banner
@@ -92,10 +94,9 @@ function WeddingRingsIntro() {
                   },
                 }}
               >
-                <Button
-                  className="findSize__banner__button"
-                  onClick={() => navigate("/education/rings")}
-                >
+
+                <Button onClick={()=> nav('/education/rings')} className="findSize__banner__button">
+
                   FIND YOUR SIZE
                 </Button>
               </ConfigProvider>
