@@ -32,94 +32,124 @@ const DropdownDiamondMain = () => {
             <h4>Shop Diamonds By Shape</h4>
             <div className="wrapper-first-diamond">
               <div className="inside-diamond-1st">
-                <a href="/diamond-search" className="dropdown-item">
+                <Link
+                  to="/diamond-search?sortBy=Round"
+                  className="dropdown-item"
+                >
                   Round
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Princess"
+                  className="dropdown-item"
+                >
                   Princess
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Cushion"
+                  className="dropdown-item"
+                >
                   Cushion
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Oval"
+                  className="dropdown-item"
+                >
                   Oval
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Emerald"
+                  className="dropdown-item"
+                >
                   Emerald
-                </a>
+                </Link>
               </div>
               <div className="inside-diamond-2nd">
-                <a href="/diamond-search" className="dropdown-item">
+                <Link
+                  to="/diamond-search?sortBy=Pear"
+                  className="dropdown-item"
+                >
                   Pear
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Asscher"
+                  className="dropdown-item"
+                >
                   Asscher
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Heart"
+                  className="dropdown-item"
+                >
                   Heart
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Radiant"
+                  className="dropdown-item"
+                >
                   Radiant
-                </a>
-                <a href="/diamond-search" className="dropdown-item">
+                </Link>
+                <Link
+                  to="/diamond-search?sortBy=Marquise"
+                  className="dropdown-item"
+                >
                   Marquise
-                </a>
+                </Link>
               </div>
             </div>
-            <a href="/diamond-search" className="dropdown-item">
+            <Link to="/diamond-search" className="dropdown-item">
               Astor By Cosmos Diamonds™
-            </a>
-            <a href="/diamond-search" className="dropdown-item">
+            </Link>
+            {/* <a to="/diamond-search" className="dropdown-item">
               Colored Diamonds
-            </a>
-            <a href="/diamond-search" className="dropdown-item">
-              Lab Grown Diamonds
-            </a>
+            </a> */}
+            <Link to="/diamond-search" className="dropdown-item">
+              Earth Grown Diamonds
+            </Link>
           </div>
         </div>
         <div className="dropdown-section">
           <h4>Build Your Own Jewelry</h4>
-          <a href="/engagement-rings" className="dropdown-item">
+          <Link to="/engagement-rings" className="dropdown-item">
             Ring
-          </a>
-          <a href="/engagement-rings" className="dropdown-item">
+          </Link>
+          <Link to="/ear-rings" className="dropdown-item">
             Earrings
-          </a>
-          <a href="/engagement-rings" className="dropdown-item">
+          </Link>
+          <Link to="/pendant" className="dropdown-item">
             Pendant
-          </a>
+          </Link>
           <h4>Learn About</h4>
-          <a href="/education" className="dropdown-item">
+          <Link to="/education" className="dropdown-item">
             How Shape Affects Price
-          </a>
-          <a href="/education" className="dropdown-item">
+          </Link>
+          <Link to="/education" className="dropdown-item">
             Learn About the 4Cs
-          </a>
-          <a href="/education" className="dropdown-item">
+          </Link>
+          <Link to="/education" className="dropdown-item">
             Ethically Sourced
-          </a>
-          <a href="/education" className="dropdown-item">
+          </Link>
+          <Link to="/education" className="dropdown-item">
             Diamond Sustainability
-          </a>
+          </Link>
         </div>
         <div className="dropdown-section">
           <h4>Service & Value</h4>
-          <a href="/education" className="dropdown-item">
+          <Link to="/education" className="dropdown-item">
             Cosmos Diamonds Credit Card
-          </a>
-          <a href="/education" className="dropdown-item">
+          </Link>
+          <Link to="/education" className="dropdown-item">
             Diamond Price Match
-          </a>
-          <a href="/education" className="dropdown-item">
+          </Link>
+          <Link to="/education" className="dropdown-item">
             Diamond Upgrade Program
-          </a>
+          </Link>
           <img
             src="https://ecommo--ion.bluenile.com/bn-main/diamond_desktop(2_2).dc991.jpg"
             alt="Diamonds"
           />
-          <a href="/diamond-search" className="dropdown-item">
+          <Link to="/diamond-search" className="dropdown-item">
             View All Diamonds
-          </a>
+          </Link>
         </div>
       </div>
       {/* <div className="dropdown-content">

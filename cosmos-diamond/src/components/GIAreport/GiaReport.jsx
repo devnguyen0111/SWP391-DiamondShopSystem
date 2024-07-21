@@ -98,7 +98,7 @@ const GiaReport = ({ product, scale }) => {
                 <Flex justify="space-between">
                   <p>Inscription(s):</p>
                   <div style={dottedSpace}></div>
-                  <strong>GIA 2141438167</strong>
+                  <strong>GIA {product.diamondId}</strong>
                 </Flex>
                 {/* <Flex justify="space-between">
                   <p>Comments:</p>
@@ -111,7 +111,7 @@ const GiaReport = ({ product, scale }) => {
           <td className="column">
             <div className="text-center mb-2">
               <h2 className="h4">GIA REPORT</h2>
-              <p className="font-weight-bold">214438167</p>
+              <p className="font-weight-bold">{product.diamondId}</p>
               <p>
                 Verify this report at{" "}
                 <a style={{ color: "#c5965d" }} href="https://www.gia.edu/">
