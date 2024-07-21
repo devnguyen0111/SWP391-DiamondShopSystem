@@ -51,7 +51,6 @@ function CoversManager() {
           theme={{
             components: {
               Button: {
-                borderRadius: "18px",
                 defaultBg: "white",
                 defaultColor: "black",
                 defaultHoverBg: "white",
@@ -80,8 +79,10 @@ function CoversManager() {
     setSearchQuery(value);
 
     if (value) {
-      const filteredData = coverList.filter((c) =>
-        c.coverName.toLowerCase().includes(value.toLowerCase()) || c.coverId == value
+      const filteredData = coverList.filter(
+        (c) =>
+          c.coverName.toLowerCase().includes(value.toLowerCase()) ||
+          c.coverId == value
       );
       setFilteredCoverList(filteredData);
     } else {

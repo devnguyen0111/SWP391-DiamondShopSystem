@@ -68,9 +68,26 @@ function RequestManager() {
       dataIndex: "detail",
       key: "detail",
       render: (_, record) => (
-        <Button onClick={() => showDetailModal(record.requestId)}>
-          Detail Request
-        </Button>
+        <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                defaultBg: "white",
+                defaultColor: "black",
+                defaultHoverBg: "white",
+                defaultHoverBorderColor: "black",
+                defaultHoverColor: "black",
+                defaultActiveBg: "black",
+                defaultActiveBorderColor: "black",
+                defaultActiveColor: "white",
+              },
+            },
+          }}
+        >
+          <Button onClick={() => showDetailModal(record.requestId)}>
+            Detail Request
+          </Button>
+        </ConfigProvider>
       ),
     },
     {
@@ -211,7 +228,6 @@ function RequestManager() {
         }}
       />
       <Modal
-        
         title="Request Detail"
         open={isDetailModalVisible}
         onCancel={handleDetailModalClose}
@@ -220,7 +236,7 @@ function RequestManager() {
             Close
           </Button>,
         ]}
-         className="detail-modal"
+        className="detail-modal"
       >
         {selectedRequestDetail && (
           <Descriptions bordered>
@@ -229,7 +245,7 @@ function RequestManager() {
             </Descriptions.Item>
 
             <Descriptions.Item label="Requested Date">
-            {new Date(selectedRequestDetail.requestedDate).toLocaleString()}
+              {new Date(selectedRequestDetail.requestedDate).toLocaleString()}
             </Descriptions.Item>
 
             <Descriptions.Item label="Staff ID">

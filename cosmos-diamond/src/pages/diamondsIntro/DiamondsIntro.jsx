@@ -3,10 +3,10 @@ import Banner from "../../components/banner/Banner";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./DiamondsIntro.scss";
 import ExploreDiamond from "../../components/exploreDiamondBanner/ExploreDiamond";
-
-
+import { useNavigate } from "react-router-dom";
 
 function DiamondsIntro() {
+  const navigate = useNavigate();
   return (
     <div>
       <Banner
@@ -97,7 +97,10 @@ function DiamondsIntro() {
             },
           }}
         >
-          <Button className="shopEarthBanner__button">
+          <Button
+            className="shopEarthBanner__button"
+            onClick={() => navigate("/diamond-search")}
+          >
             Shop Earth Created
           </Button>
         </ConfigProvider>
@@ -123,7 +126,12 @@ function DiamondsIntro() {
             },
           }}
         >
-          <Button className="shopLabGrownBanner__button">Shop Lab Grown</Button>
+          <Button
+            className="shopLabGrownBanner__button"
+            onClick={() => navigate("/diamond-search")}
+          >
+            Shop Lab Grown
+          </Button>
         </ConfigProvider>
       </div>
     </div>
