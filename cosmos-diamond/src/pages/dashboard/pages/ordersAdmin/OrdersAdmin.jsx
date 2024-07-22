@@ -82,7 +82,7 @@ function OrdersAdmin() {
               Delivered
             </Tag>
           ) : status === "paid" || status === "Paid" ? (
-            <Tag style={{ fontFamily: "Gantari" }}>Paid</Tag>
+            <Tag color="cyan-inverse" style={{ fontFamily: "Gantari" }}>Paid</Tag>
           ) : status === "shipping" || status === "Shipping" ? (
             <Tag
               style={{
@@ -179,15 +179,6 @@ function OrdersAdmin() {
   useEffect(() => {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);
-
-  // const handleDateChange  = (date, dateString) => {
-  //   setSearchDate(dateString);
-  //   applyFilters(search, selectedSegment, dateString);
-  // };
-
-  // const handleSegmentChange = (value) => {
-  //   setSelectedSegment(value);
-  // };
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -340,7 +331,22 @@ function OrdersAdmin() {
                 {selectedDetail.shippingMethodName}
               </Descriptions.Item>
             </Descriptions>
-
+            <h1
+              style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
+            >
+              Customer Information
+            </h1>
+            <Descriptions bordered style={{ marginTop: "10px" }}>
+              <Descriptions.Item label="Name" span={1.5}>
+                {selectedDetail.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Phone number" span={1.5}>
+                {selectedDetail.phoneNumber}
+              </Descriptions.Item>
+              <Descriptions.Item label="Address" span={3}>
+                {selectedDetail.address}
+              </Descriptions.Item>
+            </Descriptions>
             <h1
               style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
             >
@@ -350,7 +356,7 @@ function OrdersAdmin() {
               <Descriptions
                 bordered
                 key={item.pId}
-                style={{ marginTop: "20px" }}
+                style={{ marginTop: "10px" }}
               >
                 <Descriptions.Item label="Item Image" span={3}>
                   <img

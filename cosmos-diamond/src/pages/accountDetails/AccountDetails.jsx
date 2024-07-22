@@ -272,10 +272,8 @@ function AccountDetails() {
         <Card style={{ border: "none" }}>
           <div className="account-section">
             <div className="account-section__upper">
-              <p>
-                <HeartOutlined style={{ marginRight: "0.5em" }} />
-                Wishlist
-              </p>
+              <h1>
+              </h1>
               <Link
                 to=""
                 onClick={() => {
@@ -285,10 +283,10 @@ function AccountDetails() {
                 }}
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <p>
+                <h1>
                   Sign Out
                   <LogoutOutlined style={{ marginLeft: "0.5em" }} />
-                </p>
+                </h1>
               </Link>
             </div>
             <div className="account-section__banner">
@@ -315,10 +313,10 @@ function AccountDetails() {
               <TabPane tab="Account Details" key="1">
                 <div className="myAccount">
                   <div className="myAccount__upper">
-                    <p>
+                    <h1>
                       View and manage your personal details and contact
                       information
-                    </p>
+                    </h1>
                     <ConfigProvider
                       theme={{
                         components: {
@@ -349,49 +347,49 @@ function AccountDetails() {
                     {!edit && (
                       <>
                         <Col span={6} className="myAccount__lower__inform">
-                          <p className="myAccount__lower__inform__text1">
+                          <h1 className="myAccount__lower__inform__text1">
                             First Name
-                          </p>
-                          <p
+                          </h1>
+                          <h1
                             className="myAccount__lower__inform__text2"
                             style={{ textTransform: "capitalize" }}
                           >
                             {customer && customer.cusFirstName}
-                          </p>
-                          <p className="myAccount__lower__inform__text1">
+                          </h1>
+                          <h1 className="myAccount__lower__inform__text1">
                             Last Name
-                          </p>
-                          <p
+                          </h1>
+                          <h1
                             className="myAccount__lower__inform__text2"
                             style={{ textTransform: "capitalize" }}
                           >
                             {customer && customer.cusLastName}
-                          </p>
+                          </h1>
                         </Col>
                         <Col span={14} className="myAccount__lower__contact">
-                          <p className="myAccount__lower__inform__text1">
+                          <h1 className="myAccount__lower__inform__text1">
                             Email
-                          </p>
-                          <p className="myAccount__lower__inform__text2">
+                          </h1>
+                          <h1 className="myAccount__lower__inform__text2">
                             {customer && customer.mail}
-                          </p>
-                          <p className="myAccount__lower__inform__text1">
+                          </h1>
+                          <h1 className="myAccount__lower__inform__text1">
                             Phone
-                          </p>
-                          <p className="myAccount__lower__inform__text2">
+                          </h1>
+                          <h1 className="myAccount__lower__inform__text2">
                             {customer && customer.cusPhoneNum}
-                          </p>
+                          </h1>
                         </Col>
                         <Col span={16} offset={4}>
-                          <p className="myAccount__lower__inform__text1">
+                          <h1 className="myAccount__lower__inform__text1">
                             Address
-                          </p>
-                          <p
+                          </h1>
+                          <h1
                             className="myAccount__lower__inform__text2"
                             style={{ textTransform: "capitalize" }}
                           >
                             {address && address}
-                          </p>
+                          </h1>
                         </Col>
                       </>
                     )}
