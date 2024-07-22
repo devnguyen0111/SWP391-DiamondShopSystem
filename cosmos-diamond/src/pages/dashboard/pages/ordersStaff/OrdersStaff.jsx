@@ -23,6 +23,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
 import "./OrdersStaff.scss"
+
 import moment from "moment";
 
 function OrdersStaff() {
@@ -192,6 +193,16 @@ function OrdersStaff() {
         `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
       );
       let data = response.data.$values;
+      const validStatuses = [
+        "pending",
+        "delivered",
+        "cancel",
+        "paid",
+        "shipping",
+      ];
+      data = data.filter((order) =>
+        validStatuses.includes(order.status.toLowerCase())
+      );
       data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
       setOrderSearch(response.data.$values);
       const updatedOrders = data.map((order) => {
@@ -239,8 +250,6 @@ function OrdersStaff() {
     setSelectedDetail(null);
   };
 
-  
-  
   useEffect(() => {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);

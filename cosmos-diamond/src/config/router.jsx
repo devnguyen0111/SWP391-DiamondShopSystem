@@ -84,6 +84,8 @@ import ManagerAddDiamond from "../pages/dashboard/pages/diamondManager/ManagerAd
 import RequestManager from "../pages/dashboard/pages/requestManager/RequestManager";
 import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
 import OrdersAdmin from "../pages/dashboard/pages/ordersAdmin/OrdersAdmin";
+import SaleStaff from "../pages/dashboard/pages/staffManager/SaleStaff";
+import DeliveryStaffManager from "../pages/dashboard/pages/staffManager/DeliveryStaffManager";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -498,6 +500,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manager/requests",
         element: <RequestManager />,
+      },
+      {
+        path: "/dashboard/manager/salestaff",
+        element: <SaleStaff />,
+      },
+      {
+        path: "/dashboard/manager/deliverystaff",
+        element: <DeliveryStaffManager />,
       },
 
       //admin
