@@ -172,6 +172,11 @@ function OrdersAdmin() {
     applyFilters(search, selectedSegment, dateString);
   };
 
+  // const handleDateChange3  = (date, dateString) => {
+  //   setSearchDate(dateString);
+  //   applyFilters(search, selectedSegment, dateString);
+  // };
+
   const handleSegmentChange = (value) => {
     setSelectedSegment(value);
   };
