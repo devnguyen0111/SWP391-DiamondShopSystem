@@ -167,7 +167,7 @@ function OrdersAdmin() {
     setSelectedDetail(null);
   };
 
-  const handleDateChange = (date, dateString) => {
+  const handleDateChange1  = (date, dateString) => {
     setSearchDate(dateString);
     applyFilters(search, selectedSegment, dateString);
   };
@@ -238,7 +238,7 @@ function OrdersAdmin() {
   useEffect(() => {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);
-  
+
   return (
     <div className="mode">
       <Flex justify="space-between">
@@ -281,7 +281,7 @@ function OrdersAdmin() {
             style={{ width: "300px", fontFamily: "Gantari" }}
           />
           <DatePicker
-            onChange={handleDateChange}
+            onChange={handleDateChange1}
             format="DD-MM-YYYY"
             placeholder="Search by date"
             style={{ width: "200px", height: "2.3em" }}
