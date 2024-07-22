@@ -47,42 +47,21 @@ const Header = () => {
       </div>
 
       <nav className="nav">
-        {/* <Popover placement="topLeft" title="" content={content}> */}
-
         <DropdownDiamondMain />
-
-        {/* </Popover> */}
-
-        {/* <Dropdown overlay={menu} trigger={["hover"]}>
-          <Button
-            className="ant-dropdown-link"
-            onClick={(e) => e.preventDefault()}
-          >
-          //
-            Diamonds <DownOutlined />
-          </Button>
-        </Dropdown> */}
-
         <Link to="/engagement-rings" className="nav-link">
           Engagement Rings{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
-        </Link>
-        <Link to="/ear-rings" className="nav-link">
-          Earrings{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/pendant" className="nav-link">
           Pendant{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
-        {/* <Link to="/jewelry" className="nav-link">
-          Jewelry{" "}
-          <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "}
-        </Link> */}
-
+        <Link to="/ear-rings" className="nav-link">
+          Earrings{" "}
+        </Link>
         <Link to="/education" className="nav-link">
           Education{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
+        </Link>
+        <Link to="/feedback" className="nav-link">
+          Feedback
         </Link>
       </nav>
       {/* <div className="search-bar">

@@ -86,6 +86,7 @@ import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager"
 import OrdersAdmin from "../pages/dashboard/pages/ordersAdmin/OrdersAdmin";
 import SaleStaff from "../pages/dashboard/pages/staffManager/SaleStaff";
 import DeliveryStaffManager from "../pages/dashboard/pages/staffManager/DeliveryStaffManager";
+import Feedback from "../pages/dashboard/pages/feedback/Feedback";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -409,6 +410,10 @@ export const router = createBrowserRouter([
             <OrderFail />
           </ProtectedRouteCustomer>
         ),
+      },
+      {
+        path: "/feedback",
+        element: <Feedback />,
       },
     ],
   },
