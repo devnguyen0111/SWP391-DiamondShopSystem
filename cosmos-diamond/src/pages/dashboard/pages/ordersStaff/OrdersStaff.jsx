@@ -159,7 +159,7 @@ function OrdersStaff() {
           }}
         >
           <Button onClick={() => showDetailModal(record.orderId)}>
-            Detail Request
+            Detail Order
           </Button>
         </ConfigProvider>
       ),
