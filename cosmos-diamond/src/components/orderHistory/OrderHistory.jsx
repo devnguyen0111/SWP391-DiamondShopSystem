@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import api from "../../config/axios";
 import "./OrderHistory.scss";
 import {
   HeartOutlined,
@@ -18,6 +19,7 @@ import {
   Rate,
   Row,
   Segmented,
+  Popconfirm,
 } from "antd";
 import { getToken } from "./../getToken";
 import { apiHeader } from "../urlApiHeader";
@@ -25,14 +27,25 @@ import { alertFail, alertSuccess } from "../../hooks/useNotification";
 import { useNavigate } from "react-router-dom";
 import formatDate from "../formatDate";
 import TextArea from "antd/es/input/TextArea";
+import { selectUser } from "../../redux/features/counterSlice";
+import { useSelector } from "react-redux";
+
 function OrderHistory() {
+  const [staff, setStaff] = useState([]);
+  const user = useSelector(selectUser);
   const [customer, setCustomer] = useState();
   const [orderList, setOrderList] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [orderSearch, setOrderSearch] = useState([]);
+  const [filteredProduct, setFilteredProduct] = useState([]);
+
   // const [orderStatus, setOrderStatus] = useState("");
   const [orderFiltered, setOrderFiltered] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [reviewId, setReviewId] = useState();
+  const [selectedSegment, setSelectedSegment] = useState("All Orders");
+
   let token = getToken();
 
   const nav = useNavigate();
@@ -131,6 +144,40 @@ function OrderHistory() {
     } else {
       alertFail("You need to login first");
       nav("/login");
+    }
+  };
+
+  const getOrders = async () => {
+    try {
+      const response = await api.get("/api/Order/getAllOrders");
+      let data = response.data.$values;
+      data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
+      setOrderSearch(response.data.$values);
+      const updatedOrders = data.map((order) => {
+        const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
+        return {
+          ...order,
+          assignedStaffName: assignedStaff ? assignedStaff.label : null,
+        };
+      });
+      setOrders(updatedOrders);
+      setFilteredProduct(updatedOrders); // Cập nhật filteredProduct
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    try {
+      await api.post(`/api/Order/cancel/${user.UserID}/${orderId}`);
+      alertSuccess("Cancel order successfully!");
+      setSelectedSegment("All Orders");
+      getOrders();
+    } catch (e) {
+      alertFail(
+        "The Order can not be cancel because it exceed the limited time. Cancellation aborted!"
+      );
+      console.error(e);
     }
   };
   return (
@@ -335,13 +382,41 @@ function OrderHistory() {
                         ))}
                       </Flex>
                       {/* Order Total Price */}
-                      <Flex
+                      {/* <Flex
                         justify="flex-end"
                         className="order-total"
                         align="flex-end"
                         style={{ padding: "25px 0" }}
                       >
                         <div>Total Price:</div> <p> ${order.totalAmount}</p>
+                      </Flex> */}
+                      <Flex
+                        justify="space-between"
+                        className="order-total"
+                        align="center"
+                        style={{ padding: "25px 0" }}
+                      >
+                        {order.status == "Pending" ||
+                        order.status == "Shipping" ||
+                        order.status == "Paid" ||
+                        order.status == "Processing" ? (
+                          <Popconfirm
+                            title="Are you sure to cancel this order?"
+                            onConfirm={() => cancelOrder(order.orderId)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Button type="primary" danger>
+                              Cancel Order
+                            </Button>
+                          </Popconfirm>
+                        ) : (
+                          <Button disabled>Cancel Order</Button>
+                        )}
+                        <div>
+                          <div>Total Price:</div>
+                          <p>${order.totalAmount}</p>
+                        </div>
                       </Flex>
                     </Col>
                   ))
