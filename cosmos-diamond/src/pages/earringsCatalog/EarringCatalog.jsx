@@ -26,12 +26,14 @@ function EarringCatalog() {
       let urlMetal = metalType.map((m) => `metaltypeIds=${m}`).join("&");
       let urlShape = shape.map((shape) => `diamondShapes=${shape}`).join("&");
       let url = `${apiHeader}/Product/getFilteredProductAd?categoryId=3&subCategoryId=3&${urlSize}&${urlMetal}&${urlShape}&pageNumber=${pageNumber}&pageSize=${pageSize}&minPrice=${price[0]}&maxPrice=${price[1]}&sortOrder=${order}`;
-      console.log(url);
+      
       const res = await fetch(url);
       const data = await res.json();
       if (reset) {
+        console.log('list reseted');
         setRingList(data.$values);
       } else {
+        console.log('list not reset');
         setRingList((prev) => [...prev, ...data.$values]);
       }
     } catch (error) {
@@ -66,6 +68,7 @@ function EarringCatalog() {
   }, [handleScroll]);
 
   useEffect(() => {
+    console.log('this reset list');
     setRingList([]);
     setPageNumber(1);
     fetchEngagementRing(true);

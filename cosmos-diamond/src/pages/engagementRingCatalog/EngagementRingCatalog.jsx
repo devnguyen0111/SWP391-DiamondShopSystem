@@ -94,7 +94,7 @@ function EngagementRingCatalog() {
           size={{ size, setSize }}
           metalType={{ metalType, setMetalType }}
           shape={{ shape, setShape }}
-          category="Ring"
+          category={1}
           price={price}
           setPrice={setPrice}
         />

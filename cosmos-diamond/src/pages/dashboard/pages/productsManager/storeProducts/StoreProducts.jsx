@@ -88,7 +88,7 @@ function StoreProducts() {
       const data = response.data.$values.filter(
         (product) => product.pp === "premade"
       );
-
+      console.log(data);
       if (!Array.isArray(data)) {
         throw new Error("Dữ liệu nhận được không phải là mảng");
       }
