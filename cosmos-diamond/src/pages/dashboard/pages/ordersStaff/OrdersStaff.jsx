@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   ConfigProvider,
+  DatePicker,
   Descriptions,
   Flex,
   Input,
@@ -22,6 +23,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
 import "./OrdersStaff.scss"
+import moment from "moment";
 
 function OrdersStaff() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -43,6 +45,7 @@ function OrdersStaff() {
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProduct, setFilteredProduct] = useState([]);
+  const [searchDate, setSearchDate] = useState(null);
 
   const columns = [
     {
@@ -159,7 +162,7 @@ function OrdersStaff() {
           }}
         >
           <Button onClick={() => showDetailModal(record.orderId)}>
-            Detail Order
+            Order Detail
           </Button>
         </ConfigProvider>
       ),
@@ -175,7 +178,7 @@ function OrdersStaff() {
         data.map((staff) => ({
           label: staff.name,
           value: staff.dStaffId,
-          disabled: staff.status === "Busy",
+          disabled: staff.status == "Busy",
         }))
       );
     } catch (e) {
@@ -236,46 +239,12 @@ function OrdersStaff() {
     setSelectedDetail(null);
   };
 
-  const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value);
-    applyFilters(value, selectedSegment);
-  };
+  
+  
+  useEffect(() => {
+    applyFilters(search, selectedSegment, searchDate);
+  }, [orders, search, selectedSegment, searchDate]);
 
-  const filterOrder = (value) => {
-    setSelectedSegment(value);
-    applyFilters(search, value);
-  };
-
-  const applyFilters = (searchValue, segmentValue) => {
-    let filteredData = orders;
-
-    if (segmentValue !== "All Orders") {
-      filteredData = filteredData.filter(
-        (order) => order.status.toLowerCase() === segmentValue.toLowerCase()
-      );
-    }
-
-    if (searchValue) {
-      filteredData = filteredData.filter((order) =>
-        order.orderId.toString().includes(searchValue)
-      );
-    }
-
-    setFilteredProduct(filteredData);
-  };
-
-  // const filterOrder = (value) => {
-  //   console.log(value.toLowerCase());
-  //   setSelectedSegment(value);
-  //   if (value === "All Orders") {
-  //     setOrderSearch(orders);
-  //   } else {
-  //     setOrderSearch(
-  //       orders.filter((o) => o.status.toLowerCase() === value.toLowerCase())
-  //     );
-  //   }
-  // };
 
   useEffect(() => {
     getStaff();
@@ -285,25 +254,87 @@ function OrdersStaff() {
     getOrders();
   }, []);
 
+  const handleDateChange = (date, dateString) => {
+    setSearchDate(dateString);
+    applyFilters(search, selectedSegment, dateString);
+  };
+
+  const handleSegmentChange = (value) => {
+    setSelectedSegment(value);
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+
+    let filteredData = orders;
+
+    const dateValue = moment(value, "DD-MM-YYYY", true);
+    if (dateValue.isValid()) {
+      filteredData = filteredData.filter(
+        (order) =>
+          moment(order.orderDate).format("DD-MM-YYYY") ===
+          dateValue.format("DD-MM-YYYY")
+      );
+    } else {
+      filteredData = filteredData.filter((order) =>
+        order.orderId.toString().includes(value)
+      );
+    }
+
+    setFilteredProduct(filteredData);
+  };
+
+  const applyFilters = (searchValue, segmentValue, searchDate) => {
+    let filteredData = orders;
+
+    if (segmentValue !== "All Orders") {
+      filteredData = filteredData.filter(
+        (order) => order.status.toLowerCase() === segmentValue.toLowerCase()
+      );
+    }
+
+    if (searchDate) {
+      filteredData = filteredData.filter(
+        (order) => moment(order.orderDate).format("DD-MM-YYYY") === searchDate
+      );
+    }
+
+    if (searchValue) {
+      const dateValue = moment(searchValue, "DD-MM-YYYY", true);
+      if (dateValue.isValid()) {
+        filteredData = filteredData.filter(
+          (order) =>
+            moment(order.orderDate).format("DD-MM-YYYY") ===
+            dateValue.format("DD-MM-YYYY")
+        );
+      } else {
+        filteredData = filteredData.filter((order) =>
+          order.orderId.toString().includes(searchValue)
+        );
+      }
+    }
+
+    setFilteredProduct(filteredData);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedValue == null) {
       setShowAlert(true);
-      setSelectedSegment("All Orders");
     } else {
       setShowAlert(false);
       await assignStaff(selectedOrderId, selectedValue);
-      setSelectedSegment("All Orders");
-      filterOrder("All Orders");
     }
   };
+
 
   const handleSelect = (value) => {
     setSelectedValue(value);
   };
   return (
     <div className="mode">
-      <Flex justify="space-between">
+    <Flex justify="space-between">
         <ConfigProvider
           theme={{
             components: {
@@ -319,27 +350,36 @@ function OrdersStaff() {
           }}
         >
           <Segmented
-            style={{ marginBottom: "20px" }}
-            size="large"
             options={[
               "All Orders",
+              "Paid",
               "Pending",
-              "Shipping",
               "Delivered",
+              "Shipping",
               "Cancel",
             ]}
+            onChange={handleSegmentChange}
             value={selectedSegment}
-            onChange={filterOrder}
+            style={{ marginBottom: "20px" }}
+            size="large"
           />
         </ConfigProvider>
-        <div style={{ width: "300px" }}>
+        <Flex gap="0.5em">
+          {" "}
           <Input
             placeholder="Search Order ID"
             addonBefore={<SearchOutlined />}
             onChange={handleSearch}
             value={search}
+            style={{ width: "300px", fontFamily: "Gantari" }}
           />
-        </div>
+          <DatePicker
+            onChange={handleDateChange}
+            format="DD-MM-YYYY"
+            placeholder="Search by date"
+            style={{ width: "200px", height: "2.3em" }}
+          />
+        </Flex>
       </Flex>
       <Table
         columns={columns}

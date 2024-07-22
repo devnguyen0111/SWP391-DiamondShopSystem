@@ -11,6 +11,7 @@ import {
   Select,
   Table,
   Tag,
+  DatePicker,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
@@ -23,6 +24,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import formatDate from "./../../../../components/formatDate";
 import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
+import moment from "moment/moment";
 
 function OrdersManager() {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -45,6 +47,7 @@ function OrdersManager() {
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProduct, setFilteredProduct] = useState([]);
+  const [searchDate, setSearchDate] = useState(null);
 
   const assignStaff = async (orderId, saleStaffId) => {
     try {
@@ -197,7 +200,7 @@ function OrdersManager() {
           }}
         >
           <Button onClick={() => showDetailModal(record.orderId)}>
-            Detail Order
+            Order Detail
           </Button>
         </ConfigProvider>
       ),
@@ -218,7 +221,7 @@ function OrdersManager() {
         };
       });
       setOrders(updatedOrders);
-      setFilteredProduct(updatedOrders); // Cập nhật filteredProduct
+      setFilteredProduct(updatedOrders); 
     } catch (e) {
       console.error(e);
     }
@@ -273,38 +276,46 @@ function OrdersManager() {
   };
 
   useEffect(() => {
+    getOrders();
     getStaff();
   }, []);
 
   useEffect(() => {
-    getOrders();
-  }, []);
+    applyFilters(search, selectedSegment, searchDate);
+  }, [orders, search, selectedSegment, searchDate]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedValue == null) {
-      setShowAlert(true);
-      setSelectedSegment("All Orders");
-    } else {
-      setShowAlert(false);
-      await assignStaff(selectedOrderId, selectedValue);
-      setSelectedSegment("All Orders");
-      filterOrder("All Orders");
-    }
+  const handleDateChange = (date, dateString) => {
+    setSearchDate(dateString);
+    applyFilters(search, selectedSegment, dateString);
+  };
+
+  const handleSegmentChange = (value) => {
+    setSelectedSegment(value);
   };
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-    applyFilters(value, selectedSegment);
+
+    let filteredData = orders;
+
+    const dateValue = moment(value, "DD-MM-YYYY", true);
+    if (dateValue.isValid()) {
+      filteredData = filteredData.filter(
+        (order) =>
+          moment(order.orderDate).format("DD-MM-YYYY") ===
+          dateValue.format("DD-MM-YYYY")
+      );
+    } else {
+      filteredData = filteredData.filter((order) =>
+        order.orderId.toString().includes(value)
+      );
+    }
+
+    setFilteredProduct(filteredData);
   };
 
-  const filterOrder = (value) => {
-    setSelectedSegment(value);
-    applyFilters(search, value);
-  };
-
-  const applyFilters = (searchValue, segmentValue) => {
+  const applyFilters = (searchValue, segmentValue, searchDate) => {
     let filteredData = orders;
 
     if (segmentValue !== "All Orders") {
@@ -313,13 +324,38 @@ function OrdersManager() {
       );
     }
 
-    if (searchValue) {
-      filteredData = filteredData.filter((order) =>
-        order.orderId.toString().includes(searchValue)
+    if (searchDate) {
+      filteredData = filteredData.filter(
+        (order) => moment(order.orderDate).format("DD-MM-YYYY") === searchDate
       );
     }
 
+    if (searchValue) {
+      const dateValue = moment(searchValue, "DD-MM-YYYY", true);
+      if (dateValue.isValid()) {
+        filteredData = filteredData.filter(
+          (order) =>
+            moment(order.orderDate).format("DD-MM-YYYY") ===
+            dateValue.format("DD-MM-YYYY")
+        );
+      } else {
+        filteredData = filteredData.filter((order) =>
+          order.orderId.toString().includes(searchValue)
+        );
+      }
+    }
+
     setFilteredProduct(filteredData);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (selectedValue == null) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+      await assignStaff(selectedOrderId, selectedValue);
+    }
   };
 
   return (
@@ -340,38 +376,42 @@ function OrdersManager() {
           }}
         >
           <Segmented
-            style={{ marginBottom: "20px" }}
-            size="large"
             options={[
               "All Orders",
               "Paid",
               "Pending",
-              "Shipping",
               "Delivered",
+              "Shipping",
               "Cancel",
             ]}
+            onChange={handleSegmentChange}
             value={selectedSegment}
-            onChange={filterOrder}
+            style={{ marginBottom: "20px" }}
+            size="large"
           />
         </ConfigProvider>
-        <div style={{ width: "300px" }}>
+        <Flex gap="0.5em">
+          {" "}
           <Input
             placeholder="Search Order ID"
             addonBefore={<SearchOutlined />}
             onChange={handleSearch}
             value={search}
+            style={{ width: "300px", fontFamily: "Gantari" }}
           />
-        </div>
+          <DatePicker
+            onChange={handleDateChange}
+            format="DD-MM-YYYY"
+            placeholder="Search by date"
+            style={{ width: "200px", height: "2.3em" }}
+          />
+        </Flex>
       </Flex>
       <Table
         columns={columns}
         dataSource={filteredProduct}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: false,
-          pageSizeOptions: ["10"],
-        }}
-        confirmLoading={isLoading}
+        rowKey="orderId"
+        loading={isLoading}
       />
       <Modal
         title="Confirm delivery staff"
@@ -400,6 +440,7 @@ function OrdersManager() {
           </Button>
         </Form>
       </Modal>
+
       <Modal
         title="Order Detail"
         open={isDetailModalVisible}
@@ -417,7 +458,7 @@ function OrdersManager() {
               <Descriptions.Item label="Order ID">
                 #{selectedDetail.orderId}
               </Descriptions.Item>
-              <Descriptions.Item label="Requested Date">
+              <Descriptions.Item label="Order Date">
                 {new Date(selectedDetail.orderDate).toLocaleString()}
               </Descriptions.Item>
               <Descriptions.Item label="Total Amount">

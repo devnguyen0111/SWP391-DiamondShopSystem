@@ -193,16 +193,19 @@ function VoucherManager() {
             name="topPrice"
             rules={[
               {
-                required: true,
-                message: "Please input top price!",
+                  required: true,
+                  message: 'Please input a number!',
               },
               {
-                validator: positiveNumberValidator,
+                  type: 'number',
+                  min: 0,
+                  message: 'Number must be greater than 0!',
               },
-              // {
-              //   validator: numberValidator
-              // },
-            ]}
+              {
+                pattern: /^[0-9]*$/,
+                message: 'Please input a valid number without letters or special characters!',
+              },
+          ]}
           >
             <Input
               value={newVoucher.topPrice}
