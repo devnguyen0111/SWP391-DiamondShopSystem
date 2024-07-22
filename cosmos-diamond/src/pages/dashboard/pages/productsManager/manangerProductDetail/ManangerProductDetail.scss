@@ -43,3 +43,17 @@
   border-radius: 10px;
   height: auto;
 }
+
+.detail-modal .ant-modal-content {
+  width: 100vw !important;
+}
+
+.modal-diamonds {
+  width: max-content;
+  &:nth-child(1) {
+    padding-top: 65rem;
+    .ant-modal-content {
+      width:1000px;
+    }
+  }
+}
