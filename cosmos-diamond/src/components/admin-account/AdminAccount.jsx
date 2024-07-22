@@ -18,9 +18,7 @@ function AdminAccount() {
         <h3 className="admin-account__info__name">{user?.name}</h3>
         <p className="admin-account__info__role">{user?.Role}</p>
       </div>
-      <div className="admin-account__pop-down">
-        <DownOutlined />
-      </div>
+    
     </div>
   );
 }

@@ -72,13 +72,11 @@ function Header({ name, subName, onPress }) {
         xs={23}
         className="header-dashboard__header-control dash-info"
       >
-        <Dropdown overlay={<Menu items={items}/>} >
-          <a onClick={(e) => e.preventDefault()}>
+        
             <Space>
               <AdminAccount />
             </Space>
-          </a>
-        </Dropdown>
+          
       </Col>
     </Row>
   );

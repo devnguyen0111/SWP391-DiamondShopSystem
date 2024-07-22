@@ -1,6 +1,7 @@
 import {
   Button,
   ConfigProvider,
+  DatePicker,
   Descriptions,
   Flex,
   Input,
@@ -15,6 +16,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
 import formatDate from "./../../../../components/formatDate";
 import { SearchOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 function OrdersAdmin() {
   const [selectedSegment, setSelectedSegment] = useState("All Orders");
@@ -26,6 +28,7 @@ function OrdersAdmin() {
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProduct, setFilteredProduct] = useState([]);
+  const [searchDate, setSearchDate] = useState(null);
 
   const columns = [
     {
@@ -117,7 +120,7 @@ function OrdersAdmin() {
           }}
         >
           <Button onClick={() => showDetailModal(record.orderId)}>
-            Detail Order
+            Order Detail
           </Button>
         </ConfigProvider>
       ),
@@ -159,18 +162,42 @@ function OrdersAdmin() {
     getOrders();
   }, []);
 
+  useEffect(() => {
+    applyFilters(search, selectedSegment, searchDate);
+  }, [orders, search, selectedSegment, searchDate]);
+
+  const handleDateChange = (date, dateString) => {
+    setSearchDate(dateString);
+    applyFilters(search, selectedSegment, dateString);
+  };
+
+  const handleSegmentChange = (value) => {
+    setSelectedSegment(value);
+  };
+
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-    applyFilters(value, selectedSegment);
+
+    let filteredData = orders;
+
+    const dateValue = moment(value, "DD-MM-YYYY", true);
+    if (dateValue.isValid()) {
+      filteredData = filteredData.filter(
+        (order) =>
+          moment(order.orderDate).format("DD-MM-YYYY") ===
+          dateValue.format("DD-MM-YYYY")
+      );
+    } else {
+      filteredData = filteredData.filter((order) =>
+        order.orderId.toString().includes(value)
+      );
+    }
+
+    setFilteredProduct(filteredData);
   };
 
-  const filterOrder = (value) => {
-    setSelectedSegment(value);
-    applyFilters(search, value);
-  };
-
-  const applyFilters = (searchValue, segmentValue) => {
+  const applyFilters = (searchValue, segmentValue, searchDate) => {
     let filteredData = orders;
 
     if (segmentValue !== "All Orders") {
@@ -179,13 +206,38 @@ function OrdersAdmin() {
       );
     }
 
-    if (searchValue) {
-      filteredData = filteredData.filter((order) =>
-        order.orderId.toString().includes(searchValue)
+    if (searchDate) {
+      filteredData = filteredData.filter(
+        (order) => moment(order.orderDate).format("DD-MM-YYYY") === searchDate
       );
     }
 
+    if (searchValue) {
+      const dateValue = moment(searchValue, "DD-MM-YYYY", true);
+      if (dateValue.isValid()) {
+        filteredData = filteredData.filter(
+          (order) =>
+            moment(order.orderDate).format("DD-MM-YYYY") ===
+            dateValue.format("DD-MM-YYYY")
+        );
+      } else {
+        filteredData = filteredData.filter((order) =>
+          order.orderId.toString().includes(searchValue)
+        );
+      }
+    }
+
     setFilteredProduct(filteredData);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (selectedValue == null) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+      await assignStaff(selectedOrderId, selectedValue);
+    }
   };
 
   return (
@@ -206,28 +258,36 @@ function OrdersAdmin() {
           }}
         >
           <Segmented
-            style={{ marginBottom: "20px" }}
-            size="large"
             options={[
               "All Orders",
               "Paid",
               "Pending",
-              "Shipping",
               "Delivered",
+              "Shipping",
               "Cancel",
             ]}
+            onChange={handleSegmentChange}
             value={selectedSegment}
-            onChange={filterOrder}
+            style={{ marginBottom: "20px" }}
+            size="large"
           />
         </ConfigProvider>
-        <div style={{ width: "300px" }}>
+        <Flex gap="0.5em">
+          {" "}
           <Input
             placeholder="Search Order ID"
             addonBefore={<SearchOutlined />}
             onChange={handleSearch}
             value={search}
+            style={{ width: "300px", fontFamily: "Gantari" }}
           />
-        </div>
+          <DatePicker
+            onChange={handleDateChange}
+            format="DD-MM-YYYY"
+            placeholder="Search by date"
+            style={{ width: "200px", height: "2.3em" }}
+          />
+        </Flex>
       </Flex>
       <Table
         columns={columns}

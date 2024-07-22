@@ -15,6 +15,25 @@
     }
   }
 }
+
+.logout-container {
+  display: flex;
+  padding: 15px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.3em;
+}
+
+.side-nav-container {
+  display: flex;
+  flex-direction: column;
+  height: 94%;
+}
+
+.menu-sidebar {
+  flex-grow: 1;
+}
+
 .menu-sidebar {
   background-color: #1f1f1f !important;
   .ant-menu-item,
