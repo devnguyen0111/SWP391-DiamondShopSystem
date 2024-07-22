@@ -231,7 +231,10 @@ function OrdersManager() {
         };
       });
       setOrders(updatedOrders);
+
       setFilteredProduct(updatedOrders);
+
+
     } catch (e) {
       console.error(e);
     }

@@ -22,7 +22,8 @@ import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
-import "./OrdersStaff.scss";
+import "./OrdersStaff.scss"
+
 import moment from "moment";
 
 function OrdersStaff() {
@@ -253,6 +254,7 @@ function OrdersStaff() {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);
 
+
   useEffect(() => {
     getStaff();
   }, []);
@@ -335,12 +337,13 @@ function OrdersStaff() {
     }
   };
 
+
   const handleSelect = (value) => {
     setSelectedValue(value);
   };
   return (
     <div className="mode">
-      <Flex justify="space-between">
+    <Flex justify="space-between">
         <ConfigProvider
           theme={{
             components: {
@@ -358,9 +361,10 @@ function OrdersStaff() {
           <Segmented
             options={[
               "All Orders",
+              "Paid",
               "Pending",
-              "Shipping",
               "Delivered",
+              "Shipping",
               "Cancel",
             ]}
             onChange={handleSegmentChange}

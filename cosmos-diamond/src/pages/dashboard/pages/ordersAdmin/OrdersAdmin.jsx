@@ -176,6 +176,19 @@ function OrdersAdmin() {
     setSelectedSegment(value);
   };
 
+  useEffect(() => {
+    applyFilters(search, selectedSegment, searchDate);
+  }, [orders, search, selectedSegment, searchDate]);
+
+  const handleDateChange = (date, dateString) => {
+    setSearchDate(dateString);
+    applyFilters(search, selectedSegment, dateString);
+  };
+
+  const handleSegmentChange = (value) => {
+    setSelectedSegment(value);
+  };
+
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
@@ -231,6 +244,7 @@ function OrdersAdmin() {
     setFilteredProduct(filteredData);
   };
 
+
   useEffect(() => {
     getOrders();
   }, []);
@@ -239,6 +253,8 @@ function OrdersAdmin() {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);
   
+
+ 
   return (
     <div className="mode">
       <Flex justify="space-between">

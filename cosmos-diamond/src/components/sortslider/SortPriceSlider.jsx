@@ -41,7 +41,7 @@ function SortPriceSlider({price, setPrice, MAX_PRICE, MIN_PRICE}) {
             max={MAX_PRICE}
             min={MIN_PRICE}
             value={price}
-            onChange={handlePriceChange}
+            onAfterChange={handlePriceChange}
             step={500}
             // minDistance={500}
           />

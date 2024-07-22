@@ -43,7 +43,7 @@ function SortClaritySlider({clarity, clarityName, setClarity, setClarityName, IN
             value={clarity}
             marks
             markClassName="clarity-mark"
-            onChange={handlerClarityChange}
+            onAfterChange={handlerClarityChange}
             minDistance={1}
           />
         </div>
