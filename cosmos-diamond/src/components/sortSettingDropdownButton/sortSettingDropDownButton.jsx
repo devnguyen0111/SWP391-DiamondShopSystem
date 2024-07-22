@@ -39,7 +39,6 @@ function SettingDropDownGroup({
         setSortMetal(data.metal.$values);
         setSortSize(data.sizes.$values);
         setSortShape(data.shape.$values);
-        console.log(data);
       });
   };
 
@@ -158,9 +157,8 @@ function SettingDropDownGroup({
   );
   const handlePriceChange = (newPrice) => {
     setPrice(newPrice);
-    console.log("Price Range Updated: ", newPrice);
   };
-
+  
   return (
     <>
       <div
@@ -256,7 +254,7 @@ function SettingDropDownGroup({
                     max={MAX_PRICE}
                     min={MIN_PRICE}
                     value={price}
-                    onChange={handlePriceChange}
+                    onAfterChange={handlePriceChange}
                     step={500}
                     // minDistance={500}
                   />
