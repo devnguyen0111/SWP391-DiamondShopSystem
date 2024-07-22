@@ -167,7 +167,7 @@ function OrdersAdmin() {
     setSelectedDetail(null);
   };
 
-  const handleDateChange2  = (date, dateString) => {
+  const handleDateChange3  = (date, dateString) => {
     setSearchDate(dateString);
     applyFilters(search, selectedSegment, dateString);
   };
@@ -281,7 +281,7 @@ function OrdersAdmin() {
             style={{ width: "300px", fontFamily: "Gantari" }}
           />
           <DatePicker
-            onChange={handleDateChange2}
+            onChange={handleDateChange3}
             format="DD-MM-YYYY"
             placeholder="Search by date"
             style={{ width: "200px", height: "2.3em" }}
