@@ -40,7 +40,7 @@ function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
             value={cut}
             marks
             markClassName="cut-mark"
-            onChange={(value)=>setCut(value)}
+            onAfterChange={(value)=>setCut(value)}
             minDistance={1}
           />
         </div>

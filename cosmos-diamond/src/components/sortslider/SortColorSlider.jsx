@@ -40,7 +40,7 @@ function SortColorSlider({color, setColor, colorName, setColorName, INIT_COLOR_N
             min={1}
             value={color}
             marks
-            onChange={handlerColorChange}
+            onAfterChange={handlerColorChange}
             minDistance={1}
           />
         </div>

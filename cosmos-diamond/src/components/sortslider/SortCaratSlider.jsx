@@ -46,7 +46,7 @@ function SortCaratSlider({carat, setCarat, MAX_CARAT, MIN_CARAT}) {
             max={MAX_CARAT}
             min={MIN_CARAT}
             value={carat}
-            onChange={handleCaratChange}
+            onAfterChange={handleCaratChange}
             step={0.01}
           />
         </div>
