@@ -43,6 +43,23 @@ https://github.com/user-attachments/assets/8e1c945b-b293-41c1-9b46-d50939162222
 ### Necklaces
 ![neck-menu](https://github.com/user-attachments/assets/acaed5c2-5d74-4a3e-9c90-9c28724624fa)
 
+# ERD and stuff
+## note: thes are still in updating
+
+<details>
+<summary>Click for detail</summary>
+ 
+| ERD | ERD Detail |
+| --- | --- |
+| ![diamond_shop_system-ERD drawio](https://github.com/user-attachments/assets/0a3e9f80-0544-4d57-89a2-cdfc88bc29c7) | ![diamond_shop_system-ERD ( Detail ) drawio (1)](https://github.com/user-attachments/assets/36f1499f-eb01-40c3-839d-93de5cbb7c20) | 
+
+| UC Diagram |
+| --- |
+| ![diamond_shop_system-Use case Diagram drawio](https://github.com/user-attachments/assets/d288cbc1-271a-4d20-80e3-91b11a0db46d) | 
+![diamond_shop_system-Context Diagram (Data flow) drawio](https://github.com/user-attachments/assets/05bfe91d-9925-4b77-8bc0-aa91fe4937ae)
+
+</details>
+
 # Testing
 <details>
 <summary>Use Case Description</summary>
@@ -97,6 +114,7 @@ https://github.com/user-attachments/assets/8e1c945b-b293-41c1-9b46-d50939162222
 | UC-48  | Print warranty card                        | Manager / Sale Staff | Managers and Sale Staff can generate and print a warranty card.                      |
 | UC-49  | Manage dashboard                           | Admin                | Admins can manage the dashboard of the system.                                       |
 | UC-50  | Disable a user                             | Admin                | Admins can disable a customer account.                                               |
+
 </details>
  
 | Sprint | UC |
@@ -111,7 +129,7 @@ https://github.com/user-attachments/assets/8e1c945b-b293-41c1-9b46-d50939162222
 | Huỳnh Minh Long |`UC-05` `UC-07` | `UC-34` `UC-35` `UC-36` `UC-39` `UC-40` | `UC-27` `UC-48` | `UC-49` |
 | Nguyễn Cao Trí | `UC-04` `UC-06` | `UC-13` `UC-14` `UC-15` `UC-16` | `UC-25` `UC-41` | `UC-42` `UC-43` |
 | Nguyễn Trần Hồng Phúc | `UC-01` `UC-02` `UC-03` | `UC-31` `UC-32` `UC-37` `UC-38` `UC-47` | `UC-30` | `UC-50` |
-| Lê Quang Vinh | `UC-10` `UC-11` | `UC-17` `UC-24` `UC-26` | `UC-09` `UC-19` `UC-45` `UC-46` | `UC-44` |
-| Trần Hoàng Tuấn | `UC-12` | `UC-18` | `UC-20` `UC-21` `UC-22` `UC-23` `UC-28` | `UC-33` |
+| Lê Quang Vinh (Guest) | `UC-10` `UC-11` | `UC-17` `UC-24` `UC-26` | `UC-09` `UC-19` `UC-45` `UC-46` | `UC-44` |
+| Trần Hoàng Tuấn (Guest) | `UC-12` | `UC-18` | `UC-20` `UC-21` `UC-22` `UC-23` `UC-28` | `UC-33` |
 
 _the end_
