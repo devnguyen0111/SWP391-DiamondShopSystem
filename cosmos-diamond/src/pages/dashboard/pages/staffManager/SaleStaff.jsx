@@ -35,7 +35,12 @@ function SaleStaff() {
       key: "phone",
       render: (text) => <a>{text}</a>,
     },
-
+    {
+      title: "Total Order",
+      dataIndex: "count",
+      key: "count",
+      render: (text) => <a>{text}</a>,
+    },
     {
       title: "Status",
       dataIndex: "status",
@@ -56,6 +61,7 @@ function SaleStaff() {
         </div>
       ),
     },
+    
   ];
 
   const getStaff = async () => {
