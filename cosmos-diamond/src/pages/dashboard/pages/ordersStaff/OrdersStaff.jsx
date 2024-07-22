@@ -453,7 +453,22 @@ function OrdersStaff() {
                 {selectedDetail.shippingMethodName}
               </Descriptions.Item>
             </Descriptions>
-
+            <h1
+              style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
+            >
+              Customer Information
+            </h1>
+            <Descriptions bordered style={{ marginTop: "10px" }}>
+              <Descriptions.Item label="Name" span={1.5}>
+                {selectedDetail.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Phone number" span={1.5}>
+                {selectedDetail.phoneNumber}
+              </Descriptions.Item>
+              <Descriptions.Item label="Address" span={3}>
+                {selectedDetail.address}
+              </Descriptions.Item>
+            </Descriptions>
             <h1
               style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
             >
@@ -463,7 +478,7 @@ function OrdersStaff() {
               <Descriptions
                 bordered
                 key={item.pId}
-                style={{ marginTop: "20px" }}
+                style={{ marginTop: "10px" }}
               >
                 <Descriptions.Item label="Item Image" span={3}>
                   <img
@@ -490,6 +505,11 @@ function OrdersStaff() {
                 </Descriptions.Item>
               </Descriptions>
             ))}
+            <h1
+              style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
+            >
+              Customer
+            </h1>
           </>
         )}
       </Modal>
