@@ -290,7 +290,7 @@ function DiamondSort() {
                     onChange={handlePageChange}
                     current={pageNumber}
                     pageSize={pageSize}
-                    total={amount}
+                    total={amount && amount}
                     style={{ marginTop: "16px" }}
                   />
                 </div>
