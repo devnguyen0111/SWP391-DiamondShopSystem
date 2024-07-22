@@ -295,7 +295,7 @@ function OrdersAdmin() {
             style={{ width: "300px", fontFamily: "Gantari" }}
           />
           <DatePicker
-            onChange={handleDateChange3}
+            onChange={handleDateChange}
             format="DD-MM-YYYY"
             placeholder="Search by date"
             style={{ width: "200px", height: "2.3em" }}
