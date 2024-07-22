@@ -197,7 +197,7 @@ function OrdersManager() {
           }}
         >
           <Button onClick={() => showDetailModal(record.orderId)}>
-            Detail Request
+            Detail Order
           </Button>
         </ConfigProvider>
       ),
