@@ -211,8 +211,18 @@ function OrdersManager() {
     try {
       const response = await api.get("/api/Order/getAllOrders");
       let data = response.data.$values;
-      data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
-      setOrderSearch(response.data.$values);
+      const validStatuses = [
+        "pending",
+        "delivered",
+        "cancel",
+        "paid",
+        "shipping",
+      ];
+      data = data.filter((order) =>
+        validStatuses.includes(order.status.toLowerCase())
+      );
+      data = data.sort((a, b) => b.orderId - a.orderId);
+      setOrderSearch(data);
       const updatedOrders = data.map((order) => {
         const assignedStaff = staff.find((s) => s.value === order.saleStaffId);
         return {
@@ -221,7 +231,7 @@ function OrdersManager() {
         };
       });
       setOrders(updatedOrders);
-      setFilteredProduct(updatedOrders); 
+      setFilteredProduct(updatedOrders);
     } catch (e) {
       console.error(e);
     }

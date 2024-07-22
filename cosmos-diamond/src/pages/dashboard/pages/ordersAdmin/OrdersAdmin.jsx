@@ -131,9 +131,18 @@ function OrdersAdmin() {
     try {
       const response = await api.get("/api/Order/getAllOrders");
       let data = response.data.$values;
-      data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
-      setOrderSearch(response.data.$values);
-
+      const validStatuses = [
+        "pending",
+        "delivered",
+        "cancel",
+        "paid",
+        "shipping",
+      ];
+      data = data.filter((order) =>
+        validStatuses.includes(order.status.toLowerCase())
+      );
+      data = data.sort((a, b) => b.orderId - a.orderId);
+      setOrderSearch(data);
       setOrders(data);
       setFilteredProduct(data);
     } catch (e) {
@@ -157,14 +166,6 @@ function OrdersAdmin() {
     setIsDetailModalVisible(false);
     setSelectedDetail(null);
   };
-
-  useEffect(() => {
-    getOrders();
-  }, []);
-
-  useEffect(() => {
-    applyFilters(search, selectedSegment, searchDate);
-  }, [orders, search, selectedSegment, searchDate]);
 
   const handleDateChange = (date, dateString) => {
     setSearchDate(dateString);
@@ -230,16 +231,14 @@ function OrdersAdmin() {
     setFilteredProduct(filteredData);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedValue == null) {
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-      await assignStaff(selectedOrderId, selectedValue);
-    }
-  };
+  useEffect(() => {
+    getOrders();
+  }, []);
 
+  useEffect(() => {
+    applyFilters(search, selectedSegment, searchDate);
+  }, [orders, search, selectedSegment, searchDate]);
+  
   return (
     <div className="mode">
       <Flex justify="space-between">

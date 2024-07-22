@@ -40,6 +40,21 @@ export const navDashboardConfig = [
     icon: <SolutionOutlined style={{ fontSize: "1.4em" }} />,
     label: "Requests",
   },
+  {
+    key: "14",
+    icon: <TeamOutlined />,
+    label: "Staff",
+    children: [
+      {
+        key: "141",
+        label: "Sale Staff",
+      },
+      {
+        key: "142",
+        label: "Delivery Staff",
+      },
+    ],
+  },
 ];
 
 export const navDashboardConfigAdmin = [
@@ -138,6 +153,12 @@ export const navpath = {
   },
   13: {
     path: "/dashboard/admin/orders",
+  },
+  141: {
+    path: "/dashboard/manager/salestaff",
+  },
+  142: {
+    path: "/dashboard/manager/deliverystaff",
   },
 };
 

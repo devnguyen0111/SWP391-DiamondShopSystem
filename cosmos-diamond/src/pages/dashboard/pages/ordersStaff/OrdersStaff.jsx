@@ -22,7 +22,7 @@ import { GoDotFill } from "react-icons/go";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { alertSuccess } from "../../../../hooks/useNotification";
 import { SearchOutlined } from "@ant-design/icons";
-import "./OrdersStaff.scss"
+import "./OrdersStaff.scss";
 import moment from "moment";
 
 function OrdersStaff() {
@@ -192,6 +192,16 @@ function OrdersStaff() {
         `/api/Assign/ordersFromSaleStaffId/${user.UserID}`
       );
       let data = response.data.$values;
+      const validStatuses = [
+        "pending",
+        "delivered",
+        "cancel",
+        "paid",
+        "shipping",
+      ];
+      data = data.filter((order) =>
+        validStatuses.includes(order.status.toLowerCase())
+      );
       data = response.data.$values.sort((a, b) => b.orderId - a.orderId);
       setOrderSearch(response.data.$values);
       const updatedOrders = data.map((order) => {
@@ -239,12 +249,9 @@ function OrdersStaff() {
     setSelectedDetail(null);
   };
 
-  
-  
   useEffect(() => {
     applyFilters(search, selectedSegment, searchDate);
   }, [orders, search, selectedSegment, searchDate]);
-
 
   useEffect(() => {
     getStaff();
@@ -328,13 +335,12 @@ function OrdersStaff() {
     }
   };
 
-
   const handleSelect = (value) => {
     setSelectedValue(value);
   };
   return (
     <div className="mode">
-    <Flex justify="space-between">
+      <Flex justify="space-between">
         <ConfigProvider
           theme={{
             components: {
@@ -352,10 +358,9 @@ function OrdersStaff() {
           <Segmented
             options={[
               "All Orders",
-              "Paid",
               "Pending",
-              "Delivered",
               "Shipping",
+              "Delivered",
               "Cancel",
             ]}
             onChange={handleSegmentChange}
