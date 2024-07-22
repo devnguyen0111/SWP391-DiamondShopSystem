@@ -384,6 +384,7 @@ function ManangerProductDetail() {
             onCancel={() => setOpen(false)}
             width={1000}
             style={{ height: "100vh", overflowY: "scroll", top: "10px" }}
+            className="modal-diamonds"
           >
             <ManagerDiamondCatalog
               setDiamondInfo={setDiamondInfo}
