@@ -118,7 +118,7 @@ function SortOptionCover({
       selectable={true}
       onSelect={handleMenuSelect}
       onDeselect={handleMenuDeselect}
-      style={{ height: "300px", overflow: "auto", marginTop: "8px" }}
+      style={{ height: "auto", overflow: "auto", marginTop: "8px" }}
       items={items}
     />
   );
@@ -129,7 +129,7 @@ function SortOptionCover({
       selectable={true}
       onSelect={handleSizeSelect}
       onDeselect={handleSizeDeselect}
-      style={{ height: "200px", overflow: "auto", marginTop: "8px" }}
+      style={{ height: "auto", overflow: "auto", marginTop: "8px" }}
       items={sizeItems}
     />
   );
@@ -219,7 +219,7 @@ function SortOptionCover({
                     max={MAX_PRICE}
                     min={MIN_PRICE}
                     value={price}
-                    onChange={handlePriceChange}
+                    onAfterChange={handlePriceChange}
                     step={500}
                     // minDistance={500}
                   />

@@ -42,7 +42,7 @@ function ShoppingCart() {
           },
         });
         const data = await response.json();
-        console.log(data);
+        
         setCart(data);
         setCartTotalPrice(data.totalPrice);
         setTimeout(() => {
@@ -60,6 +60,17 @@ function ShoppingCart() {
     const uniqueDiamondIds = new Set(diamondIds);
     return uniqueDiamondIds.size !== diamondIds.length;
   };
+  const hasDisableProduct = (product)=>{
+    let disableProducts = product.filter((p)=> {
+      return p.status === 'Disabled'
+    })
+    if(disableProducts.length > 0){
+      let string = disableProducts.map((p)=> p.name1).join(" ")
+      alertFail(`${string} has been disable`)
+      return false
+    }
+    return true
+  }
   useEffect(() => {
     fetchCart();
   }, [remove]);
@@ -70,7 +81,10 @@ function ShoppingCart() {
     let pids = new Set(checklist.map((l) => l.pid));
     if (pids.size > 0) {
       let products = cart.items.$values.filter((item) => pids.has(item.pid));
-
+      if(!hasDisableProduct(products)){
+        return
+      }
+      
       let productsWithDiamond = products.map((p) => ({
         productId: p.pid,
         quantity: p.quantity,

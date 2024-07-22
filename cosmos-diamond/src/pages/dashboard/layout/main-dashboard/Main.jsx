@@ -19,7 +19,7 @@ function Main({ children }) {
   pathname = pathname.replace("/", "");
 
   return (
-    <Layout className="layout-dashboard" style={{overflowY:"hidden"}}>
+    <Layout className="layout-dashboard" style={{overflowY:"scroll"}}>
       <Drawer
         title={false}
         placement="left"

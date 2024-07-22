@@ -128,7 +128,7 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   };
 
   const handlePageChange = (page, pageSize) => {
-  
+
     setPageNumber(page);
     setPageSize(pageSize);
   };

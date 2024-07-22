@@ -243,7 +243,7 @@ function OrderHistory() {
                         "Pending",
                         "Shipping",
                         "Delivered",
-                        "Canceled ",
+                        "Cancel",
                       ]}
                       onChange={(value) => handleStatus(value)}
                     />
@@ -340,7 +340,7 @@ function OrderHistory() {
                               className="order-history__status"
                             >
                               <p>Status</p>
-                              <div style={{ textTransform: "capitalize" }}>
+                              <div style={{ textTransform: "capitalize", color: order.status === 'Cancel' && 'red' }}>
                                 {order.status}
                               </div>
                             </Flex>
