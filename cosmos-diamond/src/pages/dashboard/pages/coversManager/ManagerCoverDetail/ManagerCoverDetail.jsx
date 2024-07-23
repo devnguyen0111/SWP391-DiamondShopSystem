@@ -243,7 +243,7 @@ function ManagerCoverDetail() {
     },
     {
       title: "Price ($)",
-      dataIndex: "price",
+      dataIndex: "prices",
       key: "price",
     },
     {
@@ -397,7 +397,7 @@ function ManagerCoverDetail() {
       ...pre,
       {
         sizeId: data.id,
-        prices: data.price,
+        prices: data.prices,
         name: data.value,
         status: "Available",
         added: "new",
@@ -416,7 +416,7 @@ function ManagerCoverDetail() {
         id: data.sizeId,
         value: data.name,
         status: data.status,
-        price: data.prices,
+        prices: data.prices,
         added: "removed",
       },
     ];
