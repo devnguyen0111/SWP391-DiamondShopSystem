@@ -45,6 +45,7 @@ function PendantCatalog() {
 
       setPendantList(data.filteredProducts1.$values);
     } catch (error) {
+      setLoading(false);
       console.error("Failed to fetch data", error);
     } finally {
       setLoading(false);

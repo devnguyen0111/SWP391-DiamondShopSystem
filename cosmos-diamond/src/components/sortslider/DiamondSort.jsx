@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Row, Col, Select, Pagination, Card, Modal } from "antd";
+import { Row, Col, Select, Pagination, Card, Modal, Input } from "antd";
 
 import SortPriceSlider from "./SortPriceSlider";
 import SortCaratSlider from "./SortCaratSlider";
@@ -12,12 +12,14 @@ import "./DiamondSort.scss";
 import { apiHeader } from "../urlApiHeader";
 import api from "../../config/axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 function DiamondSort() {
   const query = useQuery();
+
   const nav = useNavigate()
   let shape = query.get("sortBy");
   const MIN_PRICE = 0;
@@ -37,7 +39,7 @@ function DiamondSort() {
   const [cut, setCut] = useState([1, 5]);
   const [cutName, setCutName] = useState(INIT_CUT);
   const [diamondList, setDiamondList] = useState([]);
-  const [diamondShape, setDiamondShape] = useState("Round");
+  const [diamondShape, setDiamondShape] = useState(shape || "Round");
   const [pageSize, setPageSize] = useState(9);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -45,7 +47,7 @@ function DiamondSort() {
   const [order, setOrder] = useState("desc");
   const [amount, setAmount] = useState(0);
   const [open1, setOpen1] = useState(false);
-
+  const [search, setSearch] = useState('')
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
     if (shape) {
@@ -65,6 +67,11 @@ function DiamondSort() {
       });
     });
   }, []);
+  //handle search
+  const handleSearch = (e)=>{
+    setSearch(e.target.value)
+    console.log(e.target.value);
+  }
   //GET Diamond List
   const fetchDiamonds = useCallback(async () => {
     setIsLoading(true);
@@ -79,7 +86,7 @@ function DiamondSort() {
     const minPriceURL = price[0];
     const maxPriceURL = price[1];
 
-    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
 
     try {
       const res = await fetch(url);
@@ -91,6 +98,7 @@ function DiamondSort() {
       setDiamondList(data.diamonds.$values);
       setAmount(data.totalDiamond);
     } catch (error) {
+      setIsLoading(false);
       console.error("Failed to fetch diamonds", error);
     } finally {
       setIsLoading(false);
@@ -106,13 +114,14 @@ function DiamondSort() {
     pageSize,
     order,
     amount,
+    search
   ]);
 
   useEffect(() => {
     setDiamondList([]);
     setPageNumber(1);
     fetchDiamonds();
-  }, [diamondShape, price, carat, clarity, color, cut, order, amount]);
+  }, [diamondShape, price, carat, clarity, color, cut, order, amount, search]);
 
   useEffect(() => {
     fetchDiamonds();
@@ -245,6 +254,7 @@ function DiamondSort() {
                       ]}
                     />
                   </div>
+                  <Input onChange={handleSearch} value={search} placeholder='Search by Diamond Code' style={{width:'30%'}} addonBefore={<SearchOutlined />}/>
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>

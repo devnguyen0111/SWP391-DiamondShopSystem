@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Row, Col, Select, Pagination, Card, Modal } from "antd";
+import { Row, Col, Select, Pagination, Card, Modal, Input } from "antd";
 
 import SortPriceSlider from "./../../../../../components/sortslider/SortPriceSlider";
 import SortCaratSlider from "./../../../../../components/sortslider/SortCaratSlider";
@@ -12,6 +12,7 @@ import { apiHeader } from "../../../../../components/urlApiHeader";
 import "./ManagerDiamondCatalog.scss";
 import api from "../../../../../config/axios";
 import { alertSuccess } from "../../../../../hooks/useNotification";
+import { SearchOutlined } from "@ant-design/icons";
 function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   const MIN_PRICE = 0;
   const MAX_PRICE = 50000;
@@ -38,6 +39,7 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
   const [order, setOrder] = useState("desc");
   const [amount, setAmount] = useState(0);
   const [open1, setOpen1] = useState(false);
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
@@ -66,7 +68,7 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
     const minPriceURL = price[0];
     const maxPriceURL = price[1];
 
-    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
 
     try {
       const res = await fetch(url);
@@ -93,14 +95,15 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
     pageNumber,
     pageSize,
     order,
-    amount
+    amount,
+    search
   ]);
 
   useEffect(() => {
     setDiamondList([]);
     setPageNumber(1);
     fetchDiamonds();
-  }, [diamondShape, price, carat, clarity, color, cut, order, amount]);
+  }, [diamondShape, price, carat, clarity, color, cut, order, amount, search]);
 
   useEffect(() => {
     fetchDiamonds();
@@ -132,6 +135,11 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
     setPageNumber(page);
     setPageSize(pageSize);
   };
+   //handle search
+   const handleSearch = (e)=>{
+    setSearch(e.target.value)
+    console.log(e.target.value);
+  }
   const handleSelectDiamond = (diamondId) => {
     
     setOpen1(true);
@@ -287,6 +295,8 @@ function ManagerDiamondCatalog({ setOpen, setDiamondInfo}) {
                       ]}
                     />
                   </div>
+                  <Input onChange={handleSearch} value={search} placeholder='Search by Diamond Code' style={{width:'30%'}} addonBefore={<SearchOutlined />}/>
+
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>
