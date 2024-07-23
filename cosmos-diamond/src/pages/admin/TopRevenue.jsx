@@ -18,15 +18,25 @@ const TopRevenue = () => {
         calloutLabelKey: "asset",
         angleKey: "amount",
         innerRadiusRatio: 0.6,
-        fills: ["#00aaff", "#ff00aa", "#ffaa00"], 
-        
-       
+        fills: ["#00aaff", "#ff00aa", "#ffaa00"],
         calloutLabels: {
           enabled: true,
           fontSize: 20,
           fontFamily: "Gantari",
           color: "#000",
+          formatter: ({ value }) => value.toFixed(0), // Định dạng số nguyên cho nhãn callout
         },
+        sectorLabelKey: "amount",
+        sectorLabels: {
+          formatter: ({ value }) => value.toFixed(0), // Định dạng số nguyên cho nhãn sector
+        },
+        tooltip: {
+          renderer: (params) => {
+            return {
+              content: `${params.datum.asset}: ${params.datum.amount.toFixed(0)}` // Định dạng số nguyên cho tooltip
+            };
+          }
+        }
       },
     ],
     legend: {
@@ -38,7 +48,7 @@ const TopRevenue = () => {
       color: "#333",
     },
     background: {
-      fill: "white", 
+      fill: "white",
     },
   });
 
@@ -68,9 +78,8 @@ const TopRevenue = () => {
     <AgCharts
       options={options}
       style={{
-        
         height: "50vh",
-        padding:'0 2em',
+        padding: "0 2em",
       }}
     />
   );

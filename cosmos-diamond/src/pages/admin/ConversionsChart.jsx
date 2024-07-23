@@ -42,6 +42,9 @@ const ConversionsChart = () => {
         type: "number",
         position: "left",
         title: { text: "Count" },
+        label: {
+          formatter: ({ value }) => value.toFixed(0),
+        },
       },
     ],
     legend: {
@@ -58,15 +61,15 @@ const ConversionsChart = () => {
     try {
       const response = await api.get("/api/Admin/Conversion");
       console.log("API response:", response.data);
-
+  
       const data = response.data.$values;
       const chartData = data.map((item) => ({
         quarter: item.quarter,
-        rings: item.rings,
-        pendant: item.pendant,
-        earrings: item.earrings,
+        rings: Math.round(item.rings),
+        pendant: Math.round(item.pendant),
+        earrings: Math.round(item.earrings),
       }));
-
+  
       setOptions((prevOptions) => ({
         ...prevOptions,
         data: chartData,
@@ -75,6 +78,7 @@ const ConversionsChart = () => {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchData();

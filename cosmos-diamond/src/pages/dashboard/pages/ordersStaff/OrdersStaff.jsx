@@ -443,7 +443,7 @@ function OrdersStaff() {
               <Descriptions.Item label="Order ID">
                 #{selectedDetail.orderId}
               </Descriptions.Item>
-              <Descriptions.Item label="Requested Date">
+              <Descriptions.Item label="Order Date">
                 {new Date(selectedDetail.orderDate).toLocaleString()}
               </Descriptions.Item>
               <Descriptions.Item label="Total Amount">

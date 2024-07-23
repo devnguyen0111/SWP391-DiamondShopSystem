@@ -10,7 +10,7 @@ function Feedback() {
   const getFeedback = async () => {
     try {
       const response = await api.get("/api/Review/GetAllFeedback");
-      const data = response.data.$values;
+      let data = response.data.$values.sort((a, b) => new Date(b.datePost) - new Date(a.datePost));
       setFeedback(data);
     } catch (e) {
       console.error(e);
