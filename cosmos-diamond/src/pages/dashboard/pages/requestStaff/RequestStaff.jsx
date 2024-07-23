@@ -1,6 +1,7 @@
 import {
   Button,
   ConfigProvider,
+  Modal,
   Popconfirm,
   Segmented,
   Table,
@@ -11,6 +12,8 @@ import api from "../../../../config/axios";
 import { alertFail, alertSuccess } from "../../../../hooks/useNotification";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/features/counterSlice";
+import EmailCancel from "../../../../components/EmailCancel/EmailCancel";
+import { apiHeader } from "../../../../components/urlApiHeader";
 
 function RequestStaff() {
   const [requests, setRequests] = useState([]);
@@ -18,6 +21,11 @@ function RequestStaff() {
   const [selectedSegment, setSelectedSegment] = useState("All Requests");
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedRequestDetail, setSelectedRequestDetail] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState();
+  const [emailBody, setEmailBody] = useState("");
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [cusEmail, setCusEmail] = useState("")
   const user = useSelector(selectUser);
 
   const data = [
@@ -127,15 +135,18 @@ function RequestStaff() {
       key: "action",
       render: (text, record) => (
         <div>
-          {record.requestStatus.toLowerCase() === "approved" && 
-          (record.orderStatus.toLowerCase() === "pending" || record.orderStatus.toLowerCase() === "shipping") ? (
+          {record.requestStatus.toLowerCase() === "approved" &&
+          (record.orderStatus.toLowerCase() === "pending" ||
+            record.orderStatus.toLowerCase() === "shipping") ? (
             <Popconfirm
               title="Are you sure to cancel this order?"
-              onConfirm={() => cancelOrder(record.orderId)}
+              onConfirm={() => handleCancelOrder(record)}
               okText="Yes"
               cancelText="No"
             >
-              <Button danger>Cancel Order</Button>
+              <Button onClick={() => setSelectedOrder(record)} danger>
+                Cancel Order
+              </Button>
             </Popconfirm>
           ) : (
             <Button disabled>Cancel Order</Button>
@@ -143,7 +154,6 @@ function RequestStaff() {
         </div>
       ),
     },
-    
   ];
 
   const getRequests = async () => {
@@ -169,6 +179,10 @@ function RequestStaff() {
       console.error(e);
     }
   };
+  // Cancel order
+  const handleCancelOrder = (order) => {
+    setOpen(true);
+  };
 
   const filterOrder = (value) => {
     setSelectedSegment(value);
@@ -186,7 +200,28 @@ function RequestStaff() {
   useEffect(() => {
     getRequests();
   }, []);
+  // send Email and cancel order
+  const finalCancel = async () => {
+    setConfirmLoading(true);
+    try {
+      console.log(cusEmail);
+      const res = await api.post(`api/Email/send/email`, {
+        to: cusEmail,
+        subject: "Cosmos Diamond, Order Cancelation.",
+        body: emailBody,
+      });
 
+      cancelOrder(selectedOrder.orderId);
+      setOpen(false);
+    } catch (error) {
+      setConfirmLoading(false);
+      console.error("Failed to send cancellation email:", error);
+      alertFail('Failed to send cancellation email')
+  
+    } finally {
+      setConfirmLoading(false);
+    }
+  };
   return (
     <div className="mode">
       <ConfigProvider
@@ -220,6 +255,18 @@ function RequestStaff() {
           pageSizeOptions: ["10"],
         }}
       />
+
+      <Modal
+        open={open}
+        onOk={() => finalCancel()}
+        onCancel={() => setOpen(false)}
+        onClose={() => setOpen(false)}setCusEmail
+        confirmLoading={confirmLoading}
+      >
+        {selectedOrder && (
+          <EmailCancel order={selectedOrder} setEmailBody={setEmailBody} setCusEmail={setCusEmail}/>
+        )}
+      </Modal>
     </div>
   );
 }

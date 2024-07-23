@@ -50,6 +50,8 @@ function EngagementRingCatalog() {
       setRingList(data.filteredProducts1.$values);
     } catch (error) {
       console.error("Failed to fetch data", error);
+      setLoading(false);
+
     } finally {
       setLoading(false);
     }

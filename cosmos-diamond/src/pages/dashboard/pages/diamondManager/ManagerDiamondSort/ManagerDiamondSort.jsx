@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Row, Col, Select, Pagination, Card, Modal, Button } from "antd";
+import { Row, Col, Select, Pagination, Card, Modal, Button, Input } from "antd";
 import { apiHeader } from "../../../../../components/urlApiHeader";
 import api from "./../../../../../config/axios";
 import SortPriceSlider from "../../../../../components/sortslider/SortPriceSlider";
@@ -10,7 +10,7 @@ import SortCutSlider from "../../../../../components/sortslider/SortCutSlider";
 import { diamonds } from "../../../../../components/sortslider/Diamonds";
 import { useNavigate } from "react-router-dom";
 import { CiRollingSuitcase } from "react-icons/ci";
-import { PlusCircleFilled, PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleFilled, PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
 function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
   const MIN_PRICE = 0;
@@ -38,6 +38,8 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
   const [order, setOrder] = useState("desc");
   const [amount, setAmount] = useState(0);
   const [open1, setOpen1] = useState(false);
+  const [search, setSearch] = useState('')
+
   const nav = useNavigate();
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
@@ -66,7 +68,7 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
     const minPriceURL = price[0];
     const maxPriceURL = price[1];
 
-    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
 
     try {
       const res = await fetch(url);
@@ -93,13 +95,14 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
     pageSize,
     order,
     amount,
+    search
   ]);
 
   useEffect(() => {
     setDiamondList([]);
     setPageNumber(1);
     fetchDiamonds();
-  }, [diamondShape, price, carat, clarity, color, cut, order, amount]);
+  }, [diamondShape, price, carat, clarity, color, cut, order, amount, search]);
 
   useEffect(() => {
     fetchDiamonds();
@@ -182,6 +185,11 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
       alertSuccess("Diamond Chosen");
     }
   };
+   //handle search
+   const handleSearch = (e)=>{
+    setSearch(e.target.value)
+    console.log(e.target.value);
+  }
   return (
     <>
       <div className="sort" style={{ color: "black", padding: "40px 100px" }}>
@@ -295,6 +303,8 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
                       ]}
                     />
                   </div>
+                  <Input onChange={handleSearch} value={search} placeholder='Search by Diamond Code' style={{width:'30%'}} addonBefore={<SearchOutlined />}/>
+
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>
