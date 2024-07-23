@@ -138,7 +138,6 @@ function UsersManager() {
       />
       <Modal
         title="Confirm Status Change"
-  
         open={modalVisible}
         onOk={changeUserStatus}
         onCancel={() => setModalVisible(false)}
