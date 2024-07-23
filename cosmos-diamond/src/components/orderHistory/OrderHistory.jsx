@@ -92,6 +92,7 @@ function OrderHistory() {
           setIsLoading(false);
         })
         .catch((e) => {
+          setIsLoading(false);
           setOrderList([]);
         });
     } else {
@@ -381,15 +382,6 @@ function OrderHistory() {
                           </Row>
                         ))}
                       </Flex>
-                      {/* Order Total Price */}
-                      {/* <Flex
-                        justify="flex-end"
-                        className="order-total"
-                        align="flex-end"
-                        style={{ padding: "25px 0" }}
-                      >
-                        <div>Total Price:</div> <p> ${order.totalAmount}</p>
-                      </Flex> */}
                       <Flex
                         justify="space-between"
                         className="order-total"
