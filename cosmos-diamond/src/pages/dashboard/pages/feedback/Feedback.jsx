@@ -9,9 +9,9 @@ function Feedback() {
   const getFeedback = async () => {
     try {
       const response = await api.get("/api/Review/GetAllFeedback");
-      let data = response.data.$values.sort(
-        (a, b) => new Date(b.datePost) - new Date(a.datePost)
-      );
+
+      let data = response.data.$values.reverse();
+
       setFeedback(data);
     } catch (e) {
       console.error(e);
@@ -43,7 +43,7 @@ function Feedback() {
         <Col span={12} md={5} sm={0}>
           {/* Sidebar placeholder */}
         </Col>
-        <Col span={24} md={14} sm={24}>
+        <Col span={24} md={16} sm={24}>
           {feedback.length > 0 ? (
             feedback.map((item, index) => (
               <Row key={index} style={{ marginBottom: "16px" }}>
@@ -60,10 +60,10 @@ function Feedback() {
               </Row>
             ))
           ) : (
-            <p>Không có phản hồi nào.</p>
+            <p>Loading</p>
           )}
         </Col>
-        <Col span={12} md={5} sm={0}>
+        <Col span={12} md={4} sm={0}>
           {/* Sidebar placeholder */}
         </Col>
       </Row>
