@@ -1,0 +1,57 @@
+.manger-update-form {
+  padding: 0 100px 0 100px;
+}
+.manger-update-form .side {
+  &__header {
+    font-size: 22px;
+    font-weight: 600;
+    margin-left: -20px;
+  }
+
+  &__status {
+    background-color: #fff;
+  }
+  &__thumbnail {
+    background-color: #fff;
+    padding: 30px 40px 50px 40px;
+    border-radius: 10px;
+    height: auto;
+  }
+  &__img {
+    margin-top: 20px;
+  }
+  &__img img {
+    box-shadow: 0px 0px 23px 6px rgba(237, 237, 237, 0.75);
+    border-radius: 6px;
+  }
+  &__status {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    height: auto;
+  }
+  &__icon {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+  }
+}
+.manger-update-form .form {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  height: auto;
+}
+
+
+
+.modal-diamonds {
+  width: max-content;
+  &:nth-child(1) {
+    padding-top: 65rem;
+    .ant-modal-content {
+      width:1000px;
+    }
+  }
+}

@@ -1,31 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./CheckoutPage.scss";
-import { Collapse, Row, Col, Select, Popconfirm } from "antd";
+import {
+  Collapse,
+  Row,
+  Col,
+  Select,
+  Popconfirm,
+  Input,
+  Form,
+  Flex,
+  Button,
+} from "antd";
 import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import FailTransaction from "../../components/failTransaction/FailTransaction";
-import { jwtDecode } from "jwt-decode"; // Correct the import statement
-import img from "../../assets/logo.png";
-import { token } from "./../../components/getToken";
+
+import { getToken } from "./../../components/getToken";
 import { apiHeader } from "../../components/urlApiHeader";
+import { useStateValue } from "../../Context/StateProvider";
+
+import api from "../../config/axios";
+import Search from "antd/es/transfer/search";
+import { set } from "lodash";
+
+const { Option } = Select;
 
 function CheckoutPage() {
-  const [email, setEmail] = useState("");
+  const { checkout, setCheckout } = useStateValue();
+  const [city, setCity] = useState([]);
+  const [state, setState] = useState([]);
+  
   const [emailConfirm, setEmailConfirm] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState();
-  const [state, setState] = useState();
-  const [street, setStreet] = useState("");
-  const [address, setAddress] = useState("");
-  const [zipcode, setZipcode] = useState("");
-  const [cart, setCart] = useState();
-  const [error, setError] = useState();
-  const [shipping, setShipping] = useState();
-
+  const [error, setError] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(0);
+  const [selectedVoucher, setSelectedVoucher] = useState(null)
+  const cityRef = useRef();
+  const stateRef = useRef();
+  const token = getToken();
+  const [form] = Form.useForm();
+  const [vouchers, setVouchers] = useState([]);
+  const [amountVoucher, setAmountVoucher] = useState(0)
   const toggleConfirmEmail = () => {
+    let email = checkout.userInfo.email;
     if (!email) {
       setError("*Please provide Email");
     } else if (
@@ -39,38 +55,11 @@ function CheckoutPage() {
       setEmailConfirm(!emailConfirm);
     }
   };
+
   useEffect(() => {
     fetch("https://esgoo.net/api-tinhthanh/1/0.htm")
       .then((res) => res.json())
       .then((data) => setCity(data.data));
-  }, []);
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    let userId = window.location.href.slice(
-      window.location.href.lastIndexOf("/") + 1,
-      window.location.href.length
-    );
-    fetch(`${apiHeader}/Customer/customer/${userId}/profile`)
-      .then((res) => res.json())
-      .then((data) => {
-        let customerinfo = data.customerinfo;
-        let address = data.ad;
-        console.log(address);
-        setEmail(customerinfo.mail);
-
-        setFirstName(customerinfo.cusFirstName);
-        setLastName(customerinfo.cusLastName);
-        setPhone(customerinfo.cusPhoneNum);
-        setCountry(address.country);
-        setStreet(address.street);
-        setZipcode(address.zipcode);
-      });
-    fetch(`${apiHeader}/Cart/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setCart(data);
-      });
   }, []);
 
   const createPayment = (orderID) => {
@@ -87,38 +76,117 @@ function CheckoutPage() {
       .then((data) => window.open(data.url, "_blank"));
   };
 
-  const createOrder = () => {
-    fetch(`${apiHeader}/Order/createOrderFromCart`, {
+  const createOrder = async (values) => {
+    const arr = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      country: values.country,
+      street: checkout.shippingAddress1.street,
+      phone: values.phone,
+      shipping: values.shipping,
+      zipcode: values.zipcode,
+    };
+    const productDetails = checkout.products.$values.map(
+      ({ productId, quantity }) => ({ productId, quantity })
+    );
+    const response = await api.post(`${apiHeader}/Order/create`, {
+      userId: checkout.userInfo.userId,
+      shippingMethodId: arr.shipping,
+      deliveryAddress: `${arr.street + ", "}${
+        checkout.shippingAddress1.state + ", "
+      }${checkout.shippingAddress1.city}`,
+      contactNumber: arr.phone,
+      products: productDetails,
+      voucherName: selectedVoucher
+    });
+
+    createPayment(response.data);
+  };
+
+  const handleCity = (value) => {
+    const selectedCity = city.find((c) => c.id === value).full_name_en;
+    setCheckout((prev) => ({
+      ...prev,
+      shippingAddress1: {
+        ...prev.shippingAddress1,
+        city: selectedCity,
+      },
+    }));
+
+    fetch(`https://esgoo.net/api-tinhthanh/2/${value}.htm`)
+      .then((res) => res.json())
+      .then((data) => setState(data.data));
+  };
+
+  const handleStateUpdate = (value) => {
+    const selectedState = state.find((s) => s.id === value).full_name_en;
+    setCheckout((prev) => ({
+      ...prev,
+      shippingAddress1: {
+        ...prev.shippingAddress1,
+        state: selectedState,
+      },
+    }));
+  };
+  const handleShipping = (e) => {
+    setSelectedMethod(e.target.value);
+    
+  };
+  const handleTotal = () => {
+    let price =
+      selectedMethod &&
+      checkout.shippingMethods.$values.find((s) => s.id == selectedMethod).cost;
+    setCheckout((pre) => ({
+      ...pre,
+      finalTotal: pre.total + price - +amountVoucher,
+    }));
+  };
+  useEffect(() => {
+    handleTotal();
+  }, [selectedMethod, selectedVoucher, amountVoucher]);
+
+  const getVoucher = async () => {
+    try {
+      const response = await api.get("/get");
+     
+      let data = response.data.$values;
+      
+
+      if (!Array.isArray(data)) {
+        throw new Error("Dữ liệu nhận được không phải là mảng");
+      }
+      data = data.filter((v)=> (checkout.total >= v.bottomPrice  && checkout.total <= v.topPrice ))
+      setVouchers(data);
+    } catch (e) {
+      console.error(e);
+      alert(e.response?.data || e.message);
+    }
+  };
+
+  useEffect(() => {
+    getVoucher();
+  }, []);
+
+  const selectVoucher = (value) => {
+    setSelectedVoucher(value)
+    let products = checkout.products.$values.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    }));
+   
+    fetch(`${apiHeader}/Order/applyVoucher`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        cusId: token.UserID,
-        shippingMethodId: shipping,
-        deliveryAddress: `${street && street + ', '}${state && state + ', '}${city && city + ','}`,
-        contactNumber: `${phone}`,
+        products: products,
+        voucherName: value,
       }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok " + res.statusText);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        return data.orderId;
-      })
-      .then((orderID) => createPayment(orderID))
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  };
-  const handleCity = (e) => {
-    fetch(`https://esgoo.net/api-tinhthanh/2/${e.target.value}.htm`)
-      .then((res) => res.json())
-      .then((data) => setState(data.data));
+    }).then(res => res.text())
+    .then(data => {
+      setAmountVoucher(data)
+    });
   };
   return (
     <div className="checkout">
@@ -152,14 +220,16 @@ function CheckoutPage() {
                   <input
                     id="email"
                     type="email"
-                    value={email}
+                    value={checkout.userInfo.email}
+                    readOnly
                     required
-                    onChange={(e) => setEmail(e.target.value)}
                   />
                 )}
                 <p className="checkout__error">{error}</p>
                 {emailConfirm && (
-                  <div style={{ fontSize: "16px" }}>{email}</div>
+                  <div style={{ fontSize: "16px" }}>
+                    {checkout.userInfo.email}
+                  </div>
                 )}
                 {!emailConfirm && (
                   <div className="checkout__policy">
@@ -177,20 +247,16 @@ function CheckoutPage() {
                 >
                   {!emailConfirm && (
                     <Popconfirm
-                    title="Confirm email"
-                    description="Can you verify it's accurate?"
-                    okText= "Yes"
-                    cancelText="No"
-                    onConfirm = {toggleConfirmEmail}
-                  >
-                    <button
-                      type="button"
-                      className="checkout__btn"
+                      title="Confirm email"
+                      description="Can you verify it's accurate?"
+                      okText="Yes"
+                      cancelText="No"
+                      onConfirm={toggleConfirmEmail}
                     >
-                      Continue
-                    </button>
-                  </Popconfirm>
-                    
+                      <button type="button" className="checkout__btn">
+                        Continue
+                      </button>
+                    </Popconfirm>
                   )}
                 </div>
               </div>
@@ -201,143 +267,206 @@ function CheckoutPage() {
                   <Col span={24} className="checkout__email">
                     Shipping Address
                   </Col>
-                  <Col span={12} className="checkout__name">
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">First Name</div>
-                      <input
-                        type="text"
-                        id="firstName"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={12} className="checkout__name">
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Last Name</div>
-                      <input
-                        type="text"
-                        id="lastName"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={24} className="checkout__country">
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Country</div>
-                      <input
-                        type="text"
-                        id="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">City/Province</div>
-                      <select
-                        style={{ maxWidth: "300px" }}
-                        onChange={(e) => handleCity(e)}
+                  <Col span={24}>
+                    <Form
+                      form={form}
+                      name="layout-multiple-horizontal"
+                      layout="vertical"
+                      wrapperCol={{ span: 24 }}
+                      initialValues={{
+                        firstName: checkout.userInfo.firstName,
+                        lastName: checkout.userInfo.lastName,
+                        country: checkout.shippingAddress1.country,
+                        phone: checkout.userInfo.phoneNum,
+                        zipcode: checkout.shippingAddress1.zipCode,
+                        city: checkout.shippingAddress1.city,
+                        state: checkout.shippingAddress1.state,
+                        street: checkout.shippingAddress1.street,
+                      }}
+                      onFinish={createOrder}
+                    >
+                      <Flex
+                        style={{ width: "100%" }}
+                        justify="space-between"
+                        gap="large"
                       >
-                        {city &&
-                          city.map((city, index) => (
-                            <option key={index} value={city.id}>
-                              {city.full_name_en}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">District</div>
-                      <select style={{ maxWidth: "300px" }}>
-                        {state &&
-                          state.map((ward, i) => (
-                            <option key={i} value={ward.id}>
-                              {ward.full_name_en}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col span={24} className="checkout__address">
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Address</div>
-                      <input
-                        type="text"
-                        id="address"
-                        value={street}
-                        onChange={(e) => setStreet(e.target.value)}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={8} className="checkout__phone">
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Phone Number</div>
-                      <input
-                        type="tel"
-                        id="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
-                  </Col>
-
-                  <Col span={8}>
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Shipping Method</div>
-                      <Select
-                        onChange={(value) => setShipping(value)}
-                        style={{
-                          width: "100%",
-                          marginTop: "10px",
-                          height: "43px",
-                        }}
-                        options={[
+                        <Form.Item
+                          layout="vertical"
+                          label="First Name"
+                          name="firstName"
+                          style={{ width: "100%" }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide First Name",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          layout="vertical"
+                          label="Last Name"
+                          name="lastName"
+                          style={{ width: "100%" }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide Last Name",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Form.Item>
+                      </Flex>
+                      <Form.Item
+                        layout="vertical"
+                        label="Country"
+                        name="country"
+                        style={{ width: "100%" }}
+                        rules={[
                           {
-                            value: "1",
-                            label: "Standard",
-                          },
-                          {
-                            value: "2",
-                            label: "Economy",
-                          },
-                          {
-                            value: "3",
-                            label: "Express",
+                            required: true,
+                            message: "Please provide Country",
                           },
                         ]}
-                      />
-                    </div>
-                  </Col>
-                  <Col span={8}>
-                    <div className="checkout__input-wrapper">
-                      <div className="checkout__label">Zipcode</div>
-                      <input
-                        type="number"
-                        id="zipcode"
-                        value={zipcode}
-                        onChange={(e) => setZipcode(e.target.value)}
-                      />
-                    </div>
+                      >
+                        <Input />
+                      </Form.Item>
+
+                      <Flex gap="large" style={{ width: "100%" }}>
+                        <Form.Item
+                          layout="vertical"
+                          label="City"
+                          name="city"
+                          style={{ width: "100%" }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide City",
+                            },
+                          ]}
+                        >
+                          <Select
+                            onChange={handleCity}
+                            value={checkout.shippingAddress1.city}
+                            ref={cityRef}
+                            className="select-city"
+                          >
+                            {city.map((c) => (
+                              <Option key={c.id} value={c.id}>
+                                {c.full_name_en}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <Form.Item
+                          layout="vertical"
+                          label="State"
+                          name="state"
+                          style={{ width: "100%" }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide State",
+                            },
+                          ]}
+                        >
+                          <Select
+                            className="select-city"
+                            onChange={handleStateUpdate}
+                            value={checkout.shippingAddress1.state}
+                            ref={stateRef}
+                          >
+                            {state.map((s) => (
+                              <Option key={s.id} value={s.id}>
+                                {s.full_name_en}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                      </Flex>
+                      <Form.Item
+                        layout="vertical"
+                        label="Street"
+                        name="street"
+                        style={{ width: "100%" }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please provide Street",
+                          },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                      <div
+                        style={{
+                          display: "flex",
+                          flex: "0 0 33%",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Form.Item
+                          layout="vertical"
+                          label="Phone Number"
+                          name="phone"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide Phone Number",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          layout="vertical"
+                          label="Zipcode"
+                          name="zipcode"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please provide Zipcode",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          layout="vertical"
+                          label="Shipping Method"
+                          name="shipping"
+                          style={{ width: "167px" }}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Shipping is required",
+                            },
+                          ]}
+                        >
+                          <select required onChange={(e) => handleShipping(e)}>
+                            <option value="">Shipping Method</option>
+                            {checkout.shippingMethods.$values.map((o) => (
+                              <option key={o.id} value={o.id}>
+                                {o.name}
+                              </option>
+                            ))}
+                          </select>
+                        </Form.Item>
+                      </div>
+                      <Form.Item className="checkout__submit">
+                        <Button htmlType="submit" className="checkout__btn">
+                          Continue to Payment
+                        </Button>
+                      </Form.Item>
+                    </Form>
                   </Col>
                   <Col span={24} className="checkout__action">
                     <Link to={"/diamond-search"} className="checkout__back">
                       <ArrowLeftOutlined /> Return Shopping
                     </Link>
-                    <div className="checkout__submit">
-                      <button
-                        type="button"
-                        onClick={createOrder}
-                        className="checkout__btn"
-                      >
-                        Continue to Payment
-                      </button>
-                    </div>
                   </Col>
                 </>
               ) : (
@@ -364,17 +493,20 @@ function CheckoutPage() {
               >
                 Items
               </Col>
-              {cart &&
-                cart.items.$values.map((item) => (
-                  <Col span={24} className="checkout__product" key={item.pid}>
+              {checkout &&
+                checkout.products.$values.map((item) => (
+                  <Col
+                    span={24}
+                    className="checkout__product"
+                    key={item.productId}
+                  >
                     <div className="checkout__product-info">
                       <div className="checkout__img">
-                        <img
-                          src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                          alt=""
-                        />
+                        <img src={item.imgUrl} alt="" />
                       </div>
-                      <div className="checkout__product-name">{item.name1}</div>
+                      <div className="checkout__product-name">
+                        {item.productName}
+                      </div>
                     </div>
                     <div className="checkout__product-price">
                       x {item.quantity}
@@ -388,22 +520,74 @@ function CheckoutPage() {
                 <ul>
                   <li>
                     <div className="checkout__summary-title">Subtotal</div>
-                    <div className="">{cart && "$" + cart.totalPrice}</div>
+                    <div className="">{checkout && `$ ${checkout.total}`}</div>
                   </li>
                   <li>
                     <div className="checkout__summary-title">Delivery</div>
-                    <div className="">$50</div>
+                    <div className="">
+                      ${" "}
+                      {selectedMethod &&
+                        checkout.shippingMethods.$values.find(
+                          (s) => s.id == selectedMethod
+                        ).cost}
+                    </div>
                   </li>
                   <li>
-                    <div className="checkout__summary-title">Labour</div>
-                    <div className="">$30</div>
+                    <Collapse
+                      size="small"
+                      expandIconPosition="end"
+                      ghost={true}
+                      items={[
+                        {
+                          key: "1",
+                          label: "Voucher",
+                          children: (
+                            <Select
+                              showSearch
+                              onSelect={selectVoucher}
+                              style={{
+                                width: 200,
+                              }}
+                              placeholder="Search to Select"
+                              optionFilterProp="label"
+                              filterOption={(input, option) =>
+                                (option?.label ?? "")
+                                  .toLowerCase()
+                                  .includes(input.toLowerCase())
+                              }
+                              filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? "")
+                                  .toLowerCase()
+                                  .localeCompare(
+                                    (optionB?.label ?? "").toLowerCase()
+                                  )
+                              }
+                              options={vouchers.map((v) => ({
+                                value: v.name, 
+                                label: v.name,
+                                description: v.description
+                              }))}
+                              optionRender={option =>(
+                                <>
+                                  <div className="">{option.data.label}</div>
+                                  <div className="" style={{opacity:'0.8', fontSize:'12px'}}>{option.data.description}</div>
+                                </>
+                              )}
+                            />
+                          ),
+                        },
+                      ]}
+                    />
+                    <div style={{paddingTop:'18px'}}>-{Math.round(amountVoucher * 100) / 100}</div>
                   </li>
                 </ul>
               </Col>
               <Col span={24}>
                 <div className="checkout__summary-total">
                   <div className="">Total</div>
-                  <div className="">{cart && "$" + cart.totalPrice}</div>
+                  <div className="">
+                    {checkout && `$ ${checkout.finalTotal || checkout.total}`}
+                  </div>
                 </div>
               </Col>
             </Row>

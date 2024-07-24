@@ -2,7 +2,11 @@ import React from "react";
 import Banner from "../../components/banner/Banner";
 import { Button, Col, ConfigProvider, Image, Row } from "antd";
 import "./WeddingRingsIntro.scss";
+import { useNavigate } from "react-router-dom";
 function WeddingRingsIntro() {
+
+  const nav = useNavigate()
+
   return (
     <div>
       <Banner
@@ -90,7 +94,9 @@ function WeddingRingsIntro() {
                   },
                 }}
               >
-                <Button className="findSize__banner__button">
+
+                <Button onClick={()=> nav('/education/rings')} className="findSize__banner__button">
+
                   FIND YOUR SIZE
                 </Button>
               </ConfigProvider>

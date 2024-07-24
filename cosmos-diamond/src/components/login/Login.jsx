@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Divider } from "antd";
 import {
   GoogleOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
-import { set, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Divider } from "antd";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
-import LoadingScreen from "../loadingScreen/LoadingScreen";
-import { apiHeader } from "../urlApiHeader";
-import { alertFail } from "../../hooks/useNotification";
-import api from "../../config/axios";
+import { signInWithPopup } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/features/counterSlice";
+import LoadingScreen from "../loadingScreen/LoadingScreen";
+import { auth, provider } from "../../config/firebase";
+import api from "../../config/axios";
+import { jwtDecode } from "jwt-decode";
+
+import { alertFail } from "./../../hooks/useNotification";
+import { apiHeader } from "./../urlApiHeader";
 
 // Định nghĩa schema xác thực
 const schema = yup.object().shape({
@@ -31,9 +32,10 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [account, setAccount] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -42,32 +44,131 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useDispatch();
+  const handleLoginGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      let finalUser;
+      const loginResponse = await fetch(`${apiHeader}/Authentication/login`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          password: "123",
+          isGoogleLogin: true,
+        }),
+      });
+
+      if (loginResponse.status === 400) {
+        const [firstName, ...lastName] = user.displayName.split(" ");
+        const lastNameString = lastName.join(" ");
+        const tempUser = {
+          email: user.email,
+          firstName: firstName,
+          lastName: lastNameString,
+          phoneNumber: user.phoneNumber,
+          password: user.uid,
+        };
+
+        await registerGg(tempUser);
+
+        // Attempt to login again after successful registration
+        const newLoginResponse = await fetch(
+          `${apiHeader}/Authentication/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              password: "123",
+              isGoogleLogin: true,
+            }),
+          }
+        );
+
+        finalUser = await newLoginResponse.json();
+        console.log(finalUser);
+      } else {
+        finalUser = await loginResponse.json();
+        console.log(finalUser);
+      }
+      localStorage.setItem("token", finalUser.token);
+      finalUser = jwtDecode(finalUser.token);
+      const responseUser = await api.get(`/api/Customer/${finalUser.UserID}`);
+
+      console.log("Login: ", responseUser);
+      setIsLoading(false);
+      //redux
+      dispatch(login(finalUser));
+      if (finalUser.Role === "customer") {
+        let previousPage = sessionStorage.getItem("location");
+
+        previousPage ? navigate(previousPage) : navigate("/");
+      }
+    } catch (error) {
+      console.error("Error during Google sign-in:", error);
+    }
+  };
+
+  const registerGg = async (user) => {
+    try {
+      const response = await fetch(`${apiHeader}/Authentication/register`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          firstname: user.firstName,
+          lastname: user.lastName,
+          phonenumber: "0394388330",
+          password: user.password,
+        }),
+      });
+
+      const data = await response.json();
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
 
   const onSubmit = async (value) => {
     try {
-      setIsLoading(true)
-      const response = await api.post("/api/Authentication/login", value);
+      setIsLoading(true);
+      let previousPage = sessionStorage.getItem("location");
+      const response = await api.post("/api/Authentication/login", {
+        ...value,
+        isGoogleLogin: false,
+      });
       localStorage.setItem("token", response.data.token);
       const user = jwtDecode(response.data.token);
       const responseUser = await api.get(`/api/Customer/${user.UserID}`);
+
       console.log("Login: ", responseUser);
-      setIsLoading(false)
+      setIsLoading(false);
       //redux
       dispatch(login(user));
       if (user.Role === "customer") {
-        navigate("/");
+        previousPage ? navigate(previousPage) : navigate("/");
       }
       if (user.Role === "admin") {
         navigate("/dashboard/admin");
       }
-      // if (user.Role === "salestaff") {
-      //   navigate("/dashboard");
-      // }
+      if (user.Role === "salestaff") {
+        navigate("/dashboard/salestaff");
+      }
       if (user.Role === "manager") {
         navigate("/dashboard/manager");
       }
+      if (user.Role === "deliverystaff") {
+        navigate("/dashboard/deliverystaff/delivery");
+      }
     } catch (e) {
+      setIsLoading(false);
       console.log(e);
       alertFail(e.response.data, "Please Try Again");
     }
@@ -107,13 +208,17 @@ const Login = () => {
           )}
 
           <div className="remember-forgot">
-            <a href="#">Forgot Password?</a>
+            <Link to="/forgot-password">Forgot Password?</Link>
           </div>
           <button type="submit">Sign In</button>
           <Divider orientation="center" style={{ borderColor: "grey" }}>
             <span id="sign-up">or Sign in with</span>
           </Divider>
-          <button className="google-login">
+          <button
+            type="button"
+            className="google-login"
+            onClick={handleLoginGoogle}
+          >
             <GoogleOutlined /> Sign In with Google
           </button>
         </form>
@@ -130,51 +235,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// const onSubmit = (data) => {
-//   // let token = await axios.post("https://localhost:7262/api/Authentication/login",{
-//   //   headers:{
-//   //     "Content-type": "application/json; charset=UTF-8",
-//   //   }
-//   // })
-//   setIsLoading(true);
-//   fetch(`${apiHeader}/Authentication/login`, {
-//     method: "POST",
-//     body: JSON.stringify({
-//       email: data.email,
-//       password: data.password,
-//     }),
-//     headers: {
-//       "Content-type": "application/json; charset=UTF-8",
-//     },
-//   })
-//     .then((response) => response.json())
-//     .then((json) => {
-
-//       localStorage.setItem("token", json.token);
-//       setAccount(jwtDecode(json.token));
-
-//     })
-//     .catch(error =>{
-//       setIsLoading(false)
-//       console.log(error.message);
-//     })
-// };
-
-// // // Logic xử lý đăng nhập
-// if (account && account.Role === 'customer') {
-//   fetch(`${apiHeader}/Customer/${account.UserID}`, {
-//     method: "GET",
-//     headers: {
-//       "Content-type": "application/json; charset=UTF-8",
-//       Authorization: `Bearer ${localStorage.getItem("token")}`,
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       setIsLoading(false);
-//       console.log(data);
-//       localStorage.setItem("customer", JSON.stringify(data));
-//       navigate("/");
-//     });
-// }

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./DiamondDetailComponent.scss";
 
-import { Col, Row, notification, Flex } from "antd";
+import { Col, Row, notification, Flex, Button, Modal } from "antd";
 import { Link } from "react-router-dom";
-import Modal from "../modal/Modal";
+import CustomModal from "../modal/Modal";
 import { disableScroll } from "../disableScroll";
-import { jwtDecode } from "jwt-decode";
-import { apiHeader } from "../urlApiHeader";
+
 import Image from "./../Image";
+import GiaReport from './../GIAreport/GiaReport';
 function DiamondDetailComponent({ product }) {
+  console.log(product);
+  const [modal2Open, setModal2Open] = useState(false);
+
   const [show, setShow] = useState(false);
   const openModal = () => {
     setShow(true);
@@ -21,7 +24,6 @@ function DiamondDetailComponent({ product }) {
   const url = window.location.href;
   const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
  
-
   return (
     <div className="detail" style={{marginTop:'70px'}}>
       <Row className="summary" gutter={[20, 16]}>
@@ -36,12 +38,12 @@ function DiamondDetailComponent({ product }) {
           </Col>
           <Col span={24}>
             <div className="summary__img">
-              <Image src={"/" + product.shape} />
+              <img src={`/${product.shape}.jpg`} alt="" />
             </div>
           </Col>
           <Col span={24}>
             <div className="summary__album">
-              <Image src={"/" + product.shape} />
+              <img src={`/${product.shape}.jpg`} alt="" />
             </div>
           </Col>
           <Col span={24} className="summary__action">
@@ -52,54 +54,30 @@ function DiamondDetailComponent({ product }) {
                   alt=""
                 />
               </Flex>
-              <div className="summary__action-name">GIA Report</div>
+              <div className="summary__action-name" onClick={()=> setModal2Open(true)}>GIA Report</div>
             </div>
           </Col>
           <Col className="summary__table">
             <table class="details-table">
               <tr>
                 <th>Shape</th>
-                <td>Pear</td>
+                <td>{product.shape}</td>
               </tr>
               <tr>
                 <th>Color</th>
-                <td>G</td>
+                <td>{product.color}</td>
               </tr>
               <tr>
                 <th>Clarity</th>
-                <td>VS1</td>
+                <td>{product.clarity}</td>
+              </tr>
+              <tr>
+                <th>Cut</th>
+                <td>{product.cut}</td>
               </tr>
               <tr>
                 <th>Carat Weight</th>
-                <td>1.00</td>
-              </tr>
-              <tr>
-                <th>Fluorescence</th>
-                <td>Strong</td>
-              </tr>
-              <tr>
-                <th>Length/Width Ratio</th>
-                <td>1.56</td>
-              </tr>
-              <tr>
-                <th>Depth %</th>
-                <td>62.6</td>
-              </tr>
-              <tr>
-                <th>Table %</th>
-                <td>62.0</td>
-              </tr>
-              <tr>
-                <th>Symmetry</th>
-                <td>Excellent</td>
-              </tr>
-              <tr>
-                <th>Girdle</th>
-                <td>Thick to Very Thick</td>
-              </tr>
-              <tr>
-                <th>Measurements</th>
-                <td>8.59x5.5x3.44 mm</td>
+                <td>{product.caratWeight}</td>
               </tr>
               <tr>
                 <th>Certificate</th>
@@ -135,7 +113,7 @@ function DiamondDetailComponent({ product }) {
                 <span>Free Overnight Shipping, Hassle-Free Returns</span>
               </div>
 
-              <i class="fa-regular fa-heart right__wishlist"></i>
+              {/* <i class="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
           <Col span={24} className="right__tag-container">
@@ -166,7 +144,7 @@ function DiamondDetailComponent({ product }) {
             <button onClick={() => openModal()} className="right__button">
               Select This Diamond
             </button>
-            <button className="right__button">Consult Expert</button>
+            <button className="right__button" style={{opacity:0}}>Consult Expert</button>
           </Col>
           <Col span={24} className="include">
             <div className="include__header">Your Order Include:</div>
@@ -196,7 +174,7 @@ function DiamondDetailComponent({ product }) {
                 <h5 className="include__title">Free Return</h5>
                 <div className="include__text">
                   Our commitment to you does not end at delivery. We offer free
-                  returns (U.S and Canada) to make your experience as easy as
+                  returns to make your experience as easy as
                   possible.
                 </div>
               </div>
@@ -204,7 +182,22 @@ function DiamondDetailComponent({ product }) {
           </Col>
         </Col>
       </Row>
-      <Modal show={show} setShow={setShow} diamond={product}></Modal>
+      <CustomModal show={show} setShow={setShow} diamond={product}></CustomModal>
+      <Modal
+        title="GIA Report"
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
+        style={{minWidth: '1000px'}}
+        footer={[
+          <Button type="primary" key="back" onClick={()=>setModal2Open(false)}>
+            OK
+          </Button>
+        ]}
+      >
+        <GiaReport product={product}/>
+      </Modal>
     </div>
   );
 }

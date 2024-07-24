@@ -1,8 +1,10 @@
 // import { useDispatch, useSelector } from "react-redux";
+
 import { Link, Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 // import { increment } from "../redux/features/counterSlice";
 // import { useEffect } from "react";
 // import api from "./axios";
+
 import Homepage from "../pages/homepage/Homepage";
 import DiamondsIntro from "../pages/diamondsIntro/DiamondsIntro";
 import Header from "../components/header/Header";
@@ -32,7 +34,6 @@ import EduRingFind from "../components/eduRingFind/EduRingFind";
 import EduRingGuide from "../components/eduRingGuide/EduRingGuide";
 import PinCode from "../components/pinCode/PinCode";
 import Main from "../pages/dashboard/layout/main-dashboard/Main";
-import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
 import AdminPage from "../pages/admin/AdminPage";
 import OrderHistory from "../components/orderHistory/OrderHistory";
 import EngagementRingCatalog from "../pages/engagementRingCatalog/EngagementRingCatalog";
@@ -55,8 +56,37 @@ import CustomPendant from "../pages/customPendant/CustomerPendant";
 import CustomEarrings from "../pages/customEarrings/CustomEarrings";
 import OrderSuccess from "../pages/orderSuccess/OrderSuccess";
 import OrderFail from "../pages/orderFail/OrderFail";
+
 import PendantCatalog from "../pages/pendantCatalog/PendantCatalog";
 import EarringCatalog from "../pages/earringsCatalog/EarringCatalog";
+import StaffChat from "../pages/dashboard/pages/staffChat/staffChat";
+import OrdersStaff from "../pages/dashboard/pages/ordersStaff/OrdersStaff";
+import ForgotPasswordEmail from "../pages/forgotPasswordEmail/ForgotPasswordEmail";
+
+import ResetPassword from "../pages/resetPassword/ResetPassword";
+import LocationTracker from "../components/LocationTracker";
+import UsersManager from "../pages/dashboard/pages/usersManager/UsersManager";
+import DeliveryStaff from "../pages/dashboard/pages/deliveryStaff/DeliveryStaff";
+import ManangerProductDetail from "../pages/dashboard/pages/productsManager/manangerProductDetail/ManangerProductDetail";
+import ManagerDiamondCatalog from "./../pages/dashboard/pages/productsManager/managerDiamondCatalog/ManagerDiamondCatalog";
+
+import SendEmail from "../pages/dashboard/pages/staffChat/SendEmail";
+import SendRequest from "../pages/dashboard/pages/requestStaff/SendRequest";
+import ManangerAddProduct from "./../pages/dashboard/pages/productsManager/managerAddProduct/ManagerAddProduct";
+import CoversManager from "../pages/dashboard/pages/coversManager/CoversManager";
+import ManagerCoverDetail from "../pages/dashboard/pages/coversManager/ManagerCoverDetail/ManagerCoverDetail";
+import ManagerAddCover from "../pages/dashboard/pages/coversManager/ManagerAddCover/ManagerAddCover";
+import GiaAndWarranty from "../pages/GiaAndWarranty/GiaAndWarranty";
+import RequestStaff from "../pages/dashboard/pages/requestStaff/RequestStaff";
+import DiamondManager from "../pages/dashboard/pages/diamondManager/DiamondManager";
+import ManagerDiamondDetail from "../pages/dashboard/pages/diamondManager/ManagerDiamondDetail/ManagerDiamondDetail";
+import ManagerAddDiamond from "../pages/dashboard/pages/diamondManager/ManagerAddDiamond/ManagerAddDiamond";
+import RequestManager from "../pages/dashboard/pages/requestManager/RequestManager";
+import OrdersManager from "../pages/dashboard/pages/ordersManager/OrdersManager";
+import OrdersAdmin from "../pages/dashboard/pages/ordersAdmin/OrdersAdmin";
+import SaleStaff from "../pages/dashboard/pages/staffManager/SaleStaff";
+import DeliveryStaffManager from "../pages/dashboard/pages/staffManager/DeliveryStaffManager";
+import Feedback from "../pages/dashboard/pages/feedback/Feedback";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -69,23 +99,67 @@ const ProtectedRouteAuth = ({ children }) => {
 
 const ProtectedRouteCustomer = ({ children }) => {
   const user = useSelector(selectUser);
-  if (user?.Role === "admin" || user?.Role === "manager") {
+  if (
+    user?.Role === "admin" ||
+    user?.Role === "manager" ||
+    user?.Role === "salestaff" ||
+    user?.Role === "deliverystaff"
+  ) {
     alertFail("You do not have permission to access this page.");
     return <Navigate to="/dashboard" replace />;
   }
   return children;
 };
 
-const ProtectedADMIN = ({ children }) => {
+const ProtectedDashboard = ({ children }) => {
   const user = useSelector(selectUser);
   console.log(user);
+
+  const validRoles = ["admin", "manager", "salestaff", "deliverystaff"];
+
+  if (!validRoles.includes(user?.Role)) {
+    return <Navigate to="*" replace />;
+  }
+
+  return children;
+};
+
+const ProtectedRouteAdmin = ({ children }) => {
+  const user = useSelector(selectUser);
   if (user?.Role !== "admin") {
-    if (user?.Role !== "manager") {
-      return <Navigate to="*" replace />;
-    }
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
   }
   return children;
 };
+
+const ProtectedRouteManager = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "manager") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteSaleStaff = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "salestaff") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteDeliveryStaff = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "deliverystaff") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -93,6 +167,7 @@ export const router = createBrowserRouter([
       <div>
         <ScrollToTop />
         <Header />
+        <LocationTracker />
         <Outlet />
         <Footer />
       </div>
@@ -179,6 +254,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRouteCustomer>
             <CompleteProductPage />
+          </ProtectedRouteCustomer>
+        ),
+      },
+      {
+        path: "/certificate/:id",
+        element: (
+          <ProtectedRouteCustomer>
+            <GiaAndWarranty />
           </ProtectedRouteCustomer>
         ),
       },
@@ -364,6 +447,10 @@ export const router = createBrowserRouter([
           </ProtectedRouteCustomer>
         ),
       },
+      {
+        path: "/feedback",
+        element: <Feedback />,
+      },
     ],
   },
   {
@@ -379,49 +466,257 @@ export const router = createBrowserRouter([
     element: <PinCode />,
   },
   {
+    path: "/forgot-password",
+    element: <ForgotPasswordEmail />,
+  },
+  {
+    path: "/reset-password/:email",
+    element: <ResetPassword />,
+  },
+  {
     path: "*",
     element: <Page404 />,
   },
   {
     path: "/dashboard",
     element: (
-      <ProtectedADMIN>
+      <ProtectedDashboard>
         <Main />
-      </ProtectedADMIN>
+      </ProtectedDashboard>
     ),
     children: [
+      //manager
       {
         path: "/dashboard/manager",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteManager>
+            <OrdersManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/orders",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteManager>
+            <OrdersManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/voucher",
-        element: <VoucherManager />,
+        element: (
+          <ProtectedRouteManager>
+            <VoucherManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/products",
-        element: <ProductsManager />,
+        element: (
+          <ProtectedRouteManager>
+            <ProductsManager />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/product/:id",
+        element: (
+          <ProtectedRouteManager>
+            <ManangerProductDetail />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/diamonds",
+        element: (
+          <ProtectedRouteManager>
+            <DiamondManager />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/diamond/:id",
+        element: (
+          <ProtectedRouteManager>
+            <ManagerDiamondDetail />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/diamonds",
+        element: (
+          <ProtectedRouteManager>
+            <ManagerDiamondCatalog />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/diamond/add",
+        element: (
+          <ProtectedRouteManager>
+            <ManagerAddDiamond />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/product/add",
+        element: (
+          <ProtectedRouteManager>
+            <ManangerAddProduct />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/covers",
+        element: (
+          <ProtectedRouteManager>
+            <CoversManager />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/cover/:id",
+        element: (
+          <ProtectedRouteManager>
+            <ManagerCoverDetail />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/cover/add",
+        element: (
+          <ProtectedRouteManager>
+            <ManagerAddCover />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/requests",
+        element: (
+          <ProtectedRouteManager>
+            <RequestManager />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/salestaff",
+        element: (
+          <ProtectedRouteManager>
+            <SaleStaff />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/deliverystaff",
+        element: (
+          <ProtectedRouteManager>
+            <DeliveryStaffManager />
+          </ProtectedRouteManager>
+        ),
       },
 
+      //admin
       {
         path: "/dashboard/admin",
-        element: <AdminPage />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminPage />
+          </ProtectedRouteAdmin>
+        ),
+      },
+      {
+        path: "/dashboard/admin/orders",
+        element: (
+          <ProtectedRouteAdmin>
+            <OrdersAdmin />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/summary",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminPage />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/users",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteAdmin>
+            <UsersManager />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/transaction",
-        element: <AdminTransaction />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminTransaction />
+          </ProtectedRouteAdmin>
+        ),
+      },
+      //hiu
+      {
+        path: "/dashboard/salestaff/orders",
+        element: (
+          <ProtectedRouteSaleStaff>
+            <OrdersStaff />
+          </ProtectedRouteSaleStaff>
+        ),
+      },
+      {
+        path: "/dashboard/salestaff",
+        element: (
+          <ProtectedRouteSaleStaff>
+            <OrdersStaff />
+          </ProtectedRouteSaleStaff>
+        ),
+      },
+      {
+        path: "/dashboard/salestaff/view-inbox",
+        element: (
+          <ProtectedRouteSaleStaff>
+            <RequestStaff />
+          </ProtectedRouteSaleStaff>
+        ),
+      },
+      // {
+      //   path: "/dashboard/salestaff/send-mail",
+      //   element: <OrdersStaff/>,
+      // },
+      {
+        path: "/dashboard/salestaff/send-mail",
+        element: (
+          <ProtectedRouteSaleStaff>
+            <SendEmail />
+          </ProtectedRouteSaleStaff>
+        ),
+      },
+      {
+        path: "/dashboard/salestaff/send-request",
+        element: (
+          <ProtectedRouteSaleStaff>
+            <SendRequest />
+          </ProtectedRouteSaleStaff>
+        ),
+      },
+
+      {
+        path: "/dashboard/deliverytaff",
+        element: (
+          <ProtectedRouteDeliveryStaff>
+            <DeliveryStaff />
+          </ProtectedRouteDeliveryStaff>
+        ),
+      },
+      {
+        path: "/dashboard/deliverystaff/delivery",
+        element: (
+          <ProtectedRouteDeliveryStaff>
+            <DeliveryStaff />
+          </ProtectedRouteDeliveryStaff>
+        ),
       },
     ],
   },

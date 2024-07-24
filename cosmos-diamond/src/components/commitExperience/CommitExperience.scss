@@ -1,8 +1,7 @@
 .commit{
     max-width: 1440px;
-    width: 1440px;
     margin: auto;
-    
+    padding: 0 100px 0 100px;
     &__left{
         display: flex;
         flex-direction: column;

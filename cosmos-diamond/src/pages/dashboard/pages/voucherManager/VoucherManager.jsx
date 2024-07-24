@@ -1,245 +1,331 @@
+import React, { useEffect, useState } from "react";
 import {
-    Alert,
-    Button,
-    ConfigProvider,
-    Drawer,
-    Input,
-    Modal,
-    Select,
-    Space,
-    Table,
-    Tag,
-  } from "antd";
-  import React, { useEffect, useState } from "react";
-  import { IoPersonAddOutline } from "react-icons/io5";
-//   import "./OrdersManager.scss";
-  import { Form, Link, useNavigate } from "react-router-dom";
-  import api from "../../../../config/axios";
-  import TextArea from "antd/es/input/TextArea";
-  
-  import { IoMdAdd } from "react-icons/io";
-  import { MdOutlineBlock } from "react-icons/md";
-  import { GoDotFill } from "react-icons/go";
-import FormNewCategory from "../../../../components/formNewCategory/FormNewCategory";
-  
-  function VoucherManager() {
-    const [selectedValue, setSelectedValue] = useState(null);
-    const onChange1 = (selectedValue) => {
-      console.log(selectedValue);
-      if (selectedValue == null) {
-        setShowAlert(true);
-      } else {
-        console.log(`Selected value: ${selectedValue}`);
-        setSelectedValue(selectedValue);
-        setShowAlert(false);
-        setModal1Open(false);
-      }
-      
-    };
-    const onSearch = (value) => {
-      console.log("search:", value);
-    };
-  
-    const filterOption = (input, option) =>
-      (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-    const navigate = useNavigate();
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
-    const [status, setStatus] = useState(false);
-    const [allUsers, setAllUsers] = useState(false);
-    const [modal1Open, setModal1Open] = useState(false);
-    const [modal2Open, setModal2Open] = useState(false);
-    const [categoryEnum, setCategoryEnum] = useState("");
-    const [showAlert, setShowAlert] = useState(false);
-  
-  
-    // const onChange = (e) => {
-    //   setName(e.target.value);
-    // };
-  
-    // const data = [
-    //   {
-    //     id: "1",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //     categoryEnum:"ACTIVE"
-    //   },
-    //   {
-    //     id: "2",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //   },
-    //   {
-    //     id: "3",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //   },
-    //   {
-    //     id: "4",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //   },
-    //   {
-    //     id: "5",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //   },
-    //   {
-    //     id: "6",
-    //     price: "$200",
-    //     quantity: "123",
-    //     assign: "Yen Nhu",
-    //   },
-    // ];
-  
-    const saleStaff = [
-      {
-      
-        value: "1",
-        label: "Jack",
-      },
-      {
-        value: "2",
-        label: "Lucy",
-      },
-      {
-        value: "3",
-        label: "Tom",
-      },
-      {
-        value: "4",
-        label: "Henry",
-      },
-      {
-        value: "5",
-        label: "Tommy",
-      },
-    ];
+  Button,
+  Modal,
+  Input,
+  Table,
+  Form,
+  DatePicker,
+  Popconfirm,
+} from "antd";
+import { IoMdAdd } from "react-icons/io";
+import api from "../../../../config/axios";
+import TextArea from "antd/es/input/TextArea";
+import dayjs from "dayjs";
+import { alertSuccess, alertFail } from "../../../../hooks/useNotification";
+import { SlTrash } from "react-icons/sl";
+import "./VoucherManager.scss";
+
+function VoucherManager() {
+  const [vouchers, setVouchers] = useState([]);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const numberPattern = "/^[0-9\b]+$/";
+
+  const positiveNumberValidator = (_, value) => {
+    if (value <= 0) {
+      return Promise.reject(new Error("Value must be greater than zero!"));
+    }
+    return Promise.resolve();
+  };
+
+  const numberValidator = (_, value) => {
+    if (!numberPattern.test(value)) {
+      return Promise.reject(new Error("The value must be a valid number!"));
+    }
+    return Promise.resolve();
+  };
+
+  const [newVoucher, setNewVoucher] = useState({
+    topPrice: 0,
+    bottomPrice: 0,
+    description: "",
+    expDate: "",
+    quantity: 0,
+    rate: 0,
+    customerVouchers: [],
+  });
+
+  const columns = [
+    {
+      title: "Voucher ID",
+      dataIndex: "voucherId",
+      key: "voucherId",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Expiration date",
+      dataIndex: "expDate",
+      key: "expDate",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Rate",
+      dataIndex: "rate",
+      key: "rate",
+      render: (text) => <span>{text}%</span>, // Thêm ký hiệu % đằng sau giá trị của rate
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Popconfirm
+          title="Are you sure to delete this voucher?"
+          onConfirm={() => handleDelete(record.voucherId)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button>
+            <SlTrash />
+          </Button>
+        </Popconfirm>
+      ),
+    },
+  ];
+
+  const getVoucher = async () => {
+    try {
+      const response = await api.get("/get");
+      const data = response.data.$values;
+      setVouchers(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCancel = () => {
+    form.resetFields();
+    setIsCreateModalVisible(false);
+  };
+
+  const handleCreate = async () => {
+    try {
+      const response = await api.post("/api/Voucher", newVoucher);
+      alertSuccess("Voucher created successfully!");
+      getVoucher();
+      form.resetFields(); 
+      setIsCreateModalVisible(false);
+      setNewVoucher({
+        topPrice: 0,
+        bottomPrice: 0,
+        description: "",
+        expDate: "",
+        quantity: 0,
+        rate: 0,
+        customerVouchers: [],
+      });
+    } catch (e) {
+      alertFail("Fail to add a voucher!");
+      console.error("Error:", e);
+    }
+  };
+
+  const handleDelete = async (voucherId) => {
+    try {
+      await api.delete(`/api/Voucher/${voucherId}`);
+      alertSuccess("Voucher deleted successfully!");
+      setVouchers((prevVouchers) =>
+        prevVouchers.filter((voucher) => voucher.voucherId !== voucherId)
+      );
+    } catch (e) {
+      console.error("Error:", e);
+      alertFail("Failed to delete voucher!");
+    }
+  };
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf("day");
+  };
+
  
-  
-    const [update, setUpdate] = useState(false);
-  
-    const columns = [
-      {
-        title: "Voucher ID",
-        dataIndex: "voucherId",
-        key: "voucherId",
-        render: (text) => <a>{text}</a>,
-      },
-      {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        render: (text) => <a>{text}</a>,
-      },
-      {
-        title: "Expiration date",
-        dataIndex: "expDate",
-        key: "expDate",
-        render: (text) => <a>{text}</a>,
-      },
-      {
-        title: "Quantity",
-        dataIndex: "quantity",
-        key: "OrderQuantity",
-      },
-      {
-        title: "Rate",
-        dataIndex: "rate",
-        key: "rate",
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-      },
-    
-    ].filter((item) => !item.hidden);
-  
-    const getVoucher = async () => {
-      try {
-        const response = await api.get("/get");
-        const data = response.data.data;
-        console.log("Voucher: ", response.data.data)
-        if (!Array.isArray(data)) {
-          throw new Error("Dữ liệu nhận được không phải là mảng");
-        }
-        console.log(data);
-      
-      } catch (e) {
-        console.error(e);
-        alertFail(e.response?.data || e.message);
-      }
-    };
-  
-    // useEffect(() => {
-    //   getAllByRole();
-    // }, []);
-  
-    console.log();
-  
-    return (
-      <div className="mode">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+  useEffect(() => {
+    getVoucher();
+  }, []);
+
+  return (
+    <div className="mode">
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           style={{ backgroundColor: "white" }}
-          onClick={() => setStatus(true)}
+          onClick={() => setIsCreateModalVisible(true)}
           className="mode__createMod"
         >
-          Create New Product <IoMdAdd />
+          Create New Voucher <IoMdAdd />
         </Button>
       </div>
-{/* 
-      <FormNewCategory
-        // getAllByRole={getAllByRole}
-        status={status}
-        setStatus={setStatus}
-      /> */}
-        <Table
-          columns={columns}
-          // dataSource={data}
-          pagination={{
-            defaultPageSize: 5,
-            showSizeChanger: true,
-            pageSizeOptions: ["5"],
-          }}
-        />
-        {/* <Modal
-          title="Confirm delivery person"
-          centered
-          dataSource={data}
-          open={modal1Open}
-          footer={null}
-          onCancel={() => setModal1Open(false)}
-        >
-          <Form name="form_item_path" layout="vertical" onSubmit={onFinishActive}>
-            <label>Order ID</label>
-            <Input style={{ margin: "8px 0" }} value={id} disabled />
-            <label>Assign delivery staff</label>
-            <Select
-              showSearch
-              placeholder="Select a person"
-              optionFilterProp="children"
-              onChange={onChange1}
-              onSearch={onSearch}
-              filterOption={filterOption}
-              options={saleStaff}
-              style={{ width: "100%", margin: "8px 0" }}
+      <Table
+        columns={columns}
+        dataSource={vouchers}
+        pagination={{
+          defaultPageSize: 5,
+          showSizeChanger: false,
+          pageSizeOptions: ["5"],
+        }}
+      />
+      <Modal
+        title="Create a new voucher"
+        open={isCreateModalVisible}
+        onOk={handleCreate}
+        onCancel={handleCancel}
+        okText="Create"
+        cancelText="Cancel"
+      >
+        <Form form={form}>
+          <Form.Item
+            label="Top price"
+            name="topPrice"
+            rules={[
+              {
+                  required: true,
+                  message: 'Please input a number!',
+              },
+              {
+                  type: 'number',
+                  min: 0,
+                  message: 'Number must be greater than 0!',
+              },
+              {
+                pattern: /^[0-9]*$/,
+                message: 'Please input a valid number without letters or special characters!',
+              },
+          ]}
+          >
+            <Input
+              value={newVoucher.topPrice}
+              onChange={(e) =>
+                setNewVoucher({ ...newVoucher, topPrice: e.target.value })
+              }
             />
-            {showAlert && <Alert message="Please selected a staff." type="error" />}
-            <Button style={{ marginTop: "1em" }} type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form>
-        </Modal> */}
-      </div>
-    );
-  }
-  
-  export default VoucherManager;
-  
+          </Form.Item>
+          <Form.Item
+            label="Bottom price"
+            name="bottomPrice"
+            rules={[
+              {
+                required: true,
+                message: "Please input bottom price!",
+              },
+              {
+                validator: positiveNumberValidator
+              },
+              // {
+              //   validator: numberValidator
+              // },
+            ]}
+          >
+            <Input
+              value={newVoucher.bottomPrice}
+              onChange={(e) =>
+                setNewVoucher({ ...newVoucher, bottomPrice: e.target.value })
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: "Please input description!",
+              },
+            ]}
+          >
+            <TextArea
+              value={newVoucher.description}
+              onChange={(e) =>
+                setNewVoucher({ ...newVoucher, description: e.target.value })
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            label="Expiration Date"
+            name="expDate"
+            rules={[
+              {
+                required: true,
+                message: "Please select expiration date!",
+              },
+            ]}
+          >
+            <DatePicker
+              disabledDate={disabledDate}
+              value={newVoucher.expDate ? dayjs(newVoucher.expDate) : null}
+              onChange={(date, dateString) =>
+                setNewVoucher({ ...newVoucher, expDate: dateString })
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            label="Quantity"
+            name="quantity"
+            rules={[
+              {
+                required: true,
+                message: "Please input quantity!",
+              },
+              {
+                validator: positiveNumberValidator,
+              },
+              // {
+              //   validator: numberValidator
+              // },
+            ]}
+          >
+            <Input
+              value={newVoucher.quantity}
+              onChange={(e) =>
+                setNewVoucher({ ...newVoucher, quantity: e.target.value })
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            label="Rate"
+            name="rate"
+            rules={[
+              {
+                required: true,
+                message: "Please input rate!",
+              },
+              {
+                validator: positiveNumberValidator,
+              },
+              // {
+              //   validator: numberValidator
+              // },
+            ]}
+          >
+            <Input
+              value={newVoucher.rate}
+              onChange={(e) =>
+                setNewVoucher({
+                  ...newVoucher,
+                  rate: e.target.value.replace("%", ""),
+                })
+              }
+              addonAfter="%"
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
+  );
+}
+
+export default VoucherManager;

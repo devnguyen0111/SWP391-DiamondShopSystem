@@ -9,17 +9,35 @@ import {
   HeartOutlined,
   ShoppingCartOutlined,
   LogoutOutlined,
+  HistoryOutlined,
+  TruckOutlined,
 } from "@ant-design/icons";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Popover } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/features/counterSlice";
+import DropdownDiamondMain from "../dropdownDiamondMain/DropdownDiamondMain";
 
 const Header = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const text = <span>Title</span>;
+  const content = (
+    <div>
+      {user && (
+        <>
+          <Link to={`/profile/${user.UserID}`} style={{ display: "block" }}>
+            <UserOutlined /> Manage profile
+          </Link>
+          <Link to={`/orders-history`} style={{ display: "block" }}>
+            <TruckOutlined /> Order History
+          </Link>
+        </>
+      )}
+    </div>
+  );
   return (
     <header className="header-container">
       <div className="logo">
@@ -27,46 +45,23 @@ const Header = () => {
           <img src={img} alt="Cosmos Diamonds" />
         </Link>
       </div>
+
       <nav className="nav">
-        {/* <Popover placement="topLeft" title="" content={content}> */}
-        <Link to="/diamonds" className="nav-link">
-          {" "}
-          Diamonds
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
-        </Link>
-
-        {/* </Popover> */}
-
-        {/* <Dropdown overlay={menu} trigger={["hover"]}>
-          <Button
-            className="ant-dropdown-link"
-            onClick={(e) => e.preventDefault()}
-          >
-          //
-            Diamonds <DownOutlined />
-          </Button>
-        </Dropdown> */}
-
+        <DropdownDiamondMain />
         <Link to="/engagement-rings" className="nav-link">
           Engagement Rings{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
-        </Link>
-        <Link to="/ear-rings" className="nav-link">
-          Earrings{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
         <Link to="/pendant" className="nav-link">
           Pendant{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
         </Link>
-        <Link to="/jewelry" className="nav-link">
-          Jewelry{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
+        <Link to="/ear-rings" className="nav-link">
+          Earrings{" "}
         </Link>
-
         <Link to="/education" className="nav-link">
           Education{" "}
-          {/* <DownOutlined style={{ fontSize: "10px", marginLeft: "3px" }} />{" "} */}
+        </Link>
+        <Link to="/feedback" className="nav-link">
+          Feedback
         </Link>
       </nav>
       {/* <div className="search-bar">
@@ -81,16 +76,23 @@ const Header = () => {
               <ShoppingCartOutlined />
             </Link>
           </div>
-          <div className="pre_icon">
+          {/* <div className="pre_icon">
             <Link to="/wishlist">
               <HeartOutlined />
             </Link>
-          </div>
+          </div> */}
 
           <div className="pre_icon">
-            <Link to={`/profile/${user.UserID}`}>
+            {/* <Link to={`/profile/${user.UserID}`}>
               <UserOutlined />
-            </Link>
+            </Link> */}
+            <Popover
+              placement="bottomRight"
+              title={`Welcome, ${user.sub}`}
+              content={content}
+            >
+              <UserOutlined />
+            </Popover>
           </div>
           <div className="pre_icon" style={{ fontSize: "1em" }}>
             <Link

@@ -153,12 +153,12 @@ function ExploreDiamond({ version }) {
             >
               {diamonds02.map((diamond, index) => (
                 <SwiperSlide key={index}>
-                  <a href={diamond.href} className="carousel__item">
+                  <Link to={`/diamond-search?sortBy=${diamond.name}`} className="carousel__item">
                     <div className="item__img">
                       <img src={diamond.src}></img>
                     </div>
                     <div className="item__name">{diamond.name}</div>
-                  </a>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -194,12 +194,12 @@ function ExploreDiamond({ version }) {
             >
               {diamonds.map((diamond, index) => (
                 <SwiperSlide key={index}>
-                  <a href={diamond.href} className="carousel__item">
+                  <Link to={`/diamond-search?sortBy=${diamond.name}`} className="carousel__item">
                     <div className="item__img">
                       <img src={diamond.src}></img>
                     </div>
                     <div className="item__name">{diamond.name}</div>
-                  </a>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>

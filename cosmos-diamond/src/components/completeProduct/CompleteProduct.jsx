@@ -2,26 +2,30 @@ import React, { useEffect, useState } from "react";
 import "./CompleteProduct.scss";
 
 import { Col, Flex, Popover, Row, notification } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Stepper from "../stepper/Stepper";
 import { apiHeader } from "../urlApiHeader";
-import { jwtDecode } from "jwt-decode";
-import { token } from "../getToken";
+
+import api from "../../config/axios";
+import { useStateValue } from "../../Context/StateProvider";
+import { getToken } from "../getToken";
+import { alertFail } from "../../hooks/useNotification";
 
 function CompleteProduct() {
   const [cover, setCover] = useState();
   const [diamond, setDiamond] = useState();
-  const [api, contextHolder] = notification.useNotification();
-
+  const [api1, contextHolder] = notification.useNotification();
+  const nav = useNavigate();
+  const { setCheckout } = useStateValue();
   useEffect(() => {
     const coverSession = JSON.parse(sessionStorage.getItem("cover"));
     const diamondSession = JSON.parse(sessionStorage.getItem("diamond"));
     setCover(coverSession);
     setDiamond(diamondSession);
   }, []);
-  const openNotification = (placement, type) => {
+  const openNotification = (placement, type, text) => {
     if (type === "success") {
-      api.success({
+      api1.success({
         message: `Add to cart sucessfully`,
         description: <Link to={"/shopping-cart"}>View Cart</Link>,
         placement,
@@ -30,7 +34,7 @@ function CompleteProduct() {
         duration: 2,
       });
     } else if (type === "error") {
-      api.error({
+      api1.error({
         message: `Add to cart fail !`,
         description: "Some thing went wrong.",
         placement,
@@ -39,9 +43,18 @@ function CompleteProduct() {
         duration: 2,
       });
     } else if (type === "warning") {
-      api.warning({
-        message: `Add to cart fail !`,
-        description: <Link to={'/login'}>Please Login to Add To Cart.</Link>,
+      api1.warning({
+        message: text,
+        description: <Link to={"/login"}>Login</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    }else if (type === "in-cart") {
+      api1.warning({
+        message: 'This jewelry has already in Your Cart',
+        description: <Link to={`/shopping-cart`}>View Cart</Link >,
         placement,
         pauseOnHover: true,
         stack: true,
@@ -50,54 +63,121 @@ function CompleteProduct() {
     }
   };
   const createProduct = async () => {
-    const res = await fetch(`${apiHeader}/Product/confirm`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        coverId: cover.coverId,
-        metaltypeId: cover.metalId,
-        sizeId: cover.sizeId,
-        diamondId: diamond.diamondId,
-      }),
-    });
-    const data = await res.json();
-    console.log(data.productId);
-    return data.productId;
-  };
-
-  const handleAddToCart = async () => {
-    if (token) {
-      const productId = await createProduct();
-      const token = localStorage.getItem("token");
-      const cus = jwtDecode(token);
-      console.log(cus);
-      fetch(`${apiHeader}/Cart/addToCart`, {
+    try {
+      if (!cover || !diamond) {
+        throw new Error("Cover or diamond is not set");
+      }
+      const res = await fetch(`${apiHeader}/Product/confirm`, {
         method: "POST",
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
-          id: cus.UserID,
-          pid: productId,
+          coverId: cover.coverId,
+          metaltypeId: cover.metalId,
+          sizeId: cover.sizeId,
+          diamondId: diamond.diamondId,
         }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .finally(() => {
-          openNotification("topRight", "success");
-        })
-        .catch(() => {
-          openNotification("topRight", "error");
-        });
-    } else {
-      openNotification("topRight", 'warning');
+      });
+      if (res.status === 200) {
+        const data = await res.text();
+       
+        return data;
+      } else {
+        const data = res.responseText;
+        alertFail(data);
+      }
+    } catch (error) {
+      alertFail('Something went wrong, cannot custom Jewelry')
     }
   };
-  
+  // Get cart item
+  const fetchCart = async () => {
+    try {
+      let token = getToken();
+      if (token) {
+        const response = await fetch(`${apiHeader}/Cart/${token.UserID}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        return data;
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
+    }
+  };
+  const handleAddToCart = async () => {
+    let token = getToken();
+    if (token) {
+      const productId = await createProduct();
+
+      console.log(await fetchCart());
+      let res = await fetchCart();
+      let cartItem = res.items.$values.map((i) => i.pid);
+
+      if (cartItem.filter((i) => i == productId).length > 0) {
+        openNotification("topRight", "in-cart");
+      } else {
+        fetch(`${apiHeader}/Cart/addToCart`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            id: token.UserID,
+            pid: productId,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .finally(() => {
+            openNotification("topRight", "success");
+          })
+          .catch(() => {
+            openNotification("topRight", "error");
+          });
+      }
+    } else {
+      openNotification("topRight", "warning", "Please Login to add to Cart");
+    }
+  };
+
+  const buyNow = async () => {
+    const token = getToken();
+    if (token) {
+      try {
+        let productId = await createProduct();
+        console.log("2 productid", productId);
+        if (productId) {
+          console.log("3 productId", productId);
+          let response = await api.post(`/api/Order/checkoutInfo`, {
+            userId: token.UserID,
+            products: [
+              {
+                productId: productId,
+                quantity: 1,
+              },
+            ],
+          });
+          setCheckout(response.data);
+          localStorage.setItem("checkout", JSON.stringify(response.data));
+          nav(`/checkout/${token.UserID}`);
+        } else {
+          alertFail("No product Id returned from product creation");
+        }
+      } catch (e) {
+        console.error("Failed to process buy now", e);
+        alertFail("Something went wrong during the checkout process");
+      }
+    } else {
+      openNotification("topRight", "warning", "Please Login to Buy Now");
+    }
+  };
   return (
     <div className="detail" style={{ marginTop: "60px" }}>
       {contextHolder}
@@ -111,13 +191,13 @@ function CompleteProduct() {
 
           <Col span={24} className="complete__action">
             <div className="complete__item">
-              <Flex justify="center" className="sumarry__action-icon">
+              {/* <Flex justify="center" className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
                   alt=""
                 />
               </Flex>
-              <div className="complete__action-name">GIA Report</div>
+              <div className="complete__action-name">GIA Report</div> */}
             </div>
           </Col>
         </Col>
@@ -185,7 +265,6 @@ function CompleteProduct() {
                     <p className="right__detail-product__ring__name">
                       {cover && cover.name}
                     </p>
-                    
                   </div>
                 </Flex>
                 <p className="right__detail-product__ring__price">
@@ -197,7 +276,7 @@ function CompleteProduct() {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
-                  marginTop:'5px'
+                  marginTop: "5px",
                 }}
                 className="right__detail-product__diamond"
               >
@@ -250,7 +329,9 @@ function CompleteProduct() {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">Buy now</button>
+            <button className="right__button" onClick={buyNow}>
+              Buy now
+            </button>
             <button className="right__button" onClick={handleAddToCart}>
               Add to cart
             </button>

@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Col, Row, Select, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { apiHeader } from "../urlApiHeader";
+import api from "./../../config/axios";
+import { alertFail } from './../../hooks/useNotification';
 
 const CoverDetail = () => {
   const [cover, setCover] = useState({});
@@ -18,6 +20,7 @@ const CoverDetail = () => {
   const url = window.location.href;
   const coverId = url.slice(url.lastIndexOf("/") + 1, url.length);
   const nav = useNavigate();
+  //Get cover detal
   useEffect(() => {
     fetch(`${apiHeader}/Cover/getCoverDetail?id=${coverId}`)
       .then((res) => res.json())
@@ -75,8 +78,8 @@ const CoverDetail = () => {
       })),
     [coverSize]
   );
-
-  const handleCoverSelect = () => {
+  // select cover
+  const handleCoverSelect = async () => {
     if (selectedMetal && selectedSize) {
       let selectedCover = {
         coverId: cover.coverId,
@@ -85,10 +88,22 @@ const CoverDetail = () => {
         name: cover.name + " " + selectedMetal.name,
         sizeId: selectedSize.sizeId,
         metalId: selectedMetal.metalId,
-        categoryId: cover.categoryId
+        categoryId: cover.categoryId,
       };
-      sessionStorage.setItem("cover", JSON.stringify(selectedCover));
-      nav("/custom-ring-by-diamond/complete-product");
+      console.log(selectedCover);
+      //Check out of stock
+      fetch(
+        `${apiHeader}/Cover/CheckForInventory?coverId=${cover.coverId}&metalTypeid=${selectedMetal.metalId}&sizeId=${selectedSize.sizeId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data) {
+            sessionStorage.setItem("cover", JSON.stringify(selectedCover));
+            nav("/custom-ring-by-diamond/complete-product");
+          } else {
+            alertFail(`Sorry but ${selectedCover.name} is out of stock. Please Choose another Metal Type or Size`)
+          }
+        });
     } else {
       openNotification();
     }
@@ -185,7 +200,7 @@ const CoverDetail = () => {
                 <span>Free Overnight Shipping, Hassle-Free Returns</span>
               </div>
 
-              <i className="fa-regular fa-heart right__wishlist"></i>
+              {/* <i className="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
           <Col span={24} className="right__price-wrapper">

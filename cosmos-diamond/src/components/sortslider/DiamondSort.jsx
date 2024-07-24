@@ -1,29 +1,35 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./DiamondSort.scss";
-import "./DiamondList.scss";
-import { Link } from "react-router-dom";
-import { Row, Col, Select } from "antd";
-import ReactSlider from "react-slider";
+import React, { useEffect, useState, useCallback } from "react";
+import { Row, Col, Select, Pagination, Card, Modal, Input } from "antd";
+
 import SortPriceSlider from "./SortPriceSlider";
 import SortCaratSlider from "./SortCaratSlider";
 import SortColorSlider from "./SortColorSlider";
 import SortClaritySlider from "./SortClaritySlider";
 import SortCutSlider from "./SortCutSlider";
 import { diamonds } from "./Diamonds";
-import Image from "../Image";
-import { length } from "./../../../node_modules/stylis/src/Tokenizer";
+
+import "./DiamondSort.scss";
 import { apiHeader } from "../urlApiHeader";
+import api from "../../config/axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
-const MIN_PRICE = 0;
-const MAX_PRICE = 50000;
-const MIN_CARAT = 0.05;
-const MAX_CARAT = 30.0;
-const INIT_CLARITY = ["SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF", "FL"];
-const INIT_COLOR_NAME = ["K", "J", "I", "H", "G", "F", "E", "D"];
-const INIT_CUT = ["Good", "Very Good", "Ideal", "Astor Ideal"];
-let url;
-
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function DiamondSort() {
+  const query = useQuery();
+
+  const nav = useNavigate()
+  let shape = query.get("sortBy");
+  const MIN_PRICE = 0;
+  const MAX_PRICE = 50000;
+  const MIN_CARAT = 0.05;
+  const MAX_CARAT = 8.0;
+  const INIT_CLARITY = ["SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF", "FL"];
+  const INIT_COLOR_NAME = ["K", "J", "I", "H", "G", "F", "E", "D"];
+  const INIT_CUT = ["Good", "Very Good", "Ideal", "Astor Ideal"];
+  const [selectedDiamond, setSelectedDiamond] = useState();
   const [price, setPrice] = useState([MIN_PRICE, MAX_PRICE]);
   const [carat, setCarat] = useState([MIN_CARAT, MAX_CARAT]);
   const [clarity, setClarity] = useState([1, 9]);
@@ -33,16 +39,25 @@ function DiamondSort() {
   const [cut, setCut] = useState([1, 5]);
   const [cutName, setCutName] = useState(INIT_CUT);
   const [diamondList, setDiamondList] = useState([]);
-  const [diamondShape, setDiamondShape] = useState("Round");
-  const [pageSize, setPageSize] = useState(16);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [diamondShape, setDiamondShape] = useState(shape || "Round");
+  const [pageSize, setPageSize] = useState(9);
+  const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder] = useState("desc");
+  const [amount, setAmount] = useState(0);
+  const [open1, setOpen1] = useState(false);
+  const [search, setSearch] = useState('')
   useEffect(() => {
     const shapes = document.querySelectorAll(".shape__block");
-    shapes[0].classList.add("chosen");
-    shapes.forEach((shape, index) => {
+    if (shape) {
+      const shapesArr = Array.from(shapes);
+      let i = shapesArr.findIndex((s) => s.innerText == shape);
+      shapes[i].classList.add("chosen");
+    } else {
+      shapes[0].classList.add("chosen");
+    }
+    shapes.forEach((shape) => {
       shape.addEventListener("click", (e) => {
         shapes.forEach((s) => s.classList.remove("chosen"));
         if (shape.contains(e.target)) {
@@ -52,80 +67,92 @@ function DiamondSort() {
       });
     });
   }, []);
+  //handle search
+  const handleSearch = (e)=>{
+    setSearch(e.target.value)
+    console.log(e.target.value);
+  }
+  //GET Diamond List
+  const fetchDiamonds = useCallback(async () => {
+    setIsLoading(true);
 
-  const fetchDiamonds = async () => {
-    let clarityURL = clarityName
+    const clarityURL = clarityName
       .map((cName) => `clarityRange=${cName}`)
       .join("&");
-    let colorURL = colorName.map((dname) => `colorRange=${dname}`).join("&");
-    let cutURL = cutName.map((dname) => `cutRange=${dname}`).join("&");
-    let minCaratURL = carat[0];
-    let maxCaratURL = carat[1];
-    let minPriceURL = price[0];
-    let maxPriceURL = price[1];
+    const colorURL = colorName.map((dname) => `colorRange=${dname}`).join("&");
+    const cutURL = cutName.map((dname) => `cutRange=${dname}`).join("&");
+    const minCaratURL = carat[0];
+    const maxCaratURL = carat[1];
+    const minPriceURL = price[0];
+    const maxPriceURL = price[1];
 
-    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}`;
+    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
 
-    const res = await fetch(url);
-    const data = await res.json();
-    console.log(data);
-    if (data.$values.length < pageSize) {
-      setHasMore(false);
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.diamonds.$values.length < pageSize) {
+        setHasMore(false);
+      }
+
+      setDiamondList(data.diamonds.$values);
+      setAmount(data.totalDiamond);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Failed to fetch diamonds", error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(true);
-    setDiamondList((pre) => [...pre, ...data.$values]);
-  };
-  //neu pageNumber tang, fetch them 16 san pham
-  useEffect(() => {
-    console.log(pageNumber);
-    if (hasMore) {
-      fetchDiamonds();
-    }
-  }, [pageNumber]);
-  //neu user sort, reset diamondList va pageNumber
+  }, [
+    clarityName,
+    colorName,
+    cutName,
+    carat,
+    price,
+    diamondShape,
+    pageNumber,
+    pageSize,
+    order,
+    amount,
+    search
+  ]);
+
   useEffect(() => {
     setDiamondList([]);
-    setPageNumber(0);
+    setPageNumber(1);
     fetchDiamonds();
-  }, [diamondShape, price, carat, clarity, color, cut, order]);
-
-  //tang pagenumber neu user keo gan toi hang san pham cuoi
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 800
-    ) {
-      setPageNumber((prev) => prev + 1);
-    }
-  };
+  }, [diamondShape, price, carat, clarity, color, cut, order, amount, search]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    fetchDiamonds();
+  }, [pageNumber, pageSize, fetchDiamonds, amount]);
 
   const handleOrder = (value) => {
     setOrder(value);
   };
+
   const resetFilter = () => {
-     setPrice([MIN_PRICE, MAX_PRICE]);
-     setCarat([MIN_CARAT, MAX_CARAT]);
-     setClarity([1, 9]);
-     setClarityName(INIT_CLARITY);
-     setColor([1, 9]);
-     setColorName(INIT_COLOR_NAME);
-     setCut([1, 5]);
-     setOrder("desc")
-     setDiamondList([])
-     setPageNumber(1)
-     setDiamondShape("Round")
-     const shapes = document.querySelectorAll(".shape__block");
-     shapes.forEach((s,i)=>{
-      s.classList.remove('chosen')
-     })
-     shapes[0].classList.add("chosen");
+    setPrice([MIN_PRICE, MAX_PRICE]);
+    setCarat([MIN_CARAT, MAX_CARAT]);
+    setClarity([1, 9]);
+    setClarityName(INIT_CLARITY);
+    setColor([1, 9]);
+    setColorName(INIT_COLOR_NAME);
+    setCut([1, 5]);
+    setOrder("desc");
+    setDiamondList([]);
+    setPageNumber(1);
+    setDiamondShape("Round");
+    const shapes = document.querySelectorAll(".shape__block");
+    shapes.forEach((s) => s.classList.remove("chosen"));
+    shapes[0].classList.add("chosen");
   };
+
+  const handlePageChange = (page, pageSize) => {
+    setPageNumber(page);
+    setPageSize(pageSize);
+  };
+
   return (
     <>
       <div className="sort">
@@ -142,7 +169,7 @@ function DiamondSort() {
                     >
                       <img
                         src={diamond.src}
-                        alt=""
+                        alt={diamond.name}
                         style={{ width: "100%", height: "100%" }}
                       />
                     </div>
@@ -196,10 +223,10 @@ function DiamondSort() {
               INIT_CUT={INIT_CUT}
             />
           </Col>
-          <Col span={24}className="sort__reset">
-            <button className="sort__btn--reset">
-              <i class="fa-solid fa-arrow-rotate-right"></i>
-              <span onClick={resetFilter}>Reset Filters</span>
+          <Col span={24} className="sort__reset">
+            <button className="sort__btn--reset" onClick={resetFilter}>
+              <i className="fa-solid fa-arrow-rotate-right"></i>
+              <span>Reset Filters</span>
             </button>
           </Col>
           <Col span={24}>
@@ -226,9 +253,8 @@ function DiamondSort() {
                         },
                       ]}
                     />
-                    
                   </div>
-                  
+                  <Input onChange={handleSearch} value={search} placeholder='Search by Diamond Code' style={{width:'30%'}} addonBefore={<SearchOutlined />}/>
                 </div>
                 <div className="list__product">
                   <Row gutter={[13, 21]}>
@@ -236,18 +262,28 @@ function DiamondSort() {
                       diamondList.map((diamond, index) => (
                         <Col
                           span={6}
-                          xs={12} md={8} lg={6}
+                          xs={12}
+                          md={8}
+                          lg={6}
                           className="product__container"
                           key={index}
                         >
-                          <Link
-                            to={`/Diamond/${diamond.diamondId}`}
-                            className="product__wrapper"
+                          <Card
+                            hoverable
+                            style={{
+                              width: 240,
+                            }}
+                            cover={
+                              <img
+                                alt="example"
+                                src={`/${diamond.shape}.jpg`}
+                              />
+                            }
+                            onClick={() =>
+                              nav(`/Diamond/${diamond.diamondId}`)
+                            }
                           >
-                            <div className="product__img">
-                              <Image src={diamond.shape} />
-                            </div>
-                            <div className="product__info">
+                            <div className="product__info1">
                               <div className="product__name">
                                 {diamond.diamondName}
                               </div>
@@ -255,10 +291,18 @@ function DiamondSort() {
                                 ${diamond.price}
                               </div>
                             </div>
-                          </Link>
+                          </Card>
                         </Col>
                       ))}
                   </Row>
+                  <Pagination
+                    showSizeChanger
+                    onChange={handlePageChange}
+                    current={pageNumber}
+                    pageSize={pageSize}
+                    total={amount && amount}
+                    style={{ marginTop: "16px" }}
+                  />
                 </div>
               </div>
             </>
@@ -268,4 +312,5 @@ function DiamondSort() {
     </>
   );
 }
+
 export default DiamondSort;

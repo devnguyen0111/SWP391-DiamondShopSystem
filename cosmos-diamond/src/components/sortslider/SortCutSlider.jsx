@@ -6,9 +6,7 @@ function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
 
 
 
-  const handlerCutChange = (newCut) => {
-    setCut(newCut);
-  };
+
 
   //Set cutName array to sort
   useEffect(() => {
@@ -42,7 +40,7 @@ function SortCutSlider({cut, setCut, cutName, setCutName, INIT_CUT}) {
             value={cut}
             marks
             markClassName="cut-mark"
-            onChange={handlerCutChange}
+            onAfterChange={(value)=>setCut(value)}
             minDistance={1}
           />
         </div>

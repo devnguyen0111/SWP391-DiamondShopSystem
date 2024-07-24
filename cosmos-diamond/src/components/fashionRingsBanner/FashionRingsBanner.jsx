@@ -7,7 +7,7 @@ function FashionRingsBanner() {
     return (
             <div className='fsrContent'>
                 <div className='fsrContent__inform'>
-                    <h3 className='fsrContent__inform__intro'>fashion rings</h3>
+                    <h3 className='fsrContent__inform__intro'>fashion design</h3>
                     <h1 className='fsrContent__inform__title'>Outshines in Every Setting</h1>
                     <h5 className='fsrContent__inform__subtitle'>Superior brilliance is in the cut. Discover the brightest diamonds in our collection, <br/> crafted by highly skilled artisans to outshine the rest.
                     </h5>

@@ -1,82 +1,82 @@
 import { useEffect, useState, useCallback } from "react";
 import Banner from "../../components/banner/Banner";
 import SettingDropDownGroup from "../../components/sortSettingDropdownButton/sortSettingDropDownButton";
-import { Col, Divider, Dropdown, Flex, Row, Select, Space, Spin } from "antd";
+import {
+  Col,
+  Divider,
+  Dropdown,
+  Empty,
+  Flex,
+  Input,
+  Pagination,
+  Row,
+  Select,
+  Space,
+  Spin,
+} from "antd";
 import "./EngagementRingCatalog.scss";
 import { Link } from "react-router-dom";
 import { apiHeader } from "../../components/urlApiHeader";
 import { debounce } from "lodash";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function EngagementRingCatalog() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(16);
+  const [amount, setAmount] = useState(1)
   const [ringList, setRingList] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
+ 
   const [loading, setLoading] = useState(false);
   const [metalType, setMetalType] = useState([]);
   const [size, setSize] = useState([]);
   const [shape, setShape] = useState([]);
-  // const [order, setOrder] = useState('asc')
-  //fetch product
+  const [order, setOrder] = useState("desc");
+  const [search, setSearch] = useState("")
+  // fetch product
   const [price, setPrice] = useState([0, 50000]);
 
-  const fetchEngagementRing = async () => {
-    setLoading(true);
+  const fetchEngagementRing = async (reset = false) => {
+    
     try {
+      setLoading(true);
       let urlSize = size.map((s) => `sizeIds=${s}`).join("&");
       let urlMetal = metalType.map((m) => `metaltypeIds=${m}`).join("&");
       let urlShape = shape.map((shape) => `diamondShapes=${shape}`).join("&");
-      let url = `${apiHeader}/Product/getFilteredProductAd?categoryId=1&subCategoryId=1&${urlSize}&${urlMetal}&${urlShape}&pageNumber=${pageNumber}&pageSize=${pageSize}&minPrice=${price[0]}&maxPrice=${price[1]}`;
+      let url = `${apiHeader}/Product/getFilteredProductAd?categoryId=1&subCategoryId=1&${urlSize}&${urlMetal}&${urlShape}&pageNumber=${pageNumber}&pageSize=${pageSize}&minPrice=${price[0]}&maxPrice=${price[1]}&sortOrder=${order}&diamondCode=${search}`;
       console.log(url);
       const res = await fetch(url);
       const data = await res.json();
-      if (data.$values.length < pageSize) {
-        setHasMore(false);
-        setRingList((prev) => [...prev, ...data.$values]);
-      }
-      console.log(data);
-      setRingList((prev) => [...prev, ...data.$values]);
+      setAmount(data.totalProduct)
+      setRingList(data.filteredProducts1.$values);
     } catch (error) {
       console.error("Failed to fetch data", error);
+      setLoading(false);
+
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (hasMore) {
-      fetchEngagementRing();
-    }
+    fetchEngagementRing();
   }, [pageNumber]);
-
-  const handleScroll = useCallback(
-    debounce(() => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 3000
-      ) {
-        setPageNumber((prevPageNumber) => prevPageNumber + 1);
-      }
-    }, 300),
-    []
-  );
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
 
   useEffect(() => {
     setRingList([]);
     setPageNumber(1);
-    fetchEngagementRing();
-  }, [size, metalType, shape, price]);
-  // const handleOrder = (value)=>{
-  //   setOrder(value)
-  // }
+    fetchEngagementRing(true);
+  }, [size, metalType, shape, price, order, search]);
+  const handleOrder = (value) => {
+    setOrder(value);
+  };
+
+  const handlePageChange = (page, pageSize) => {
+    setPageNumber(page);
+    setPageSize(pageSize);
+  };
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
   return (
     <>
       <Banner
@@ -94,63 +94,88 @@ function EngagementRingCatalog() {
           size={{ size, setSize }}
           metalType={{ metalType, setMetalType }}
           shape={{ shape, setShape }}
-          category="Ring"
+          category={1}
           price={price}
           setPrice={setPrice}
         />
+        <Input style={{width: '300px', height: '70%'}} placeholder="Search by Diamond Code" value={search} onChange={handleSearch}/>
       </Flex>
 
       <div className="list" style={{ width: "100%" }}>
-        {/* <div className="list__order">
-          <span style={{color:'#333'}}>Sort by:</span>
-        <Select
-          defaultValue= 'Best seller'
-          style={{
-            width: 120,
-            marginLeft: '12px'
-          }}
-          onChange={handleOrder}
-          options={[
-            {
-              value: "asc",
-              label: "Best seller",
-            },
-            {
-              value: "desc",
-              label: "High to Low",
-            },
-            {
-              value: "asc",
-              label: "Low to High",
-            },
-          ]}
-        />
-        </div> */}
+        <div className="list__order">
+          <span style={{ color: "#333" }}>Sort by:</span>
+          <Select
+            defaultValue="High to Low"
+            style={{
+              width: 120,
+              marginLeft: "12px",
+            }}
+            onChange={handleOrder}
+            options={[
+              {
+                value: "desc",
+                label: "High to Low",
+              },
+              {
+                value: "asc",
+                label: "Low to High",
+              },
+            ]}
+          />
+        </div>
         <Divider></Divider>
         <Row gutter={[13, 21]}>
-          {ringList.map((ring, index) => (
-            <Col span={6} className="product__container" key={index}>
-              <Link
-                to={`/Product/${ring.productId}`}
-                className="product__wrapper"
+        {!loading ? (
+            ringList.length > 0 ? (
+              ringList.map((ring, index) => (
+                <Col span={6} className="product__container" key={index}>
+                  <Link
+                    to={`/Product/${ring.productId}`}
+                    className="product__wrapper"
+                  >
+                    <div className="product__img">
+                      <img src={ring.imgUrl} alt={ring.productName} />
+                      {/* <i className="fa-regular fa-heart list__wishlist"></i> */}
+                    </div>
+                    <div className="product__info">
+                      <div className="product__name">{ring.productName}</div>
+                      <div className="product__price">${ring.unitPrice}</div>
+                    </div>
+                  </Link>
+                </Col>
+              ))
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
               >
-                <div className="product__img">
-                  <img src={ring.imgUrl} alt={ring.productName} />
-                  <i className="fa-regular fa-heart list__wishlist"></i>
-                </div>
-                <div className="product__info">
-                  <div className="product__name">{ring.productName}</div>
-                  <div className="product__price">${ring.unitPrice}</div>
-                </div>
-              </Link>
-            </Col>
-          ))}
+                <Empty description="There is no ring found" />
+              </div>
+            )
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <LoadingOutlined style={{fontSize:'60px'}} />
+            </div>
+          )}
         </Row>
-        {loading && (
-          <div style={{ textAlign: "center" }} className="loading-spinner">
-            <Spin size="large" />
-          </div>
-        )}
+
+        <Pagination
+          showSizeChanger
+          onChange={handlePageChange}
+          current={pageNumber}
+          pageSize={pageSize}
+          total={amount}
+          style={{ marginTop: "16px" }}
+        />
       </div>
     </>
   );

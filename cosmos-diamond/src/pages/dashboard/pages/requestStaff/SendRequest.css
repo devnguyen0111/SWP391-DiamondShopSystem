@@ -1,0 +1,52 @@
+.request-container {
+  width: 95%;
+  margin: 0 auto;
+  /* border: 1px solid #d9d9d9;
+  border-radius: 4px; */
+  padding: 4em;
+
+  /* background-color: #fff; */
+}
+
+/* .div-ant {
+  overflow-y: scroll !important;
+} */
+
+.request-field {
+  margin-bottom: 16px;
+}
+
+.request-select {
+  width: 100%;
+}
+
+.reason-input {
+  min-height: 200px;
+  margin-bottom: 16px;
+  background-color: white;
+}
+
+.file-upload {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.ql-editor {
+  height: 180px !important;
+}
+
+.ql-container {
+  background-color: white !important;
+}
+
+.titleRequest {
+  font-size: 2em;
+  font-family: "Gantari";
+  color: black;
+  margin-bottom: 0.7em;
+}

@@ -1,62 +1,132 @@
 import React, { useEffect, useState } from "react";
 import "./ProductDetail.scss";
 import Stepper from "../stepper/Stepper";
-import { Col, Row, notification } from "antd";
+import { Button, Col, Flex, Modal, Row, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import Modal from "../modal/Modal";
-import { disableScroll } from "../disableScroll";
 import { jwtDecode } from "jwt-decode";
 import { apiHeader } from "../urlApiHeader";
+import { useStateValue } from "../../Context/StateProvider";
+import { getToken, token } from "./../getToken";
+import api from "./../../config/axios";
+import { alertFail } from "../../hooks/useNotification";
+import GiaReport from "../GIAreport/GiaReport";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+
 function ProductDetail({ product }) {
   // const [show, setShow] = useState(false)
   // const openModal = () => {
   //   setShow(true);
   //   disableScroll()
   // };
-  const nav = useNavigate()
-  const addToCart = () => {
+  const { checkout, setCheckout } = useStateValue();
+  const nav = useNavigate();
+  const [modal2Open, setModal2Open] = useState(false);
+  console.log(product);
+  const addToCart = async () => {
     const url = window.location.href;
-    const productId = url.slice(url.lastIndexOf("/")+1, url.length);
-    const token = jwtDecode(localStorage.getItem("token"))
-    console.log(token);
-    const customerId = token.UserID;
-    if (customerId) {
-      fetch(
-        `${apiHeader}/Cart/addToCart`,
-        {
+    const productId = url.slice(url.lastIndexOf("/") + 1, url.length);
+    const token = getToken();
+    if (token) {
+      let res = await fetchCart();
+      let cartItem = res.items.$values;
+      if (cartItem.filter((item) => item.pid == productId).length > 0) {
+        openNotification("topRight", "in-cart");
+      } else {
+        fetch(`${apiHeader}/Cart/addToCart`, {
           method: "POST",
           headers: {
             "Content-type": "application/json; charset=UTF-8",
-            
           },
           body: JSON.stringify({
-            id: customerId,
+            id: token.UserID,
             pid: productId,
           }),
-        }
-      ).then(openNotification('topRight'))
+        })
+          .then(openNotification("topRight", "success"))
+          .catch(() => {
+            alertFail("Cannot add to Cart, Please try again");
+          });
+      }
+    } else {
+      openNotification("topRight", "warning");
     }
   };
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (placement) => {
-    api.success({
-      message: `Add to cart sucessfully`,
-      description:
-        <Link to={'/shopping-cart'}>View Cart</Link>,
-      placement,
-      pauseOnHover: true,
-      stack: true,
-      duration: 2
-    });
+  //get cart itme
+  const fetchCart = async () => {
+    try {
+      let token = getToken();
+      if (token) {
+        const response = await fetch(`${apiHeader}/Cart/${token.UserID}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        return data;
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
+    }
   };
+  const [api2, contextHolder] = notification.useNotification();
+  const openNotification = (placement, type) => {
+    if (type == "success") {
+      api2.success({
+        message: `Add to cart sucessfully`,
+        description: <Link to={"/shopping-cart"}>View Cart</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    } else if (type == "warning") {
+      api2.warning({
+        message: `You need to Login first`,
+        description: <Link to={"/login"}>Login</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    } else if (type === "in-cart") {
+      api2.warning({
+        message: "This jewelry has already in Your Cart",
+        description: <Link to={`/shopping-cart`}>View Cart</Link>,
+        placement,
+        pauseOnHover: true,
+        stack: true,
+        duration: 2,
+      });
+    }
+  };
+  const buyNow = async () => {
+    const token = getToken();
 
+    if (token) {
+      let response = await api.post(`${apiHeader}/Order/checkoutInfo`, {
+        userId: token.UserID,
+        products: [
+          {
+            productId: product.productId,
+            quantity: 1,
+          },
+        ],
+      });
+      setCheckout(response.data);
+      localStorage.setItem("checkout", JSON.stringify(response.data));
+      nav(`/checkout/${token.UserID}`);
+    } else {
+      openNotification("topRight", "warning");
+    }
+  };
   return (
     <div className="detail">
       {contextHolder}
       <Row className="summary" gutter={[20, 16]}>
         <Col span={12} className="summary__left">
           <Col span={24}>
-            <div onClick={()=> nav(-1)} className="summary__navigator">
+            <div onClick={() => nav(-1)} className="summary__navigator">
               <i class="fa-solid fa-chevron-left"></i>
               <span className="" style={{ marginLeft: "4px" }}>
                 Back to gallery
@@ -65,76 +135,56 @@ function ProductDetail({ product }) {
           </Col>
           <Col span={24}>
             <div className="summary__img">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <img src={product.imgUrl} alt="" />
             </div>
           </Col>
           <Col span={24}>
             <div className="summary__album">
-              <img
-                src="https://dam.bluenile.com/images/public/5500/Pave_Settings.webp"
-                alt=""
-              />
+              <img src={product.imgUrl} alt="" />
             </div>
           </Col>
           <Col span={24} className="summary__action">
-            <div className="summary__item">
+            <Flex
+              justify="center"
+              vertical
+              align="center"
+              className="summary__item"
+            >
               <div className="sumarry__action-icon">
                 <img
                   src="https://ecommo--ion.bluenile.com/static-diamonds-bn/GIALogo.df3f5.png"
                   alt=""
                 />
               </div>
-              <div className="summary__action-name">GIA Report</div>
-            </div>
+              <div
+                className="summary__action-name"
+                onClick={() => setModal2Open(true)}
+              >
+                GIA Report
+              </div>
+            </Flex>
           </Col>
           <Col className="summary__table">
             <table class="details-table">
               <tr>
                 <th>Shape</th>
-                <td>Pear</td>
+                <td>{product.shape}</td>
               </tr>
               <tr>
                 <th>Color</th>
-                <td>G</td>
+                <td>{product.color}</td>
               </tr>
               <tr>
                 <th>Clarity</th>
-                <td>VS1</td>
+                <td>{product.clarity}</td>
               </tr>
               <tr>
                 <th>Carat Weight</th>
-                <td>1.00</td>
+                <td>{product.carat}</td>
               </tr>
               <tr>
-                <th>Fluorescence</th>
-                <td>Strong</td>
-              </tr>
-              <tr>
-                <th>Length/Width Ratio</th>
-                <td>1.56</td>
-              </tr>
-              <tr>
-                <th>Depth %</th>
-                <td>62.6</td>
-              </tr>
-              <tr>
-                <th>Table %</th>
-                <td>62.0</td>
-              </tr>
-              <tr>
-                <th>Symmetry</th>
-                <td>Excellent</td>
-              </tr>
-              <tr>
-                <th>Girdle</th>
-                <td>Thick to Very Thick</td>
-              </tr>
-              <tr>
-                <th>Measurements</th>
-                <td>8.59x5.5x3.44 mm</td>
+                <th>Cut</th>
+                <td>{product.cut}</td>
               </tr>
               <tr>
                 <th>Certificate</th>
@@ -146,7 +196,6 @@ function ProductDetail({ product }) {
         <Col span={12} className="right">
           <Col span={24} className="right__name">
             {product && product.productName}
-            
           </Col>
 
           <Col span={24}>
@@ -171,16 +220,93 @@ function ProductDetail({ product }) {
                 <span>Free Overnight Shipping, Hassle-Free Returns</span>
               </div>
 
-              <i class="fa-regular fa-heart right__wishlist"></i>
+              {/* <i class="fa-regular fa-heart right__wishlist"></i> */}
             </div>
           </Col>
-          <Col span={24} className="right__tag-container">
-            <div className="right__tag-wrapper">
-              <div className="right__tag">VS1</div>
-              <div className="right__tag">Very Good</div>
-              <div className="right__tag">0.3</div>
-              <div className="right__tag"></div>
+          <Col span={24} className="right__detail-product">
+            <div>
+              <h1>Complete Jewelry:</h1>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+                className="right__detail-product__ring"
+              >
+                <Flex className="">
+                  <svg
+                    viewBox="0 2 26 15"
+                    fill="none"
+                    width={"25px"}
+                    height={35}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10 5.878c-4.694 0-8.5 3.833-8.5 8.56C1.5 19.169 5.306 23 10 23s8.5-3.833 8.5-8.561-3.806-8.561-8.5-8.561Zm0 0L4.673 1M10 5.878 15.327 1"
+                      stroke="#151542"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div>
+                    <p className="right__detail-product__ring__name">
+                      {product && `#${product.coverId} ${product.coverName}`}
+                    </p>
+                  </div>
+                </Flex>
+                <p className="right__detail-product__ring__price">
+                  ${product && product.coverPrice}
+                </p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  marginTop: "5px",
+                }}
+                className="right__detail-product__diamond"
+              >
+                <Flex>
+                  <svg
+                    viewBox="0 0 26 16"
+                    fill="none"
+                    width={"25px"}
+                    height={35}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      d="M20.95 1H5.055L1 6.763 13 21 25 6.764 20.95 1Z"
+                      stroke="#151542"
+                      strokeWidth="1.2"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                  <div>
+                    <p className="right__detail-product__ring__name">
+                      {product && product.diamondName}
+                    </p>
+                  </div>
+                </Flex>
+                <p
+                  className="right__detail-product__ring__price"
+                  style={{ justifySelf: "flex-end" }}
+                >
+                  ${product && product.diamondPrice}
+                </p>
+              </div>
             </div>
+            <Flex className="" gap={10}>
+              <h1 className="">Size: {product?.sizeName}</h1>
+              {product?.categoryId === 1 && (
+                <Link to={'/education/rings'} title="How to measure your size" className="">
+                  <QuestionCircleOutlined />
+                </Link>
+              )}
+            </Flex>
           </Col>
           <Col span={24} className="right__price-wrapper">
             <div className="right__price">
@@ -199,15 +325,8 @@ function ProductDetail({ product }) {
             </div>
           </Col>
           <Col span={24} className="right__button-wrapper">
-            <button className="right__button">
-              {/* Select This Diamond */}
-              <Link
-                style={{ display: "block", width: "100%", color: "#fff" }}
-                to={"/checkout"}
-              >
-                {" "}
-                Buy now
-              </Link>
+            <button className="right__button" onClick={() => buyNow()}>
+              Buy now
             </button>
             <button onClick={() => addToCart()} className="right__button">
               Add to Cart
@@ -249,6 +368,25 @@ function ProductDetail({ product }) {
           </Col>
         </Col>
       </Row>
+      <Modal
+        title="GIA Report"
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
+        style={{ minWidth: "1000px" }}
+        footer={[
+          <Button
+            type="primary"
+            key="back"
+            onClick={() => setModal2Open(false)}
+          >
+            OK
+          </Button>,
+        ]}
+      >
+        <GiaReport product={product} />
+      </Modal>
     </div>
   );
 }

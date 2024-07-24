@@ -1,182 +1,83 @@
-import React from "react";
-import { Table } from "antd";
-import "./TableTransaction.css";
-
-// const dataSource = [
-//   {
-//     key: "1",
-//     id: 14454933,
-//     invoiceNumber: 23,
-//     traceNumber: 3081003,
-//     amount: 16450000,
-//     bank: "NCB",
-//     paymentContent: "Thanh toan don hang: 23",
-//     status: "Success",
-//     installment: "No",
-//     creationDate: "12/06/2024 07:35:09",
-//   },
-//   {
-//     key: "2",
-//     id: 14454246,
-//     invoiceNumber: 1,
-//     traceNumber: 3079802,
-//     amount: 13600327,
-//     bank: "NCB",
-//     paymentContent: "Thanh toan don hang: 1",
-//     status: "Success",
-//     installment: "No",
-//     creationDate: "11/06/2024 17:09:26",
-//   },
-
-//   // Add the rest of the data similarly
-// ];
-
-// const columns = [
-//   {
-//     title: "STT",
-//     dataIndex: "key",
-//     key: "key",
-//   },
-//   {
-//     title: "Transaction ID",
-//     dataIndex: "id",
-//     key: "id",
-//     sorter: (a, b) => a.id - b.id,
-//   },
-//   {
-//     title: "Invoice Number",
-//     dataIndex: "invoiceNumber",
-//     key: "invoiceNumber",
-//     sorter: (a, b) => a.invoiceNumber - b.invoiceNumber,
-//   },
-//   {
-//     title: "Trace Number",
-//     dataIndex: "traceNumber",
-//     key: "traceNumber",
-//     sorter: (a, b) => a.traceNumber - b.traceNumber,
-//   },
-//   {
-//     title: "Amount",
-//     dataIndex: "amount",
-//     key: "amount",
-//     sorter: (a, b) => a.amount - b.amount,
-//   },
-//   {
-//     title: "Bank",
-//     dataIndex: "bank",
-//     key: "bank",
-//   },
-//   {
-//     title: "Payment Content",
-//     dataIndex: "paymentContent",
-//     key: "paymentContent",
-//   },
-//   {
-//     title: "Status",
-//     dataIndex: "status",
-//     key: "status",
-//   },
-//   {
-//     title: "Installment",
-//     dataIndex: "installment",
-//     key: "installment",
-//   },
-//   {
-//     title: "Creation Date",
-//     dataIndex: "creationDate",
-//     key: "creationDate",
-//     sorter: (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
-//   },
-// ];
-
-// const TransactionTable = () => {
-//   return (
-//     <div className="table-container">
-//       <Table dataSource={dataSource} columns={columns} />
-//     </div>
-//   );
-// };
-
-const dataSource = Array.from({ length: 50 }, (_, index) => ({
-  key: index + 1,
-  id: 14454933 + index,
-  invoiceNumber: index + 1,
-  traceNumber: 3081003 + index,
-  amount: 8225000 + (index % 3) * 1000000,
-  bank: "NCB",
-  paymentContent: `Product Payment: ${index + 1}`,
-  status: "Success",
-  installment: "No",
-  creationDate: `12/06/2024 07:${(35 + index).toString().padStart(2, "0")}:09`,
-}));
-
-const columns = [
-  {
-    title: "STT",
-    dataIndex: "key",
-    key: "key",
-  },
-  {
-    title: "Transaction ID",
-    dataIndex: "id",
-    key: "id",
-    sorter: (a, b) => a.id - b.id,
-  },
-  {
-    title: "Invoice Number",
-    dataIndex: "invoiceNumber",
-    key: "invoiceNumber",
-    sorter: (a, b) => a.invoiceNumber - b.invoiceNumber,
-  },
-  {
-    title: "Trace Number",
-    dataIndex: "traceNumber",
-    key: "traceNumber",
-    sorter: (a, b) => a.traceNumber - b.traceNumber,
-  },
-  {
-    title: "Amount",
-    dataIndex: "amount",
-    key: "amount",
-    sorter: (a, b) => a.amount - b.amount,
-  },
-  {
-    title: "Bank",
-    dataIndex: "bank",
-    key: "bank",
-  },
-  {
-    title: "Payment Content",
-    dataIndex: "paymentContent",
-    key: "paymentContent",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "Installment",
-    dataIndex: "installment",
-    key: "installment",
-  },
-  {
-    title: "Creation Date",
-    dataIndex: "creationDate",
-    key: "creationDate",
-    sorter: (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
-  },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { AgCharts } from "ag-charts-react";
 
 const TransactionTable = () => {
+  const [options, setOptions] = useState({
+    data: [],
+    title: {
+      text: "Top Revenue Products",
+      fontSize: 24,
+      fontFamily: "Gantari",
+      color: "#333",
+    },
+    series: [
+      {
+        type: "donut",
+        calloutLabelKey: "asset",
+        angleKey: "amount",
+        innerRadiusRatio: 0.7,
+        fills: ["#00aaff", "#ff00aa", "#ffaa00"], // Màu sắc các phần của donut
+        strokeWidth: 2,
+        stroke: "#fff",
+        calloutLabels: {
+          enabled: true,
+          fontSize: 20,
+          fontFamily: "Gantari",
+          color: "#000",
+        },
+      },
+    ],
+    legend: {
+      enabled: true,
+      position: "bottom",
+      markerShape: "circle",
+      fontSize: 14,
+      fontFamily: "Gantari",
+      color: "#333",
+    },
+    background: {
+      fill: "white", // Loại bỏ background
+    },
+  });
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://dss-api.azurewebsites.net/api/Admin/TopRevenueProducts"
+      );
+      console.log("API response:", response.data);
+
+      const data = response.data;
+      const chartData = [
+        { asset: "Rings", amount: data.rings },
+        { asset: "Pendant", amount: data.pendant },
+        { asset: "Earrings", amount: data.earrings },
+      ];
+      setOptions((prevOptions) => ({
+        ...prevOptions,
+        data: chartData,
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="table-container mode">
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ pageSize: 8 }}
-      />
-    </div>
+    <AgCharts
+      options={options}
+      style={{
+        width: "49.5%",
+        height: "50vh",
+        paddingLeft: "2em",
+       
+
+      }}
+    />
   );
 };
 

@@ -111,6 +111,36 @@
     }
   }
 }
+
+.voucherTable {
+  width: 100%;
+  margin-top: 1em;
+  &__info {
+    display: flex;
+    h3{
+      font-size: 1.2em;
+      font-family: "Gantari";
+      padding: 1em;
+    }
+  }
+  .ant-table-content {
+    .ant-table-thead {
+      .ant-table-cell {
+        font-size:1em;
+        background-color:#F4F0EB;
+        color: rgb(0, 0, 0);
+        font-family: "Gantari" !important;
+      }
+    }
+    .ant-table-tbody {
+      .ant-table-cell {
+        font-size:1.1em;
+        font-family: "Gantari" !important;
+      }
+    }
+  }
+}
+
 .select1{
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -126,4 +156,21 @@
   outline: none;
   border: #b7b7c3 1px solid;
   border-radius: 8px;
+}
+
+
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000 !important;
+  text-shadow: 0 0 0.25px currentcolor !important;
+  border-bottom: #000000 !important;
+  font-size:1.2em !important;
+  font-family: "Gantari" !important;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+
+  background: #000000 !important;
+  pointer-events: none !important;
+  font-family: "Gantari" !important;
 }

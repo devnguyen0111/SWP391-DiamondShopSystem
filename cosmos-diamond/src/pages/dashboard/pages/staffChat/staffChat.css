@@ -1,0 +1,45 @@
+/* .staffChat {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  border-right: 1px solid #ddd;
+}
+
+.email-list {
+  flex: 1;
+  padding: 20px;
+}
+
+.email-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.email-item.unread {
+  font-weight: bold;
+}
+
+.compose-popup {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.compose-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.compose-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+} */
