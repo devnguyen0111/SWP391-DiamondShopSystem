@@ -590,7 +590,7 @@ function CheckoutPage() {
                 <div className="checkout__summary-total">
                   <div className="">Total</div>
                   <div className="">
-                    {checkout && `$ ${checkout.finalTotal || checkout.total}`}
+                    {checkout && `$ ${Math.floor(checkout.finalTotal) || checkout.total}`}
                   </div>
                 </div>
               </Col>

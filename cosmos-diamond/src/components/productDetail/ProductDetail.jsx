@@ -299,13 +299,20 @@ function ProductDetail({ product }) {
                 </p>
               </div>
             </div>
-            <Flex className="" gap={10}>
-              <h1 className="">Size: {product?.sizeName}</h1>
-              {product?.categoryId === 1 && (
-                <Link to={'/education/rings'} title="How to measure your size" className="">
-                  <QuestionCircleOutlined />
-                </Link>
-              )}
+            <Flex vertical >
+              <Flex gap={10}>
+                <h1 className="">Size: {product?.sizeName}</h1>
+                {product?.categoryId === 1 && (
+                  <Link
+                    to={"/education/rings"}
+                    title="How to measure your size"
+                    className=""
+                  >
+                    <QuestionCircleOutlined />
+                  </Link>
+                )}
+              </Flex>
+              <h1>Metal Type: {product?.metaltypeName} </h1>
             </Flex>
           </Col>
           <Col span={24} className="right__price-wrapper">
