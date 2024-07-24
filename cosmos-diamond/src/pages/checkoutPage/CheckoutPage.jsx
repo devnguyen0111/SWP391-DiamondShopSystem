@@ -29,7 +29,7 @@ function CheckoutPage() {
   const { checkout, setCheckout } = useStateValue();
   const [city, setCity] = useState([]);
   const [state, setState] = useState([]);
-
+  
   const [emailConfirm, setEmailConfirm] = useState(false);
   const [error, setError] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(0);
@@ -520,7 +520,11 @@ function CheckoutPage() {
                 <ul>
                   <li>
                     <div className="checkout__summary-title">Subtotal</div>
-                    <div className="">{checkout && `$ ${checkout.total}`}</div>
+                    <div className="">{checkout && `$ ${checkout.subTotal}`}</div>
+                  </li>
+                  <li>
+                    <div className="checkout__summary-title">Rate of charge</div>
+                    <div className="">{checkout && `$ ${checkout.rateOfCharge}`}</div>
                   </li>
                   <li>
                     <div className="checkout__summary-title">Delivery</div>
@@ -586,7 +590,7 @@ function CheckoutPage() {
                 <div className="checkout__summary-total">
                   <div className="">Total</div>
                   <div className="">
-                    {checkout && `$ ${checkout.finalTotal || checkout.total}`}
+                    {checkout && `$ ${Math.floor(checkout.finalTotal) || checkout.total}`}
                   </div>
                 </div>
               </Col>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { apiHeader } from "../../../../../components/urlApiHeader";
+
 import {
   Button,
   Col,
@@ -18,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { alertFail, alertSuccess } from "../../../../../hooks/useNotification";
 import api from "../../../../../config/axios";
 import ManagerDiamondCatalog from "../managerDiamondCatalog/ManagerDiamondCatalog";
-import "./ManagerAddProduct.scss"
+import "./ManangerAddProduct.css";
 
 function ManangerAddProduct() {
   const [product, setProduct] = useState();
@@ -75,11 +76,11 @@ function ManangerAddProduct() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          alertSuccess('Add Jewelry Successfully!')
+          alertSuccess("Add Jewelry Successfully!");
         })
-        .catch(e =>{
-            alertFail(e)
-        })
+        .catch((e) => {
+          alertFail(e);
+        });
     } else {
       alertFail("Please choose Diamond");
     }
@@ -98,7 +99,7 @@ function ManangerAddProduct() {
         className="product-update"
       >
         <Col lg={5} md={24} className="side">
-          <Row gutter={[0,24]}>
+          <Row gutter={[0, 24]}>
             <Col xs={24} className="side__thumbnail">
               <div className="side__header">Jewelry image</div>
               <div className="side__img">
@@ -110,7 +111,7 @@ function ManangerAddProduct() {
                 />
               </div>
             </Col>
-            <Col xs={24}  className="side__status">
+            <Col xs={24} className="side__status">
               <Flex justify="space-between" align="center">
                 <div className="side__header">Category</div>
               </Flex>
@@ -147,13 +148,11 @@ function ManangerAddProduct() {
             </Col>
           </Row>
         </Col>
-        <Col lg={{span: 16, offset:1}} md={24} className="form">
+        <Col lg={{ span: 16, offset: 1 }} md={24} className="form">
           <div className="side__header">General Information</div>
           {category ? (
             <Form layout="vertical" onFinish={handleFinish}>
-              <Form.Item
-                label="Jewelry name"
-              >
+              <Form.Item label="Jewelry name">
                 <Input />
               </Form.Item>
               <div className="side__header">Pricing</div>

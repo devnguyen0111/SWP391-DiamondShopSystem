@@ -8,12 +8,9 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-column">
           <h3>Customer Care</h3>
-          <a href="#">Live Chat</a>
-          <a href="#">1-800-242-2728</a>
           <a href="#">Email Us</a>
           <a href="#">Contact Us</a>
           <a href="#">FAQ</a>
-          <a href="#">Returns</a>
         </div>
         <div className="footer-column">
           <h3>Why Cosmos Diamonds?</h3>
@@ -32,7 +29,6 @@ const Footer = () => {
           <a href="#">Diamond Sustainability</a>
           <a href="#">Cosmos Diamonds Blog</a>
           <a href="#">Locations</a>
-          <a href="#">Careers</a>
         </div>
         <div className="footer-column">
           <h3>Diamond Shapes</h3>
@@ -59,18 +55,11 @@ const Footer = () => {
       </div>
       <div className="footer-bottom">
         <p>© 2024 Cosmos Diamonds Inc.</p>
-        {/* <div className="social-icons">
-          <a href="#" className="social-icon">Facebook</a>
-          <a href="#" className="social-icon">Instagram</a>
-          <a href="#" className="social-icon">Twitter</a>
-          <a href="#" className="social-icon">Pinterest</a>
-        </div> */}
         <div className="footer-links">
           <a href="#">Terms & Conditions</a>
           <a href="#">Privacy Policy</a>
           <a href="#">Site Map</a>
           <a href="#">Accessibility</a>
-          {/* <a href="#">Do Not Sell My Personal Information</a> */}
         </div>
       </div>
     </footer>

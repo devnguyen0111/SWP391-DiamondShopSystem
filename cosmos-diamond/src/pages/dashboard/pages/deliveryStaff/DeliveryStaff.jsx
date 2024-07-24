@@ -11,6 +11,7 @@ import {
   message,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import formatDate from "./../../../../components/formatDate";
 import { Form, useNavigate } from "react-router-dom";
 import api from "../../../../config/axios";
 import { useSelector } from "react-redux";
@@ -51,7 +52,8 @@ function DeliveryStaff() {
       title: "Order date",
       dataIndex: "orderDate",
       key: "orderDate",
-      render: (text) => <a>{text}</a>,
+      sorter: (a, b) => new Date(a.orderDate) - new Date(b.orderDate),
+      render: (text) => <span>{formatDate(text)}</span>,
     },
 
     {
@@ -189,8 +191,9 @@ function DeliveryStaff() {
     setSelectedDetail(null);
   };
 
-  
-  useEffect(() => {getOrders();}, [])
+  useEffect(() => {
+    getOrders();
+  }, []);
   useEffect(() => {}, [orders]);
 
   return (
@@ -221,7 +224,7 @@ function DeliveryStaff() {
               <Descriptions.Item label="Order ID">
                 #{selectedDetail.orderId}
               </Descriptions.Item>
-              
+
               <Descriptions.Item label="Total Amount">
                 ${selectedDetail.totalAmount}
               </Descriptions.Item>
