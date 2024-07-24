@@ -152,9 +152,9 @@ function ManangerAddProduct() {
           <div className="side__header">General Information</div>
           {category ? (
             <Form layout="vertical" onFinish={handleFinish}>
-              <Form.Item label="Jewelry name">
+              {/* <Form.Item label="Jewelry name">
                 <Input />
-              </Form.Item>
+              </Form.Item> */}
               <div className="side__header">Pricing</div>
               <Form.Item
                 label="Unit Price"
