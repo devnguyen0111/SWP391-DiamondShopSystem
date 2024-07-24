@@ -65,7 +65,7 @@ function EngagementRingCatalog() {
     setRingList([]);
     setPageNumber(1);
     fetchEngagementRing(true);
-  }, [size, metalType, shape, price, order]);
+  }, [size, metalType, shape, price, order, search]);
   const handleOrder = (value) => {
     setOrder(value);
   };

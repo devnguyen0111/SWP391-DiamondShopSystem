@@ -29,7 +29,7 @@ function CheckoutPage() {
   const { checkout, setCheckout } = useStateValue();
   const [city, setCity] = useState([]);
   const [state, setState] = useState([]);
-
+  
   const [emailConfirm, setEmailConfirm] = useState(false);
   const [error, setError] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(0);
