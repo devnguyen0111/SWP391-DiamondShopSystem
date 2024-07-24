@@ -427,14 +427,14 @@ function OrdersManager() {
         loading={isLoading}
       />
       <Modal
-        title="Confirm delivery staff"
+        title="Confirm sale staff"
         open={modal1Open}
         footer={null}
         onCancel={() => setModal1Open(false)}
         confirmLoading={isLoading}
       >
         <Form name="form_item_path" layout="vertical" onSubmit={handleSubmit}>
-          <label>Assign delivery staff</label>
+          <label>Assign sale staff</label>
           <Select
             showSearch
             placeholder="Select a person"
