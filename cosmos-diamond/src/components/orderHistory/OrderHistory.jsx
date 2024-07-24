@@ -137,7 +137,7 @@ function OrderHistory() {
         .then((data) => {
           setOpen(false);
           alertSuccess(data);
-          nav(`/Product/${reviewId}`);
+          
         })
         .catch((e) => {
           alertFail("Cannot add Review");

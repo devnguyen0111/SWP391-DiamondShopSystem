@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { alertFail, alertSuccess } from "../../../../../hooks/useNotification";
 import api from "../../../../../config/axios";
 import ManagerDiamondCatalog from "../managerDiamondCatalog/ManagerDiamondCatalog";
+import "./ManagerAddProduct.scss"
 
 function ManangerAddProduct() {
   const [product, setProduct] = useState();
@@ -276,6 +277,7 @@ function ManangerAddProduct() {
           onCancel={() => setOpen(false)}
           width={1000}
           style={{ height: "100vh", overflowY: "scroll", top: "10px" }}
+          className="modal-diamonds"
         >
           <ManagerDiamondCatalog
             setDiamondInfo={setDiamondInfo}
