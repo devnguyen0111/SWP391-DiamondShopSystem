@@ -124,7 +124,7 @@ function CoverCatlog({ category }) {
                 >
                   <div className="product__img">
                     <img src={jewelry.url} alt={jewelry.name} />
-                    <i className="fa-regular fa-heart list__wishlist"></i>
+                    {/* <i className="fa-regular fa-heart list__wishlist"></i> */}
                   </div>
                   <div className="product__info">
                     <div className="product__name">{jewelry.name}</div>

@@ -144,7 +144,7 @@ function DiamondDetailComponent({ product }) {
             <button onClick={() => openModal()} className="right__button">
               Select This Diamond
             </button>
-            <button className="right__button">Consult Expert</button>
+            <button className="right__button" style={{opacity:0}}>Consult Expert</button>
           </Col>
           <Col span={24} className="include">
             <div className="include__header">Your Order Include:</div>
@@ -174,7 +174,7 @@ function DiamondDetailComponent({ product }) {
                 <h5 className="include__title">Free Return</h5>
                 <div className="include__text">
                   Our commitment to you does not end at delivery. We offer free
-                  returns (U.S and Canada) to make your experience as easy as
+                  returns to make your experience as easy as
                   possible.
                 </div>
               </div>
