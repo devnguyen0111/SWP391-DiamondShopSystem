@@ -21,10 +21,10 @@
     &__rateDate {
       display: flex;
       justify-content: space-between;
-      gap:1em;
+      gap: 1em;
       &__rate {
         font-size: 1.1em;
-        padding-top:0.3em;
+        padding-top: 0.3em;
       }
     }
   }
@@ -58,7 +58,7 @@
       }
 
       &__title {
-        font-family: "Lora";
+        font-family: "Lora bold";
         font-weight: 200;
         font-size: 3em;
         margin: 0em 0 0.7em 0;
