@@ -121,7 +121,7 @@ function OrderHistory() {
         cusId: getToken().UserID,
         productId: reviewId,
       });
-      fetch(`https://localhost:7262/api/Review/addReview`, {
+      fetch(`https://dss-api.azurewebsites.net/api/Review/addReview`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -162,7 +162,7 @@ function OrderHistory() {
         };
       });
       setOrders(updatedOrders);
-      setFilteredProduct(updatedOrders); // Cập nhật filteredProduct
+      setFilteredProduct(updatedOrders); 
     } catch (e) {
       console.error(e);
     }
