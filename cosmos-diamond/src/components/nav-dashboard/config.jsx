@@ -4,6 +4,7 @@ import {
   TeamOutlined,
   ShoppingCartOutlined,
   RubyOutlined,
+  PercentageOutlined,
 } from "@ant-design/icons";
 import { LiaRingSolid } from "react-icons/lia";
 import { PiTicketLight } from "react-icons/pi";
@@ -39,6 +40,11 @@ export const navDashboardConfig = [
     key: "11",
     icon: <SolutionOutlined style={{ fontSize: "1.4em" }} />,
     label: "Requests",
+  },
+  {
+    key: "20",
+    icon: <PercentageOutlined style={{ fontSize: "1.4em" }} />,
+    label: "Charge Rate",
   },
   {
     key: "14",
@@ -145,6 +151,10 @@ export const navpath = {
   10: {
     path: "/dashboard/manager/covers",
   },
+  20: {
+    path: "/dashboard/manager/rate",
+  },
+
   11: {
     path: "/dashboard/manager/requests",
   },

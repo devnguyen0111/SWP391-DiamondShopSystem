@@ -520,7 +520,11 @@ function CheckoutPage() {
                 <ul>
                   <li>
                     <div className="checkout__summary-title">Subtotal</div>
-                    <div className="">{checkout && `$ ${checkout.total}`}</div>
+                    <div className="">{checkout && `$ ${checkout.subTotal}`}</div>
+                  </li>
+                  <li>
+                    <div className="checkout__summary-title">Rate of charge</div>
+                    <div className="">{checkout && `$ ${checkout.rateOfCharge}`}</div>
                   </li>
                   <li>
                     <div className="checkout__summary-title">Delivery</div>
