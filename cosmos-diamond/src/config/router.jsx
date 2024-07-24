@@ -87,6 +87,7 @@ import OrdersAdmin from "../pages/dashboard/pages/ordersAdmin/OrdersAdmin";
 import SaleStaff from "../pages/dashboard/pages/staffManager/SaleStaff";
 import DeliveryStaffManager from "../pages/dashboard/pages/staffManager/DeliveryStaffManager";
 import Feedback from "../pages/dashboard/pages/feedback/Feedback";
+import RateOfChargeManagager from "../pages/dashboard/pages/rateOfChargeManagager/RateOfChargeManagager";
 
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
@@ -499,6 +500,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRouteManager>
             <OrdersManager />
+          </ProtectedRouteManager>
+        ),
+      },
+      {
+        path: "/dashboard/manager/rate",
+        element: (
+          <ProtectedRouteManager>
+            <RateOfChargeManagager/>
           </ProtectedRouteManager>
         ),
       },
