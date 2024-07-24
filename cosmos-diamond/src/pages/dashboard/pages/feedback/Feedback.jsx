@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import api from "../../../../config/axios";
 
 function Feedback() {
-  const [feedback, setFeedback] = useState([]); // Khởi tạo với một mảng rỗng
-
+  const [feedback, setFeedback] = useState([]); 
   const getFeedback = async () => {
     try {
       const response = await api.get("/api/Review/GetAllFeedback");
