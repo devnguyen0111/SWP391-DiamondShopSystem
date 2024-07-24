@@ -68,7 +68,7 @@ function ManagerDiamondSort({ setOpen, setDiamondInfo }) {
     const minPriceURL = price[0];
     const maxPriceURL = price[1];
 
-    const url = `${apiHeader}/Diamond?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
+    const url = `${apiHeader}/Diamond/ForManager1?sortBy=${diamondShape}&${clarityURL}&${colorURL}&${cutURL}&minCaratWeight=${minCaratURL}&maxCaratWeight=${maxCaratURL}&minPrice=${minPriceURL}&maxPrice=${maxPriceURL}&pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${order}&diamondCode=${search}`;
 
     try {
       const res = await fetch(url);
