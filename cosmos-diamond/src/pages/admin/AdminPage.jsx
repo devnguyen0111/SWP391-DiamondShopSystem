@@ -17,7 +17,7 @@ function AdminPage() {
   const [todayOrders, setTodayOrders] = useState(0);
   const [thisMonthOrders, setThisMonthOrders] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
-  const [processing, setProcessing] = useState(0);
+  const [pending, setPending] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [delivered, setDelivered] = useState(0);
   const [cancelled, setCancelled] = useState(0);
@@ -68,7 +68,7 @@ function AdminPage() {
     try {
       const response = await api.get("/api/Admin/OrderCheckStatus");
       const data = response.data;
-      setProcessing(data.processing);
+      setPending(data.pending);
       setShipping(data.shipping);
       setDelivered(data.delivered);
       setCancelled(data.cancelled);
@@ -87,7 +87,7 @@ function AdminPage() {
   }, []);
 
   const formatNumber = (number) => {
-    return number.toLocaleString();
+    return number?.toLocaleString();
   };
 
   return (
@@ -136,8 +136,8 @@ function AdminPage() {
             <FaArrowsRotate />
           </div>
           <div className="card-lower-info">
-            <p>Order Processing</p>
-            <h2>{formatNumber(processing)}</h2>
+            <p>Order Pending</p>
+            <h2>{formatNumber(pending)}</h2>
           </div>
         </div>
         <div className="card-lower">

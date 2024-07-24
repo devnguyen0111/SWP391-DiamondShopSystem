@@ -111,7 +111,7 @@ const ProtectedRouteCustomer = ({ children }) => {
   return children;
 };
 
-const ProtectedADMIN = ({ children }) => {
+const ProtectedDashboard = ({ children }) => {
   const user = useSelector(selectUser);
   console.log(user);
 
@@ -121,6 +121,42 @@ const ProtectedADMIN = ({ children }) => {
     return <Navigate to="*" replace />;
   }
 
+  return children;
+};
+
+const ProtectedRouteAdmin = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "admin") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteManager = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "manager") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteSaleStaff = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "salestaff") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+const ProtectedRouteDeliveryStaff = ({ children }) => {
+  const user = useSelector(selectUser);
+  if (user?.Role !== "deliverystaff") {
+    alertFail("You do not have permission to access this page.");
+    return <Navigate to="/dashboard" replace />;
+  }
   return children;
 };
 
@@ -444,110 +480,206 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <ProtectedADMIN>
+      <ProtectedDashboard>
         <Main />
-      </ProtectedADMIN>
+      </ProtectedDashboard>
     ),
     children: [
       //manager
       {
         path: "/dashboard/manager",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteManager>
+            <OrdersManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/orders",
-        element: <OrdersManager />,
+        element: (
+          <ProtectedRouteManager>
+            <OrdersManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/voucher",
-        element: <VoucherManager />,
+        element: (
+          <ProtectedRouteManager>
+            <VoucherManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/products",
-        element: <ProductsManager />,
+        element: (
+          <ProtectedRouteManager>
+            <ProductsManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/product/:id",
-        element: <ManangerProductDetail />,
+        element: (
+          <ProtectedRouteManager>
+            <ManangerProductDetail />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/diamonds",
-        element: <DiamondManager />,
+        element: (
+          <ProtectedRouteManager>
+            <DiamondManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/diamond/:id",
-        element: <ManagerDiamondDetail />,
+        element: (
+          <ProtectedRouteManager>
+            <ManagerDiamondDetail />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/diamonds",
-        element: <ManagerDiamondCatalog />,
+        element: (
+          <ProtectedRouteManager>
+            <ManagerDiamondCatalog />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/diamond/add",
-        element: <ManagerAddDiamond />,
+        element: (
+          <ProtectedRouteManager>
+            <ManagerAddDiamond />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/product/add",
-        element: <ManangerAddProduct />,
+        element: (
+          <ProtectedRouteManager>
+            <ManangerAddProduct />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/covers",
-        element: <CoversManager />,
+        element: (
+          <ProtectedRouteManager>
+            <CoversManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/cover/:id",
-        element: <ManagerCoverDetail />,
+        element: (
+          <ProtectedRouteManager>
+            <ManagerCoverDetail />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/cover/add",
-        element: <ManagerAddCover />,
+        element: (
+          <ProtectedRouteManager>
+            <ManagerAddCover />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/requests",
-        element: <RequestManager />,
+        element: (
+          <ProtectedRouteManager>
+            <RequestManager />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/salestaff",
-        element: <SaleStaff />,
+        element: (
+          <ProtectedRouteManager>
+            <SaleStaff />
+          </ProtectedRouteManager>
+        ),
       },
       {
         path: "/dashboard/manager/deliverystaff",
-        element: <DeliveryStaffManager />,
+        element: (
+          <ProtectedRouteManager>
+            <DeliveryStaffManager />
+          </ProtectedRouteManager>
+        ),
       },
 
       //admin
       {
         path: "/dashboard/admin",
-        element: <AdminPage />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminPage />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/orders",
-        element: <OrdersAdmin />,
+        element: (
+          <ProtectedRouteAdmin>
+            <OrdersAdmin />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/summary",
-        element: <AdminPage />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminPage />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/users",
-        element: <UsersManager />,
+        element: (
+          <ProtectedRouteAdmin>
+            <UsersManager />
+          </ProtectedRouteAdmin>
+        ),
       },
       {
         path: "/dashboard/admin/transaction",
-        element: <AdminTransaction />,
+        element: (
+          <ProtectedRouteAdmin>
+            <AdminTransaction />
+          </ProtectedRouteAdmin>
+        ),
       },
       //hiu
       {
         path: "/dashboard/salestaff/orders",
-        element: <OrdersStaff />,
+        element: (
+          <ProtectedRouteSaleStaff>
+            <OrdersStaff />
+          </ProtectedRouteSaleStaff>
+        ),
       },
       {
         path: "/dashboard/salestaff",
-        element: <OrdersStaff />,
+        element: (
+          <ProtectedRouteSaleStaff>
+            <OrdersStaff />
+          </ProtectedRouteSaleStaff>
+        ),
       },
       {
         path: "/dashboard/salestaff/view-inbox",
-        element: <RequestStaff />,
+        element: (
+          <ProtectedRouteSaleStaff>
+            <RequestStaff />
+          </ProtectedRouteSaleStaff>
+        ),
       },
       // {
       //   path: "/dashboard/salestaff/send-mail",
@@ -555,20 +687,36 @@ export const router = createBrowserRouter([
       // },
       {
         path: "/dashboard/salestaff/send-mail",
-        element: <SendEmail />,
+        element: (
+          <ProtectedRouteSaleStaff>
+            <SendEmail />
+          </ProtectedRouteSaleStaff>
+        ),
       },
       {
         path: "/dashboard/salestaff/send-request",
-        element: <SendRequest />,
+        element: (
+          <ProtectedRouteSaleStaff>
+            <SendRequest />
+          </ProtectedRouteSaleStaff>
+        ),
       },
 
       {
         path: "/dashboard/deliverytaff",
-        element: <DeliveryStaff />,
+        element: (
+          <ProtectedRouteDeliveryStaff>
+            <DeliveryStaff />
+          </ProtectedRouteDeliveryStaff>
+        ),
       },
       {
         path: "/dashboard/deliverystaff/delivery",
-        element: <DeliveryStaff />,
+        element: (
+          <ProtectedRouteDeliveryStaff>
+            <DeliveryStaff />
+          </ProtectedRouteDeliveryStaff>
+        ),
       },
     ],
   },

@@ -505,11 +505,7 @@ function OrdersStaff() {
                 </Descriptions.Item>
               </Descriptions>
             ))}
-            <h1
-              style={{ marginTop: "2em", fontWeight: "550", fontSize: "1.2em" }}
-            >
-              Customer
-            </h1>
+          
           </>
         )}
       </Modal>
