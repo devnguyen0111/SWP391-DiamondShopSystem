@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import api from "../../../../config/axios";
 
 function Feedback() {
-  const [feedback, setFeedback] = useState([]); 
+  const [feedback, setFeedback] = useState([]);
   const getFeedback = async () => {
     try {
       const response = await api.get("/api/Review/GetAllFeedback");
-      let data = response.data.$values.sort((a, b) => new Date(b.datePost) - new Date(a.datePost));
+      let data = response.data.$values.sort(
+        (a, b) => new Date(b.datePost) - new Date(a.datePost)
+      );
       setFeedback(data);
     } catch (e) {
       console.error(e);
@@ -47,9 +49,9 @@ function Feedback() {
               <Row key={index} style={{ marginBottom: "16px" }}>
                 <Col span={24}>
                   <FeedbackCard
-                    cusName={item.cusName}
+                    cusName={`Customer: ${item.cusName}`}
                     rate={item.ratings}
-                    productName={item.productName}
+                    productName={`Product: ${item.productName}`}
                     img={item.imgUrl}
                     feedbackContent={item.feedback}
                     datePost={item.datePost}
